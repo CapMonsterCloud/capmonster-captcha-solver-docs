@@ -58,5 +58,82 @@
   "sidebar.tutorialSidebar.category.Внешние сервисы.link.generated-index.title": {
     "message": "将外部服务连接到 CapMonster Cloud。",
     "description": "The generated-index page title for category Внешние сервисы in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Complex Image (click)": {
+    "message": "Complex Image (click)",
+    "description": "The label for category Complex Image (click) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Complex Image (click).link.generated-index.title": {
+    "message": "复杂图像识别与解决 — ComplexImageTask | API",
+    "description": "The generated-index page title for category Complex Image (click) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Complex Image (click).link.generated-index.description": {
+    "message": "使用 ComplexImageTask 方法通过 CapMonster Cloud API 自动识别和解决复杂图像验证码。",
+    "description": "The generated-index page description for category Complex Image (click) in sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Audio": {
+    "message": "Audio",
+    "description": "The label for category Audio in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Audio.link.generated-index.title": {
+    "message": "Audio Modules — Complex Image (click) | API",
+    "description": "The generated-index page title for category Audio in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Audio.link.generated-index.description": {
+    "message": "使用 Audio Modules —— 专门用于解决音频验证码的模块。返回结果为从音频中识别出的数字或文本。",
+    "description": "The generated-index page description for category Audio in sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Coordinate": {
+    "message": "Coordinate",
+    "description": "The label for category Coordinate in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Coordinate.link.generated-index.title": {
+    "message": "Coordinate Modules — Complex Image (click) | API",
+    "description": "The generated-index page title for category Coordinate in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Coordinate.link.generated-index.description": {
+    "message": "使用 Coordinate Modules —— 专门用于处理需要在图像上选择点击点的验证码。返回结果为坐标，表示应点击的位置。",
+    "description": "The generated-index page description for category Coordinate in sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Grid": {
+    "message": "Grid",
+    "description": "The label for category Grid in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Grid.link.generated-index.title": {
+    "message": "Grid Modules — Complex Image (click) | API",
+    "description": "The generated-index page title for category Grid in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Grid.link.generated-index.description": {
+    "message": "使用 Grid Modules —— 专门用于解决网格类图像验证码的模块。返回布尔数组（true/false），表示对应单元格是否符合条件。",
+    "description": "The generated-index page description for category Grid in sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Rotation": {
+    "message": "Rotation",
+    "description": "The label for category Rotation in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Rotation.link.generated-index.title": {
+    "message": "Rotation Modules — Complex Image (click) | API",
+    "description": "The generated-index page title for category Rotation in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Rotation.link.generated-index.description": {
+    "message": "使用 Rotation modules —— 专门用于解决图像旋转验证码。返回需要点击的位置坐标，使图像旋转到正确方向。",
+    "description": "The generated-index page description for category Rotation in sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Text": {
+    "message": "Text",
+    "description": "The label for category Text in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Text.link.generated-index.title": {
+    "message": "Text Modules — Complex Image (click) | API",
+    "description": "The generated-index page title for category Text in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
+    "message": "使用 Text Modules —— 专门用于解决基于图像的对象选择验证码。返回识别结果（文本或正确选项索引）。",
+    "description": "The generated-index page description for category Text in sidebar tutorialSidebar"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "label": "Audio",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Audio Modules — Complex Image (click) | API",
+    "description": "Use Audio Modules — specialized components for solving audio captchas. The response returns recognized digits or text extracted from the audio."
+  }
+}

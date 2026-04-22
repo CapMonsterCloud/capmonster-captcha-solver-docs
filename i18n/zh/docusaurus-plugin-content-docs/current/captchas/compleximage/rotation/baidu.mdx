@@ -1,0 +1,147 @@
+---
+sidebar_label: baidu
+title: '识别与解决 baidu | API'
+description: '使用 ComplexImageTask 方法，通过 CapMonster Cloud API 自动识别并解决 baidu 验证码。'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/baidu" />
+
+# baidu
+
+![](../images/ComplexImageTask-Recognition/baidu_img.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="baidu" captchaId="complex-rec_baidu" />
+</PriceBlockWrap>
+
+:::warning **注意！**
+此任务不需要使用代理服务器。
+:::
+<br />
+
+请求必须包含一张 base64 格式的图片。
+
+## 请求参数
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> 重要提示：在创建任务之前请直接获取 base64 图片，以避免在解题过程中出现错误（参见章节 [如何获取 base64](#如何获取-base64)）。
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    base64 编码格式的图片。
+
+    ---
+
+    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    任务名称：`"baidu"`
+
+</TabItem>
+
+## 创建任务方法
+
+:::warning **注意！**
+在求解过程开始时，可能会出现临时的 *unsolvable*（不可解）响应。这**不是错误**——初始化完成后验证码仍会继续成功解决。
+:::
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+      **请求**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": 
+        {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": ["base64"],
+          "metadata": {
+            "Task": "baidu"
+          }
+        }
+      }
+      ```
+
+    	任务示例：
+
+    	![](../images/ComplexImageTask-Recognition/baidu.png)
+
+        **响应**
+        ```json
+        {
+          "errorId":0,
+          "taskId":143998457
+        }
+        ```
+    </MethodDescription>
+
+</TabItem>
+
+## 获取任务结果方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+      **请求**
+      ```json
+      {
+        "clientKey":"API_KEY",
+        "taskId": 143998457
+      }
+      ```
+		**响应：** 图像需要顺时针旋转的角度。
+      ```json
+      {
+        "solution":
+        {
+          "answer":[297],
+          "metadata":{"AnswerType":"NumericArray"}
+        },
+        "cost":0.0005,
+        "status":"ready",
+        "errorId":0,
+        "errorCode":null,
+        "errorDescription":null
+      }
+      ```
+	</MethodDescription>
+</TabItem>
+
+## 如何获取 Base64
+
+页面中的图片可以以 URL 形式存在，也可以已经被编码为 Base64 格式。要找到所需的值，请在验证码图片上右键，选择 **检查（Inspect）**，然后仔细查看 **Elements（元素）** 面板或网络请求 —— 在那里你可以找到图片 URL 或已编码的内容。
+
+1. 在浏览器中打开显示验证码的网站。  
+2. 右键点击验证码元素并选择 **检查（Inspect）**。
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

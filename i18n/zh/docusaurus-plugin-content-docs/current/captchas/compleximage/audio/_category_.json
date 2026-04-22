@@ -1,0 +1,10 @@
+{
+  "label": "Audio",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Audio Modules — Complex Image (click) | API",
+    "description": "使用 Audio Modules —— 专门用于解决音频验证码的模块。返回结果为从音频中识别出的数字或提取的文本。"
+  }
+}

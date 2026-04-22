@@ -1,0 +1,10 @@
+{
+  "label": "Complex Image (click)",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "复杂图像验证码识别与解决 — ComplexImageTask | API",
+    "description": "使用 ComplexImageTask 方法通过 CapMonster Cloud API 自动识别并解决复杂图像验证码。"
+  }
+}

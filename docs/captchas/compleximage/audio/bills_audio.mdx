@@ -1,0 +1,169 @@
+---
+sidebar_label: bills_audio
+title: 'Распознавание и решение bills_audio | API'
+description: 'Используйте метод ComplexImageTask для автоматического распознавания и решения bills_audio через API Capmonster Cloud.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/bills_audio" />
+
+# bills_audio
+
+![](../images/ComplexImageTask-Recognition/bills_audio.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="bills_audio" captchaId="complex-rec_bills_audio" />
+</PriceBlockWrap>
+
+:::warning **Внимание!**
+Использование прокси-серверов для данной задачи не требуется.
+:::
+<br />
+Аудио-капча `bills_audio` — это звуковая версия «капчи с чеками», где сгенерированные изображения или данные имитируют чеки и содержат, например, цифры, суммы и даты. В этом типе задачи пользователю предлагается прослушать аудиофайл и на основе услышанной информации подтвердить правильность ввода. Такой формат может выглядеть, например, следующим образом:
+
+![](../images/ComplexImageTask-Recognition/bills_audio1.png) ![](../images/ComplexImageTask-Recognition/bills_audio2.png)
+
+## Параметры запроса
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+>  ВАЖНО: получайте base64 аудио непосредственно перед созданием задачи, чтобы избежать ошибок при решении (см. раздел [Получение аудио и конвертация в Base64](#получение-аудио-и-конвертация-в-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Аудио в кодировке base64.
+    Пример: `[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+
+    ---
+
+    <ParamItem title="Task (внутри metadata)" required type="string" />
+    Название задания: `"bills_audio"`<br />
+    
+    ---
+
+    <ParamItem title="PayloadType (внутри metadata)" required type="string" />
+    Тип передаваемых данных в задаче: `"Audio"`
+
+</TabItem>
+
+## Создание задачи
+
+<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+    <MethodItem>
+    ```http
+    https://api.capmonster.cloud/createTask
+    ```
+    </MethodItem>
+    <MethodDescription>
+      **Запрос**
+```json
+{
+    "clientKey": "API_KEY",
+    "task": {
+        "type": "ComplexImageTask",
+        "class": "recognition",
+        "imagesBase64": [
+            "UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"
+        ],
+        "metadata": {
+            "Task": "bills_audio",
+            "PayloadType": "Audio"
+        }
+    }
+}
+```
+
+    **Ответ**
+    ```json
+    {
+        "errorId": 0,
+        "taskId": 143998457
+    }
+    ```
+    </MethodDescription>
+</TabItem>
+
+## Получение результата задачи
+
+<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+    <MethodItem>
+    ```http
+    https://api.capmonster.cloud/getTaskResult
+    ```
+    </MethodItem>
+    <MethodDescription>
+    **Запрос**
+    ```json
+    {
+        "clientKey": "API_KEY",
+        "taskId": 143998457
+    }
+    ```
+    **Ответ:**  в ответе возвращаются цифры из аудио.
+    ```json
+    {
+      "solution": {
+          "answer": [6, 8, 4, 1, 2, 3],
+          "metadata": {"AnswerType": "Text"}
+      },
+      "cost": 0.0008,
+      "status": "ready",
+      "errorId": 0,
+      "errorCode": null,
+      "errorDescription": null
+    }
+    ```
+    </MethodDescription>
+</TabItem>
+
+## Получение аудио и конвертация в Base64
+
+1. Откройте страницу с капчей и запустите **DevTools**, затем перейдите во вкладку **Network**.
+2. Активируйте аудио-режим капчи, нажав соответствующую кнопку.
+3. В списке запросов найдите адрес вида:
+   `blob:https://example.com/3be79ac6-1b3d-43ef-9a8a-7ad8877b3606`
+4. Скопируйте этот URL и откройте его в адресной строке браузера — откроется аудиофайл капчи в формате **.wav**.
+
+![](../images/ComplexImageTask-Recognition/bills_audio4.png)
+
+![](../images/ComplexImageTask-Recognition/bills_audio3.png)
+
+5. Сохраните файл и выполните конвертацию из **.wav** в **Base64** удобным для вас способом — например, с помощью кода на Node.js:
+```JavaScript
+const fs = require("fs");
+
+// Путь к исходному .wav файлу
+const filePath = "C:\\Users\\User\\Downloads\\file-acbe-4fb3-9f8e-f989ba6c7fde.wav";
+
+const fileBuffer = fs.readFileSync(filePath);
+
+// Конвертация в Base64
+const base64 = fileBuffer.toString("base64");
+
+// Сохранение Base64-строку в текстовый файл
+fs.writeFileSync("output.txt", base64);
+
+console.log("Файл успешно конвертирован в Base64 и сохранён как output.txt");
+```
+
+6. Используйте полученную строку Base64 в запросе на решение в CapMonster Cloud.

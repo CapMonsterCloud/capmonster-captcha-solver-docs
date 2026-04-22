@@ -1,0 +1,10 @@
+{
+  "label": "Text",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Text Modules — Complex Image (click) | API",
+    "description": "使用 Text Modules —— 专门用于解决图像对象选择验证码的组件。返回识别结果（文本或正确选项的索引），与任务要求相对应。"
+  }
+}

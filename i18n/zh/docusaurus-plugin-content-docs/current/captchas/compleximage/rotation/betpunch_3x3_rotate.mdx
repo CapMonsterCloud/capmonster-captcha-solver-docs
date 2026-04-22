@@ -1,0 +1,154 @@
+---
+sidebar_label: betpunch_3x3_rotate
+title: '识别与解决 betpunch_3x3_rotate | API'
+description: '使用 ComplexImageTask 方法，通过 CapMonster Cloud API 自动识别并解决 betpunch_3x3_rotate 验证码。'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/betpunch_3x3_rotate" />
+
+# betpunch_3x3_rotate
+
+![](../images/ComplexImageTask-Recognition/betpunch_img.png)
+
+
+<PriceBlockWrap>
+  <PriceBlock title="betpunch_3x3_rotate" captchaId="complex-rec_betpunch_3x3_rotate_request" />
+</PriceBlockWrap>
+
+:::warning **注意！**
+此任务不需要使用代理服务器。
+:::
+<br />
+
+请求必须包含九张图片。图片必须按以下顺序提供。
+
+![](../images/ComplexImageTask-Recognition/betpunch_3x3_rotate_example.png)
+
+## 请求参数
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> 重要提示：在创建任务之前请直接获取 base64 图片，以避免在解题过程中出现错误（参见章节 [如何获取 base64](#如何获取-base64)）。
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    base64 编码格式的图片数组。
+
+    ---
+
+    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    任务名称：`betpunch_3x3_rotate`
+
+</TabItem>
+
+## 创建任务方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+      **请求**
+      ```json
+      { 
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "{image_1_Base64}",
+            "{image_2_Base64}",
+            "{image_3_Base64}",
+            "{image_4_Base64}",
+            "{image_5_Base64}",
+            "{image_6_Base64}",
+            "{image_7_Base64}",
+            "{image_8_Base64}",
+            "{image_9_Base64}"
+          ],
+          "metadata": {
+            "Task": "betpunch_3x3_rotate"
+          }
+        }
+      }
+      ```
+
+    	**响应**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":407533072
+    	}
+    	```
+    </MethodDescription>
+
+</TabItem>
+
+## 获取任务结果方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+
+      **响应**
+      `"answer":[X,X,X,X,X,X,X,X,X]`，其中 X 为每张图片对应的整数值（1 到 4）。  
+      4 表示该图片无需旋转；1–3 表示需要逆时针旋转的次数。
+
+      ```json
+      {
+        "errorId":0,
+        "status":"ready",
+        "errorCode":null,
+        "errorDescription":null,
+        "solution":
+        {
+          "answer":[4,4,4,4,4,3,1,2,2],
+          "metadata":{"AnswerType":"NumericArray"}
+        }
+      }
+      ```
+	</MethodDescription>
+</TabItem>
+
+## 如何获取 Base64
+
+页面中的图片可以以 URL 形式存在，也可以已经被编码为 Base64 格式。要找到所需的值，请在验证码图片上右键，选择 **检查（Inspect）**，然后仔细查看 **Elements（元素）** 面板或网络请求 —— 在那里你可以找到图片 URL 或已编码的内容。
+
+1. 在浏览器中打开显示验证码的网站。  
+2. 右键点击验证码元素并选择 **检查（Inspect）**。
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

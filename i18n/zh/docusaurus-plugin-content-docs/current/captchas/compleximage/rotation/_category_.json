@@ -1,0 +1,10 @@
+{
+  "label": "Rotation",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Rotation Modules — Complex Image (click) | API",
+    "description": "使用 Rotation 模块 —— 专门用于解决图像旋转验证码的组件。返回需要点击的坐标点，以便将图像调整到正确位置。"
+  }
+}

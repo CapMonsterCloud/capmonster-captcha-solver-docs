@@ -1,0 +1,154 @@
+---
+sidebar_label: betpunch_3x3_rotate
+title: 'Recognition and solving betpunch_3x3_rotate | API'
+description: 'Use the ComplexImageTask method for automatic recognition and solving betpunch_3x3_rotate via the CapMonster Cloud API.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/betpunch_3x3_rotate" />
+
+# betpunch_3x3_rotate
+
+![](../images/ComplexImageTask-Recognition/betpunch_img.png)
+
+
+<PriceBlockWrap>
+  <PriceBlock title="betpunch_3x3_rotate" captchaId="complex-rec_betpunch_3x3_rotate_request" />
+</PriceBlockWrap>
+
+:::warning **Attention!**
+Using proxy servers is not required for this task.
+:::
+<br />
+
+The request must contain nine images. The images must be provided in the following order:
+
+![](../images/ComplexImageTask-Recognition/betpunch_3x3_rotate_example.png)
+
+## Request parameters
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANT: obtain the base64 images directly before creating the task to avoid errors during solving (see section [How to get base64](#how-to-get-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Array of images encoded in base64 format.
+
+    ---
+
+    <ParamItem title="Task (inside metadata)" required type="string" />
+    Task name: `betpunch_3x3_rotate`
+
+</TabItem>
+
+## Create task method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+      **Request**
+      ```json
+      { 
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "{image_1_Base64}",
+            "{image_2_Base64}",
+            "{image_3_Base64}",
+            "{image_4_Base64}",
+            "{image_5_Base64}",
+            "{image_6_Base64}",
+            "{image_7_Base64}",
+            "{image_8_Base64}",
+            "{image_9_Base64}"
+          ],
+          "metadata": {
+            "Task": "betpunch_3x3_rotate"
+          }
+        }
+      }
+      ```
+
+    	**Response**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":407533072
+    	}
+    	```
+    </MethodDescription>
+
+</TabItem>
+
+## Get task result method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Request**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+
+      **Response**
+      `"answer":[X,X,X,X,X,X,X,X,X]`, where X is an integer value from 1 to 4 for each image.  
+      4 means the image does not need rotation; 1–3 indicate how many counterclockwise rotations are required.
+
+      ```json
+      {
+        "errorId":0,
+        "status":"ready",
+        "errorCode":null,
+        "errorDescription":null,
+        "solution":
+        {
+          "answer":[4,4,4,4,4,3,1,2,2],
+          "metadata":{"AnswerType":"NumericArray"}
+        }
+      }
+      ```
+	</MethodDescription>
+</TabItem>
+
+## How to get Base64
+
+Images on pages can be represented either as a URL or already encoded in Base64 format. To find the required value, right-click the captcha image, select **Inspect**, and carefully examine the **Elements** section or network requests — there you can find either the image URL or the encoded content.
+
+1. Open your website where the captcha is displayed in the browser.  
+2. Right-click the captcha element and select **Inspect**.
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

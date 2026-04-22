@@ -1,0 +1,10 @@
+{
+  "label": "Complex Image (click)",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+	"title": "Распознавание и решение капч со сложными изображениями — ComplexImageTask | API",
+	"description": "Используйте метод ComplexImageTask для автоматического распознавания и решения сложных капч-изображений через API Capmonster Cloud."
+  }
+}

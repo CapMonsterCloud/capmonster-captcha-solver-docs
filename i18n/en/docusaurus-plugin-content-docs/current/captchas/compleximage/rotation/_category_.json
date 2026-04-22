@@ -1,0 +1,10 @@
+{
+  "label": "Rotation",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Rotation Modules — Complex Image (click) | API",
+    "description": "Используйте Rotation-модули — специализированные компоненты для решения капч с поворотом изображения. В ответе вы получите координаты точек, по которым необходимо кликнуть, чтобы привести изображение в правильное положение."
+  }
+}

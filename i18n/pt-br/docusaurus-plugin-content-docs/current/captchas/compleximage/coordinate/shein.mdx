@@ -1,0 +1,150 @@
+---
+sidebar_label: shein
+title: 'Reconhecimento e resolução de shein | API'
+description: 'Use o método ComplexImageTask para reconhecimento automático e resolução de shein via API do CapMonster Cloud.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/shein" />
+
+# shein
+
+![](../images/ComplexImageTask-Recognition/shein3.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="shein" captchaId="complex-rec_oocl_rotate_new" />
+</PriceBlockWrap>
+
+:::warning **Atenção!**
+O uso de servidores proxy não é necessário para esta tarefa.
+:::
+<br />
+
+A solicitação deve conter uma única imagem no formato base64.
+
+## Parâmetros da solicitação
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANTE: obtenha a imagem em base64 imediatamente antes de criar a tarefa para evitar erros durante a resolução (veja a seção [Como obter base64](#como-obter-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Imagem codificada em formato base64.
+
+    ---
+
+    <ParamItem title="Task (dentro de metadata)" required type="string" />
+    Nome da tarefa: `"shein"`
+
+</TabItem>
+
+## Método para criar tarefa
+
+<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+      **Solicitação**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "base64"
+          ],
+          "metadata": {
+            "Task": "shein"
+          }
+        }
+      }
+      ```
+
+    	Exemplo de tarefa:
+
+    	![](../images/ComplexImageTask-Recognition/shein1.png)
+    	![](../images/ComplexImageTask-Recognition/shein2.png)
+
+    	**Resposta**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":143998457
+    	}
+    	```
+    </MethodDescription>
+
+</TabItem>
+
+## Método para obter o resultado da tarefa
+
+<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Solicitação**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 143998457
+		}
+		```
+		**Resposta:** coordenadas que devem ser clicadas em uma ordem específica.
+      ```json
+      {
+        "solution": {
+          "answer": [
+            { "X": 69.0, "Y": 201.954889 },
+            { "X": 128.0, "Y": 281.54887104 },
+            { "X": 181.00000776, "Y": 49.89473468 }
+          ],
+          "metadata": {
+            "AnswerType": "Coordinate"
+          }
+        },
+        "cost": 0.0003,
+        "status": "ready",
+        "errorId": 0,
+        "errorCode": null,
+        "errorDescription": null
+      }
+      ```
+	</MethodDescription>
+</TabItem>
+
+## Como obter Base64
+
+As imagens nas páginas podem ser representadas tanto como uma URL quanto já codificadas em formato Base64. Para encontrar o valor necessário, clique com o botão direito na imagem da captcha, selecione **Inspect (Inspecionar)** e examine cuidadosamente a seção **Elements** ou as requisições de rede — ali você poderá encontrar a URL da imagem ou o conteúdo já codificado.
+
+1. Abra o seu site onde a captcha é exibida no navegador.
+2. Clique com o botão direito no elemento da captcha e selecione **Inspect (Inspecionar)**.
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

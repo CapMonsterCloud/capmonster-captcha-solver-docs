@@ -1,0 +1,152 @@
+---
+sidebar_label: oocl_rotate_new
+title: '识别与解决 oocl_rotate_new | API'
+description: '使用 ComplexImageTask 方法，通过 CapMonster Cloud API 自动识别并解决 oocl_rotate_new 验证码。'
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/oocl_rotate_new" />
+
+# Oocl_rotate_new
+
+![](../images/ComplexImageTask-Recognition/oocl_img.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="oocl_rotate_new" captchaId="complex-rec_oocl_rotate_new" />
+</PriceBlockWrap>
+
+:::warning **注意！**
+此任务不需要使用代理服务器。
+:::
+<br />
+
+请求必须包含两张图片：背景（background）和圆（circle）。
+
+## 请求参数
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> 重要提示：在创建任务之前请直接获取 base64 图片，以避免在解题过程中出现错误（参见章节 [如何获取 base64](#如何获取-base64)）。
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    base64 编码格式的图片。
+
+    ---
+
+    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    任务名称：`"oocl_rotate_new"`
+
+</TabItem>
+
+## 创建任务方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+  **请求**
+  ```json
+  {
+    "clientKey": "API_KEY",
+    "task": {
+      "type": "ComplexImageTask",
+      "class": "recognition",
+      "imagesBase64": [
+        "{background_base64}",
+        "{circle_base64}"
+      ],
+      "metadata": {
+        "Task": "oocl_rotate_new"
+      }
+    }
+  }
+```
+
+背景示例（*background_base64*）：
+
+![](../images/ComplexImageTask-Recognition/ex1.png)
+
+圆形示例（*circle_base64*）：
+
+![](../images/ComplexImageTask-Recognition/ex2.png)
+
+**响应**
+```json
+{
+  "errorId":0,
+  "taskId":407533072
+}
+```
+
+</MethodDescription>
+
+</TabItem>
+
+## 获取任务结果方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+
+**响应：** 表示圆形需要顺时针旋转的角度。
+
+```json
+{
+  "errorId":0,
+  "status":"ready",
+  "errorCode":null,
+  "errorDescription":null,
+  "solution": 
+  {
+    "answer":[130.90909],
+    "metadata":{"AnswerType":"NumericArray"}
+  }		   
+}
+```
+
+</MethodDescription>
+
+</TabItem>
+
+## 如何获取 Base64
+
+页面中的图片可以以 URL 形式存在，也可以已经被编码为 Base64 格式。要找到所需的值，请在验证码图片上右键，选择 **检查（Inspect）**，然后仔细查看 **Elements（元素）** 面板或网络请求 —— 在那里你可以找到图片 URL 或已编码的内容。
+
+1. 在浏览器中打开显示验证码的网站。  
+2. 右键点击验证码元素并选择 **检查（Inspect）**。
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

@@ -1,0 +1,10 @@
+{
+  "label": "Audio",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Audio Modules — Complex Image (click) | API",
+    "description": "Используйте Audio Modules — специализированные компоненты для решения аудио-капч. В ответе вы получите распознанные цифры или текст, извлечённые из аудио."
+  }
+}

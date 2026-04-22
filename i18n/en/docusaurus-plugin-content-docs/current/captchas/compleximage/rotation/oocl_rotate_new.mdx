@@ -1,0 +1,149 @@
+---
+sidebar_label: oocl_rotate_new
+title: 'Recognition and solving oocl_rotate_new | API'
+description: 'Use the ComplexImageTask method for automatic recognition and solving oocl_rotate_new via the CapMonster Cloud API.'
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/oocl_rotate_new" />
+
+# Oocl_rotate_new
+
+![](../images/ComplexImageTask-Recognition/oocl_img.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="oocl_rotate_new" captchaId="complex-rec_oocl_rotate_new" />
+</PriceBlockWrap>
+
+:::warning **Attention!**
+Using proxy servers is not required for this task.
+:::
+<br />
+
+The request must contain two images: background and circle.
+
+## Request parameters
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANT: obtain the base64 images directly before creating the task to avoid errors during solving (see section [How to get base64](#how-to-get-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Image encoded in base64 format.
+
+    ---
+
+    <ParamItem title="Task (inside metadata)" required type="string" />
+    Task name: `"oocl_rotate_new"`
+
+</TabItem>
+
+## Create task method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+  **Request**
+  ```json
+  {
+    "clientKey": "API_KEY",
+    "task": {
+      "type": "ComplexImageTask",
+      "class": "recognition",
+      "imagesBase64": [
+        "{background_base64}",
+        "{circle_base64}"
+      ],
+      "metadata": {
+        "Task": "oocl_rotate_new"
+      }
+    }
+  }
+```
+
+	Background example (*background_base64*):
+
+	![](../images/ComplexImageTask-Recognition/ex1.png)
+
+	Circle example (*circle_base64*):
+
+	![](../images/ComplexImageTask-Recognition/ex2.png)
+
+	**Response**
+	```json
+	{
+	  "errorId":0,
+	  "taskId":407533072
+	}
+	```
+</MethodDescription>
+
+</TabItem>
+
+## Get task result method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Request**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+
+	**Response:** degrees indicating how much the circle must be rotated clockwise.
+  ```json
+  {
+    "errorId":0,
+    "status":"ready",
+    "errorCode":null,
+    "errorDescription":null,
+    "solution": 
+    {
+      "answer":[130.90909],
+      "metadata":{"AnswerType":"NumericArray"}
+    }		   
+  }
+  ```
+</MethodDescription>
+
+</TabItem>
+
+## How to get Base64
+
+Images on pages can be represented either as a URL or already encoded in Base64 format. To find the required value, right-click the captcha image, select **Inspect**, and carefully examine the **Elements** section or network requests — there you can find either the image URL or the encoded content.
+
+1. Open your website where the captcha is displayed in the browser.  
+2. Right-click the captcha element and select **Inspect**.
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

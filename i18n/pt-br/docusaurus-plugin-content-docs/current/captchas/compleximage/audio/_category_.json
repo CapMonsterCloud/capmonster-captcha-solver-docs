@@ -1,0 +1,10 @@
+{
+  "label": "Áudio",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Módulos de Áudio — Complex Image (click) | API",
+    "description": "Use os Módulos de Áudio — componentes especializados para resolver captchas de áudio. A resposta retorna dígitos ou texto reconhecidos extraídos do áudio."
+  }
+}

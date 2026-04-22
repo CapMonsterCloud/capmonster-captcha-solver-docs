@@ -1,0 +1,10 @@
+{
+  "label": "Complex Image (click)",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+  "title": "Recognition and solving complex image captchas — ComplexImageTask | API",
+  "description": "Use the ComplexImageTask method for automatic recognition and solving of complex image captchas via the CapMonster Cloud API."
+  }
+}

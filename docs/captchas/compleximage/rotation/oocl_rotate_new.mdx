@@ -1,0 +1,148 @@
+---
+sidebar_label: oocl_rotate_new
+title: 'Распознавание и решение oocl_rotate_new | API'
+description: 'Используйте метод ComplexImageTask для автоматического распознавания и решения oocl_rotate_new через API Capmonster Cloud.'
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/oocl_rotate_new" />
+
+# Oocl_rotate_new
+
+![](../images/ComplexImageTask-Recognition/oocl_img.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="oocl_rotate_new" captchaId="complex-rec_oocl_rotate_new" />
+</PriceBlockWrap>
+
+:::warning **Внимание!**
+Использование прокси-серверов для данной задачи не требуется.
+:::
+<br />
+
+В запросе необходимо передать два изображения: фон и круг.
+
+## Параметры запроса
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+>  ВАЖНО: получайте base64 изображений непосредственно перед созданием задачи, чтобы избежать ошибок при решении (см. раздел [Как получить base64](#как-получить-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Изображение в кодировке base64.
+
+    ---
+
+    <ParamItem title="Task (внутри metadata)" required type="string" />
+    Название задания: `"oocl_rotate_new"`
+
+</TabItem>
+
+
+## Создание задачи
+
+<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+  **Запрос**
+  ```json
+  {
+    "clientKey": "API_KEY",
+    "task": {
+      "type": "ComplexImageTask",
+      "class": "recognition",
+      "imagesBase64": [
+        "{background_base64}",
+        "{circle_base64}"
+      ],
+      "metadata": {
+        "Task": "oocl_rotate_new"
+      }
+    }
+  }
+  ```
+
+    	Пример фона (*background_base64*):
+
+    	![](../images/ComplexImageTask-Recognition/ex1.png)
+
+    	Пример круга (*circle_base64*):
+
+    	![](../images/ComplexImageTask-Recognition/ex2.png)
+
+    	**Ответ**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":407533072
+    	}
+    	```
+    </MethodDescription>
+
+</TabItem>
+
+## Получение результата задачи
+
+<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Запрос**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Ответ:** градусы, на которые необходимо повернуть круг по часовой стрелке.
+      ```json
+      {
+        "errorId":0,
+        "status":"ready",
+        "errorCode":null,
+        "errorDescription":null,
+        "solution": 
+        {
+          "answer":[130.90909],
+          "metadata":{"AnswerType":"NumericArray"}
+        }		   
+      }
+      ```
+	</MethodDescription>
+</TabItem>
+
+## Как получить Base64
+
+Изображения на страницах могут быть представлены либо в виде ссылки (URL), либо сразу закодированы в формате Base64. Чтобы найти нужное значение, кликните правой кнопкой мыши по изображению, выберите **Просмотреть код** (**Inspect**) и внимательно изучите раздел **Элементы** или сетку сетевых запросов – там вы сможете обнаружить ссылку или закодированное содержимое.
+
+1. Откройте ваш сайт, где отображается капча, в браузере.
+2. Правой кнопкой кликните по элементу капчи и выберите **Inspect**.
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)

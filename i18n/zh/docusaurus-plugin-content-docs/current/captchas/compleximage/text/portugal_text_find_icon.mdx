@@ -1,0 +1,607 @@
+---
+sidebar_label: portugal_text_find_icon
+title: '识别与解决 portugal_text_find_icon | API'
+description: '使用 ComplexImageTask 方法，通过 CapMonster Cloud API 自动识别并解决 portugal_text_find_icon 验证码。'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/portugal_text_find_icon" />
+
+# portugal_text_find_icon
+
+![](../images/ComplexImageTask-Recognition/portugal_text_find_icon.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="portugal_text_find_icon" captchaId="complex-rec_oocl_rotate_new" />
+</PriceBlockWrap>
+
+:::warning **注意！**
+此任务不需要使用代理服务器。
+:::
+<br />
+
+请求必须包含一张 base64 格式的图片，该图片由 5 张横向拼接的图像组成（不包含文本），并按照其显示顺序排列。下方展示了拼接过程的详细示例。此外，`TaskArgument` 参数用于指定任务文本——即需要查找的目标图标。
+
+## 请求参数
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> 重要提示：在创建任务之前请直接获取 base64 图片，以避免在解题过程中出现错误（参见章节 [自动识别与解决示例](#自动识别与解决示例)）。
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    base64 编码格式的图片。
+
+    ---
+
+    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    任务名称：`"portugal_text_find_icon"`
+
+     ---
+
+    <ParamItem title="TaskArgument（在 metadata 中）" required type="string" />
+    用于指定需要查找哪个图标的任务文本。例如：`"Clique no(a) quadrado."`<br />
+
+    **重要说明**：任务文本中的某些字符必须正确转义，以避免处理或识别错误。
+    例如，对于文本 `"Por favor, clique no(a) avião."`，必须传递 `"Por favor, clique no(a) avi\\u00E3o."`
+    （*详见章节 [自动识别与解决示例](#自动识别与解决示例)*）。
+
+</TabItem>
+
+## 创建任务方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+    </MethodItem>
+    <MethodDescription>
+      **请求**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "iVBORw0KGgoAAAA...SuQmCC"
+          ],
+          "metadata": {
+            "Task": "portugal_text_find_icon",
+            "TaskArgument": "Encontre o(a) avi\\u00E3o."
+          }
+        }
+      }
+      ```
+
+    	**响应**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":143998457
+    	}
+    	```
+    </MethodDescription>
+
+</TabItem>
+
+示例任务：
+
+示例展示了 5 个图标以及任务文本：“Encontre o(a) avião.”（找到飞机）。
+
+![](../images/ComplexImageTask-Recognition/portugal_text_find_icon1.png)
+
+你需要发送一个 base64 图片，该图片由 5 张水平拼接的图标组成：
+
+![](../images/ComplexImageTask-Recognition/portugal_text_find_icon2.png)
+
+## 获取任务结果方法
+
+<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 143998457
+		}
+		```
+
+		**响应：**
+		返回的索引表示需要点击的图标编号。图标编号从 1 到 5：
+```json
+{
+  "solution": {
+    "answer": [4],
+    "metadata": {
+      "AnswerType": "NumericArray"
+    }
+  },
+  "status": "ready",
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null
+}     
+```
+
+</MethodDescription>
+
+</TabItem>
+
+## 自动识别与解决示例
+
+以下为使用 `requests` 和 `Playwright` 的 Python 示例，展示完整的验证码处理流程：从获取任务并提取图片，到处理、准备并发送至 CapMonster Cloud 进行识别，以及获取最终结果。
+
+:::warning 重要
+这些示例仅用于演示，展示与你网站交互的一般逻辑。在实际项目中，代码可能需要根据具体网站、请求结构和 headers 进行适配。
+
+敏感数据（API key、代理设置等）应存储在 `.env` 文件或环境变量中。
+:::
+
+<Tabs classNameName="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="python" label="使用 requests" default className="method-panel">
+<details>
+      <summary>显示代码</summary>
+```python
+import os
+import io
+import time
+import base64
+import csv
+import json
+import re
+import requests
+from PIL import Image
+
+# ===================== 配置 =====================
+# 建议将敏感数据存储在 .env 文件中
+
+# 内部验证码 API 基础地址
+BASE = "https://www.example.com"
+
+# CapMonster Cloud API
+API_KEY = "YOUR_API_KEY"
+CREATE_TASK_URL = "https://api.capmonster.cloud/createTask"
+GET_RESULT_URL = "https://api.capmonster.cloud/getTaskResult"
+
+# 用于模拟真实浏览器请求的 headers
+HEADERS = {
+    "User-Agent": "userAgentPlaceholder",
+    "Referer": BASE + "/",
+    "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+    "Connection": "keep-alive"
+}
+
+# 数据保存目录（图片、日志、CSV）
+SAVE_DIR = "captcha_results"
+os.makedirs(SAVE_DIR, exist_ok=True)
+
+session = requests.Session()
+session.headers.update(HEADERS)
+
+# ===================== 工具函数 =====================
+
+def serialize_json(text):
+    """
+    将字符串转换为 JSON 安全格式。
+    """
+    json_str = json.dumps(text, ensure_ascii=True)[1:-1]
+    return re.sub(r'\\u([0-9a-f]{4})', lambda m: '\\u' + m.group(1).upper(), json_str)
+
+
+def post_json(url, payload):
+    """
+    发送 JSON POST 请求并返回服务器响应。
+    """
+    return requests.post(url, json=payload).json()
+
+# ===================== 验证码获取 =====================
+
+def get_captcha():
+    """
+    从网站内部 API 请求新的验证码。
+    """
+    url = f"{BASE}/api.php?action=new"
+    res = session.get(url)
+    data = res.json()
+    print("[CAPTCHA]:", data)
+    return data
+
+
+def build_image_urls(data):
+    """
+    根据 session 和答案构建验证码图片 URL 列表。
+    """
+    return [
+        f"{BASE}/api.php?action=img&s={data['session']}&c={ans}"
+        for ans in data["answers"]
+    ]
+
+# ===================== 图片处理 =====================
+
+def download_images(urls):
+    """
+    从 URL 列表下载验证码图片。
+    """
+    images = []
+    for url in urls:
+        r = session.get(url)
+
+        if "image" not in r.headers.get("Content-Type", ""):
+            continue
+
+        if len(r.content) < 100:
+            continue
+
+        try:
+            img = Image.open(io.BytesIO(r.content)).convert("RGBA")
+            images.append(img)
+        except:
+            pass
+
+    return images
+
+
+def merge_images(pil_images):
+    """
+    将多张图片水平拼接为一张图片。
+    """
+    widths, heights = zip(*(img.size for img in pil_images))
+
+    result = Image.new("RGBA", (sum(widths), max(heights)))
+
+    x = 0
+    for img in pil_images:
+        result.paste(img, (x, 0))
+        x += img.size[0]
+
+    return result
+
+
+def to_base64(img):
+    """
+    将图片转换为 base64 字符串。
+    """
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode()
+
+
+def save_csv(prompt, urls):
+    """
+    将验证码日志（提示词 + 图片 URL）保存到 CSV 文件。
+    """
+    with open(os.path.join(SAVE_DIR, "captcha.csv"), "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["prompt", "image_url"])
+        for url in urls:
+            writer.writerow([prompt, url])
+
+# ===================== CapMonster Cloud API =====================
+
+def create_task(base64_image, prompt):
+    """
+    创建 CapMonster Cloud 图片识别任务。
+    """
+    payload = {
+        "clientKey": API_KEY,
+        "task": {
+            "type": "ComplexImageTask",
+            "class": "recognition",
+            "imagesBase64": [base64_image],
+            "metadata": {
+                "Task": "portugal_text_find_icon",
+                "TaskArgument": serialize_json(prompt)
+            }
+        }
+    }
+
+    res = post_json(CREATE_TASK_URL, payload)
+    print("[createTask]:", res)
+    return res.get("taskId")
+
+
+def get_result(task_id):
+    """
+    等待任务完成并返回结果。
+    """
+    while True:
+        time.sleep(2)
+
+        res = post_json(GET_RESULT_URL, {
+            "clientKey": API_KEY,
+            "taskId": task_id
+        })
+
+        if res.get("status") == "ready":
+            return res
+
+        print("[...] 等待结果中...")
+
+# ===================== 主流程 =====================
+
+def main():
+
+    # 获取验证码
+    data = get_captcha()
+    prompt = data["question_i"]
+    print("[PROMPT]:", prompt)
+
+    # 构建图片 URL
+    urls = build_image_urls(data)
+    save_csv(prompt, urls)
+
+    # 下载图片
+    images = download_images(urls)
+    if not images:
+        print("未找到图片")
+        return
+
+    # 将图片拼接
+    merged = merge_images(images)
+
+    filepath = os.path.join(SAVE_DIR, f"captcha_{int(time.time())}.png")
+    merged.save(filepath)
+    print("[+] 图片已保存:", filepath)
+
+    # 转换为 base64
+    base64_img = to_base64(merged)
+
+    # 在 CapMonster Cloud 创建任务
+    task_id = create_task(base64_img, prompt)
+    if not task_id:
+        print("createTask 错误")
+        return
+
+    print("[+] taskId:", task_id)
+
+    # 获取结果
+    result = get_result(task_id)
+
+    print("\n=== 完整结果 ===")
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="使用 Playwright" className="method-panel">
+  <details>
+    <summary>显示代码</summary>
+```python
+import os
+import io
+import time
+import base64
+import json
+import requests
+import re
+from playwright.sync_api import sync_playwright
+from PIL import Image
+
+# CapMonster Cloud 的 API Key
+API_KEY = "YOUR_API_KEY"
+
+# CapMonster Cloud 接口
+CREATE_TASK_URL = "https://api.capmonster.cloud/createTask"
+GET_RESULT_URL = "https://api.capmonster.cloud/getTaskResult"
+
+# 带验证码的网站目标地址
+TARGET_URL = "https://www.example.com"
+
+# 用于保存验证码图片的目录
+SAVE_DIR = "captcha_imgs"
+os.makedirs(SAVE_DIR, exist_ok=True)
+
+# 浏览器 User-Agent，用于模拟真实用户
+USER_AGENT = "userAgentPlaceholder"
+
+
+def serialize_json(text):
+    # 将文本转换为 JSON 安全字符串（Unicode 转义）
+    json_str = json.dumps(text, ensure_ascii=True)[1:-1]
+
+    # 将 Unicode 字符转换为大写（某些验证码任务需要）
+    return re.sub(r'\\u([0-9a-f]{4})',
+                  lambda m: '\\u' + m.group(1).upper(),
+                  json_str)
+
+
+# 将多张图片横向拼接为一张图片
+def merge_images(images):
+
+    widths, heights = zip(*(img.size for img in images))
+
+    result = Image.new("RGBA", (sum(widths), max(heights)), (0, 0, 0, 0))
+
+    x_offset = 0
+    for img in images:
+        if img.mode != "RGBA":
+            img = img.convert("RGBA")
+
+        # 将图片并排放置
+        result.paste(img, (x_offset, 0), img)
+        x_offset += img.size[0]
+
+    return result
+
+
+# 将 PIL 图片转换为 base64
+def image_to_base64(img):
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    return base64.b64encode(buffer.getvalue()).decode()
+
+
+def post_json(url, payload):
+    return requests.post(url, json=payload).json()
+
+
+# 从 URL 或 base64 获取图片
+def fetch_image(session, src):
+    # 如果是 base64 图片
+    if src.startswith("data:"):
+        return base64.b64decode(src.split(",", 1)[1])
+
+    # 否则从网络下载
+    res = session.get(src, headers={
+        "User-Agent": USER_AGENT,
+        "Referer": TARGET_URL
+    })
+
+    # 检查请求是否成功
+    if res.status_code != 200:
+        raise Exception(f"图片加载失败: {src}")
+
+    return res.content
+
+
+# 创建验证码识别任务
+def create_task(base64_image, prompt):
+    payload = {
+        "clientKey": API_KEY,
+        "task": {
+            "type": "ComplexImageTask",
+            "class": "recognition",
+            "imagesBase64": [base64_image],
+            "metadata": {
+                "Task": "portugal_text_find_icon",
+                "TaskArgument": serialize_json(prompt)  # 验证码提示文本
+            }
+        }
+    }
+
+    print("\n[=== createTask ===]")
+    print(json.dumps(payload, indent=2))
+
+    res = post_json(CREATE_TASK_URL, payload)
+    print("[createTask]:", res)
+
+    return res.get("taskId")
+
+
+# 等待验证码识别结果
+def get_result(task_id):
+    while True:
+        time.sleep(2)  # 请求间隔
+
+        res = post_json(GET_RESULT_URL, {
+            "clientKey": API_KEY,
+            "taskId": task_id
+        })
+
+        # 如果结果已准备好
+        if res.get("status") == "ready":
+            return res.get("solution")
+
+        print("[...] 等待结果中...")
+
+
+def main():
+    session = requests.Session() 
+
+    images_data = []
+
+    with sync_playwright() as p:
+        # 启动浏览器（非无头模式，便于调试）
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+
+        # 打开目标页面
+        page.goto(TARGET_URL)
+
+        # 等待验证码提示文本出现
+        page.wait_for_selector(".captcheck_question_image", timeout=15000)
+        prompt = page.locator(".captcheck_question_image").first.inner_text()
+        print("[PROMPT]:", prompt)
+
+        # 获取所有验证码选项图片
+        answer_links = page.locator(".captcheck_answer_images a")
+        count = answer_links.count()
+
+        print(f"[+] 找到图片数量: {count}")
+
+        # 提取图片地址
+        for i in range(count):
+            img = answer_links.nth(i).locator("img")
+            src = img.get_attribute("src")
+
+            # 下载图片
+            images_data.append(fetch_image(session, src))
+
+        browser.close()
+
+    print(f"[+] 获取到图片数量: {len(images_data)}")
+
+    # 如果没有图片则退出
+    if not images_data:
+        print("未找到图片")
+        return
+
+    # 转换为 PIL 图片
+    images = [Image.open(io.BytesIO(x)) for x in images_data]
+
+    # 拼接图片
+    merged = merge_images(images)
+
+    # 保存最终图片
+    path = f"{SAVE_DIR}/result.png"
+    merged.save(path)
+    print("[+] 已保存:", path)
+
+    # 转换为 base64
+    base64_image = image_to_base64(merged)
+
+    print("[+] 正在发送到 CapMonster Cloud...")
+    task_id = create_task(base64_image, prompt)
+
+    # 检查任务是否创建成功
+    if not task_id:
+        print("createTask 错误")
+        return
+
+    print("[+] taskId:", task_id)
+
+    # 等待结果
+    solution = get_result(task_id)
+
+    print("\nRESULT:")
+    print(solution)
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+  </TabItem>
+    </Tabs>

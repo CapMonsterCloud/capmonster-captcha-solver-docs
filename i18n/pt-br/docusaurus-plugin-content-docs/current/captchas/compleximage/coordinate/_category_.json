@@ -1,0 +1,10 @@
+{
+  "label": "Coordinate",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Coordinate Modules — Complex Image (click) | API",
+    "description": "Используйте Coordinate Modules — специализированные компоненты для решения капч с выбором точек на изображении. В ответе вы получите координаты, по которым необходимо выполнить клик в соответствии с заданием."
+  }
+}

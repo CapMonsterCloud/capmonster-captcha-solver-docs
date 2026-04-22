@@ -1,0 +1,10 @@
+{
+  "label": "Grid",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Grid Modules — Complex Image (click) | API",
+    "description": "使用 Grid Modules —— 专门用于解决网格图像验证码的模块。返回布尔值数组（true/false），其中每个元素表示对应单元格中的图像是否符合 задан条件。"
+  }
+}

@@ -58,5 +58,82 @@
   "sidebar.tutorialSidebar.category.Внешние сервисы.link.generated-index.title": {
     "message": "Conectando serviços externos ao CapMonster Cloud",
     "description": "The generated-index page title for category Внешние сервисы in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Complex Image (click)": {
+    "message": "Complex Image (click)",
+    "description": "O rótulo da categoria Complex Image (click) na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Complex Image (click).link.generated-index.title": {
+    "message": "Reconhecimento e resolução de captchas de imagem complexa — ComplexImageTask | API",
+    "description": "O título da página generated-index para a categoria Complex Image (click) na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Complex Image (click).link.generated-index.description": {
+    "message": "Use o método ComplexImageTask para reconhecimento automático e resolução de captchas de imagem complexa via API CapMonster Cloud.",
+    "description": "A descrição da página generated-index para a categoria Complex Image (click) na sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Audio": {
+    "message": "Audio",
+    "description": "O rótulo da categoria Audio na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Audio.link.generated-index.title": {
+    "message": "Módulos de Audio — Complex Image (click) | API",
+    "description": "O título da página generated-index para a categoria Audio na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Audio.link.generated-index.description": {
+    "message": "Use módulos de Audio — componentes especializados para resolver captchas de áudio. A resposta retorna dígitos ou texto reconhecido a partir do áudio.",
+    "description": "A descrição da página generated-index para a categoria Audio na sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Coordinate": {
+    "message": "Coordinate",
+    "description": "O rótulo da categoria Coordinate na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Coordinate.link.generated-index.title": {
+    "message": "Módulos de Coordinate — Complex Image (click) | API",
+    "description": "O título da página generated-index para a categoria Coordinate na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Coordinate.link.generated-index.description": {
+    "message": "Use módulos de Coordinate — componentes especializados para resolver captchas que exigem seleção de pontos em uma imagem. A resposta retorna coordenadas indicando onde clicar conforme a tarefa.",
+    "description": "A descrição da página generated-index para a categoria Coordinate na sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Grid": {
+    "message": "Grid",
+    "description": "O rótulo da categoria Grid na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Grid.link.generated-index.title": {
+    "message": "Módulos de Grid — Complex Image (click) | API",
+    "description": "O título da página generated-index para a categoria Grid na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Grid.link.generated-index.description": {
+    "message": "Use módulos de Grid — componentes especializados para resolver captchas baseados em grade de imagens. A resposta retorna um array de valores booleanos (true/false), onde cada elemento indica se a imagem na célula correspondente atende à condição.",
+    "description": "A descrição da página generated-index para a categoria Grid na sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Rotation": {
+    "message": "Rotation",
+    "description": "O rótulo da categoria Rotation na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Rotation.link.generated-index.title": {
+    "message": "Módulos de Rotation — Complex Image (click) | API",
+    "description": "O título da página generated-index para a categoria Rotation na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Rotation.link.generated-index.description": {
+    "message": "Use módulos de Rotation — componentes especializados para resolver captchas de rotação de imagem. A resposta retorna coordenadas indicando onde clicar para girar a imagem para a posição correta.",
+    "description": "A descrição da página generated-index para a categoria Rotation na sidebar tutorialSidebar"
+  },
+
+  "sidebar.tutorialSidebar.category.Text": {
+    "message": "Text",
+    "description": "O rótulo da categoria Text na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Text.link.generated-index.title": {
+    "message": "Módulos de Text — Complex Image (click) | API",
+    "description": "O título da página generated-index para a categoria Text na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
+    "message": "Use módulos de Text — componentes especializados para resolver captchas baseados em imagem com seleção de objetos. A resposta retorna resultados de reconhecimento (texto ou índice da opção correta) de acordo com a tarefa.",
+    "description": "A descrição da página generated-index para a categoria Text na sidebar tutorialSidebar"
   }
 }

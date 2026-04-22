@@ -1,0 +1,608 @@
+---
+sidebar_label: portugal_text_find_icon
+title: 'Reconhecimento e resolução de portugal_text_find_icon | API'
+description: 'Use o método ComplexImageTask para reconhecimento automático e resolução de portugal_text_find_icon via API do CapMonster Cloud.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/portugal_text_find_icon" />
+
+# portugal_text_find_icon
+
+![](../images/ComplexImageTask-Recognition/portugal_text_find_icon.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="portugal_text_find_icon" captchaId="complex-rec_oocl_rotate_new" />
+</PriceBlockWrap>
+
+:::warning **Atenção!**
+O uso de servidores proxy não é necessário para esta tarefa.
+:::
+<br />
+
+A solicitação deve conter uma única imagem em formato base64, composta por 5 imagens unidas horizontalmente (sem texto), organizadas na ordem de exibição. Um exemplo detalhado do processo de junção é mostrado abaixo. Além disso, o parâmetro `TaskArgument` especifica o texto da tarefa — o ícone alvo a ser encontrado.
+
+## Parâmetros da solicitação
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANTE: obtenha a imagem em base64 diretamente antes de criar a tarefa para evitar erros durante a resolução (veja a seção [Exemplos automatizados de reconhecimento e resolução](#exemplos-automatizados-de-reconhecimento-e-resolução)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+---
+
+<ParamItem title="class" required type="string" />
+**recognition**
+
+---
+
+<ParamItem title="imagesBase64" required type="array" />
+Imagem codificada em formato base64.
+
+---
+
+<ParamItem title="Task (dentro de metadata)" required type="string" />
+Nome da tarefa: `"portugal_text_find_icon"`
+
+ ---
+
+<ParamItem title="TaskArgument (dentro de metadata)" required type="string" />
+Texto da tarefa que define qual ícone deve ser encontrado. Exemplo: `"Clique no(a) quadrado."`<br />
+
+**Importante**: alguns caracteres no texto da tarefa devem ser devidamente escapados para evitar erros de processamento ou resolução.
+Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar `"Por favor, clique no(a) avi\\u00E3o."`
+(*veja o exemplo na seção [Exemplos automáticos de reconhecimento e resolução](#exemplos-automatizados-de-reconhecimento-e-resolução)*).
+
+</TabItem>
+
+## Método para criar tarefa
+
+<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+    </MethodItem>
+    <MethodDescription>
+      **Requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "iVBORw0KGgoAAAA...SuQmCC"
+          ],
+          "metadata": {
+            "Task": "portugal_text_find_icon",
+            "TaskArgument": "Encontre o(a) avi\\u00E3o."
+          }
+        }
+      }
+      ```
+
+	**Resposta**
+	```json
+	{
+	  "errorId":0,
+	  "taskId":143998457
+	}
+	```
+</MethodDescription>
+
+</TabItem>
+
+Exemplo de tarefa:
+
+O exemplo mostra 5 ícones e o texto da tarefa: "Encontre o(a) avião." (Find the airplane).
+
+![](../images/ComplexImageTask-Recognition/portugal_text_find_icon1.png)
+
+Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unidas horizontalmente:
+
+![](../images/ComplexImageTask-Recognition/portugal_text_find_icon2.png)
+
+## Método para obter o resultado da tarefa
+
+<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Requisição**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 143998457
+		}
+		```
+
+	**Resposta:**
+	o índice retornado é o número do ícone que deve ser clicado. A indexação dos ícones começa em 1 e termina em 5:
+
+```json
+{
+  "solution": {
+    "answer": [4],
+    "metadata": {
+      "AnswerType": "NumericArray"
+    }
+  },
+  "status": "ready",
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null
+}     
+```
+
+</MethodDescription>
+
+</TabItem>
+
+## Exemplos automatizados de reconhecimento e resolução
+
+Exemplos em Python usando `requests` e `Playwright`, demonstrando o fluxo completo de captcha: desde a obtenção da tarefa e extração das imagens até o processamento, preparação e envio para o CapMonster Cloud para reconhecimento, bem como a obtenção do resultado final.
+
+:::warning Importante
+Estes exemplos são apenas para demonstração e ilustram a lógica geral de funcionamento com o seu site. Em projetos reais, o código pode precisar de adaptação para um site específico, suas requisições e cabeçalhos.
+
+Dados sensíveis (chaves de API, configurações de proxy, etc.) devem ser armazenados em arquivos `.env` ou variáveis de ambiente.
+:::
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="python" label="Usando requests" default className="method-panel">
+<details>
+      <summary>Mostrar código</summary>
+```python
+import os
+import io
+import time
+import base64
+import csv
+import json
+import re
+import requests
+from PIL import Image
+
+# ===================== CONFIGURAÇÃO =====================
+# Recomenda-se armazenar dados sensíveis em .env
+
+# URL base da API interna de captcha
+BASE = "https://www.example.com"
+
+# CapMonster Cloud API
+API_KEY = "YOUR_API_KEY"
+CREATE_TASK_URL = "https://api.capmonster.cloud/createTask"
+GET_RESULT_URL = "https://api.capmonster.cloud/getTaskResult"
+
+# Cabeçalhos para simular uma requisição real de navegador
+HEADERS = {
+    "User-Agent": "userAgentPlaceholder",
+    "Referer": BASE + "/",
+    "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+    "Connection": "keep-alive"
+}
+
+# Diretório para salvar dados (imagens, logs, CSV)
+SAVE_DIR = "captcha_results"
+os.makedirs(SAVE_DIR, exist_ok=True)
+
+session = requests.Session()
+session.headers.update(HEADERS)
+
+# ===================== UTILITÁRIOS =====================
+
+def serialize_json(text):
+    """
+    Converte uma string para um formato seguro em JSON.
+    """
+    json_str = json.dumps(text, ensure_ascii=True)[1:-1]
+    return re.sub(r'\\u([0-9a-f]{4})', lambda m: '\\u' + m.group(1).upper(), json_str)
+
+
+def post_json(url, payload):
+    """
+    Envia uma requisição POST com corpo JSON e retorna a resposta do servidor.
+    """
+    return requests.post(url, json=payload).json()
+
+# ===================== OBTENÇÃO DO CAPTCHA =====================
+
+def get_captcha():
+    """
+    Solicita um novo captcha da API interna do site.
+    """
+    url = f"{BASE}/api.php?action=new"
+    res = session.get(url)
+    data = res.json()
+    print("[CAPTCHA]:", data)
+    return data
+
+
+def build_image_urls(data):
+    """
+    Constrói uma lista de URLs das imagens do captcha com base na sessão e respostas.
+    """
+    return [
+        f"{BASE}/api.php?action=img&s={data['session']}&c={ans}"
+        for ans in data["answers"]
+    ]
+
+# ===================== PROCESSAMENTO DE IMAGENS =====================
+
+def download_images(urls):
+    """
+    Faz download das imagens do captcha a partir de uma lista de URLs.
+    """
+    images = []
+    for url in urls:
+        r = session.get(url)
+
+        if "image" not in r.headers.get("Content-Type", ""):
+            continue
+
+        if len(r.content) < 100:
+            continue
+
+        try:
+            img = Image.open(io.BytesIO(r.content)).convert("RGBA")
+            images.append(img)
+        except:
+            pass
+
+    return images
+
+
+def merge_images(pil_images):
+    """
+    Junta várias imagens em uma única (concatenação horizontal).
+    """
+    widths, heights = zip(*(img.size for img in pil_images))
+
+    result = Image.new("RGBA", (sum(widths), max(heights)))
+
+    x = 0
+    for img in pil_images:
+        result.paste(img, (x, 0))
+        x += img.size[0]
+
+    return result
+
+
+def to_base64(img):
+    """
+    Converte uma imagem para string base64.
+    """
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode()
+
+
+def save_csv(prompt, urls):
+    """
+    Salva o log do captcha (prompt + URLs das imagens) em um arquivo CSV.
+    """
+    with open(os.path.join(SAVE_DIR, "captcha.csv"), "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["prompt", "image_url"])
+        for url in urls:
+            writer.writerow([prompt, url])
+
+# ===================== API CAPMONSTER CLOUD =====================
+
+def create_task(base64_image, prompt):
+    """
+    Cria uma tarefa no CapMonster Cloud para reconhecimento de imagem.
+    """
+    payload = {
+        "clientKey": API_KEY,
+        "task": {
+            "type": "ComplexImageTask",
+            "class": "recognition",
+            "imagesBase64": [base64_image],
+            "metadata": {
+                "Task": "portugal_text_find_icon",
+                "TaskArgument": serialize_json(prompt)
+            }
+        }
+    }
+
+    res = post_json(CREATE_TASK_URL, payload)
+    print("[createTask]:", res)
+    return res.get("taskId")
+
+
+def get_result(task_id):
+    """
+    Aguarda a conclusão da tarefa e retorna o resultado.
+    """
+    while True:
+        time.sleep(2)
+
+        res = post_json(GET_RESULT_URL, {
+            "clientKey": API_KEY,
+            "taskId": task_id
+        })
+
+        if res.get("status") == "ready":
+            return res
+
+        print("[...] aguardando resultado...")
+
+# ===================== PROCESSO PRINCIPAL =====================
+
+def main():
+
+    # obter captcha
+    data = get_captcha()
+    prompt = data["question_i"]
+    print("[PROMPT]:", prompt)
+
+    # construir URLs das imagens
+    urls = build_image_urls(data)
+    save_csv(prompt, urls)
+
+    # baixar imagens
+    images = download_images(urls)
+    if not images:
+        print("Nenhuma imagem encontrada")
+        return
+
+    # unir imagens em uma só
+    merged = merge_images(images)
+
+    filepath = os.path.join(SAVE_DIR, f"captcha_{int(time.time())}.png")
+    merged.save(filepath)
+    print("[+] Imagem salva:", filepath)
+
+    # converter imagem para base64
+    base64_img = to_base64(merged)
+
+    # criar tarefa no CapMonster Cloud
+    task_id = create_task(base64_img, prompt)
+    if not task_id:
+        print("erro createTask")
+        return
+
+    print("[+] taskId:", task_id)
+
+    # obter resultado
+    result = get_result(task_id)
+
+    print("\n=== RESULTADO COMPLETO ===")
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="Using Playwright" className="method-panel">
+  <details>
+    <summary>Mostrar código</summary>
+```python
+import os
+import io
+import time
+import base64
+import json
+import requests
+import re
+from playwright.sync_api import sync_playwright
+from PIL import Image
+
+# Chave API do CapMonster Cloud
+API_KEY = "YOUR_API_KEY"
+
+# Endpoints do CapMonster Cloud
+CREATE_TASK_URL = "https://api.capmonster.cloud/createTask"
+GET_RESULT_URL = "https://api.capmonster.cloud/getTaskResult"
+
+# Site alvo com captcha
+TARGET_URL = "https://www.example.com"
+
+# Diretório para salvar a imagem final do captcha
+SAVE_DIR = "captcha_imgs"
+os.makedirs(SAVE_DIR, exist_ok=True)
+
+# User-Agent do navegador para simular um usuário real
+USER_AGENT = "userAgentPlaceholder"
+
+
+def serialize_json(text):
+    # Converte texto em string segura para JSON com escape Unicode
+    json_str = json.dumps(text, ensure_ascii=True)[1:-1]
+
+    # Converte símbolos Unicode para maiúsculas (necessário para algumas tarefas de captcha)
+    return re.sub(r'\\u([0-9a-f]{4})',
+                  lambda m: '\\u' + m.group(1).upper(),
+                  json_str)
+
+
+# Junta várias imagens em uma única imagem horizontal
+def merge_images(images):
+
+    widths, heights = zip(*(img.size for img in images))
+
+    result = Image.new("RGBA", (sum(widths), max(heights)), (0, 0, 0, 0))
+
+    x_offset = 0
+    for img in images:
+        if img.mode != "RGBA":
+            img = img.convert("RGBA")
+
+        # Coloca imagens lado a lado (em linha)
+        result.paste(img, (x_offset, 0), img)
+        x_offset += img.size[0]
+
+    return result
+
+
+# Converte imagem PIL para string base64
+def image_to_base64(img):
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    return base64.b64encode(buffer.getvalue()).decode()
+
+
+def post_json(url, payload):
+    return requests.post(url, json=payload).json()
+
+
+# Carrega imagem por URL ou decodifica base64
+def fetch_image(session, src):
+    # Se a imagem for fornecida em base64 (data URI)
+    if src.startswith("data:"):
+        return base64.b64decode(src.split(",", 1)[1])
+
+    # Caso contrário, baixa da URL
+    res = session.get(src, headers={
+        "User-Agent": USER_AGENT,
+        "Referer": TARGET_URL
+    })
+
+    # Verifica resposta bem-sucedida
+    if res.status_code != 200:
+        raise Exception(f"Error loading image: {src}")
+
+    return res.content
+
+
+# Cria tarefa de resolução de captcha
+def create_task(base64_image, prompt):
+    payload = {
+        "clientKey": API_KEY,
+        "task": {
+            "type": "ComplexImageTask",
+            "class": "recognition",
+            "imagesBase64": [base64_image],
+            "metadata": {
+                "Task": "portugal_text_find_icon",
+                "TaskArgument": serialize_json(prompt)  # instrução do captcha
+            }
+        }
+    }
+
+    print("\n[=== createTask ===]")
+    print(json.dumps(payload, indent=2))
+
+    res = post_json(CREATE_TASK_URL, payload)
+    print("[createTask]:", res)
+
+    return res.get("taskId")
+
+
+# Aguarda o resultado da solução do captcha
+def get_result(task_id):
+    while True:
+        time.sleep(2)  # intervalo entre requisições
+
+        res = post_json(GET_RESULT_URL, {
+            "clientKey": API_KEY,
+            "taskId": task_id
+        })
+
+        # Se a solução estiver pronta
+        if res.get("status") == "ready":
+            return res.get("solution")
+
+        print("[...] waiting for result...")
+
+
+def main():
+    session = requests.Session() 
+
+    images_data = []
+
+    with sync_playwright() as p:
+        # Abre o navegador (não headless para depuração)
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+
+        # Abre a página alvo
+        page.goto(TARGET_URL)
+
+        # Aguarda o texto da instrução do captcha
+        page.wait_for_selector(".captcheck_question_image", timeout=15000)
+        prompt = page.locator(".captcheck_question_image").first.inner_text()
+        print("[PROMPT]:", prompt)
+
+        # Encontra todas as imagens de resposta do captcha
+        answer_links = page.locator(".captcheck_answer_images a")
+        count = answer_links.count()
+
+        print(f"[+] Found images: {count}")
+
+        # Extrai os links das imagens
+        for i in range(count):
+            img = answer_links.nth(i).locator("img")
+            src = img.get_attribute("src")
+
+            # Baixa a imagem
+            images_data.append(fetch_image(session, src))
+
+        browser.close()
+
+    print(f"[+] Received images: {len(images_data)}")
+
+    # Se não houver imagens, encerra
+    if not images_data:
+        print("No images found")
+        return
+
+    # Converte bytes para imagens PIL
+    images = [Image.open(io.BytesIO(x)) for x in images_data]
+
+    # Junta imagens
+    merged = merge_images(images)
+
+    # Salva imagem final
+    path = f"{SAVE_DIR}/result.png"
+    merged.save(path)
+    print("[+] Saved:", path)
+
+    # Converte imagem para base64
+    base64_image = image_to_base64(merged)
+
+    print("[+] Sending to CapMonster Cloud...")
+    task_id = create_task(base64_image, prompt)
+
+    # Verifica criação da tarefa
+    if not task_id:
+        print("createTask error")
+        return
+
+    print("[+] taskId:", task_id)
+
+    # Aguarda resultado
+    solution = get_result(task_id)
+
+    print("\nRESULT:")
+    print(solution)
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+  </TabItem>
+    </Tabs>

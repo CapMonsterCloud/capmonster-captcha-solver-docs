@@ -1,0 +1,172 @@
+---
+sidebar_label: bills_audio
+title: 'Recognition and solving bills_audio | API'
+description: 'Use the ComplexImageTask method for automatic recognition and solving bills_audio via the CapMonster Cloud API.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/bills_audio" />
+
+# bills_audio
+
+![](../images/ComplexImageTask-Recognition/bills_audio.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="bills_audio" captchaId="complex-rec_bills_audio" />
+</PriceBlockWrap>
+
+:::warning **Attention!**
+Using proxy servers is not required for this task.
+:::
+<br />
+The `bills_audio` audio captcha is an audio version of the “receipt captcha”, where generated images or data simulate receipts and may contain digits, amounts, and dates. In this type of task, the user is asked to listen to an audio file and verify the correct input based on the information heard. This format may look like the following:
+
+![](../images/ComplexImageTask-Recognition/bills_audio1.png) ![](../images/ComplexImageTask-Recognition/bills_audio2.png)
+
+## Request parameters
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANT: obtain the base64 audio directly before creating the task to avoid errors during solving (see section [Obtaining audio and converting to Base64](#obtaining-audio-and-converting-to-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Audio encoded in base64.
+    Example: `[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+
+    ---
+
+    <ParamItem title="Task (inside metadata)" required type="string" />
+    Task name: `"bills_audio"`<br />
+
+    ---
+
+    <ParamItem title="PayloadType (inside metadata)" required type="string" />
+    Type of data sent in the task: `"Audio"`
+
+</TabItem>
+
+## Create task method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+    <MethodItem>
+    ```http
+    https://api.capmonster.cloud/createTask
+    ```
+    </MethodItem>
+    <MethodDescription>
+      **Request**
+```json
+{
+    "clientKey": "API_KEY",
+    "task": {
+        "type": "ComplexImageTask",
+        "class": "recognition",
+        "imagesBase64": [
+            "UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"
+        ],
+        "metadata": {
+            "Task": "bills_audio",
+            "PayloadType": "Audio"
+        }
+    }
+}
+```
+**Response**
+```json
+{
+    "errorId": 0,
+    "taskId": 143998457
+}
+```
+</MethodDescription>
+
+</TabItem>
+
+## Get task result method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+    <MethodItem>
+    ```http
+    https://api.capmonster.cloud/getTaskResult
+    ```
+    </MethodItem>
+    <MethodDescription>
+    **Request**
+    ```json
+    {
+        "clientKey": "API_KEY",
+        "taskId": 143998457
+    }
+    ```
+    **Response:** the result contains digits from the audio.
+    ```json
+    {
+      "solution": {
+          "answer": [6, 8, 4, 1, 2, 3],
+          "metadata": {"AnswerType": "Text"}
+      },
+      "cost": 0.0008,
+      "status": "ready",
+      "errorId": 0,
+      "errorCode": null,
+      "errorDescription": null
+    }
+    ```
+    </MethodDescription>
+</TabItem>
+
+## Obtaining audio and converting to Base64
+
+1. Open the captcha page and launch **DevTools**, then go to the **Network** tab.  
+2. Activate the audio mode of the captcha by clicking the corresponding button.  
+3. In the request list, find an address like:  
+   `blob:https://example.com/3be79ac6-1b3d-43ef-9a8a-7ad8877b3606`  
+4. Copy this URL and open it in the browser address bar — the captcha audio file in **.wav** format will open.
+
+![](../images/ComplexImageTask-Recognition/bills_audio4.png)
+
+![](../images/ComplexImageTask-Recognition/bills_audio3.png)
+
+5. Save the file and convert the **.wav** file to **Base64** using any convenient method — for example, with Node.js:
+
+```JavaScript
+const fs = require("fs");
+
+// Path to the source .wav file
+const filePath = "C:\\Users\\User\\Downloads\\file-acbe-4fb3-9f8e-f989ba6c7fde.wav";
+
+const fileBuffer = fs.readFileSync(filePath);
+
+// Convert to Base64
+const base64 = fileBuffer.toString("base64");
+
+// Save Base64 string to a text file
+fs.writeFileSync("output.txt", base64);
+
+console.log("File successfully converted to Base64 and saved as output.txt");
+```
+
+6. Use the resulting Base64 string in the CapMonster Cloud task request.
+
+

@@ -1,0 +1,10 @@
+{
+  "label": "Coordinate",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Coordinate Modules — Complex Image (click) | API",
+    "description": "使用 Coordinate Modules —— 专门用于解决需要在图像上选择点击点的验证码。在响应中，您将获得坐标，用于按照任务要求进行点击。"
+  }
+}

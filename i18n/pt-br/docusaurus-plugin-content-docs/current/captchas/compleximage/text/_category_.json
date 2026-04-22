@@ -1,0 +1,10 @@
+{
+  "label": "Text",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Text Modules — Complex Image (click) | API",
+    "description": "Используйте Text Modules — специализированные компоненты для решения капч с выбором объектов на изображении. В ответе вы получите результат распознавания (текст или индекс правильного варианта), соответствующий заданию."
+  }
+}

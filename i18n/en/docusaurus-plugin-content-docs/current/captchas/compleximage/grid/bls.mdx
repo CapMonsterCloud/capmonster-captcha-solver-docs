@@ -1,0 +1,341 @@
+---
+sidebar_label: bls
+title: 'Recognition and solving bls | API'
+description: 'Use the ComplexImageTask method for automatic recognition and solving of bls via the CapMonster Cloud API.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import BlogLink from '@theme/BlogLink';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/bls" />
+
+
+# bls
+
+![](../images/ComplexImageTask-Recognition/bls_img.png)
+
+<PriceBlockWrap>
+  <PriceBlock  captchaId="complex-rec_bls" />
+</PriceBlockWrap>
+
+:::warning **Attention!**
+Using proxy servers is not required for this task.
+:::
+
+In the request, 9 images must be provided in base64 format. <br />
+Additionally, the `TaskArgument` value must be passed inside `metadata`.
+
+<BlogLink url="https://capmonster.cloud/en/blog/news/bls-solve-extension" />
+
+## Request parameters
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANT: obtain base64 images directly before creating the task to avoid errors during solving (see section [How to get base64](#how-to-get-base64)).
+</span>
+<br />
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Array of images encoded in base64 format.
+
+    ---
+
+    <ParamItem title="Task (inside metadata)" required type="string" />
+    Task name: `"bls_3x3"`
+
+    ---
+
+    <ParamItem title="TaskArgument (inside metadata)" required type="string" />
+    The value of the number that must be found in the images. Example: `"123"`
+
+</TabItem>
+
+## Create task method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+      **Request**
+      ```json
+      {
+        "clientKey":{{API_key}},
+        "task": 
+        {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "image1_to_base64",
+            "image2_to_base64",
+            "image3_to_base64",
+            "image4_to_base64",
+            "image5_to_base64",
+            "image6_to_base64",
+            "image7_to_base64",
+            "image8_to_base64",
+            "image9_to_base64"
+          ],
+          "metadata": {
+            "Task": "bls_3x3",
+            "TaskArgument": "123"
+          }
+        }
+      }
+      ```
+
+    	Example task:
+
+    	![](../images/ComplexImageTask-Recognition/bls.png)
+
+    	Pass images converted to base64:
+
+    	![](../images/ComplexImageTask-Recognition/image1.gif)
+    	![](../images/ComplexImageTask-Recognition/image2.gif)
+    	![](../images/ComplexImageTask-Recognition/image3.gif)
+    	![](../images/ComplexImageTask-Recognition/image4.gif)
+    	![](../images/ComplexImageTask-Recognition/image5.gif)
+    	![](../images/ComplexImageTask-Recognition/image6.gif)
+    	![](../images/ComplexImageTask-Recognition/image7.gif)
+    	![](../images/ComplexImageTask-Recognition/image8.gif)
+    	![](../images/ComplexImageTask-Recognition/image9.gif)
+
+    	For this example: `"TaskArgument": "546"`
+
+    	**Response**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":143998457
+    	}
+    	```
+    </MethodDescription>
+
+</TabItem>
+
+## Get task result method
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Request**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 143998457
+		}
+		```
+		**Response:**
+		an array of boolean values (`true` or `false`) depending on whether the number in each image matches the target argument.
+```json
+{
+  "errorId": 0,
+  "status": "ready",
+  "errorCode": null,
+  "errorDescription": null,
+  "solution": {
+    "answer": [true, true, false, false, true, false, false, true, true],
+    "metadata": {
+      "AnswerType": "Grid"
+    }
+  }
+}      
+```
+
+</MethodDescription>
+
+</TabItem>
+
+## Alternative solving method (bls_text)
+
+Instead of using the automatic matching mode (`bls_3x3`), you can use text recognition for each image separately. This approach provides greater flexibility and allows more precise control over the processing workflow.
+
+This method is implemented via the `ImageToTextTask` with the `bls_text` module (*see section [Module name passing](/api/module-name.mdx)*). In this mode, **each image is processed as an individual captcha**, and the result is a recognized text value.
+
+### Workflow
+
+1. The captcha is split into separate images (9 grid elements).
+2. Each image is submitted as an individual `ImageToTextTask`.
+3. The response returns the recognized text (number).
+4. The received values are compared with the target to determine the matching images.
+
+### Request example
+
+<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+      **Request**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "ImageToTextTask",
+    "capMonsterModule": "bls_text",
+    "body": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...CruPHGc8nk5z+HtRQB//9k="
+  }
+}
+```
+
+**Response example**
+
+```json
+{
+  "errorId": 0,
+  "status": "ready",
+  "errorCode": null,
+  "errorDescription": null,
+  "solution": {
+    "text": "123"
+  }
+}
+```
+</MethodDescription>
+
+</TabItem>
+
+### Example of automated bls_text solving
+
+In this approach, each image is submitted individually as an `ImageToTextTask` using the `bls_text` module. The recognition results are then collected and processed. You receive a text value for each image and can define your own logic — for example, comparing values with a target (`target`), filtering, combining results, or implementing any custom processing depending on your use case.
+
+<details>
+      <summary>Show code (Node.js)</summary>
+```javascript
+const API_KEY = "API_KEY";
+const CREATE_TASK_URL = "https://api.capmonster.cloud/createTask";
+const GET_RESULT_URL = "https://api.capmonster.cloud/getTaskResult";
+
+const target = "546";
+
+// 9 images (send each in format: "/9j/4AAQSkZJ...6UUAf/Z")
+const images = [
+  "base64_img_1",
+  "base64_img_2",
+  "base64_img_3",
+  "base64_img_4",
+  "base64_img_5",
+  "base64_img_6",
+  "base64_img_7",
+  "base64_img_8",
+  "base64_img_9",
+];
+
+// create task (SINGLE image)
+async function createTask(imageBase64) {
+  const payload = {
+    clientKey: API_KEY,
+    task: {
+      type: "ImageToTextTask",
+      capMonsterModule: "bls_text",
+      body: imageBase64,
+    },
+  };
+
+  console.log("=== REQUEST ===");
+  console.log(JSON.stringify(payload, null, 2));
+
+  const res = await fetch(CREATE_TASK_URL, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  console.log("=== CREATE RESPONSE ===");
+  console.log(JSON.stringify(data, null, 2));
+
+  if (data.errorId !== 0) {
+    throw new Error(data.errorDescription);
+  }
+
+  return data.taskId;
+}
+
+// waiting for result
+async function getResult(taskId) {
+  while (true) {
+    const res = await fetch(GET_RESULT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        clientKey: API_KEY,
+        taskId,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.errorId !== 0) {
+      throw new Error(data.errorDescription);
+    }
+
+    if (data.status === "ready") {
+      return data.solution.text;
+    }
+
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+}
+
+// main logic
+async function solveBlsText() {
+  try {
+    // 1. create tasks
+    const taskIds = await Promise.all(images.map((img) => createTask(img)));
+
+    // 2. get results
+    const results = await Promise.all(taskIds.map((id) => getResult(id)));
+
+    // 3. further processing, e.g. compare with target
+    const answer = results.map((text) => text === target);
+
+    console.log("RESULTS:", results);
+    console.log("ANSWER:", answer);
+
+    return answer;
+  } catch (err) {
+    console.error("ERROR:", err.message);
+  }
+}
+
+solveBlsText();
+```
+</details>
+
+
+## How to get Base64
+
+Images on pages can be represented either as a URL or already encoded in Base64 format. To find the required value, right-click the captcha image, select **Inspect**, and carefully examine the **Elements** section or network requests — there you can find either the image URL or the encoded content.
+
+1. Open your website where the captcha is displayed in the browser.  
+2. Right-click the captcha element and select **Inspect**.
+
+![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)
+
