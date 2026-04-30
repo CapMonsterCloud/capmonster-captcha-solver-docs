@@ -215,27 +215,17 @@ In this case, you don’t need to pass all parameters from option 2 — they can
     ---
 
     <ParamItem title="challengeScript" required type="string" />
-    Link to challenge.js.
-
-    ---
-
-    <ParamItem title="captchaScript" required type="string" />
-    Link to captcha.js. In this option, provide any string.
-
-    ---
-
-    <ParamItem title="websiteKey" required type="string" />
-    Provide any string.
+    Link to `challenge.js`.
 
     ---
 
     <ParamItem title="context" required type="string" />
-    Provide any string.
+    Provide an empty string.
 
     ---
 
     <ParamItem title="iv" required type="string" />
-    Provide any string.
+    Provide an empty string.
 
     ---
 
@@ -469,8 +459,6 @@ When navigating to the site, you get a **405** response and an HTML page with ca
         "type": "AmazonTask",
         "websiteURL": "https://example.com",
         "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "",
-        "websiteKey": "",
         "context": "",
         "iv": "",
         "cookieSolution": true
@@ -507,8 +495,6 @@ When navigating to the site, you get a **405** response and an HTML page with ca
         "type": "AmazonTask",
         "websiteURL": "https://example.com",
         "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "",
-        "websiteKey": "",
         "context": "",
         "iv": "",
         "cookieSolution": true,
