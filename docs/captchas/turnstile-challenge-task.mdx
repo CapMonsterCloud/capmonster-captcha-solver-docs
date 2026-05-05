@@ -64,7 +64,7 @@ CapMonster Cloud может возвращать результат решени
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Ключ Turnstile
+  Ключ Turnstile (*см. раздел [Как найти все нужные параметры для создания задачи](#как-найти-все-нужные-параметры-для-создания-задачи)*)
 
   ---
 
@@ -271,7 +271,7 @@ console.log(htmlBase64);
         "task": {
           "type": "TurnstileTask",
           "websiteURL": "https://example.com",
-          "websiteKey": "0x4AAAAAAADnPIDROrmt1Wwj",
+          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
           "pageAction": "managed",
@@ -305,7 +305,7 @@ console.log(htmlBase64);
         "task": {
           "type": "TurnstileTask",
           "websiteURL": "https://example.com",
-          "websiteKey": "0x4AAAAAAADnPIDROrmt1Wwj",
+          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
           "pageAction": "managed",
@@ -1009,7 +1009,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // CapMonster Cloud автоматически использует свои прокси
     let turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com", // URL страницы с капчей
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy", // Замените на корректное значение
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", // Замените на корректное значение
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
         cloudflareTaskType: "token",
@@ -1031,7 +1031,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey: "YOUR_WEBSITE_KEY_HERE",
         proxy,
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
@@ -1084,7 +1084,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cloudflare cf_clearance решается только с вашим прокси
     const turnstileRequest = new TurnstileRequest({
         websiteURL: 'https://example.com/',
-        websiteKey: '0x4AAAAAAABUY0VLtOUMAHxE',
+        websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1125,7 +1125,7 @@ const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster
     // CapMonster Cloud автоматически использует свои прокси
     let turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com", // URL страницы с капчей
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy", // Замените на корректное значение
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", // Замените на корректное значение
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
         cloudflareTaskType: "token",
@@ -1147,7 +1147,7 @@ const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster
 
     turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", 
         proxy,
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
@@ -1196,7 +1196,7 @@ async function main() {
     // Cloudflare cf_clearance решается только с вашим прокси
     const turnstileRequest = new TurnstileRequest({
         websiteURL: 'https://example.com/',
-        websiteKey: '0x4AAAAAAABUY0VLtOUMAHxE',
+        websiteKey: 'xxxxx', // Замените на корректное значение
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1236,7 +1236,7 @@ async def solve_turnstile_token():
     # CapMonster Cloud автоматически использует свои прокси
     turnstile_request = TurnstileRequest(
         websiteURL="http://example.com",  # URL страницы с капчей
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",        # Замените на корректное значение
+        websiteKey="YOUR_WEBSITE_KEY_HERE",        # Замените на корректное значение
         data="YOUR_DATA_HERE",
         pageAction="managed",
         cloudflareTaskType="token",
@@ -1257,7 +1257,7 @@ async def solve_turnstile_token():
     #
     # turnstile_request = TurnstileRequest(
     #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+    #     websiteKey="YOUR_WEBSITE_KEY_HERE",
     #     proxy=proxy,
     #     data="YOUR_DATA_HERE",
     #     pageAction="managed",
@@ -1307,7 +1307,7 @@ async def solve_cf_clearance():
     # Cloudflare cf_clearance решается только с вашим прокси
     turnstile_request = TurnstileRequest(
         websiteURL="https://example.com",
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",  # замените на актуальное значение
+        websiteKey="xxxxx",
         cloudflareTaskType="cf_clearance",
         htmlPageBase64="BASE64_HTML_PAGE_HERE",
         userAgent="userAgentPlaceholder",
@@ -1357,7 +1357,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",           // URL страницы с капчей
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",      // Ваш sitekey
+            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",      // Ваш sitekey
             Data = "YOUR_DATA_HERE",
             PageAction = "managed",
             CloudflareTaskType = "token",
@@ -1372,7 +1372,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",
+            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",
             Data = "YOUR_DATA_HERE",
             PageAction = "managed",
             CloudflareTaskType = "token",
@@ -1425,7 +1425,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",     // URL страницы с капчей        
-            WebsiteKey = "0x4AAAAAAADnPIDROrmt1Wwj",  // Замените на корректное значение     
+            WebsiteKey = "xxxxx",   
             CloudflareTaskType = "cf_clearance",                                    
             HtmlPageBase64 = "htmlPageBase64Here",        
             UserAgent = "userAgentPlaceholder", 

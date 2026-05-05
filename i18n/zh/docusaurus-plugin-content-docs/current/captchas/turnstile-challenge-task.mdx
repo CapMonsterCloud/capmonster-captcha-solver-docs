@@ -65,7 +65,7 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Turnstile 网站 key
+  Turnstile 网站 key (*参见章节 [如何获取创建任务所需的所有参数](#如何获取创建任务所需的所有参数)*)
 
 ---
 
@@ -269,7 +269,7 @@ console.log(htmlBase64);
         "task": {
           "type": "TurnstileTask",
           "websiteURL": "https://example.com",
-          "websiteKey": "0x4AAAAAAADnPIDROrmt1Wwj",
+          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
           "pageAction": "managed",
@@ -304,7 +304,7 @@ console.log(htmlBase64);
         "task": {
           "type": "TurnstileTask",
           "websiteURL": "https://example.com",
-          "websiteKey": "0x4AAAAAAADnPIDROrmt1Wwj",
+          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
           "pageAction": "managed",
@@ -1028,7 +1028,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // CapMonster Cloud 会自动使用它们的代理
     let turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com", // 验证码页面的 URL
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy", // 替换为正确的值
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", // 替换为正确的值
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
         cloudflareTaskType: "token",
@@ -1050,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey: "YOUR_WEBSITE_KEY_HERE",
         proxy,
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
@@ -1102,7 +1102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cloudflare cf_clearance 只能使用您的代理解决
     const turnstileRequest = new TurnstileRequest({
         websiteURL: 'https://example.com/',
-        websiteKey: '0x4AAAAAAABUY0VLtOUMAHxE',
+        websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1142,7 +1142,7 @@ const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
     // CapMonster Cloud 会自动使用它们的代理
     let turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com", // 验证码页面的 URL
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy", // 替换为正确的值
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", // 替换为正确的值
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
         cloudflareTaskType: "token",
@@ -1164,7 +1164,7 @@ const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
 
     turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey: "YOUR_WEBSITE_KEY_HERE",
         proxy,
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
@@ -1213,7 +1213,7 @@ async function main() {
     // Cloudflare cf_clearance 只能使用您的代理解决
     const turnstileRequest = new TurnstileRequest({
         websiteURL: 'https://example.com/',
-        websiteKey: '0x4AAAAAAABUY0VLtOUMAHxE',
+        websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1255,7 +1255,7 @@ async def solve_turnstile_token():
     # CapMonster Cloud 会自动使用它们的代理
     turnstile_request = TurnstileRequest(
         websiteURL="http://example.com",  # 验证码页面的 URL
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",        # 替换为正确的值
+        websiteKey="YOUR_WEBSITE_KEY_HERE",        # 替换为正确的值
         data="YOUR_DATA_HERE",
         pageAction="managed",
         cloudflareTaskType="token",
@@ -1276,7 +1276,7 @@ async def solve_turnstile_token():
     #
     # turnstile_request = TurnstileRequest(
     #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+    #     websiteKey="YOUR_WEBSITE_KEY_HERE",
     #     proxy=proxy,
     #     data="YOUR_DATA_HERE",
     #     pageAction="managed",
@@ -1326,7 +1326,7 @@ async def solve_cf_clearance():
     # Cloudflare cf_clearance 只能使用您的代理解决
     turnstile_request = TurnstileRequest(
         websiteURL="https://example.com",
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey="xxxxx",
         cloudflareTaskType="cf_clearance",
         htmlPageBase64="BASE64_HTML_PAGE_HERE",
         userAgent="userAgentPlaceholder",
@@ -1377,7 +1377,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",        // 验证码页面的 URL
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",    // 替换为正确的值
+            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",    // 替换为正确的值
             Data = "data_here",
             PageAction = "managed",
             CloudflareTaskType = "token",
@@ -1392,7 +1392,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",
+            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",
             Data = "data_here",
             PageAction = "managed",
             CloudflareTaskType = "token",
@@ -1446,7 +1446,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",     // 验证码页面的 URL        
-            WebsiteKey = "0x4AAAAAAADnPIDROrmt1Wwj",  // 替换为正确的值     
+            WebsiteKey = "xxxxx",    
             CloudflareTaskType = "cf_clearance",                                    
             HtmlPageBase64 = "htmlPageBase64Here",        
             UserAgent = "userAgentPlaceholder", 

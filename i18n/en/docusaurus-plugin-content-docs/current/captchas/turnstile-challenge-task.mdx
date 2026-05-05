@@ -65,7 +65,8 @@ CapMonster Cloud can return the solution result as either a **token** or a **cf_
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Turnstile site key
+  Turnstile site key (*see section [How to find all required parameters for task creation](#how-to-find-all-required-parameters-for-task-creation)*)
+
 
   ---
 
@@ -271,7 +272,7 @@ console.log(htmlBase64);
         "task": {
           "type": "TurnstileTask",
           "websiteURL": "https://example.com",
-          "websiteKey": "0x4AAAAAAADnPIDROrmt1Wwj",
+          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
           "pageAction": "managed",
@@ -305,7 +306,7 @@ console.log(htmlBase64);
         "task": {
           "type": "TurnstileTask",
           "websiteURL": "https://example.com",
-          "websiteKey": "0x4AAAAAAADnPIDROrmt1Wwj",
+          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
           "pageAction": "managed",
@@ -1011,7 +1012,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // CapMonster Cloud automatically uses its own proxies
     let turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com", // URL of the captcha page
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy", // Replace with the correct value
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", // Replace with the correct value
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
         cloudflareTaskType: "token",
@@ -1033,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey: "YOUR_WEBSITE_KEY_HERE",
         proxy,
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
@@ -1086,7 +1087,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cloudflare cf_clearance can only be solved with your own proxy
     const turnstileRequest = new TurnstileRequest({
         websiteURL: 'https://example.com/',
-        websiteKey: '0x4AAAAAAABUY0VLtOUMAHxE',
+        websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1125,7 +1126,7 @@ const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
     // CapMonster Cloud automatically uses its own proxies
     let turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com", // URL of the captcha page
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy", // Replace with the correct value
+        websiteKey: "YOUR_WEBSITE_KEY_HERE", // Replace with the correct value
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
         cloudflareTaskType: "token",
@@ -1147,7 +1148,7 @@ const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
 
     turnstileRequest = new TurnstileRequest({
         websiteURL: "https://example.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey: "YOUR_WEBSITE_KEY_HERE",
         proxy,
         data: "YOUR_DATA_HERE",
         pageAction: "managed",
@@ -1196,7 +1197,7 @@ async function main() {
     // Cloudflare cf_clearance can only be solved with your own proxy
     const turnstileRequest = new TurnstileRequest({
         websiteURL: 'https://example.com/',
-        websiteKey: '0x4AAAAAAABUY0VLtOUMAHxE',
+        websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1238,7 +1239,7 @@ async def solve_turnstile_token():
     # CapMonster Cloud automatically uses its own proxies
     turnstile_request = TurnstileRequest(
         websiteURL="http://example.com",  # URL of the captcha page
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",        # Replace with the correct value
+        websiteKey="YOUR_WEBSITE_KEY_HERE",        # Replace with the correct value
         data="YOUR_DATA_HERE",
         pageAction="managed",
         cloudflareTaskType="token",
@@ -1259,7 +1260,7 @@ async def solve_turnstile_token():
     #
     # turnstile_request = TurnstileRequest(
     #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+    #     websiteKey="YOUR_WEBSITE_KEY_HERE",
     #     proxy=proxy,
     #     data="YOUR_DATA_HERE",
     #     pageAction="managed",
@@ -1309,7 +1310,7 @@ async def solve_cf_clearance():
     # Cloudflare cf_clearance can only be solved with your own proxy
     turnstile_request = TurnstileRequest(
         websiteURL="https://example.com",
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteKey="xxxxx",
         cloudflareTaskType="cf_clearance",
         htmlPageBase64="BASE64_HTML_PAGE_HERE",
         userAgent="userAgentPlaceholder",
@@ -1359,7 +1360,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",                 // URL of the captcha page
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",           // Replace with the correct value
+            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",           // Replace with the correct value
             Data = "data_here",
             PageAction = "managed",
             CloudflareTaskType = "token",
@@ -1374,7 +1375,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",
+            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",
             Data = "data_here",
             PageAction = "managed",
             CloudflareTaskType = "token",
@@ -1428,7 +1429,7 @@ class Program
         var turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://example.com",     // URL of the captcha page        
-            WebsiteKey = "0x4AAAAAAADnPIDROrmt1Wwj",  // Replace with the correct value     
+            WebsiteKey = "xxxxx",   
             CloudflareTaskType = "cf_clearance",                                  
             HtmlPageBase64 = "htmlPageBase64Here",        
             UserAgent = "userAgentPlaceholder", 
