@@ -65,6 +65,9 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 * **V2:**
   `apiGetLib` = 页面中加载的 `site.min.js` 文件 URL。
 
+  示例：`https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js`，其中 X.Y.Z 是客户端版本。
+
+
 *更多信息请参阅章节 [创建任务方法](#创建任务方法) 和 [如何识别 Friendly Captcha 版本](#如何识别-friendly-captcha-版本)。*
 
   ---
@@ -122,7 +125,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 对于 **V2**
 
 ```json
-"apiGetLib": "https://example.com/wp-content/plugins/friendly-captcha/public/vendor/v2/site.min.js?ver=0.1.25"
+"apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 
 <br />
@@ -339,7 +342,8 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
     version: null,      
     clientVersion: null,
     indicators: [],
-    siteMinJsLinks: []
+    siteMinJsLinks: [],
+    detectedCdn: null
   };
 
   const scripts = Array.from(document.scripts).map(s => s.src);
@@ -347,14 +351,9 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
   for (const src of scripts) {
     if (!src) continue;
 
-    if (src.includes("site.min.js")) {
-      result.version = "V2";
-      result.indicators.push("Found site.min.js");
-      result.siteMinJsLinks.push(src);
-    }
-
     if (src.includes("widget.min.js") || src.includes("widget.module.min.js")) {
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Found widget script");
     }
 
@@ -362,6 +361,7 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
     if (match) {
       result.clientVersion = match[1];
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Detected CDN version");
     }
   }
@@ -381,6 +381,17 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
     if (r.name.includes("puzzle?sitekey")) {
       result.version = "V1";
       result.indicators.push("Found puzzle?sitekey request");
+    }
+  }
+
+  for (const src of scripts) {
+    if (!src) continue;
+
+    if (src.includes("site.min.js")) {
+      result.version = "V2";
+      result.detectedCdn = src;
+      result.indicators.push("Found site.min.js");
+      result.siteMinJsLinks.push(src);
     }
   }
 

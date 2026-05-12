@@ -63,7 +63,7 @@ CapMonster Cloud по умолчанию работает через встро�
   `apiGetLib` = `https://cdn.jsdelivr.net/npm/friendly-challenge@X.Y.Z/widget.module.min.js`, где `X.Y.Z` — версия клиента из заголовка `x-frc-client`.
 
 * **V2:**
-  `apiGetLib` = URL файла `site.min.js`, который загружается на странице.
+  `apiGetLib` = URL файла `site.min.js`, который загружается на странице. Пример: `https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js`, где X.Y.Z — это версия клиента.
 
 
 *Подробнее см. в разделах [Метод создания задачи](#метод-создания-задачи) и [Как определить версию Friendly Captcha](#как-определить-версию-friendly-captcha).*
@@ -122,8 +122,9 @@ CapMonster Cloud по умолчанию работает через встро�
 ```
 
 Для **V2**
+
   ```json
-  "apiGetLib": "https://example.com/wp-content/plugins/friendly-captcha/public/vendor/v2/site.min.js?ver=0.1.25"
+  "apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 <br />
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -335,7 +336,8 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
     version: null,      
     clientVersion: null,
     indicators: [],
-    siteMinJsLinks: []
+    siteMinJsLinks: [],
+    detectedCdn: null
   };
 
   const scripts = Array.from(document.scripts).map(s => s.src);
@@ -343,14 +345,9 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
   for (const src of scripts) {
     if (!src) continue;
 
-    if (src.includes("site.min.js")) {
-      result.version = "V2";
-      result.indicators.push("Found site.min.js");
-      result.siteMinJsLinks.push(src);
-    }
-
     if (src.includes("widget.min.js") || src.includes("widget.module.min.js")) {
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Found widget script");
     }
 
@@ -358,6 +355,7 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
     if (match) {
       result.clientVersion = match[1];
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Detected CDN version");
     }
   }
@@ -377,6 +375,17 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
     if (r.name.includes("puzzle?sitekey")) {
       result.version = "V1";
       result.indicators.push("Found puzzle?sitekey request");
+    }
+  }
+
+  for (const src of scripts) {
+    if (!src) continue;
+
+    if (src.includes("site.min.js")) {
+      result.version = "V2";
+      result.detectedCdn = src;
+      result.indicators.push("Found site.min.js");
+      result.siteMinJsLinks.push(src);
     }
   }
 
