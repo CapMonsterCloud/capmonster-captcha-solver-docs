@@ -64,6 +64,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 * **V2:**
   `apiGetLib` = URL of the `site.min.js` file loaded on the page.
+  Example: `https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js`, where X.Y.Z is the client version.
 
 
 *See also sections [Create task method](#create-task-method) and [How to determine Friendly Captcha version](#how-to-determine-friendly-captcha-version).*
@@ -122,8 +123,8 @@ For **V1**
 
 For **V2**
 
-```json
-"apiGetLib": "https://example.com/wp-content/plugins/friendly-captcha/public/vendor/v2/site.min.js?ver=0.1.25"
+  ```json
+  "apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 
 <br />
@@ -339,7 +340,8 @@ You can automate the process of detecting the Friendly Captcha version in the br
     version: null,      
     clientVersion: null,
     indicators: [],
-    siteMinJsLinks: []
+    siteMinJsLinks: [],
+    detectedCdn: null
   };
 
   const scripts = Array.from(document.scripts).map(s => s.src);
@@ -347,14 +349,9 @@ You can automate the process of detecting the Friendly Captcha version in the br
   for (const src of scripts) {
     if (!src) continue;
 
-    if (src.includes("site.min.js")) {
-      result.version = "V2";
-      result.indicators.push("Found site.min.js");
-      result.siteMinJsLinks.push(src);
-    }
-
     if (src.includes("widget.min.js") || src.includes("widget.module.min.js")) {
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Found widget script");
     }
 
@@ -362,6 +359,7 @@ You can automate the process of detecting the Friendly Captcha version in the br
     if (match) {
       result.clientVersion = match[1];
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Detected CDN version");
     }
   }
@@ -381,6 +379,17 @@ You can automate the process of detecting the Friendly Captcha version in the br
     if (r.name.includes("puzzle?sitekey")) {
       result.version = "V1";
       result.indicators.push("Found puzzle?sitekey request");
+    }
+  }
+
+  for (const src of scripts) {
+    if (!src) continue;
+
+    if (src.includes("site.min.js")) {
+      result.version = "V2";
+      result.detectedCdn = src;
+      result.indicators.push("Found site.min.js");
+      result.siteMinJsLinks.push(src);
     }
   }
 

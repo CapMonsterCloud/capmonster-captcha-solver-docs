@@ -63,7 +63,9 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   `apiGetLib` = `https://cdn.jsdelivr.net/npm/friendly-challenge@X.Y.Z/widget.module.min.js`, onde `X.Y.Z` é a versão do cliente obtida no cabeçalho `x-frc-client`.
 
 * **V2:**
-  `apiGetLib` = URL do arquivo `site.min.js` carregado na página.
+  `apiGetLib` = URL do arquivo `site.min.js` carregado na página. 
+  Exemplo: `https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js`, onde X.Y.Z é a versão do cliente.
+
 
 *Veja também as seções [Criar método de tarefa](#criar-método-de-tarefa) e [Como identificar a versão do Friendly Captcha](#como-identificar-a-versão-do-friendly-captcha).*
 
@@ -121,7 +123,7 @@ Para **V1**
 Para **V2**
 
 ```json
-"apiGetLib": "https://example.com/wp-content/plugins/friendly-captcha/public/vendor/v2/site.min.js?ver=0.1.25"
+"apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 
 <br />
@@ -338,7 +340,8 @@ Você pode automatizar o processo de detecção da versão do Friendly Captcha n
     version: null,      
     clientVersion: null,
     indicators: [],
-    siteMinJsLinks: []
+    siteMinJsLinks: [],
+    detectedCdn: null
   };
 
   const scripts = Array.from(document.scripts).map(s => s.src);
@@ -346,14 +349,9 @@ Você pode automatizar o processo de detecção da versão do Friendly Captcha n
   for (const src of scripts) {
     if (!src) continue;
 
-    if (src.includes("site.min.js")) {
-      result.version = "V2";
-      result.indicators.push("Found site.min.js");
-      result.siteMinJsLinks.push(src);
-    }
-
     if (src.includes("widget.min.js") || src.includes("widget.module.min.js")) {
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Found widget script");
     }
 
@@ -361,6 +359,7 @@ Você pode automatizar o processo de detecção da versão do Friendly Captcha n
     if (match) {
       result.clientVersion = match[1];
       result.version = "V1";
+      result.detectedCdn = src;
       result.indicators.push("Detected CDN version");
     }
   }
@@ -380,6 +379,17 @@ Você pode automatizar o processo de detecção da versão do Friendly Captcha n
     if (r.name.includes("puzzle?sitekey")) {
       result.version = "V1";
       result.indicators.push("Found puzzle?sitekey request");
+    }
+  }
+
+  for (const src of scripts) {
+    if (!src) continue;
+
+    if (src.includes("site.min.js")) {
+      result.version = "V2";
+      result.detectedCdn = src;
+      result.indicators.push("Found site.min.js");
+      result.siteMinJsLinks.push(src);
     }
   }
 
