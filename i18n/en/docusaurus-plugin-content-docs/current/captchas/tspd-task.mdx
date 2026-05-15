@@ -28,7 +28,9 @@ TSPD is a WAF (Web Application Firewall) protection designed to prevent automate
 
 * Use **your own proxies** for this task.
 
-* After solving, you will receive **special cookies** to add to your browser.
+* Proxies used in TSPD tasks must support a **static session**. The same exit IP must be used throughout all stages (cookies retrieval → task solving → using the received cookies). Changing the session or IP between stages may lead to errors.
+
+* After solving, you will receive cookies that must be included in subsequent requests to the target website.
 :::
 
 ## Request parameters
@@ -98,7 +100,9 @@ Browser User-Agent.<br />
 ---
 
   <ParamItem title="proxyLogin" required type="string" />
-  Proxy login.
+  Proxy login. <br />
+
+**Restrictions:** must not contain the characters `;`, `|`, `)`
 
 ---
 
