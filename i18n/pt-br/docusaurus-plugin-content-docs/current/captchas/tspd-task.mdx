@@ -28,7 +28,9 @@ TSPD é uma proteção WAF (Web Application Firewall) projetada para prevenir at
 
 * Use **seus próprios proxies** para esta tarefa.
 
-* Após resolver, você receberá **cookies especiais** para adicionar ao navegador.
+* O proxy nas tarefas TSPD deve suportar uma **sessão estática**. O mesmo IP de saída deve ser usado em todas as etapas (obtenção de cookies → resolução da tarefa → uso dos cookies obtidos). A mudança de sessão ou de IP entre as etapas pode causar erros.
+
+* Após a resolução, você receberá cookies que devem ser enviados nas requisições subsequentes ao site de destino.
 :::
 
 ## Parâmetros da solicitação
@@ -96,7 +98,9 @@ Porta do proxy.
 ---
 
 <ParamItem title="proxyLogin" required type="string" />
-Login do proxy.
+Login do proxy. <br />
+
+**Restrições:** não deve conter os caracteres `;`, `|`, `)`
 
 ---
 
