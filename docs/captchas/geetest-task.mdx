@@ -85,7 +85,7 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="websiteURL" required type="string" />
-    Адрес страницы, на которой решается капча. Правильный Url всегда передается в Referer на запросе https://api-na.geetest.com/gettype.php?. Например: Мы находимся на https://example.com#login, но видим что фактически капча инициализируется не там, а на https://example.com.
+    Адрес страницы, на которой инициализируется капча. Корректный URL обычно передается в заголовке `Referer` при запросе к `https://api-na.geetest.com/gettype.php`. Например, вы можете находиться на странице `https://example.com#login`, однако фактическая инициализация капчи выполняется на странице `https://example.com`.
 
     ---
 
@@ -95,11 +95,14 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="challenge" required="required only for V3" type="string" />
-    <p>Меняющийся ключ.<br />При каждом обращении к нашему API нужно получать новое значение ключа. Если капча загружена на странице, то значение `challenge` уже недействительно и вы получите в ответ [error](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`. <br />За задачи с ошибкой `ERROR_TOKEN_EXPIRED` плата взимается как за успешно решённые задачи.<br />Нужно изучить запросы и найти тот, в котором возвращается это значение и перед каждым созданием задачи на распознавания выполнять этот запрос и парсить `challenge` из него.</p>
+    <p>Динамический ключ.<br />
+    Для каждого обращения к API необходимо получать новое значение `challenge`. Если капча уже была загружена на странице, текущее значение `challenge` становится недействительным, и API вернёт [ошибку](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`.<br />
+Задачи, завершившиеся с ошибкой `ERROR_TOKEN_EXPIRED`, тарифицируются как успешно решённые.<br />
+Необходимо проанализировать сетевые запросы и определить запрос, в ответе которого возвращается актуальное значение `challenge`. Перед каждым созданием задачи на распознавание капчи следует повторно выполнять этот запрос и извлекать из ответа новое значение `challenge`.</p>
 
     ---
 
-    <ParamItem title="version" type="integer" required="required only for V4"/>
+    <ParamItem title="version" required type="integer"/>
     3
 
     ---
@@ -114,6 +117,12 @@ V4 (captcha_id = gt)
     Путь к скрипту капчи для ее отображения на странице. 
 	<br />Необязательный параметр. Может потребоваться для некоторых сайтов. 
 	<br />Отправляйте JSON в виде строки.
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent браузера. <br />
+  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
 
     ---
 
@@ -146,12 +155,6 @@ V4 (captcha_id = gt)
 
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
-
-    ---
-
-    <ParamItem title="userAgent" type="string" />
-    User-Agent браузера. <br />
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
   </TabItem>
   
 
@@ -175,6 +178,7 @@ V4 (captcha_id = gt)
     "websiteURL": "https://www.geetest.com/en/demo",
     "gt": "022397c99c9f646f6477822485f30404",
     "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "version": 3,
     "geetestApiServerSubdomain": "api-na.geetest.com"
 
   }
@@ -206,13 +210,14 @@ V4 (captcha_id = gt)
     "websiteURL": "https://www.geetest.com/en/demo",
     "gt": "022397c99c9f646f6477822485f30404",
     "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "version": 3,
     "geetestApiServerSubdomain": "api-na.geetest.com",
+    "userAgent": "userAgentPlaceholder",
     "proxyType": "http",
     "proxyAddress": "8.8.8.8",
     "proxyPort": 8080,
     "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
-    "userAgent": "userAgentPlaceholder"
+    "proxyPassword": "proxyPasswordHere"
   }
 }
 ```
@@ -460,7 +465,7 @@ V4 (captcha_id = gt)
   </TabItem>
 </Tabs>
 
-## <span style={{fontSize: '1.5rem'}}>Используйте библиотеку SDK</span>
+### <span style={{fontSize: '1.5rem'}}>Используйте библиотеку SDK</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -491,7 +496,8 @@ V4 (captcha_id = gt)
         let geetestRequest = new GeeTestRequest({
             websiteURL: "https://example.com/geetest.php", // URL страницы с капчей
             gt: "81dc9bdb52d04dc20036dbd8313ed055",        // Замените на корректное значение
-            challenge: "d93591bdf7860e1e4ee2fca799911215"  // Замените на корректное значение
+            challenge: "d93591bdf7860e1e4ee2fca799911215",
+            version: 3
         });
 
         // Пример использования вашего собственного прокси
@@ -510,6 +516,7 @@ V4 (captcha_id = gt)
             websiteURL: "https://example.com/geetest.php",
             gt: "81dc9bdb52d04dc20036dbd8313ed055",
             challenge: "d93591bdf7860e1e4ee2fca799911215",
+            version: 3,
             proxy,
             userAgent: "userAgentPlaceholder"
         });
@@ -544,7 +551,8 @@ V4 (captcha_id = gt)
           let geetestRequest = new GeeTestRequest({
               websiteURL: "https://example.com/geetest.php", // URL страницы с капчей
               gt: "81dc9bdb52d04dc20036dbd8313ed055",       // Замените на корректное значение
-              challenge: "d93591bdf7860e1e4ee2fca799911215" // Замените на корректное значение
+              challenge: "d93591bdf7860e1e4ee2fca799911215", // Замените на корректное значение
+              version: 3
           });
 
           // Пример использования вашего собственного прокси
@@ -563,6 +571,7 @@ V4 (captcha_id = gt)
               websiteURL: "https://example.com/geetest.php",
               gt: "81dc9bdb52d04dc20036dbd8313ed055",
               challenge: "d93591bdf7860e1e4ee2fca799911215",
+              version: 3,
               proxy,
               userAgent: "userAgentPlaceholder"
           });
@@ -599,7 +608,8 @@ V4 (captcha_id = gt)
         geetest_request = GeetestRequest(
             websiteUrl="https://example.com",
             gt="81dc9bdb52d04dc20036dbd8313ed055",
-            challenge="d93591bdf7860e1e4ee2fca799911215"
+            challenge="d93591bdf7860e1e4ee2fca799911215",
+            version=3
         )
 
         # Пример использования вашего собственного прокси
@@ -617,6 +627,7 @@ V4 (captcha_id = gt)
         #     websiteUrl="https://example.com",
         #     gt="81dc9bdb52d04dc20036dbd8313ed055",
         #     challenge="d93591bdf7860e1e4ee2fca799911215",
+        #     version=3,
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
@@ -666,7 +677,8 @@ V4 (captcha_id = gt)
             {
                 WebsiteUrl = "https://example.com/demo/geetest", // URL страницы с капчей
                 Gt = "your_gt_value",                             // Замените на корректное значение
-                Challenge = "your_challenge_value"               // Замените на корректное значение
+                Challenge = "your_challenge_value",               // Замените на корректное значение
+                Version = 3                                       // Версия капчи
             };
 
             // Пример использования вашего собственного прокси
@@ -677,6 +689,8 @@ V4 (captcha_id = gt)
                 WebsiteUrl = "https://example.com/demo/geetest", // URL страницы с капчей
                 Gt = "your_gt_value",  
                 Challenge = "your_challenge_value",
+                Version = 3,
+                UserAgent = "userAgentPlaceholder",
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89", 
@@ -728,7 +742,7 @@ V4 (captcha_id = gt)
 
     ---
 
-    <ParamItem title="version" type="integer" required="required only for V4"/>
+    <ParamItem title="version" required type="integer"/>
     4
 
     ---
@@ -748,6 +762,11 @@ V4 (captcha_id = gt)
 
     <ParamItem title="initParameters" type="object" />
     Дополнительные параметры для 4 версии, используются вместе с “riskType” (тип капчи/характеристики ее проверки).
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent браузера, используемый для решения капчи. <br />
 
     ---
 
@@ -781,10 +800,6 @@ V4 (captcha_id = gt)
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-    ---
-
-    <ParamItem title="userAgent" type="string" />
-    User-Agent браузера, используемый для решения капчи.
   </TabItem>
 
 
@@ -1139,7 +1154,7 @@ class Program
   </TabItem>
 </Tabs>
 
-## <span style={{fontSize: '1.5rem'}}>Используйте библиотеку SDK</span>
+### <span style={{fontSize: '1.5rem'}}>Используйте библиотеку SDK</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -1438,10 +1453,11 @@ class Program
 
 ```json
 {
-  "type": "GeeTestTaskProxyless",
+  "type": "GeeTestTask",
   "websiteURL": "https://app.gal**.com/accountSetting/social",
   "gt": "244bcb8b9846215df5af4c624a750db4",
-  "challenge": "SendVerifyCode"
+  "challenge": "SendVerifyCode",
+  "version": 3
 }
 ```
 

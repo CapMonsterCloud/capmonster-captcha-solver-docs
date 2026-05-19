@@ -87,7 +87,7 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="websiteURL" required type="string" />
-    解决验证码的页面地址。正確的 Url 始終會傳給請求 https://api-na.geetest.com/gettype.php 上的 Referer？舉例來說： 我們在 https://example.com#login，但我們看到驗證碼實際上沒有在那裡初始化，而是在 https://example.com。
+    <p>初始化验证码的页面地址。正确的 URL 通常会在向 `https://api-na.geetest.com/gettype.php` 发起请求时，通过 `Referer` 请求头传递。例如，您可能位于 `https://example.com#login` 页面，但实际上验证码的初始化是在 `https://example.com` 页面上执行的。</p>
 
     ---
 
@@ -97,11 +97,14 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="challenge" required="required only for V3" type="string" />
-    <p> 一个动态密钥。<br />每次调用我们的 API 时，我们需要获取一个新的密钥值。如果验证码已经加载在页面上，则 `challenge` 值不再有效，您将收到 [错误](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`。<br /> 对于带有 `ERROR_TOKEN_EXPIRED` 错误的任务，将会收取费用。 需要检查请求并找到返回此值的请求，并在每次创建识别任务之前执行该请求并解析出挑战值。 </p>
+    <p> 一个动态密钥。<br />
+    对于每一次 API 请求，都需要获取新的 `challenge` 值。如果验证码已经在页面上加载过，当前的 `challenge` 值将失效，API 会返回 [错误](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`。<br />
+以 `ERROR_TOKEN_EXPIRED` 结束的任务将按成功完成的任务计费。<br />
+需要分析网络请求，并确定哪个请求的响应中返回了最新的 `challenge` 值。在每次创建验证码识别任务之前，都应重新执行该请求，并从响应中提取新的 `challenge` 值。</p>
 
     ---
 
-    <ParamItem title="version" type="integer" required="required only for V4"/>
+    <ParamItem title="version" required type="integer"/>
     3
 
     ---
@@ -113,6 +116,12 @@ V4 (captcha_id = gt)
 
     <ParamItem title="geetestGetLib" type="string" />
     展示验证码脚本的路径。 <br /> 可选参数。某些站点可能需要。<br />以字符串形式发送 JSON。
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    浏览器的 User-Agent。<br />
+**请仅传递当前 Windows 系统下的有效 UA。当前推荐值为**：`userAgentPlaceholder`
 
     ---
 
@@ -145,12 +154,6 @@ V4 (captcha_id = gt)
     <ParamItem title="proxyPassword" type="string" />
     代理服务器密码。
 
-    ---
-
-    <ParamItem title="userAgent" type="string" />
-    浏览器的 User-Agent。<br />
-**请仅传递当前 Windows 系统下的有效 UA。当前推荐值为**：`userAgentPlaceholder`
-
   </TabItem>
 
 
@@ -173,6 +176,7 @@ V4 (captcha_id = gt)
     "websiteURL": "https://www.geetest.com/en/demo",
     "gt": "022397c99c9f646f6477822485f30404",
     "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "version": 3,
     "geetestApiServerSubdomain": "api-na.geetest.com"
 
   }
@@ -204,13 +208,14 @@ V4 (captcha_id = gt)
     "websiteURL": "https://www.geetest.com/en/demo",
     "gt": "022397c99c9f646f6477822485f30404",
     "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "version": 3,
     "geetestApiServerSubdomain": "api-na.geetest.com",
+    "userAgent": "userAgentPlaceholder",
     "proxyType": "http",
     "proxyAddress": "8.8.8.8",
     "proxyPort": 8080,
     "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
-    "userAgent": "userAgentPlaceholder"
+    "proxyPassword": "proxyPasswordHere"
   }
 }
 ```
@@ -461,7 +466,7 @@ V4 (captcha_id = gt)
   </TabItem>
 </Tabs>
 
-## <span style={{fontSize: '1.5rem'}}>使用 SDK 库</span>
+### <span style={{fontSize: '1.5rem'}}>使用 SDK 库</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -492,7 +497,8 @@ V4 (captcha_id = gt)
         let geetestRequest = new GeeTestRequest({
             websiteURL: "https://example.com/geetest.php", // 验证码页面的 URL
             gt: "81dc9bdb52d04dc20036dbd8313ed055",        // 替换为正确的值
-            challenge: "d93591bdf7860e1e4ee2fca799911215"  // 替换为正确的值
+            challenge: "d93591bdf7860e1e4ee2fca799911215",  // 替换为正确的值
+            version: 3
         });
 
         // 使用您自己的代理的示例
@@ -511,6 +517,7 @@ V4 (captcha_id = gt)
             websiteURL: "https://example.com/geetest.php",
             gt: "81dc9bdb52d04dc20036dbd8313ed055",
             challenge: "d93591bdf7860e1e4ee2fca799911215",
+            version: 3,
             proxy,
             userAgent: "userAgentPlaceholder"
         });
@@ -545,7 +552,8 @@ async function solveGeeTest() {
     let geetestRequest = new GeeTestRequest({
         websiteURL: "https://example.com/geetest.php", // 验证码页面的 URL
         gt: "81dc9bdb52d04dc20036dbd8313ed055",       // 替换为正确的值
-        challenge: "d93591bdf7860e1e4ee2fca799911215" // 替换为正确的值
+        challenge: "d93591bdf7860e1e4ee2fca799911215", // 替换为正确的值
+        version: 3
     });
 
     // 使用您自己的代理的示例
@@ -564,6 +572,7 @@ async function solveGeeTest() {
         websiteURL: "https://example.com/geetest.php",
         gt: "81dc9bdb52d04dc20036dbd8313ed055",
         challenge: "d93591bdf7860e1e4ee2fca799911215",
+        version: 3,
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -600,7 +609,8 @@ solveGeeTest().catch(console.error);
         geetest_request = GeetestRequest(
             websiteUrl="https://example.com",
             gt="81dc9bdb52d04dc20036dbd8313ed055",
-            challenge="d93591bdf7860e1e4ee2fca799911215"
+            challenge="d93591bdf7860e1e4ee2fca799911215",
+            version=3
         )
 
         # 使用您自己的代理的示例
@@ -618,6 +628,7 @@ solveGeeTest().catch(console.error);
         #     websiteUrl="https://example.com",
         #     gt="81dc9bdb52d04dc20036dbd8313ed055",
         #     challenge="d93591bdf7860e1e4ee2fca799911215",
+        #     version=3,
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
@@ -667,7 +678,8 @@ class Program
         {
             WebsiteUrl = "https://example.com/demo/geetest", // 页面中验证码的 URL
             Gt = "your_gt_value",                             // 替换为正确的值
-            Challenge = "your_challenge_value"               // 替换为正确的值
+            Challenge = "your_challenge_value",               // 替换为正确的值
+            Version = 3                                        // 替换为正确的值
         };
 
         // 使用您自己的代理的示例
@@ -678,6 +690,8 @@ class Program
             WebsiteUrl = "https://example.com/demo/geetest", // 页面中验证码的 URL
             Gt = "your_gt_value",  
             Challenge = "your_challenge_value",
+            Version = 3,
+            UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89", 
@@ -729,7 +743,7 @@ class Program
 
     ---
 
-    <ParamItem title="version" type="integer" required="required only for V4"/>
+    <ParamItem title="version" required type="integer"/>
     4
 
     ---
@@ -746,6 +760,11 @@ class Program
 
     <ParamItem title="initParameters" type="object" />
     版本 4 的附加参数，与“riskType”（验证码类型/验证特征）一起使用。
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    用于识别验证码的浏览器 User-Agent。
 
     ---
 
@@ -772,10 +791,6 @@ class Program
     <ParamItem title="proxyPassword" type="string" />
     代理服务器密码。
 
-    ---
-
-    <ParamItem title="userAgent" type="string" />
-    用于识别验证码的浏览器 User-Agent。
   </TabItem>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
@@ -1125,7 +1140,7 @@ class Program
   </TabItem>
 </Tabs>
 
-## <span style={{fontSize: '1.5rem'}}>使用 SDK 库</span>
+### <span style={{fontSize: '1.5rem'}}>使用 SDK 库</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -1421,10 +1436,11 @@ class Program
 
 ```json
 {
-  "type": "GeeTestTaskProxyless",
+  "type": "GeeTestTask",
   "websiteURL": "https://app.gal**.com/accountSetting/social",
   "gt": "244bcb8b9846215df5af4c624a750db4",
-  "challenge": "SendVerifyCode"
+  "challenge": "SendVerifyCode",
+  "version": 3
 }
 ```
 

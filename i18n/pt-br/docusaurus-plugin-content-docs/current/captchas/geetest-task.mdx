@@ -84,7 +84,7 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="websiteURL" required type="string" />
-    Endereço da página onde o captcha é resolvido. O URL correto é sempre passado para o Referer na solicitação https://api-na.geetest.com/gettype.php? Por exemplo: Estamos em https://example.com#login, mas vemos que o captcha não está de fato inicializado lá, mas em https://example.com.
+    O endereço da página na qual o captcha é inicializado. O URL correto geralmente é enviado no cabeçalho Referer ao fazer uma solicitação para https://api-na.geetest.com/gettype.php. Por exemplo, você pode estar na página https://example.com#login, porém a inicialização real do captcha é realizada em https://example.com.
 
     ---
 
@@ -95,14 +95,14 @@ V4 (captcha_id = gt)
 
     <ParamItem title="challenge" required="required apenas para V3" type="string" />
     <p>
-    Uma chave dinâmica.<br />Cada vez que nossa API é chamada, precisamos obter um novo valor de chave. Se o captcha for carregado na página, o valor `challenge` não será mais válido e você receberá o [erro](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`. <br />
-    Você será cobrado por tarefas com erro `ERROR_TOKEN_EXPIRED`.
-    É necessário examinar as solicitações e encontrar aquela em que este valor é retornado e, antes de cada criação da tarefa de reconhecimento, executar esta solicitação e analisar o desafio a partir dela.
+    Um novo valor de `challenge` deve ser obtido para cada solicitação à API. Se o captcha já tiver sido carregado na página, o valor atual de `challenge` se tornará inválido, e a API retornará o [erro](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`.<br />
+As tarefas que terminarem com o erro `ERROR_TOKEN_EXPIRED` serão cobradas como tarefas resolvidas com sucesso.<br />
+É necessário analisar as requisições de rede e identificar a solicitação cuja resposta contém o valor atual de `challenge`. Antes de criar cada tarefa de resolução de captcha, essa solicitação deve ser executada novamente, e um novo valor de `challenge` deve ser extraído da resposta.
     </p>
 
     ---
 
-    <ParamItem title="version" type="integer" required="required apenas para V4"/>
+    <ParamItem title="version" required type="integer"/>
     3
 
     ---
@@ -114,6 +114,12 @@ V4 (captcha_id = gt)
 
     <ParamItem title="geetestGetLib" type="string" />
     Caminho para o script do captcha para exibi-lo na página. <br /> Parâmetro opcional. Pode ser necessário para alguns sites. <br />Enviar JSON como string.
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent do navegador. <br />
+**Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
 
     ---
 
@@ -144,11 +150,6 @@ V4 (captcha_id = gt)
     <ParamItem title="proxyPassword" type="string" />
     Senha do servidor proxy.
 
-    ---
-
-    <ParamItem title="userAgent" type="string" />
-    User-Agent do navegador. <br />
-**Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
 
   </TabItem>
 
@@ -172,6 +173,7 @@ V4 (captcha_id = gt)
     "websiteURL": "https://www.geetest.com/en/demo",
     "gt": "022397c99c9f646f6477822485f30404",
     "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "version": 3,
     "geetestApiServerSubdomain": "api-na.geetest.com"
 
   }
@@ -203,13 +205,14 @@ https://api.capmonster.cloud/createTask
     "websiteURL": "https://www.geetest.com/en/demo",
     "gt": "022397c99c9f646f6477822485f30404",
     "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "version": 3,
     "geetestApiServerSubdomain": "api-na.geetest.com",
+    "userAgent": "userAgentPlaceholder",
     "proxyType": "http",
     "proxyAddress": "8.8.8.8",
     "proxyPort": 8080,
     "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
-    "userAgent": "userAgentPlaceholder"
+    "proxyPassword": "proxyPasswordHere"
   }
 }
 ```
@@ -460,7 +463,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
   </TabItem>
 </Tabs>
 
-## <span style={{fontSize: '1.5rem'}}>Usar biblioteca SDK</span>
+### <span style={{fontSize: '1.5rem'}}>Usar biblioteca SDK</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -491,7 +494,8 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
         let geetestRequest = new GeeTestRequest({
             websiteURL: "https://example.com/geetest.php", // URL da página com captcha
             gt: "81dc9bdb52d04dc20036dbd8313ed055",       // Substitua pelo valor correto
-            challenge: "d93591bdf7860e1e4ee2fca799911215" // Substitua pelo valor correto
+            challenge: "d93591bdf7860e1e4ee2fca799911215", // Substitua pelo valor correto
+            version: 3
         });
 
         // Exemplo de uso do seu próprio proxy
@@ -510,6 +514,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
             websiteURL: "https://example.com/geetest.php",
             gt: "81dc9bdb52d04dc20036dbd8313ed055",
             challenge: "d93591bdf7860e1e4ee2fca799911215",
+            version: 3,
             proxy,
             userAgent: "userAgentPlaceholder"
         });
@@ -544,7 +549,8 @@ async function solveGeeTest() {
     let geetestRequest = new GeeTestRequest({
         websiteURL: "https://example.com/geetest.php", // URL da página com captcha
         gt: "81dc9bdb52d04dc20036dbd8313ed055",       // Substitua pelo valor correto
-        challenge: "d93591bdf7860e1e4ee2fca799911215" // Substitua pelo valor correto
+        challenge: "d93591bdf7860e1e4ee2fca799911215", // Substitua pelo valor correto
+        version: 3
     });
 
     // Exemplo de uso do seu próprio proxy
@@ -563,6 +569,7 @@ async function solveGeeTest() {
         websiteURL: "https://example.com/geetest.php",
         gt: "81dc9bdb52d04dc20036dbd8313ed055",
         challenge: "d93591bdf7860e1e4ee2fca799911215",
+        version: 3,
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -599,7 +606,8 @@ solveGeeTest().catch(console.error);
         geetest_request = GeetestRequest(
             websiteUrl="https://example.com",
             gt="81dc9bdb52d04dc20036dbd8313ed055",
-            challenge="d93591bdf7860e1e4ee2fca799911215"
+            challenge="d93591bdf7860e1e4ee2fca799911215",
+            version=3
         )
 
         # Exemplo de uso do seu próprio proxy
@@ -617,6 +625,7 @@ solveGeeTest().catch(console.error);
         #     websiteUrl="https://example.com",
         #     gt="81dc9bdb52d04dc20036dbd8313ed055",
         #     challenge="d93591bdf7860e1e4ee2fca799911215",
+        #     version=3,
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
@@ -666,7 +675,8 @@ solveGeeTest().catch(console.error);
             {
                 WebsiteUrl = "https://example.com/demo/geetest", // URL da página com o captcha
                 Gt = "your_gt_value",                             // Substitua pelo valor correto
-                Challenge = "your_challenge_value"               // Substitua pelo valor correto
+                Challenge = "your_challenge_value",               // Substitua pelo valor correto
+                Version = 3                                       // Versão do captcha
             };
 
             // Exemplo de uso do seu próprio proxy
@@ -677,6 +687,7 @@ solveGeeTest().catch(console.error);
                 WebsiteUrl = "https://example.com/demo/geetest", // URL da página com o captcha
                 Gt = "your_gt_value",  
                 Challenge = "your_challenge_value",
+                Version = 3,
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89", 
@@ -728,7 +739,7 @@ A chave do identificador GeeTest para o domínio - o parâmetro `captcha_id`.
 
 ---
 
-<ParamItem title="version" type="integer" required="required only for V4"/>
+<ParamItem title="version" required type="integer"/>
 4
 
 ---
@@ -745,6 +756,12 @@ Caminho para o script captcha para exibi-lo na página. <br />Parâmetro opciona
 
 <ParamItem title="initParameters" type="object" />
 Parâmetros adicionais para a versão 4, usados junto com “riskType” (tipo de captcha/características de sua verificação).
+
+---
+
+<ParamItem title="userAgent" type="string" />
+User-Agent do navegador. <br />
+**Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
 
 ---
 
@@ -775,11 +792,6 @@ Login do servidor proxy.
 <ParamItem title="proxyPassword" type="string" />
 Senha do servidor proxy.
 
----
-
-<ParamItem title="userAgent" type="string" />
-User-Agent do navegador. <br />
-**Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
 </TabItem>
 
 
@@ -1130,7 +1142,7 @@ class Program
   </TabItem>
 </Tabs>
 
-## <span style={{fontSize: '1.5rem'}}>Usar biblioteca SDK</span>
+### <span style={{fontSize: '1.5rem'}}>Usar biblioteca SDK</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -1426,10 +1438,11 @@ Lista de valores possíveis para `challenge`:
 
 ```json
 {
-  "type": "GeeTestTaskProxyless",
+  "type": "GeeTestTask",
   "websiteURL": "https://app.gal**.com/accountSetting/social",
   "gt": "244bcb8b9846215df5af4c624a750db4",
-  "challenge": "SendVerifyCode"
+  "challenge": "SendVerifyCode",
+  "version": 3
 }
 ```
 
