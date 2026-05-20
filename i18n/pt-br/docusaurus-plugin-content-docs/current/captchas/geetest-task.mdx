@@ -84,7 +84,7 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="websiteURL" required type="string" />
-    O endereço da página na qual o captcha é inicializado. O URL correto geralmente é enviado no cabeçalho Referer ao fazer uma solicitação para https://api-na.geetest.com/gettype.php. Por exemplo, você pode estar na página https://example.com#login, porém a inicialização real do captcha é realizada em https://example.com.
+    O endereço da página na qual o captcha é inicializado. O URL correto geralmente é enviado no cabeçalho Referer ao fazer uma solicitação para `https://api-na.geetest.com/gettype.php`. Por exemplo, você pode estar na página `https://example.com#login`, porém a inicialização real do captcha é realizada em `https://example.com`.
 
     ---
 
@@ -93,7 +93,7 @@ V4 (captcha_id = gt)
 
     ---
 
-    <ParamItem title="challenge" required="required apenas para V3" type="string" />
+    <ParamItem title="challenge" required="required only for V3" type="string" />
     <p>
     Um novo valor de `challenge` deve ser obtido para cada solicitação à API. Se o captcha já tiver sido carregado na página, o valor atual de `challenge` se tornará inválido, e a API retornará o [erro](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`.<br />
 As tarefas que terminarem com o erro `ERROR_TOKEN_EXPIRED` serão cobradas como tarefas resolvidas com sucesso.<br />
