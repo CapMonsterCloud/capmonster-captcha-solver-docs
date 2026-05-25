@@ -13,7 +13,7 @@ const PriceBlockWrap = ({ children }: React.PropsWithChildren) => {
     <PricesProvider>
       <div className={styles.wrap}>
         <div className={styles.linkWrap}>
-          <a href={currentLocale === 'en' ? `/#price` : `/${currentLocale}#price`} className={styles.link}>
+          <a href={`https://capmonster.cloud/${currentLocale}/prices`} target="_blank" className={styles.link}>
             {fullPriceText}
           </a>
         </div>
