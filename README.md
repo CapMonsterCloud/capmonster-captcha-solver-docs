@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/ZennoLab/capmonstercloud-docs/blob/master/static/img/logo_docs.svg"></p>
+<p align="center"><img src="https://github.com/CapMonsterCloud/docs/blob/master/static/img/logo_docs.svg"></p>
 
 
 # Documentation for CapMonster Cloud

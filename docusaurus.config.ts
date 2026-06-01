@@ -45,7 +45,7 @@ const config: Config = {
           editUrl: (params: { versionDocsDirPath: string; docPath: string; locale: string }) => {
             const { versionDocsDirPath, docPath, locale } = params;
 
-            const baseUrl = 'https://github.com/ZennoLab/capmonstercloud-docs/tree/dev';
+            const baseUrl = 'https://github.com/CapMonsterCloud/docs/tree/dev';
 
             if (locale === 'ru') {
               return `${baseUrl}/${versionDocsDirPath}/${docPath}`;
