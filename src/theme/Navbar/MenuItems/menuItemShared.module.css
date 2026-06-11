@@ -1,0 +1,29 @@
+.base {
+  display: flex;
+  align-items: center;
+  color: #14193c;
+  font-family: var(--ifm-font-family-base);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  outline-color: #7d6eff;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+[data-theme='dark'] .base {
+  color: #e1e6f0;
+}
+
+@media (max-width: 996px) {
+  .base {
+    font-size: 18px;
+    font-weight: 400;
+  }
+}
+
+.title {
+  line-height: inherit;
+}

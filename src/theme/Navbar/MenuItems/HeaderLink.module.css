@@ -1,20 +1,12 @@
 .headerLink {
-  color: #14193c;
+  composes: base from './menuItemShared.module.css';
   text-decoration: none;
-  outline-color: #7d6eff;
-  transition: color 0.2s ease;
-  display: flex;
-  align-items: center;
   justify-content: center;
   height: auto;
 }
 
 .headerLink:hover {
   color: #505578;
-}
-
-[data-theme='dark'] .headerLink {
-  color: #e1e6f0;
 }
 
 [data-theme='dark'] .headerLink:hover {
@@ -29,9 +21,7 @@
 }
 
 .text {
-  font-size: 16px;
-  line-height: 1.4;
-  white-space: nowrap;
+  composes: title from './menuItemShared.module.css';
 }
 
 @media (max-width: 996px) {
@@ -40,10 +30,7 @@
     border-bottom: 1px solid #dce1eb;
     justify-content: space-between;
     padding-left: 8px;
-  }
-
-  .text {
-    font-size: 18px;
+    box-sizing: border-box;
   }
 
   .inner {

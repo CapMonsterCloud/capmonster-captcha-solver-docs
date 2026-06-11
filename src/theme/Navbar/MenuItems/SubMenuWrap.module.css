@@ -30,11 +30,16 @@
 @media (max-width: 996px) {
   .subMenuWrap {
     width: 100% !important;
-    padding-bottom: 10px !important;
+    padding: 0 !important;
     position: static !important;
     box-shadow: none !important;
     opacity: 1 !important;
     visibility: visible !important;
+    background: transparent !important;
+  }
+
+  .singleColumn {
+    gap: 0;
   }
 
   .subMenuWrap.hidden {
