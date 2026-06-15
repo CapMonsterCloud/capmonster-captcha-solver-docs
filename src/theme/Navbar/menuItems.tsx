@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from '@docusaurus/Link';
 import { DefaultNavbarItemProps } from '@theme/NavbarItem';
 
 import { localesMappings } from '../../locales';
