@@ -48,7 +48,7 @@ const SubMenu = ({ link, handleClick }: SubMenuProps) => {
         onKeyDown={handleKeyDown}
         className={styles.button}
       >
-        {link.title}
+        <span className={styles.buttonTitle}>{link.title}</span>
         <ArrowIcon className={styles.arrow} />
       </button>
 

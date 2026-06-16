@@ -6,31 +6,27 @@
 }
 
 .button {
-  display: flex;
-  align-items: center;
+  composes: base from './menuItemShared.module.css';
   justify-content: space-between;
   width: 100%;
   cursor: pointer;
-  outline-color: #7d6eff;
   gap: 5px;
-  color: #14193c;
   background: transparent;
   border: none;
-  transition: color 0.2s ease;
+  font-family: var(--ifm-font-family-base);
+  font-size: 16px;
+  line-height: 1.4;
 }
 
-[data-theme='dark'] .button {
-  color: #e1e6f0;
+.buttonTitle {
+  composes: title from './menuItemShared.module.css';
 }
+
 [data-theme='dark'] .subMenu {
   color: #e1e6f0;
 }
 
 @media (min-width: 996px) {
-  .button {
-    font-size: 16px;
-  }
-
   .button:hover {
     color: #505578;
   }
@@ -52,8 +48,8 @@
 
 @media (max-width: 996px) {
   .subMenu {
-    border-bottom: 1px solid #dce1eb;
     padding-left: 0;
+    border-bottom: none;
   }
 
   .arrow {
@@ -61,7 +57,11 @@
   }
 
   .button {
-    font-size: 18px;
     height: 54px;
+    padding-left: 8px;
+    border-bottom: 1px solid #dce1eb;
+    box-sizing: border-box;
+    font-size: 18px;
+    font-weight: 400;
   }
 }

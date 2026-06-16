@@ -686,10 +686,17 @@ a[class*='cardContainer'] {
     gap: 10px;
   }
 
+  .localeDropdownWithFlags.menu__link {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
   .localeDropdownWithFlags span {
     color: #14193c;
-    font-size: 18px;
-    line-height: 28px;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
   }
 
   .menu__list > .menu__list-item:has(.lk-link) {
@@ -729,3 +736,4 @@ a[class*='cardContainer'] {
 .main-wrapper {
   flex: 1;
 }
+
