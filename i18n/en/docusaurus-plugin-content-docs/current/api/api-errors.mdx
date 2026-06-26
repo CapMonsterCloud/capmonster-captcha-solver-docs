@@ -17,7 +17,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 - Check documentation updates regularly to stay informed about API changes and avoid using deprecated methods or parameters.  
 - Use high-quality proxies.  
 
-If the error persists and you’re unable to resolve it, please contact support via the [form](https://helpdesk.zennolab.com/conversation/new), our chat available on the [website](https://capmonster.cloud/) and in the [documentation](https://docs.capmonster.cloud/), or the [Telegram channel](https://t.me/capmonstercloud), providing:
+If the error persists and you’re unable to resolve it, please contact support via the [form](https://helpdesk.zennolab.com/en/conversation/new), our chat available on the [website](https://capmonster.cloud/) and in the [documentation](https://docs.capmonster.cloud/), or the [Telegram channel](https://t.me/capmonstercloud), providing:
 
 - taskId  
 - task type (type)  
@@ -124,10 +124,21 @@ Incorrect *proxyAddress* or *proxyPort* causing connection timeout. Verify *prox
 API error code: `ERROR_TASK_NOT_SUPPORTED` <br />
 The specified task type is unsupported or invalid. Please check the value of the type property in the task object.
 
-### `ERROR_TASK_ABSENT`
+### `TASK ABSENT`
 API error code: `ERROR_TASK_ABSENT` <br />
 The task object is missing in the [createTask](./methods/create-task.mdx) request or the JSON is invalid. Check the request structure.
 
 ### `USERAGENT IS EXPIRED`
 API error code: `ERROR_WRONG_USERAGENT`<br />
 An invalid User Agent was provided in the request. You can find the current User Agent [here](https://capmonster.cloud/api/useragent/actual).
+
+### `SERVICE NOT AVAILABLE`
+API error code: `ERROR_SERVICE_NOT_AVAILABLE`<br />
+The service is temporarily unavailable. This error is returned if the callback service is unavailable or the availability check for [getTaskResult](./methods/get-task-result.mdx) has failed. In these cases, new task creation is blocked to prevent users from paying for tasks whose results cannot be received. Recommendation: try again later. If you are using a callback, make sure the specified callback URL is accessible.
+
+### `INVALID TASK`
+API error code: `ERROR_INVALID_TASK`<br />
+The request is syntactically valid but contains invalid data required to create a task. For example, required fields may be missing, contain invalid values, or contain expired data, making it impossible to solve the CAPTCHA. The `errorDescription` field specifies which request fields are invalid and how to fix them. Check the task parameters, verify that the submitted data is up to date, and correct the fields specified in `errorDescription`. If you are unable to resolve the issue yourself, please contact [support](https://helpdesk.zennolab.com/en/conversation/new).
+
+
+

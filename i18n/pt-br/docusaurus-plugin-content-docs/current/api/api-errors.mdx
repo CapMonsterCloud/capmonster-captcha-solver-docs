@@ -124,10 +124,20 @@ Código de erro na API: `ERROR_PROXY_READ_TIMEOUT`<br />
 Código de erro na API: `ERROR_TASK_NOT_SUPPORTED` <br />
 O tipo de tarefa informado não é suportado ou foi definido incorretamente. Verifique o valor da propriedade type no objeto da tarefa.
 
-### `ERROR_TASK_ABSENT`
+### `TASK ABSENT`
 Código de erro na API: `ERROR_TASK_ABSENT` <br />
 O objeto task está ausente na requisição [createTask](./methods/create-task.mdx) ou o JSON é inválido. Verifique a estrutura da requisição.
 
 ### `USERAGENT IS EXPIRED`
 Código de erro na API: `ERROR_WRONG_USERAGENT`<br />
 O User Agent informado na requisição é inválido. Veja o User Agent atual [aqui](https://capmonster.cloud/api/useragent/actual).
+
+### `SERVICE NOT AVAILABLE`
+
+Código de erro na API: `ERROR_SERVICE_NOT_AVAILABLE`<br />
+O serviço está temporariamente indisponível. Este erro é retornado quando o serviço de callback está indisponível ou quando a verificação de disponibilidade do [getTaskResult](./methods/get-task-result.mdx) falha. Nesses casos, a criação de novas tarefas é bloqueada para evitar que o usuário pague por tarefas cujos resultados não poderão ser recebidos. Recomendação: tente novamente mais tarde. Se estiver usando callback, verifique se a URL informada está acessível.
+
+### `INVALID TASK`
+
+Código de erro na API: `ERROR_INVALID_TASK`<br />
+A solicitação está sintaticamente correta, mas contém dados inválidos para criar a tarefa. Por exemplo, campos obrigatórios podem estar ausentes, conter valores incorretos ou dados expirados, impossibilitando a resolução do CAPTCHA. O campo `errorDescription` informa quais campos da solicitação estão incorretos e como corrigi-los. Verifique os parâmetros da tarefa, confirme que os dados enviados estão atualizados e corrija os campos indicados em `errorDescription`. Se você não conseguir resolver o problema por conta própria, entre em contato com nossa equipe de [suporte](https://helpdesk.zennolab.com/conversation/new).
