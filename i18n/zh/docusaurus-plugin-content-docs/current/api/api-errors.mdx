@@ -125,10 +125,18 @@ API 错误代码: `ERROR_PROXY_READ_TIMEOUT`<br />
 API 错误代码: `ERROR_TASK_NOT_SUPPORTED` <br />
 任务类型不受支持或不正确。请检查任务对象中的 type 属性值。
 
-### `ERROR_TASK_ABSENT`
+### `TASK ABSENT`
 API 错误代码: `ERROR_TASK_ABSENT` <br />
 在 [createTask](./methods/create-task.mdx) 请求中缺少 task 对象或 JSON 无效。请检查请求结构。
 
 ### `USERAGENT IS EXPIRED`
 API 错误代码: `ERROR_WRONG_USERAGENT`<br />
 请求中提供的 User Agent 无效。您可以在[这里](https://capmonster.cloud/api/useragent/actual)查看最新的 User Agent。
+
+### `SERVICE NOT AVAILABLE`
+API 错误代码：`ERROR_SERVICE_NOT_AVAILABLE`<br />
+服务暂时不可用。当回调（callback）服务不可用，或 [getTaskResult](./methods/get-task-result.mdx) 可用性检查失败时，将返回此错误。为了避免用户为无法获取结果的任务付费，在这些情况下将禁止创建新任务。建议：请稍后重试。如果使用了 callback，请确保指定的回调 URL 可以正常访问。
+
+### `INVALID TASK`
+API 错误代码：`ERROR_INVALID_TASK`<br />
+请求在语法上是正确的，但包含无法创建任务的无效数据。例如，必填字段缺失、字段值错误或数据已过期，导致无法完成验证码识别。`errorDescription` 字段会说明哪些请求字段存在问题以及如何修正。请检查任务参数，确认提交的数据仍然有效，并根据 `errorDescription` 修正相应字段。如果仍无法自行解决问题，请联系[技术支持](https://helpdesk.zennolab.com/conversation/new)。
