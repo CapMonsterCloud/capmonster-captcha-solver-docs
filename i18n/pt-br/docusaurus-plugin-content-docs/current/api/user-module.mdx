@@ -13,10 +13,9 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 A função de criação de módulo personalizado permite treinar o sistema para reconhecer um tipo específico de captcha. Isso aumenta a velocidade e a precisão no reconhecimento de captchas não padrão e reduz a probabilidade de erros.
 
-Para acessar a [página de treinamento do módulo](https://capmonster.cloud/UserModules), clique no seu e-mail no canto superior direito do site e selecione a opção correspondente no menu.
+Acesse a [página de Módulos de treinamento](https://capmonster.cloud/UserModules) ou, no [painel de controle](https://dash.capmonster.cloud/), selecione a seção correspondente no menu localizado à esquerda:
 
-![](./images/user-module/834ccbf9-f439-4b1b-8cab-42ed3dbc055c.png)
-
+![](./images/user-module/user-module.png)
 
 ---
 
@@ -38,8 +37,10 @@ Abaixo, cada etapa é descrita com mais detalhes.
 
 #### Quantos captchas você precisa?
 
-Na página de [Treinamento de Módulos](https://capmonster.cloud/UserModules), marque os tipos de caracteres que aparecem no seu captcha. Em seguida, será exibida uma indicação de quantos captchas você precisa coletar e enviar:
-![](./images/user-module/module-name.png)
+Na página [Módulos de treinamento](https://capmonster.cloud/UserModules), clique no botão **Adicionar módulo** e, na janela que será aberta, especifique os tipos de caracteres presentes no seu CAPTCHA. Depois disso, aparecerá uma dica informando quantos CAPTCHAs você precisa coletar e enviar:
+
+![](./images/user-module/user-module-archive.png)
+
 
 #### Formatos de imagem suportados
 
@@ -64,13 +65,11 @@ Não execute a coleta de captchas em dezenas ou centenas de threads! Poucos site
 
 ### 2. Enviando o arquivo de captchas
 
-![](./images/user-module/a2ba29bd-c910-44cf-9979-ceb143633efd.png)
-
 #### 2.1. Nome
 
 Primeiro, defina o nome do módulo (apenas caracteres latinos).
 
-![](./images/user-module/fed2d879-b494-4b60-a13a-036c693d0951.png)
+![](./images/user-module/user-module-name.png)
 
 :::warning
 O nome do módulo não deve conter a palavra **captcha**.
@@ -84,7 +83,7 @@ O que você marcar aqui afeta o número de captchas que você precisará fazer u
 
 Você pode escolher uma ou várias opções das sugeridas.
 
-![](./images/user-module/3b39f9e1-d981-41af-842a-a51f4a51a4e0.png)
+![](./images/user-module/user-module-params.png)
 
 :::info
 Você deve marcar pelo menos uma das seguintes opções: "Contém caracteres cirílicos", "Contém caracteres latinos", "Contém números".
@@ -94,7 +93,7 @@ Você deve marcar pelo menos uma das seguintes opções: "Contém caracteres cir
 
 Especifique onde as respostas dos captchas estão localizadas.
 
-![](./images/user-module/markup-location.png)
+![](./images/user-module/user-module-markup.png)
 
 É bem simples:
 
@@ -117,24 +116,30 @@ captcha3.png:99loe
 
 Depois de especificar o nome do módulo, selecionar os tipos de símbolos e a localização das respostas, você precisa enviar o arquivo zip com os captchas e nos enviar.
 
-![](./images/user-module/archieve.png)
+![](./images/user-module/user-module-upload.png)
 
 #### 2.5. Pagamento
 
-- Se você fez tudo corretamente, sua solicitação aparecerá na tabela com o status **Validado**.
-- Depois disso, você precisa depositar $10 por módulo.
+- Se você fez tudo corretamente, sua solicitação aparecerá na tabela com o status **Validated**.
+* Depois disso, é necessário fazer um depósito de $10 no saldo por 1 módulo (independentemente da quantidade atual de fundos no saldo).
+
+1. Clique em **Recarga de saldo**
+2. Clique no botão **Recarregar saldo** e use o método de pagamento mais conveniente para você.
+
+![](./images/user-module/user-module-top-up-balance.png)
+
 
 :::note
 Os fundos alocados para o treinamento não são debitados, mas permanecem no saldo. Você pode gastá-los na resolução de qualquer captcha, a qualquer momento.
 :::
 
-- Após o depósito bem-sucedido, o status do **primeiro** módulo enviado mudará para **Pago**.
+- Após o depósito bem-sucedido, o status do **primeiro** módulo enviado mudará para **Paid**.
 
 ---
 
 ### 3. Status
 
-#### Validado
+#### Validated
 
 ![](./images/user-module/validated.png)
 
@@ -144,25 +149,25 @@ Você recebe esse status após enviar o formulário (desde que você tenha feito
 Módulos com esse status podem ser excluídos. Se você enviou o módulo, mas percebeu que enviou um arquivo errado ou deu um nome ruim para o módulo, você pode excluí-lo, fazer as alterações e enviá-lo novamente.
 :::
 
-#### Pago
+#### Paid
 
 ![](./images/user-module/paid.png)
 
 Seu pagamento pelo módulo foi aceito.
 
-#### ValidadoEmProfundidade
+#### ValidatedInDepth
 
 ![](./images/user-module/ValidatedInDepth.png)
 
 Trabalhos preparatórios.
 
-#### Anotado
+#### Annotated
 
 ![](./images/user-module/Annotated.png)
 
 Marcação de captcha concluída. O treinamento está em andamento.
 
-#### Treinado
+#### Trained
 
 ![](./images/user-module/trained.png)
 
@@ -198,27 +203,26 @@ O treinamento leva um dia por módulo.
 </details>
 
 <details>
-    <summary>Vejo o sinal "Erro" na coluna "Comentário" ao lado do meu módulo. O que devo fazer?</summary>
+    <summary>Vejo o sinal `Erro` na coluna "Comentário" ao lado do meu módulo. O que devo fazer?</summary>
 
-![](./images/user-module/Error.png)
+![](./images/user-module/error.png)
 
-Não entre em pânico![(wink)](./images/user-module/Aspose.Words.aac7548a-0b79-486d-96ce-e145c7faf5a6.015.png) Apenas espere um pouco.
+Por favor, aguarde um pouco. Se a situação não mudar dentro de 24 horas, entre em contato com o [suporte](https://helpdesk.zennolab.com/en-us/conversation/new).
 
-Se nada mudar em um dia, [entre em contato com o suporte](https://helpdesk.zennolab.com) e nós definitivamente o ajudaremos.
 
 </details>
 
 <details>
     <summary>Enviei um arquivo errado, posso reenviá-lo?</summary>
 
-Se você não pagou pelo módulo e ele tem o status **Validado**, você pode excluí-lo. Você pode encontrar mais informações na descrição do status **Validado**.
+Se você não pagou pelo módulo e ele tem o status `Validated`, você pode excluí-lo. Você pode encontrar mais informações na descrição do status `Validated`.
 
 </details>
 
 <details>
     <summary>O que é a coluna “Gerenciar” na tabela? Não tenho nada lá</summary>
 
-Você verá o botão "Excluir" nesta coluna. Mas ele só está disponível para os módulos com o status **Validado**.
+Você verá o botão "Excluir" nesta coluna. Mas ele só está disponível para os módulos com o status `Validated`.
 
 Para módulos com outros status, essa coluna permanece vazia.
 
@@ -241,13 +245,13 @@ Não. O módulo treinado está disponível apenas no CapMonster.Cloud.
 <details>
     <summary>Não estou satisfeito com a qualidade do treinamento. O que fazer?</summary>
 
-Por favor, [entre em contato com nosso serviço de suporte](https://helpdesk.zennolab.com/).
+Por favor, [entre em contato com nosso serviço de suporte](https://helpdesk.zennolab.com/en-us/conversation/new).
 
 </details>
 
 <details>
     <summary>Tenho uma pergunta que não está coberta aqui. Onde devo entrar em contato?</summary>
 
-Por favor, [entre em contato com nosso serviço de suporte](https://helpdesk.zennolab.com/).
+Por favor, [entre em contato com nosso serviço de suporte](https://helpdesk.zennolab.com/en-us/conversation/new).
 
 </details>
