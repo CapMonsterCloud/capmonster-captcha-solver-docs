@@ -16,10 +16,9 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 The custom module creation feature allows you to train the system to recognize a specific type of captcha. This improves the speed and accuracy of recognizing non-standard captchas and reduces the likelihood of errors.
 
-To go to the [module training page](https://capmonster.cloud/UserModules), click your email in the top-right corner of the site and select the corresponding menu option.
-
-![](./images/user-module/834ccbf9-f439-4b1b-8cab-42ed3dbc055c.png)
-
+Go to the [Training module page](https://capmonster.cloud/UserModules), or select the corresponding section from the left-hand menu in your [dashboard](https://dash.capmonster.cloud/):
+ 
+![](./images/user-module/user-module.png)
 
 ---
 
@@ -41,10 +40,10 @@ Each step is described in more detail below.
 
 #### How many captchas do you need?
 
-On the [Module training page](https://capmonster.cloud/UserModules), mark the types of characters that appear in your captcha. After that, a hint will appear showing how many captchas you need to collect and upload:
+On the [Training module page](https://capmonster.cloud/UserModules), click the **Add Module** button and, in the window that opens, specify the character types that appear in your CAPTCHA. After that, a hint will appear showing how many CAPTCHAs you need to collect and upload:
 
+![](./images/user-module/user-module-archive.png)
 
-![](./images/user-module/module-name.png)
 
 #### Supported image formats
 
@@ -69,13 +68,11 @@ It is not recommended to collect captchas in tens or hundreds of threads simulta
 
 ### 2. Sending the captcha archive
 
-![](./images/user-module/a2ba29bd-c910-44cf-9979-ceb143633efd.png)
-
 #### 2.1. Name
 
 First, you need to set the module name. It must contain only Latin characters.
 
-![](./images/user-module/fed2d879-b494-4b60-a13a-036c693d0951.png)
+![](./images/user-module/user-module-name.png)
 
 :::warning
 The module name must not contain the word **captcha**.
@@ -88,7 +85,7 @@ The selected options determine the total number of captchas required to train th
 
 You can mark one or several items from the suggested list.
 
-![](./images/user-module/3b39f9e1-d981-41af-842a-a51f4a51a4e0.png)
+![](./images/user-module/user-module-params.png)
 
 :::info
 You should mark at least one of the following options: "Contains Cyrillic characters", "Contains Latin characters", "Contains numbers"
@@ -98,13 +95,13 @@ You should mark at least one of the following options: "Contains Cyrillic charac
 
 Specify where captcha answers are located.
 
-![](./images/user-module/markup-location.png)
+![](./images/user-module/user-module-markup.png)
 
 It's quite simple: 
 
 - **None** - select it if you don't have answers to captchas (in this case, module training may take longer).
 - **Located in file names** - select it if the name of every captcha image is the answer to it (sometimes a captcha answers cannot be saved in the file name: operating systems do not allow some symbols in file names).
-- **Located in a separate file in the archieve** - select it if answers are saved in a file (it should be a simple text file—.txt).
+- **Located in a separate file in the archive** - select it if answers are saved in a file (it should be a simple text file—.txt).
   - File name- answers.txt
   - Should be located inside the archive with captchas
   - Format - CaptchaFileName:CaptchaAnswer, each captcha on a new line. Example:
@@ -121,12 +118,18 @@ captcha3.png:99loe
 
 When you specified the module name, selected symbol types, and location of answers, you need to upload the zip archive with the captchas and send us.
 
-![](./images/user-module/archieve.png)
+![](./images/user-module/user-module-upload.png)
 
 #### 2.5. Payment
 
 - If you did all that correctly, your request will appear in the table with the **Validated** status.
-- After that, you need to deposit $10 per module.
+* After that, you need to deposit $10 to your balance per 1 module, regardless of the current amount of funds in your balance.
+
+1. Click **Top Up Balance**
+2. Click the **Top Up Balance** button and use the payment method convenient for you.
+
+![](./images/user-module/user-module-top-up-balance.png)
+
 
 :::note
 The funds for training are not charged; they remain on your balance.
@@ -203,27 +206,25 @@ The estimated time for one module to be ready is about one business day.
 </details>
 
 <details>
-    <summary>I see the "Error" sign in the "Comment" column next to my module. What should I do?</summary>
+    <summary>I see the `Error` sign in the "Comment" column next to my module. What should I do?</summary>
 
-![](./images/user-module/Error.png)
+![](./images/user-module/error.png)
 
-Don't panic![(wink)](./images/user-module/Aspose.Words.aac7548a-0b79-486d-96ce-e145c7faf5a6.015.png) Just wait a bit. 
-
-If nothing changed in a day, [contact support](https://helpdesk.zennolab.com) and we will definitely help you.
+Please wait a little. If the situation does not change within 24 hours, please contact [Support](https://helpdesk.zennolab.com/en-us/conversation/new).
 
 </details>
 
 <details>
     <summary>I uploaded a wrong archive, can I resend it?</summary>
 
-If you didn't pay for the module and it has the **Validated** status, you can delete it. You can find more information in the description of the **Validated** status.
+If you have not yet paid for the module and its status is `Validated`, you can delete it yourself. For more details, see the description of the `Validated` status.
 
 </details>
 
 <details>
     <summary>What is the “Manage” column in the table? I have nothing there</summary>
 
-In this column, the **Delete** button is displayed only for modules with the **Validated** status.
+In this column, the "Delete" button is displayed only for modules with the `Validated` status.
 
 For modules with other statuses, this column remains empty.
 
@@ -246,13 +247,13 @@ No. The trained module is only available in CapMonster.Cloud.
 <details>
     <summary>I am not satisfied with the quality of training. What to do?</summary>
 
-Please contact [our support service](https://helpdesk.zennolab.com/).
+Please contact [our support service](https://helpdesk.zennolab.com/en-us/conversation/new).
 
 </details>
 
 <details>
     <summary>I have a question that is not covered here. Where should I contact?</summary>
 
-Please contact [our support service](https://helpdesk.zennolab.com/).
+Please contact [our support service](https://helpdesk.zennolab.com/en-us/conversation/new).
 
 </details>
