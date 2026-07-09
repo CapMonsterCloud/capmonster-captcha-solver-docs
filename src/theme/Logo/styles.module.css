@@ -4,6 +4,7 @@
 
 .logoImg {
   display: block;
+  max-width: 92%;
 }
 
 .logoText {
