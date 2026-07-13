@@ -68,6 +68,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxy" label="YidunTask (при использовании прокси)" className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
@@ -157,6 +158,7 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
 </TabItem>
+</Tabs>
 
 ## Метод создания задачи
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -231,6 +233,7 @@ CapMonster Cloud по умолчанию работает через встро�
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Yidun капчи.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -261,6 +264,7 @@ CapMonster Cloud по умолчанию работает через встро�
   ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 ### Когда нужны `yidunGetLib` и `yidunApiServerSubdomain`?
 Если на странице в сетевых запросах (**Network**) вы находите параметры `challenge`, `hcg`, `hct` - значит, используется Enterprise (или Business) версия Yidun, и следует дополнительно передать `yidunGetLib` и `yidunApiServerSubdomain` для корректного решения.

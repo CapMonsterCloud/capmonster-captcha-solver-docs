@@ -61,19 +61,19 @@ If an error occurs during the launch, it means, that port 80 and/or 443 is occup
 
 To fix this error, it is necessary to end the process, that occupies these ports.  
 
-Run the command line via the start menu →  search → cmd
+Run the command line via the `Start menu →  Search → cmd`
 
 ![](./images/external-services/Aspose.Words.99efaca6-356f-455c-b8b5-a03b46d29ad6.011.png) 
 
-Enter the command netstat -a -o | findstr :443
+Enter the command `netstat -a -o | findstr :443`
 
-The ***-a*** key indicates that we are interested in all active connections, ***-o*** — for each of them we need to display the PID (process ID).
-**findstr :443** will show us only the process that occupies the port we need.
+The `-a` key indicates that we are interested in all active connections, `-o` — for each of them we need to display the PID (process ID).
+`findstr :443` will show us only the process that occupies the port we need.
 
 The PID of the process will be displayed in the right column, as in the screenshot. 
 Remember it or write it down.
 
-Open the task manager, go to the **Details** tab, find the process with the necessary ID and end the task.
+Open the task manager, go to the `Details` tab, find the process with the necessary ID and end the task.
 
 ![](./images/external-services/Aspose.Words.99efaca6-356f-455c-b8b5-a03b46d29ad6.012.png)
 

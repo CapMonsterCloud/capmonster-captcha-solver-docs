@@ -30,6 +30,7 @@ O CapMonster Cloud, por padrão, funciona com proxies integrados — já incluí
 Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço **65.21.190.34** à lista de permissões (whitelist).
 :::
 ## Parâmetros da solicitação
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
@@ -88,6 +89,7 @@ Login do servidor proxy.
 Senha do servidor proxy.
 
 </TabItem>
+</Tabs>
 
 ## Criar tarefa
 
@@ -165,6 +167,7 @@ https://api.capmonster.cloud/createTask
 ## Obter o resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do Basilisk.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -196,6 +199,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
 

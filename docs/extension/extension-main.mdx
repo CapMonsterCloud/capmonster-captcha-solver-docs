@@ -26,39 +26,44 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 *Если по какой-то причине не удалось установить расширение из библиотеки Google Chrome, воспользуйтесь инструкцией по ручной установке.*
 
 <details>
-    <summary>Ручная установка расширения</summary>
+<summary>Ручная установка расширения</summary>
 
-1. Скачайте [архив с раcширением](https://zenno.link/chrome-actual-build).
+1. Скачайте [архив с расширением](https://zenno.link/chrome-actual-build).
 
-2. Распакуйте скачанный архив в папку с любым именем. 
-   
-   **ВНИМАНИЕ**: данную папку впоследствии удалять нельзя иначе расширение в браузере перестанет работать.
-3. В браузере Google Chrome перейдите на страницу **Управление расширениями**, одним из трёх способов:
-   1. Введите в адресную строку браузера `chrome://extensions` и нажмите клавишу **Enter**.
-   2. Через меню: нажмите в правом верхнем углу (возле изображения профиля) три вертикальные точки, затем **Дополнительные инструменты** -> **Расширения**.
+2. Распакуйте скачанный архив в папку с любым именем.
 
-  ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.004.png)
+   > `Важно:` после установки не удаляйте папку с расширением, иначе браузер больше не сможет его использовать.
 
-   3. Или перейдите в настройки Google Chrome и справа в меню выберите пункт **Расширения** (в самом низу)
+3. Введите в адресную строку браузера `chrome://extensions` и нажмите `Enter`.
 
-  ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.005.png)
+   Можно открыть страницу расширений одним из следующих способов:
 
-4. Включите **Режим разработчика**
-5. Снизу появится новое меню в котором нужно выбрать кнопку **Загрузить распакованное расширение**. 
+   - Через меню: нажмите в правом верхнем углу (рядом с изображением профиля) `⋮` → `Расширения` → `Управление расширениями`.
 
-  ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.006.png)
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.004.png)
 
-6. Появится стандартный для вашей ОС диалог поиска файлов/директорий, найдите и выберите папку, в которую распаковали архив.
-7. После этого расширение должно появиться в списке установленных.
+   - Или откройте настройки Google Chrome и в левом меню выберите `Расширения` (в самом низу списка).
 
-![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.007.png)
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.005.png)
 
-  </details>
+4. Включите `Режим разработчика`.
+
+5. В верхней части страницы появится панель, на которой нажмите кнопку `Загрузить распакованное расширение`.
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.006.png)
+
+6. В открывшемся окне выберите папку, в которую был распакован архив.
+
+7. После этого расширение появится в списке установленных.
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.007.png)
+
+</details>
 
 <details>
     <summary>Ручное обновление расширения</summary>
 
-Если вы устанавливаете расширение поверх предыдущей версии, после обновления исходных файлов необходимо также нажать кнопку **Обновить** на странице **Управление расширениями**. (Инструкции по открытию этой страницы приведены выше в разделе **Ручная установка**.)
+Если вы устанавливаете расширение поверх предыдущей версии, после обновления исходных файлов необходимо также нажать кнопку `Обновить` на странице `Управление расширениями`. (Инструкции по открытию этой страницы приведены выше в разделе `Ручная установка`.)
 
 ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.008.png)
 </details>
@@ -96,9 +101,9 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ### <a name="id-расширениедлябраузера-прокси"></a>Прокси
 ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.013.png) 
 
-Здесь можно указать прокси, который будет отправлен вместе с задачей на распознавание.
+В этом разделе можно указать прокси, который будет передан вместе с задачей на распознавание.
 
-“Логин” и “Пароль” указывать необязательно.
+Поля **Логин** и **Пароль** заполнять необязательно. Расширение также поддерживает прокси с **IPv6**.
 
 ### <a name="id-расширениедлябраузера-управлениечёрнымсписком"></a>Управление чёрным списком
 С помощью чёрного списка можно настроить сайты, на которых расширение будет игнорировать капчу.
@@ -130,27 +135,35 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ### Поддерживаемые типы капч и их параметры
 
 
-| Тип капчи                   | Какие параметры отображаются                                                                                              |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Invisible**  | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise** | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V3**            | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
-| **GeeTest v3**              | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
-| **GeeTest v4**              | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
-| **Cloudflare Turnstile**    | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
-| **Cloudflare Challenge**    | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
-| **ImageToText**             | `body` (в формате `base64`), `type`                                                                                       |
-| **BLS**                     | `class`, `imagesBase64`, `Task` (внутри `metadata`), `TaskArgument` (внутри `metadata`), `type`                           |
-| **Binance**                 | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
+| Тип капчи                           | Какие параметры отображаются                                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                    |
+| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
+| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
+| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
+| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
+| **ImageToText**                     | `body` (в формате `base64`), `type`                                                                                       |
+| **BLS**                             | `class`, `imagesBase64`, `Task` (внутри `metadata`), `TaskArgument` (внутри `metadata`), `type`                           |
+| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
 
-Чтобы воспользоваться этой функцией, активируйте расширение, откройте страницу с капчей (убедитесь, что её тип поддерживается и выбран для решения), затем выполните следующие шаги:
+
+Чтобы воспользоваться этой функцией, активируйте расширение, укажите API-ключ в настройках и убедитесь, что на балансе есть средства. Затем откройте страницу с капчей, проверьте, что её тип поддерживается и выбран для решения, и выполните следующие шаги:
 
 1. Откройте **Инструменты разработчика** (DevTools) и перейдите на вкладку **Capmonster Cloud**:
    
    ![](./images/params_extension.png)
 
 2. Перезагрузите страницу.
+
+:::warning **Важно**
+Для API-запросов используйте актуальный `userAgent`, поддерживаемый [нашим сервисом](https://capmonster.cloud/api/useragent/actual).
+:::
+
 
 Параметры выбранной капчи отобразятся автоматически:
 

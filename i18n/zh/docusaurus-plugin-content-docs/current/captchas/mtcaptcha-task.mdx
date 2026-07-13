@@ -33,6 +33,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ## 请求参数
 
+<Tabs>
 <TabItem value="proxy" label="MTCaptchaTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **MTCaptchaTask**
@@ -107,6 +108,7 @@ var mtcaptchaConfig = {
 代理服务器登录密码。
 
 </TabItem>
+</Tabs>
 
 ## 创建任务的方法
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -183,6 +185,7 @@ https://api.capmonster.cloud/createTask
 
 使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 获取 MTCaptcha 的解决方案。
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -214,6 +217,7 @@ https://api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 如何查找验证码参数
 

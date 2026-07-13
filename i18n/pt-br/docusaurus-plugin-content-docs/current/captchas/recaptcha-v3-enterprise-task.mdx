@@ -38,6 +38,7 @@ A reCAPTCHA v3 Enterprise funciona totalmente em segundo plano e não exige que 
 Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa reCAPTCHA v3, especificando o parâmetro `isEnterprise` [(*consulte a seção reCAPTCHA v3*)](../recaptcha-v3-task/).
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
@@ -65,9 +66,11 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     <p>Exemplo em HTML:
     <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
+</Tabs>
 
 ## Método de criar tarefa
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (sem proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -96,6 +99,7 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Método de obter resultado da tarefa
 
@@ -105,6 +109,7 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta do ReCaptcha3. Você receberá a resposta dentro de um período de 10 a 30 segundos, dependendo da carga de trabalho do serviço.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
     <MethodItem>
 ```http
@@ -143,6 +148,7 @@ Para alguns sites, a resposta pode ser semelhante ao exemplo a seguir. Ao confir
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

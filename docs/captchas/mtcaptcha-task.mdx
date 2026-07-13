@@ -32,6 +32,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 ## Параметры запроса
 
+<Tabs>
 <TabItem value="proxy" label="MTCaptchaTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **MTCaptchaTask**
@@ -104,6 +105,7 @@ IP адрес прокси IPv4/IPv6. Не допускается:
 Пароль прокси-сервера.
 
 </TabItem>
+</Tabs>
 
 ## Метод создания задачи
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -178,6 +180,7 @@ https://api.capmonster.cloud/createTask
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение MTCaptcha капчи.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -207,6 +210,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Как найти параметры капчи
 

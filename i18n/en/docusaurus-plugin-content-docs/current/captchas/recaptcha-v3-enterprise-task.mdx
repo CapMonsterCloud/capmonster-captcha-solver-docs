@@ -39,6 +39,7 @@ reCAPTCHA v3 Enterprise operates entirely in the background and does not require
 You can also solve reCAPTCHA v3 Enterprise using the reCAPTCHA v3 task type by specifying the `isEnterprise` parameter [(*see the reCAPTCHA v3 section*)](../recaptcha-v3-task/).
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
@@ -66,9 +67,11 @@ You can also solve reCAPTCHA v3 Enterprise using the reCAPTCHA v3 task type by s
     <p>Example in HTML:
     <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
+</Tabs>
 
 ## Create task method
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -97,6 +100,7 @@ You can also solve reCAPTCHA v3 Enterprise using the reCAPTCHA v3 task type by s
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 :::warning **Warning!**
 On some websites, it is important that the UserAgent matches the one used when solving the captcha. Therefore, if CapMonster Cloud returns a UserAgent along with the token, **always** apply it when submitting the form or confirming the solution on the target page.
@@ -104,6 +108,7 @@ On some websites, it is important that the UserAgent matches the one used when s
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer for ReCaptcha3. You will get response within 10 - 30 sec period depending on service workload.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -142,6 +147,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer fo
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

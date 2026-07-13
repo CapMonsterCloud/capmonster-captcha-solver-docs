@@ -1,5 +1,7 @@
 ﻿---
 sidebar_position: 0
+sidebar_label: Extensão para o navegador Chrome
+
 ---
 
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
@@ -28,35 +30,40 @@ Para começar a usar a extensão, clique em seu ícone à direita da barra de en
 
 1. Baixe o [arquivo com a extensão](https://zenno.link/chrome-actual-build).
 
-2. Descompacte-o para qualquer pasta.
-   
-   **ATENÇÃO**: a pasta não deve ser excluída, caso contrário, a extensão deixará de funcionar.
-3. No navegador Google Chrome, abra a página **Extensões**. Existem várias maneiras de fazer isso:
-   1. Digite `chrome://extensions` na barra de endereços do navegador e pressione **Enter**.
-   2. No menu: clique nos três pontos verticais no canto superior direito (perto da foto do perfil), depois em **Mais Ferramentas**, e em seguida **Extensões**.
+2. Extraia o arquivo baixado para uma pasta com qualquer nome.
 
-  ![](./images/extension-main-firefox/359d5afb-d644-45c2-a882-e7fc3da759eb.png)
+   > `Importante:` após a instalação, não exclua a pasta com a extensão; caso contrário, o navegador não poderá mais usá-la.
 
-   3. Ou vá para as configurações do Google Chrome e selecione **Extensões** (na parte inferior) no menu à direita.
+3. Digite `chrome://extensions` na barra de endereço do navegador e pressione `Enter`.
 
-  ![](./images/extension-main-firefox/61a9b824-b0d2-4808-8bb8-feac4b25d0b7.png)
+   Você pode abrir a página de extensões de uma das seguintes formas:
 
-4. Ative o **Modo de desenvolvedor**.
-5. Em seguida, clique em **Carregar sem compactação**.
+   - Pelo menu: clique em `⋮` no canto superior direito, ao lado da imagem do perfil → `Extensões` → `Gerenciar extensões`.
 
-  ![](./images/extension-main-firefox/load-unpacked.png)
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.004.png)
 
-6. Encontre e escolha a pasta onde você descompactou a extensão.
-7. Depois disso, a extensão deve aparecer na lista das extensões instaladas.
+   - Ou abra as configurações do Google Chrome e selecione `Extensões` no menu à esquerda, no final da lista.
 
-![](./images/extension-main-firefox/919a2eab-1651-4b48-8980-b69346d700fd.png)
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.005.png)
 
-  </details>
+4. Ative o `Modo do desenvolvedor`.
+
+5. Na parte superior da página, aparecerá um painel. Clique no botão `Carregar sem compactação`.
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.006.png)
+
+6. Na janela que será aberta, selecione a pasta para a qual o arquivo foi extraído.
+
+7. Depois disso, a extensão aparecerá na lista de extensões instaladas.
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.007.png)
+
+</details>
 
 <details>
     <summary>Atualização manual da extensão</summary>
 
-Se você estiver instalando a extensão sobre a versão anterior, ao atualizar os arquivos originais da extensão, também precisará clicar no botão de atualização na página **Extensões** (como abrir esta página está descrito acima na seção **Instalação manual**).
+Se você estiver instalando a extensão sobre a versão anterior, ao atualizar os arquivos originais da extensão, também precisará clicar no botão de atualização na página `Extensões` (como abrir esta página está descrito acima na seção `Instalação manual`).
 
 ![](./images/extension-main-firefox/manual-update.png)
 </details>
@@ -66,7 +73,7 @@ Se você estiver instalando a extensão sobre a versão anterior, ao atualizar o
 <details>
     <summary>Como fixar a extensão</summary>
 
-Por padrão, a extensão instalada é ocultada. Para fixá-la, você deve clicar no botão “Fixar”:
+Por padrão, a extensão instalada é ocultada. Para fixá-la, você deve clicar no botão `Fixar`:
 
 ![](./images/extension-main-firefox/pin1.png)
 </details>
@@ -93,9 +100,10 @@ Se a primeira tentativa de resolver o captcha falhar, a extensão enviará taref
 ### <a name="id-browserextension-proxy"></a>Proxy
 ![](./images/extension-main-firefox/proxy.png) 
 
-Aqui você pode especificar o proxy que será enviado junto com a tarefa de reconhecimento.
+Nesta seção, é possível especificar o proxy que será enviado junto com a tarefa de reconhecimento.
 
-O **Login** e a **Senha** são opcionais.
+Os campos **Login** e **Password** são opcionais. A extensão também oferece suporte a proxies com **IPv6**.
+
 ### <a name="id-browserextension-blacklistcontrol"></a>Controle de lista negra
 Usando a lista negra, você pode configurar a extensão para ignorar captchas em sites específicos.
 
@@ -125,29 +133,34 @@ A extensão **CapMonster Cloud** oferece uma maneira prática de visualizar os p
 
 ### Tipos de captcha suportados e seus parâmetros
 
-| Tipo de Captcha             | Parâmetros Exibidos                                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Invisible**  | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise** | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V3**            | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                                    |
-| **GeeTest v3**              | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                            |
-| **GeeTest v4**              | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                               |
-| **Cloudflare Turnstile**    | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
-| **Cloudflare Challenge**    | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                         |
-| **ImageToText**             | `body` (em formato `base64`), `type`                                                                                            |
-| **BLS**                     | `class`, `imagesBase64`, `Task` (dentro de `metadata`), `TaskArgument` (dentro de `metadata`), `type`                           |
-| **Binance**                 | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                                   |
+| Tipo de captcha                     | Quais parâmetros são exibidos                                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
+| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                          |
+| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                                    |
+| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                            |
+| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                               |
+| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
+| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                         |
+| **ImageToText**                     | `body` (no formato `base64`), `type`                                                                                            |
+| **BLS**                             | `class`, `imagesBase64`, `Task` (dentro de `metadata`), `TaskArgument` (dentro de `metadata`), `type`                           |
+| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                                   |
 
+Para usar esta função, ative a extensão, informe a chave de API nas configurações e verifique se há saldo disponível. Em seguida, abra a página com o captcha, confirme se o tipo dele é compatível e está selecionado para resolução, e siga estas etapas:
 
-Para usar este recurso, ative a extensão, abra a página do captcha (certifique-se de que o tipo de captcha é suportado e está selecionado para resolução), e siga os passos abaixo:
+1. Abra as **Ferramentas do desenvolvedor** e acesse a guia **Capmonster Cloud**:
 
-1. Abra as Ferramentas de **Desenvolvedor** (DevTools) e vá até a aba **CapMonster Cloud**: 
-    
-   ![](./images/params_extension.png)
+![](./images/params_extension.png)
 
 2. Recarregue a página.
 
-Os parâmetros do captcha selecionado serão exibidos automaticamente:  
+:::warning **Importante**
+Para solicitações de API, use um `userAgent` atualizado, compatível com [nosso serviço](https://capmonster.cloud/api/useragent/actual).
+:::
+
+Os parâmetros do captcha selecionado serão exibidos automaticamente:
 
 ![](./images/params_extension1.png)

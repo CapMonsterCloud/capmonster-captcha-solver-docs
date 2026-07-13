@@ -56,6 +56,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 
 ### Opção 1
+<Tabs>
 <TabItem value="proxyless" label="AmazonTask (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -122,8 +123,10 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
 </TabItem>
+</Tabs>
 
 ### Opção 2 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -199,12 +202,14 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 ---
 
 </TabItem>
+</Tabs>
 
 ### Opção 3
 
 Se o site usa um captcha invisível e somente `challenge.js` é carregado, use esta opção.  
 Nesse caso, não é necessário enviar todos os parâmetros da opção 2 — eles podem ficar vazios. Envie apenas o valor de `challenge.js`.
 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -269,6 +274,7 @@ Nesse caso, não é necessário enviar todos os parâmetros da opção 2 — ele
 ---
 
 </TabItem>
+</Tabs>
 
 
 ### Como obter os parâmetros `websiteKey`, `context`, `iv` e `challengeScript`
@@ -525,6 +531,7 @@ Ao navegar até o site, você recebe uma resposta **405** e uma página HTML com
 ## Obter o resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do AmazonTask.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -554,6 +561,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Como encontrar todos os parâmetros necessários para a criação da tarefa
 

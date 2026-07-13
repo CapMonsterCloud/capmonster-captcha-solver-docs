@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 6
 sidebar_label: GeeTest
 ---
@@ -80,6 +80,7 @@ V4 (captcha_id = gt)
 </span>
 <br />
 
+  <Tabs>
   <TabItem value="proxy" label="GeeTestTask (using proxy)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
@@ -155,6 +156,7 @@ V4 (captcha_id = gt)
     代理服务器密码。
 
   </TabItem>
+  </Tabs>
 
 
 ### <span style={{fontSize: '1.5rem'}}>创建任务</span>
@@ -236,6 +238,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result</span>
 
+	<Tabs>
 	<TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel-full">
 		<MethodItem>
 			```http
@@ -264,6 +267,7 @@ V4 (captcha_id = gt)
 ```
 		</MethodDescription>
 	</TabItem>
+	</Tabs>
 
 <br />
 
@@ -727,6 +731,7 @@ class Program
 
 ### <span style={{fontSize: '1.5rem'}}>请求参数</span>
 
+  <Tabs>
   <TabItem value="proxy" label="GeeTestTask (using proxy)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
@@ -793,6 +798,7 @@ class Program
     代理服务器密码。
 
   </TabItem>
+  </Tabs>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
@@ -876,6 +882,7 @@ class Program
 
 ### <span style={{fontSize: '1.5rem'}}>获取任务结果方法</span>
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -906,6 +913,7 @@ class Program
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

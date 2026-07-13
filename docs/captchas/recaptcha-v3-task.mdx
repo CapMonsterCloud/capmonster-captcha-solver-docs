@@ -38,6 +38,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 ## Параметры запроса
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
@@ -72,9 +73,11 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
+</Tabs>
 
 
 ## Метод создания задачи
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -106,6 +109,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Метод получения результата задачи
@@ -116,6 +120,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение ReCaptcha3. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 30 с.
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -158,6 +163,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

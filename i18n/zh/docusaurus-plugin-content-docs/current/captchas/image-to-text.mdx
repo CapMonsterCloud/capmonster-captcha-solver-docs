@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 12
 sidebar_label: ImageToText
 ---
@@ -38,6 +38,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <br />
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ImageToTextTask**
@@ -74,6 +75,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="math" type="boolean" />
     false — 未定义；<br />true — 如果验证码需要数学操作（例如：验证码 2 + 6 = 将返回值 8）。**重要提示：** 请勿在 `captcha_math` 模块中使用 `math: true` 参数。
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -107,6 +109,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 ## 创建任务方法 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -133,11 +136,13 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## 获取任务结果方法
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取验证码的解决方案。根据系统负载，您将在300毫秒到6秒的时间范围内收到答案。
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -164,6 +169,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

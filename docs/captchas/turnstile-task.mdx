@@ -50,6 +50,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -113,6 +114,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     Пароль прокси-сервера.
 
 </TabItem>
+</Tabs>
 
 ---
 
@@ -189,6 +191,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Turnstile. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 5 до 20 с.
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -217,6 +220,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 |**Свойство**|**Тип**|**Описание**|
 | :- | :- | :- |

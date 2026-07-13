@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 7
 sidebar_label: Cloudflare Turnstile
 title: "Recognise and resolve Cloudflare Turnstile | API"
@@ -51,6 +51,7 @@ All Turnstile subtypes are automatically supported: **manual**, **non-interactiv
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -114,6 +115,7 @@ All Turnstile subtypes are automatically supported: **manual**, **non-interactiv
   Proxy password.
 
 </TabItem>
+</Tabs>
 ---
 
 ## Create task method
@@ -190,6 +192,7 @@ All Turnstile subtypes are automatically supported: **manual**, **non-interactiv
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve the Turnstile solution. Depending on system load, the response can take between 5 and 20 seconds.
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (proxyless)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -218,6 +221,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |

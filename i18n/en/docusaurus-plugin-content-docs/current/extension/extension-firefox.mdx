@@ -33,22 +33,28 @@ To get started with the extension, click on its icon to the right of the address
 2. Open the Firefox browser and go to work with extensions:
    ![](./images/extension-main-firefox/extension-menu.png)
    
-3. Click the gear button, in the drop-down list that opens, select **Install add-on from file...**
+3. Go to `Manage Your Extensions`, click the gear button, and in the dropdown list that opens, select `Install Add-on From File…`
    ![](./images/extension-main-firefox/extension-installation.png)
    
 4. Select the downloaded archive with the extension.
 
-5. After downloading the extension, go to **Manage Your Extensions** and click on the installed extension. 
+5. After the extension is loaded, go to `Manage extensions` and click the installed extension. 
    ![](./images/extension-main-firefox/extension1.png)
    
-6. Go to the **Permissions** tab and make sure that all permissions are granted.
+6. Go to the `Permissions` tab and make sure that all permissions have been granted.
    ![](./images/extension-main-firefox/extension2.png)
+
+If errors occur during the standard installation, use the add-on debugging mode:
+
+1. Go to `Manage Your Extensions`, click the gear button, and in the dropdown list that opens, select `Debug Add-ons`
+![](./images/extension-main-firefox/ext-firefox-fix.png)
+2. In the window that opens, click `Load Temporary Add-on` and select the downloaded archive with the extension.
 </details>
 
 <details>
     <summary>Manual update of the extension</summary>
 
-If you are installing the extension over the previous version, then when you update the original extension files, you also need to click the update button on the **Extensions** page (how to open this page is described above in the **Manual installation** section).
+If you are installing the extension over the previous version, then when you update the original extension files, you also need to click the update button on the `Extensions` page (how to open this page is described above in the `Manual installation` section).
 </details>
 
 -----
@@ -70,7 +76,7 @@ Enter API key in the corresponding field(**1**), press **Save** button(**2**). I
 ### <a name="id-browserextension-automaticcaptchasolving"></a>Automated captcha solving
 Here you can select the types of captchas that the extension will recognize automatically.
 
-![](./images/extension-main-firefox/extension.examplef.png)
+![](./images/extension-main-firefox/extension.example.png)
 
 :::info !
 
@@ -82,9 +88,10 @@ If the first attempt to solve the captcha is failed, the extension will send rep
 ### <a name="id-browserextension-proxy"></a>Proxy
 ![](./images/extension-main-firefox/proxy.png) 
 
-Here you can specify the proxy that will be sent along with the recognition task.
+In this section, you can specify a proxy that will be passed along with the recognition task.
 
-The "Login" and "Password" are optional.
+The **Login** and **Password** fields are optional. The extension also supports proxies with **IPv6**.
+
 ### <a name="id-browserextension-blacklistcontrol"></a>Blacklist control
 Using the blacklist you can configure the extension to ignore captchas on specific websites.
 
@@ -114,28 +121,35 @@ The **CapMonster Cloud** extension provides a convenient way to view the paramet
 
 ### Supported captcha types and their parameters
 
-| Captcha Type                | Displayed Parameters                                                                                                      |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Invisible**  | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise** | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V3**            | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
-| **GeeTest v3**              | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
-| **GeeTest v4**              | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
-| **Cloudflare Turnstile**    | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
-| **Cloudflare Challenge**    | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
-| **ImageToText**             | `body` (in `base64` format), `type`                                                                                       |
-| **BLS**                     | `class`, `imagesBase64`, `Task` (inside `metadata`), `TaskArgument` (inside `metadata`), `type`                           |
-| **Binance**                 | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
+| Captcha type                        | Displayed parameters                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                    |
+| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
+| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
+| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
+| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
+| **ImageToText**                     | `body` (in `base64` format), `type`                                                                                       |
+| **BLS**                             | `class`, `imagesBase64`, `Task` (inside `metadata`), `TaskArgument` (inside `metadata`), `type`                           |
+| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
 
-To use this feature, activate the extension, open the captcha page (make sure the captcha type is supported and selected for solving), and then follow these steps:
 
-1. Open **Developer Tools** (DevTools) and go to the **CapMonster Cloud tab**:  
+To use this feature, enable the extension, specify your API key in the settings, and make sure there are funds on your balance. Then open the page with the captcha, check that its type is supported and selected for solving, and follow these steps:
+
+1. Open **Developer Tools** and go to the **Capmonster Cloud** tab:  
    
-   ![](./images/extension-main-firefox/params_extenstion2.png)
+   ![](./images/extension-main-firefox/params_extension2.png)
 
 2. Reload the page.
 
-The parameters of the selected captcha will be displayed automatically:  
+:::warning **Important**
+For API requests, use an up-to-date `userAgent` supported by [our service](https://capmonster.cloud/api/useragent/actual).
+:::
 
-![](./images/extension-main-firefox/params_extenstion3.png)
+Captcha parameters will be displayed automatically:  
+
+![](./images/extension-main-firefox/params_extension3.png)

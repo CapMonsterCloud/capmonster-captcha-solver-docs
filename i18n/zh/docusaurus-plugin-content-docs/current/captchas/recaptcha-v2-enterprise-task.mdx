@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 2
 sidebar_label: reCAPTCHA v2 Enterprise
 ---
@@ -44,6 +44,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ## 请求参数
 
+  <Tabs>
   <TabItem value="proxy" label="RecaptchaV2EnterpriseTask (使用代理)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
@@ -122,6 +123,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     代理密码。
 
   </TabItem>
+  </Tabs>
 
 <br />
 对于 `enterprisePayload` - 在调用它之前，您需要用自己的函数替换 `grecaptcha.enterprise.render` 函数，并从其参数中获取值。该函数在加载脚本后存在，验证码通常立即渲染或基于页面事件渲染。如果验证码在客户端使用当前字段 `s` 渲染，那么令牌很可能不会被接受。
@@ -249,6 +251,7 @@ Object.defineProperty(window, 'grecaptcha', {
 
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法请求 ReCaptcha2 的答案。根据服务负载情况，您将在 10到80 秒内收到响应。
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -275,6 +278,7 @@ Object.defineProperty(window, 'grecaptcha', {
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

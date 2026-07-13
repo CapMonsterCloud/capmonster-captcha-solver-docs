@@ -34,6 +34,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 ## Request parameters
 
+<Tabs>
 <TabItem value="proxy" label="CustomTask (when using a proxy)" className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
@@ -108,6 +109,7 @@ Browser User-Agent.<br />
   Proxy password.
 
 </TabItem>
+</Tabs>
 
 ## Create task method
 
@@ -213,6 +215,7 @@ The token format in the response depends on the captcha version used on the webs
 
 **V2**: `"AQQA.8Q2TbgK_..._pknXDweJjKT2qwmroOhHcZsU4dHyu-jaGIPx9k7432p_num13buuTu6n4lVA=="`
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
   <MethodItem>
       ```http
@@ -247,6 +250,7 @@ The token format in the response depends on the captcha version used on the webs
 
   </MethodDescription>
 </TabItem>
+</Tabs>
 <br />
 The obtained token value should be inserted into the corresponding field:
 

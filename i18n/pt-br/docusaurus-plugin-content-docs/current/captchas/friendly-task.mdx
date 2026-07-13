@@ -34,6 +34,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da solicitação
 
+<Tabs>
 <TabItem value="proxy" label="CustomTask (ao usar proxy)" className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
@@ -108,6 +109,7 @@ Login do proxy.
 Senha do proxy.
 
 </TabItem>
+</Tabs>
 
 ## Criar método de tarefa
 
@@ -214,6 +216,7 @@ O formato do token na resposta depende da versão do captcha usada no site:
 
 **V2**: `"AQQA.8Q2TbgK_..._pknXDweJjKT2qwmroOhHcZsU4dHyu-jaGIPx9k7432p_num13buuTu6n4lVA=="`
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
   <MethodItem>
       ```http
@@ -248,6 +251,7 @@ O formato do token na resposta depende da versão do captcha usada no site:
 
   </MethodDescription>
 </TabItem>
+</Tabs>
 <br />
 O valor do token obtido deve ser inserido no campo correspondente:
 

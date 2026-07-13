@@ -12,11 +12,11 @@
     "description": "The generated-index page description for category API in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Методы": {
-    "message": "Methods",
+    "message": "Métodos",
     "description": "The label for category Методы in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Типы капч": {
-    "message": "Captcha types",
+    "message": "Tipos de captcha",
     "description": "The label for category Типы капч in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Типы капч.link.generated-index.description": {
@@ -24,11 +24,11 @@
     "description": "The generated-index page description for category Типы капч in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Внешние сервисы": {
-    "message": "External services",
+    "message": "Serviços externos",
     "description": "The label for category Внешние сервисы in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Расширение": {
-    "message": "Extension",
+    "message": "Extensão do navegador",
     "description": "The label for category Расширение in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Методы.link.generated-index.description": {

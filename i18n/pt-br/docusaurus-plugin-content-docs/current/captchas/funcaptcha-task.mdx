@@ -40,6 +40,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
@@ -115,6 +116,7 @@ Senha do servidor proxy.
 
 ---
 </TabItem>
+</Tabs>
 
 ## Criar método de tarefa
 
@@ -191,6 +193,7 @@ https://api.capmonster.cloud/createTask
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução FunCaptcha.
 
+<Tabs>
 <TabItem value="proxyless" label="FunCaptchaTask (sem proxy)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -223,6 +226,7 @@ https://api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Encontrando os parâmetros do FunCaptcha
 
@@ -294,6 +298,7 @@ Você pode implementar a mesma lógica usando outras ferramentas de automação 
 
 ---
 
+<Tabs>
 <TabItem value="js" label="JavaScript" default className="method-panel">
 <details>
 <summary>Node.js</summary>
@@ -428,9 +433,11 @@ async function getTaskResult(taskId) {
 
 </details>
 </TabItem>
+</Tabs>
 
 ---
 
+<Tabs>
 <TabItem value="python" label="Python" className="method-panel">
 <details>
 <summary>Python</summary>
@@ -568,9 +575,11 @@ asyncio.run(main())
 
 </details>
 </TabItem>
+</Tabs>
 
 ---
 
+<Tabs>
 <TabItem value="js" label="JavaScript" default className="method-panel">
 <details>
 <summary>C#</summary>
@@ -745,3 +754,4 @@ class Program
 
 </details>
 </TabItem>
+</Tabs>

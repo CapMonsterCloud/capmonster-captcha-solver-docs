@@ -42,7 +42,7 @@ Ao clicar duas vezes no ícone do CapMonsterInterceptor na bandeja, você pode v
 <details>
     <summary>Como alterar a chave de API especificada ao instalar o CapMonsterInterceptor?</summary>
 
-Dê um clique duplo no ícone do CapMonsterInterceptor na bandeja. Na janela do programa, encontre o bloco «Configurações», altere a chave e clique em «Salvar».
+Dê um clique duplo no ícone do CapMonsterInterceptor na bandeja. Na janela do programa, encontre o bloco «Settings», altere a chave e clique em «Save».
 
 ![](./images/external-services/Aspose.Words.99efaca6-356f-455c-b8b5-a03b46d29ad6.009.png)
 </details>
@@ -56,19 +56,19 @@ Se ocorrer um erro durante a inicialização, isso significa que as portas 80 e/
 
 Para corrigir esse erro, é necessário encerrar o processo que ocupa essas portas.
 
-Execute o prompt de comando através do menu iniciar → pesquisa → cmd
+Execute a linha de comando pelo `Menu Iniciar → Pesquisa → cmd`
 
 ![](./images/external-services/Aspose.Words.99efaca6-356f-455c-b8b5-a03b46d29ad6.011.png)
 
 Digite o comando `netstat -a -o | findstr :443`
 
-A chave ***-a*** indica que estamos interessados em todas as conexões ativas, ***-o*** — para cada uma delas, precisamos exibir o PID (ID do processo).
-**findstr :443** nos mostrará apenas o processo que ocupa a porta necessária.
+A chave `-a` indica que estamos interessados em todas as conexões ativas, `-o` — para cada uma delas, precisamos exibir o PID (ID do processo).
+`findstr :443` nos mostrará apenas o processo que ocupa a porta necessária.
 
 O PID do processo será exibido na coluna da direita, como na captura de tela.
 Lembre-se ou anote-o.
 
-Abra o gerenciador de tarefas, vá para a aba «Detalhes», encontre o processo com o ID necessário e finalize a tarefa.
+Abra o Gerenciador de Tarefas, acesse a aba `Detalhes`, encontre o processo com o ID necessário e finalize a tarefa.
 
 ![](./images/external-services/Aspose.Words.99efaca6-356f-455c-b8b5-a03b46d29ad6.012.png)
 

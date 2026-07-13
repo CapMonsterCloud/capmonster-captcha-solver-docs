@@ -30,13 +30,15 @@ Select **Use CapMonster Cloud** and enter your personal API key.
 <details>
     <summary>A-Parser</summary>
 
-To solve a `reCAPTCHA`, select **Util::ReCaptcha2** and specify the key for the Provider field.
+To solve a reCAPTCHA, select `Util::ReCaptcha2` and choose `CapMonster Cloud` in the `Provider` field.
 
 ![](./images/external-program/aparser.png) 
+![](./images/external-program/aparser1.png) 
 
-To solve standard captchas, select **Util::Antigate** and specify **api.CapMonster Cloud** as the value for **Antigate domain**. In the "key" field, specify your personal API key.
+To solve standard captchas, select `Util::Antigate` and choose `CapMonster Cloud` in the `Provider` field. In the `Client key` field, enter your CapMonster Cloud API key.
 
 ![](./images/external-program/aparser2.png)
+![](./images/external-program/aparser3.png)
 </details>
 
 <details>
@@ -59,14 +61,16 @@ This method works for:
 ## Connecting to other programs in 3 steps
 1. In your program, select one of the captcha solvers that we support:
    `Anti-Captcha (v1.0, v2.0), RuCaptcha, RipCaptcha, 2Captcha, BypassCaptcha, DeathByCaptcha`.
-1. Then specify your personal API key for CapMonsterCloud in the relevant field in your program from which you will send captchas.
-   1. **note for DeathByCaptcha:** to identify a user, DeathByCaptcha API employs a username and password, not an API key. In this case, specify the API key for CapMonsterCloud in the password field. Enter any value in the username field.
-1. Last step: match our IP with another service so CapMonster Cloud can get captchas from the aforementioned services. For that, select your operating system, hit the spoiler, and follow the instruction.
+2. Then specify your personal API key for CapMonsterCloud in the relevant field in your program from which you will send captchas.
+
+> **note for DeathByCaptcha:** to identify a user, DeathByCaptcha API employs a username and password, not an API key. In this case, specify the API key for CapMonsterCloud in the password field. Enter any value in the username field.
+
+3. Last step: match our IP with another service so CapMonster Cloud can get captchas from the aforementioned services. For that, select your operating system, hit the spoiler, and follow the instruction.
 
 <details>
     <summary>I have Windows</summary>
 
-Go here: C:\Windows\System32\drivers\etc\ and find the file **hosts**. Open it with Notepad and add the following lines to the document end:
+Go here: C:\Windows\System32\drivers\etc\ and find the file `hosts`. Open it with Notepad and add the following lines to the document end:
 
 ```
 # CapMonster Cloud begin
@@ -114,18 +118,19 @@ Go here: C:\Windows\System32\drivers\etc\ and find the file **hosts**. Open it w
 # CapMonster Cloud end
 ```
 Save.
+
 :::info
 In some cases, you may need admin rights to save the file. In this case, you will have to follow this simple instructions:
 
-1. Start typing "Notepad" in the search bar of your taskbar. Once the result is found, RMB-click on it and click "Run as administrator."
+1. Start typing `Notepad` in the search bar of your taskbar. Once the result is found, RMB-click on it and click `Run as administrator.`
 
   ![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.008.png)
 
-1. In the Notepad upper menu, click File — Open and specify the path to "hosts": *C:\Windows\System32\drivers\etc.* If there are several files with this name in the folder, open the file that has no extension.
-1. Make changes to "hosts" and then save the file in the menu.
+2. In the Notepad upper menu, click `File` — open and specify the path to `hosts`: *C:\Windows\System32\drivers\etc.* If there are several files with this name in the folder, open the file that has no extension.
+3. Make changes to `hosts` and then save the file in the menu.
 :::
 
-Try visiting any of these domains. If everything is correct, a white page will open. If you couldn't do it, contact [support](https://helpdesk.zennolab.com/conversation/new), we will help you with all configurations!
+Try visiting any of these domains. If everything is correct, a white page will open. If you couldn't do it, contact [support](https://helpdesk.zennolab.com/en-us/conversation/new), we will help you with all configurations!
 </details>
 
 <details>
@@ -201,7 +206,7 @@ After changes are made, click Ctrl+O to apply them. After that, click Ctrl+X and
 
 To see the changes, clear the DNS cache. For that, enter the command: `sudo killall -HUP mDNSResponder`. It will clear the DNS cache on your Mac, and the operating system will see the changes in Hosts.
 
-Try visiting any of these domains. If everything is correct, a white page will open. If you couldn't do it, contact [support](https://helpdesk.zennolab.com/conversation/new), we will help you with all configurations.
+Try visiting any of these domains. If everything is correct, a white page will open. If you couldn't do it, contact [support](https://helpdesk.zennolab.com/en-us/conversation/new), we will help you with all configurations.
 </details>
 
 <details>
@@ -260,7 +265,7 @@ Add the following lines to the end of the document:
 
 After changes are made, click Ctrl+X and then Y to apply them.  
 
-Try visiting any of these domains. If everything is correct, a white page will open. If you couldn't do it, contact [support](https://helpdesk.zennolab.com/conversation/new), we will help you with all configurations.
+Try visiting any of these domains. If everything is correct, a white page will open. If you couldn't do it, contact [support](https://helpdesk.zennolab.com/en-us/conversation/new), we will help you with all configurations.
 </details>
 
 This method works for many apps, including the following:
@@ -269,7 +274,7 @@ This method works for many apps, including the following:
 - Жукладочник
 - Определяйка
 - PHP скрипты
-- Словоёб
+- СловоЕБ
 - Add2Board
 - AddNews
 - AddSite
@@ -325,7 +330,7 @@ This method works for many apps, including the following:
 
 :::info !
 
-If you couldn't connect CapMonster Cloud to your app, contact [support](https://helpdesk.zennolab.com/conversation/new), we will help you with all configurations.
+If you couldn't connect CapMonster Cloud to your app, contact [support](https://helpdesk.zennolab.com/en-us/conversation/new), we will help you with all configurations.
 
 :::
 

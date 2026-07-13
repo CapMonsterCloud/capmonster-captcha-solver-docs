@@ -55,6 +55,7 @@ CapMonster Cloud по умолчанию работает через встро�
 <br />
 
 ### Вариант 1
+<Tabs>
 <TabItem value="proxyless" label="AmazonTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -120,8 +121,10 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
 </TabItem>
+</Tabs>
 
 ### Вариант 2 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -196,11 +199,13 @@ CapMonster Cloud по умолчанию работает через встро�
 ---
 
 </TabItem>
+</Tabs>
 
 ### Вариант 3
 
 Если на сайте используется невидимая капча и загружается только `challenge.js`, используйте этот вариант. В этом случае передавать все параметры, как в варианте 2, не требуется — значения можно оставить пустыми. Передавайте только значение `challenge.js`.
 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -265,6 +270,7 @@ CapMonster Cloud по умолчанию работает через встро�
 ---
 
 </TabItem>
+</Tabs>
 
 
 ### Как получить параметры `websiteKey`, `context`, `iv` и `challengeScript`
@@ -521,6 +527,7 @@ CapMonster Cloud по умолчанию работает через встро�
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение AmazonTask.
 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -550,6 +557,7 @@ CapMonster Cloud по умолчанию работает через встро�
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Как найти все нужные параметры для создания задачи
 

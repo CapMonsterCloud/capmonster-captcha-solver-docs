@@ -54,6 +54,7 @@ Hunt CAPTCHA is an anti-bot system used on betting platforms to detect automated
 <br />
 
 
+<Tabs>
 <TabItem value="proxy" label="HuntTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
@@ -127,6 +128,7 @@ Browser User-Agent.<br />
   Proxy password.
 
 </TabItem>
+</Tabs>
 --- 
 
 **The solution supports two operating modes:**
@@ -174,6 +176,7 @@ Used to obtain an X-HD token bound to the IP address.
 
 ### Create task method for X-HD generation
 
+<Tabs>
 <TabItem value="proxy" label="CustomTask (with proxy)" className="method-panel">
     <MethodItem>
       ```http
@@ -209,6 +212,7 @@ Used to obtain an X-HD token bound to the IP address.
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Mode 2. CAPTCHA solving
@@ -240,6 +244,7 @@ Used after the website returns a captcha error and provides `meta.token`.
 
 The value of `meta.token` must be passed in the `data` parameter.
 
+<Tabs>
 <TabItem value="proxy" label="CustomTask (with proxy)" className="method-panel">
     <MethodItem>
       ```http
@@ -276,6 +281,7 @@ The value of `meta.token` must be passed in the `data` parameter.
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Get task result method
 
@@ -289,6 +295,7 @@ The value of `solution.data.token`:
 * In CAPTCHA solving mode — `solution.data.token` is the solution token that must be sent back to the website to confirm the action.
   :::
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -317,6 +324,7 @@ The value of `solution.data.token`:
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Working with cookies
 

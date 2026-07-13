@@ -8,147 +8,160 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <ArticleHead slug="extension/extension-main" />
 
 # Chrome 浏览器扩展
-## 描述
-通过此扩展，您可以直接在浏览器中自动识别验证码。
+## 说明
+使用此扩展，您可以直接在浏览器中自动识别验证码。
 
 该扩展适用于 Google Chrome 浏览器。
 
 -----
 ## 自动安装
-**重要提示！** 您不能在隐身模式和访客模式下安装扩展程序。
+**重要！** 不建议在无痕模式或访客模式下安装扩展。
 
-1. 打开 [Chrome 网上应用店](https://chrome.google.com/webstore/detail/capmonster-cloud-%E2%80%94-automa/pabjfbciaedomjjfelfafejkppknjleh?hl=en)。
-1. 点击 **安装**。
+1. 打开 [Chrome 网上应用店](https://chrome.google.com/webstore/detail/capmonster-cloud-%E2%80%94-automa/pabjfbciaedomjjfelfafejkppknjleh?hl=zh)。
+2. 点击 **安装**。
 
-要开始使用扩展，请点击地址栏右侧的扩展图标。前往 [设置页面](extension-main.mdx#设置)。
+要开始使用该扩展，请点击地址栏右侧的扩展图标。然后前往[设置](extension-main.mdx#设置)。
 
-*如果由于某些原因无法从 Chrome 网上应用店安装扩展，请使用手动安装的说明。*
+*如果由于某种原因无法从 Chrome 网上应用店安装该扩展，请使用手动安装说明。*
 
 <details>
     <summary>手动安装</summary>
 
-1. 下载带有扩展的[存档文件](https://zenno.link/chrome-actual-build).
+1. 下载[扩展压缩包](https://zenno.link/chrome-actual-build)。
 
-2. 将其解压缩到任意文件夹。
+2. 将下载的压缩包解压到任意名称的文件夹中。
 
-   **警告**: 请勿删除该文件夹，否则扩展将停止工作。
-3. 在 Google Chrome 浏览器中打开“扩展程序”页面。有几种方法可以做到这一点：
-   1. 在浏览器的地址栏中键入 chrome://extensions 并按 Enter。
-   2. 从菜单中：点击右上角的三个竖点（靠近个人资料图片），然后选择“更多工具”，然后选择“扩展程序”。
+   > `重要：`安装完成后，请勿删除扩展所在的文件夹，否则浏览器将无法继续使用该扩展。
 
-![](./images/extension-main-firefox/359d5afb-d644-45c2-a882-e7fc3da759eb.png)
+3. 在浏览器地址栏中输入 `chrome://extensions`，然后按下 `Enter`。
 
-   3. 或者转到 Google Chrome 设置，并在右侧菜单中选择“扩展程序”（位于最底部）。
+   您可以通过以下任一方式打开扩展程序页面：
 
-![](./images/extension-main-firefox/61a9b824-b0d2-4808-8bb8-feac4b25d0b7.png)
+   - 通过菜单：点击右上角个人资料图片旁边的 `⋮` → `扩展程序` → `管理扩展程序`。
 
-4. 启用“开发者模式”。
-5. 然后点击“加载已解压的扩展程序”。
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.004.png)
 
-![](./images/extension-main-firefox/load-unpacked.png)
+   - 或打开 Google Chrome 设置，然后在左侧菜单最底部选择 `扩展程序`。
 
-6. 找到并选择您解压缩扩展的文件夹。
-7. 完成后，扩展应出现在已安装扩展的列表中。
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.005.png)
 
-![](./images/extension-main-firefox/919a2eab-1651-4b48-8980-b69346d700fd.png)
+4. 启用 `开发者模式`。
 
-</details>
+5. 页面顶部将出现一个面板。点击 `加载已解压的扩展程序` 按钮。
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.006.png)
+
+6. 在打开的窗口中，选择解压该压缩包的文件夹。
+
+7. 此后，该扩展将出现在已安装扩展程序列表中。
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.007.png)
+
+  </details>
 
 <details>
-<summary>扩展程序的手动更新</summary>
+    <summary>手动更新扩展程序</summary>
 
-如果您正在安装扩展的更新版本，那么当您更新原始扩展文件时，还需要在“扩展程序”页面上点击更新按钮（如何打开此页面在上面的“手动安装”部分已经描述）。
+如果您是在旧版本上安装此扩展程序，那么在更新原始扩展文件后，还需要在 `扩展程序` 页面点击更新按钮（如何打开此页面，请参阅上方的 `手动安装` 部分）。
 
-![](./images/extension-main-firefox/manual-update.png)
+![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.008.png)
 </details>
 
 -----
 ## 设置
 <details>
-<summary>如何固定扩展</summary>
+    <summary>如何固定扩展程序</summary>
 
-默认情况下，安装的扩展是隐藏的。要固定它，您需要点击“固定”按钮：
+默认情况下，已安装的扩展程序处于隐藏状态。要将其固定，请点击 **固定** 按钮：
 
 ![](./images/extension-main-firefox/pin1.png)
 </details>
 
-启动扩展后，您将看到此窗口：
+启动扩展程序后，您将看到以下窗口：
 
 ![](./images/extension-main-firefox/ext.screen.en.png)
 ### <a name="id-browserextension-apikey"></a>API 密钥
-在相应的字段中输入 API 密钥(1)，点击保存按钮(2)。如果您输入了正确的密钥，您的余额将显示在下方(3)。
+在相应字段中输入 API 密钥（**1**），然后点击 **保存** 按钮（**2**）。如果输入的密钥正确，您的余额将显示在下方（**3**）。
 
 ![](./images/extension-main-firefox/api-key.png)
 ### <a name="id-browserextension-automaticcaptchasolving"></a>自动识别验证码
-在这里，您可以选择扩展将自动识别的验证码类型。
+您可以在此选择扩展程序将自动识别的验证码类型。
 
 ![](./images/extension-main-firefox/extension.example.png)
 
 :::info !
 
-您可能需要重新加载带有验证码的页面以使更改生效！
+您可能需要重新加载包含验证码的页面，才能使更改生效！
 
 :::
-### <a name="id-browserextension-repeatcaptchasolvingincaseofanerror"></a>在出现错误时重复解决验证码
-如果第一次尝试解决验证码失败，扩展将发送重复的任务，直到验证码解决成功，或者直到达到此设置中指定的限制为止。
+### <a name="id-browserextension-repeatcaptchasolvingincaseofanerror"></a>出错时重复识别验证码
+如果第一次识别验证码失败，扩展程序将重复发送任务，直到验证码被成功识别，或达到此设置中指定的限制。
+
 ### <a name="id-browserextension-proxy"></a>代理
-![](./images/extension-main-firefox/proxy.png)
+![](./images/extension-main-firefox/proxy.png) 
 
-在这里，您可以指定将与识别任务一起发送的代理设置。
+在此部分中，您可以指定一个代理，该代理将与识别任务一起发送。
 
-“登录”和“密码”是可选的。
-### <a name="id-browserextension-blacklistcontrol"></a>黑名单控制
-使用黑名单，您可以配置扩展程序在特定网站上忽略验证码。
+**登录名** 和 **密码** 字段为可选项。该扩展程序还支持使用 **IPv6** 的代理。
 
-启用此选项后，将会出现一个输入网站的字段：
+### <a name="id-browserextension-blacklistcontrol"></a>黑名单管理
+您可以使用黑名单配置扩展程序，使其忽略特定网站上的验证码。
+
+启用此选项后，将显示一个用于输入网站的字段：
 
 ![](./images/extension-main-firefox/blacklist-control.png)
 
-域名必须与协议（https:// 或 http://） 一起指定。
+必须连同协议（https:// 或 http://）一起指定域名。
 您可以使用通配符：
 
-- ? - 代表除句点以外的任何字符
-- \* - 代表任意数量的任何字符
+- ? - 除句点外的任意单个字符
+- \* - 任意数量的任意字符
 
 示例：
 
-|**过滤器**|**描述**|
+|**过滤器**|**说明**|
 | :-: | :-: |
-|`https://zennolab.com`|禁止在 `https://zennolab.com` 网站上使用扩展|
-|`https://*.zennolab.com`|禁止在所有子域名 `https://zennolab.com` 上使用扩展|
-|`https://www.google.*`|禁止在 Google 的所有区域（ru、com、com.ua 等）使用扩展|
+|`https://zennolab.com`|禁止扩展程序在网站 `https://zennolab.com` 上运行|
+|`https://*.zennolab.com`|禁止扩展程序在 `https://zennolab.com` 的所有子域名上运行|
+|`https://www.google.*`|禁止扩展程序在所有区域域名（ru、com、com.ua 等）的 Google 网站上运行|
 
-当解决验证码时发生错误，请参阅[错误术语表](/api/api-errors.mdx)。
+如果识别验证码时出现错误，请参阅[错误词汇表](/api/api-errors.mdx)。
 
 ## 验证码参数映射
 
-**CapMonster Cloud** 扩展程序提供了一种便捷方式，用于查看各种验证码类型所需的参数，以便正确发送至服务器并成功完成识别。显示的数据有助于验证参数的准确性，并可作为构建 API 请求的示例。
+**CapMonster Cloud** 扩展程序提供了一种便捷方式，用于查看正确提交任务和成功识别各种验证码类型所需的参数。显示的数据可帮助您确认所发送参数的准确性，也可以在构建 API 请求时用作示例。
 
 ### 支持的验证码类型及其参数
 
-| 验证码类型                       | 显示的参数                                                                                                       |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`，`imageUrls`，`Task`（在 `metadata` 中），`Grid`（在 `metadata` 中），`recognizingThreshold`，`userAgent`，`type` |
-| **reCAPTCHA V2 Invisible**  | `class`，`imageUrls`，`Task`（在 `metadata` 中），`Grid`（在 `metadata` 中），`recognizingThreshold`，`userAgent`，`type` |
-| **reCAPTCHA V2 Enterprise** | `class`，`imageUrls`，`Task`（在 `metadata` 中），`Grid`（在 `metadata` 中），`recognizingThreshold`，`userAgent`，`type` |
-| **reCAPTCHA V3**            | `websiteURL`，`websiteKey`，`pageAction`，`minScore`，`type`                                                    |
-| **GeeTest v3**              | `websiteURL`，`gt`，`challenge`，`userAgent`，`type`                                                            |
-| **GeeTest v4**              | `websiteURL`，`gt`（`captcha_id`），`userAgent`，`version`，`type`                                                |
-| **Cloudflare Turnstile**    | `websiteURL`，`websiteKey`，`userAgent`，`type`                                                                |
-| **Cloudflare Challenge**    | `websiteURL`，`websiteKey`，`userAgent`，`pageAction`，`data`，`pageData`，`cloudflareTaskType`，`type`            |
-| **ImageToText**             | `body`（`base64` 格式），`type`                                                                                  |
-| **BLS**                     | `class`，`imagesBase64`，`Task`（在 `metadata` 中），`TaskArgument`（在 `metadata` 中），`type`                         |
-| **Binance**                 | `websiteURL`，`websiteKey`，`validateId`，`userAgent`，`type`                                                   |
+| 验证码类型                        | 显示的参数                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2（Click）**            | `class`、`imageUrls`、`Task`（位于 `metadata` 内）、`Grid`（位于 `metadata` 内）、`recognizingThreshold`、`userAgent`、`type` |
+| **reCAPTCHA V2（Token）**            | `websiteURL`、`websiteKey`、`userAgent`、`type`                                                                           |
+| **reCAPTCHA V2 Invisible**          | `class`、`imageUrls`、`Task`（位于 `metadata` 内）、`Grid`（位于 `metadata` 内）、`recognizingThreshold`、`userAgent`、`type` |
+| **reCAPTCHA V2 Enterprise（Click）** | `class`、`imageUrls`、`Task`（位于 `metadata` 内）、`Grid`（位于 `metadata` 内）、`recognizingThreshold`、`userAgent`、`type` |
+| **reCAPTCHA V2 Enterprise（Token）** | `websiteURL`、`websiteKey`、`userAgent`、`recaptchaDataSValue`、`type`                                                    |
+| **reCAPTCHA V3**                    | `websiteURL`、`websiteKey`、`pageAction」、`minScore」、`type」                                                              |
+| **GeeTest v3**                      | `websiteURL」、`gt」、`challenge」、`userAgent」、`type」                                                                      |
+| **GeeTest v4**                      | `websiteURL`、`gt`（`captcha_id`）、`userAgent`、`version`、`type`                                                         |
+| **Cloudflare Turnstile**            | `websiteURL`、`websiteKey`、`userAgent`、`type`                                                                           |
+| **Cloudflare Challenge**            | `websiteURL`、`websiteKey`、`userAgent`、`pageAction`、`data`、`pageData`、`cloudflareTaskType`、`type`                   |
+| **ImageToText**                     | `body`（采用 `base64` 格式）、`type`                                                                                       |
+| **BLS**                             | `class`、`imagesBase64`、`Task`（位于 `metadata` 内）、`TaskArgument`（位于 `metadata` 内）、`type`                           |
+| **Binance**                         | `websiteURL`、`websiteKey`、`validateId`、`userAgent`、`type`                                                             |
 
 
-使用此功能，请启用扩展程序，打开验证码页面（确保验证码类型受支持并已选中），然后按以下步骤操作：
+要使用此功能，请启用扩展程序，在设置中指定您的 API 密钥，并确保账户余额充足。然后打开包含验证码的页面，确认该验证码类型受支持且已被选择用于识别，并按照以下步骤操作：
 
-1. 打开开发者工具（DevTools），进入 **CapMonster Cloud** 选项卡： 
-    
+1. 打开 **开发者工具**，然后转到 **Capmonster Cloud** 选项卡：  
+   
    ![](./images/params_extension.png)
 
-2. 刷新页面。
+2. 重新加载页面。
 
-所选验证码的参数将自动显示：  
+:::warning **重要**
+对于 API 请求，请使用[我们的服务](https://capmonster.cloud/api/useragent/actual)支持的最新 `userAgent`。
+:::
+
+验证码参数将自动显示：  
 
 ![](./images/params_extension1.png)

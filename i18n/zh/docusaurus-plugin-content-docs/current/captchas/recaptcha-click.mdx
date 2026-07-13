@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 4
 sidebar_label: reCAPTCHA (click)
 ---
@@ -39,6 +39,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -86,6 +87,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="websiteURL" type="string" />
     解决验证码的页面 URL。
 </TabItem>
+</Tabs>
 
 
 ### 参数说明
@@ -108,6 +110,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## 创建任务方法 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -144,12 +147,14 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## 获取任务结果方法
 
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取验证码解决方案。根据系统负载情况，您将在300毫秒到6秒的时间内收到响应。
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -176,6 +181,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

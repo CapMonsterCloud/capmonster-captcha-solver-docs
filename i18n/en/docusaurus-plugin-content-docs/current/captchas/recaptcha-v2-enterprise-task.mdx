@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 2
 sidebar_label: reCAPTCHA v2 Enterprise
 title: "Recognise and solve reCAPTCHA v2 Enterprise - reCAPTCHA v2 Enterprise Task | API"
@@ -41,6 +41,7 @@ This type of captcha might be solved a bit longer than usual image captcha, but 
 <BlogLink url="https://capmonster.cloud/en/blog/re-1/recaptcha-enterprise-how-to-solve-complete-guide"/>
 ## Request parameters
 
+  <Tabs>
   <TabItem value="proxy" label="RecaptchaV2EnterpriseTask (with proxy)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
@@ -117,6 +118,7 @@ This type of captcha might be solved a bit longer than usual image captcha, but 
     Proxy-server password.
 
   </TabItem>
+  </Tabs>
 
 <br />
 For `enterprisePayload` - before calling it, you need to replace the `grecaptcha.enterprise.render` function with your own and take the value from its parameters. The function exists after loading the script, and the captcha is usually rendered immediately or based on a page event. If the captcha is rendered with the current field `s` on the client, then the token will most likely not be accepted.
@@ -244,6 +246,7 @@ Object.defineProperty(window, 'grecaptcha', {
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request answer for ReCaptcha2. You will get response within 10 - 80 sec period depending on service workload.
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -270,6 +273,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request an
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

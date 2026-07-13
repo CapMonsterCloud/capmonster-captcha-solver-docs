@@ -38,6 +38,7 @@ O pedido deve conter uma única imagem no formato base64.
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -58,6 +59,7 @@ O pedido deve conter uma única imagem no formato base64.
     Nome da tarefa: `"baidu"`
 
 </TabItem>
+</Tabs>
 
 ## Método para criar tarefa
 
@@ -65,6 +67,7 @@ O pedido deve conter uma única imagem no formato base64.
 No início do processo de resolução, podem ocorrer respostas temporariamente *unsolvable*. Isso **não é um erro** — a captcha continuará sendo resolvida corretamente após a inicialização.
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -102,9 +105,11 @@ No início do processo de resolução, podem ocorrer respostas temporariamente *
     </MethodDescription>
 
 </TabItem>
+</Tabs>
 
 ## Método para obter o resultado da tarefa
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -136,6 +141,7 @@ No início do processo de resolução, podem ocorrer respostas temporariamente *
       ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Como obter Base64
 

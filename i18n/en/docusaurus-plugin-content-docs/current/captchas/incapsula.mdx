@@ -47,6 +47,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -115,10 +116,12 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
   **Pass only a valid UA from Windows OS. Currently it is**: `userAgentPlaceholder`
 
   </TabItem>
+</Tabs>
 
 
 ## Create task method
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel">
 	<MethodItem>
       ```http
@@ -162,10 +165,12 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
     </MethodDescription>
   </TabItem>
+</Tabs>
 
 ## Get task result method
 Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the Imperva solution.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -198,6 +203,7 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Access denied
 

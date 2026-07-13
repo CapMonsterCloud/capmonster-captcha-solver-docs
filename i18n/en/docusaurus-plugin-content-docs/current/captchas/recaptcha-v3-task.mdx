@@ -38,6 +38,7 @@ When creating a task, it is recommended to provide two parameters: `pageAction` 
 ## Request parameters
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3TaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
@@ -69,10 +70,12 @@ When creating a task, it is recommended to provide two parameters: `pageAction` 
     <ParamItem title="pageAction" type="string" />
     <p>Widget action value. Website owner defines what user is doing on the page through this parameter. Default value: *verify*</p><p>Example:<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
+</Tabs>
 
 
 ## Create task method
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -103,6 +106,7 @@ When creating a task, it is recommended to provide two parameters: `pageAction` 
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Get task result method
@@ -113,6 +117,7 @@ On some websites, it is important that the UserAgent matches the one used when s
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer for ReCaptcha3. You will get response within 10 - 30 sec period depending on service workload.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -154,6 +159,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer fo
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 

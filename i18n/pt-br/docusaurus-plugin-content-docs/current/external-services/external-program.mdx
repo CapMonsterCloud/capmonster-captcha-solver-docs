@@ -26,13 +26,15 @@ Selecione “Use CapMonster Cloud” e insira sua chave de API pessoal.
 <details>
    <summary>A-Parser</summary>
 
-Para resolver um reCAPTCHA, selecione "Util::ReCaptcha2" e especifique a chave para o campo Provider.
+Para resolver um reCAPTCHA, selecione `Util::ReCaptcha2` e escolha `CapMonster Cloud` no campo `Provider`.
 
-![](./images/external-program/aparser.png)
+![](./images/external-program/aparser.png) 
+![](./images/external-program/aparser1.png) 
 
-Para resolver captchas padrão, selecione “Util::Antigate” e especifique “api.capmonster.cloud” como o valor para “Antigate domain”. No campo "key", especifique sua chave de API pessoal.
+Para resolver captchas padrão, selecione `Util::Antigate` e escolha `CapMonster Cloud` no campo `Provider`. No campo `Client key`, insira sua chave de API do CapMonster Cloud.
 
 ![](./images/external-program/aparser2.png)
+![](./images/external-program/aparser3.png)
 </details>
 
 <details>
@@ -53,16 +55,19 @@ Esse método funciona para:
 </details>
 
 ## Conectando a outros programas em 3 etapas
-1. No seu programa, selecione um dos solucionadores de captchas que suportamos:
-   `Anti-Captcha (v1.0, v2.0), RuCaptcha, RipCaptcha, 2Captcha, BypassCaptcha, DeathByCaptcha`.
-1. Em seguida, insira sua chave de API pessoal do CapMonsterCloud no campo relevante do programa de onde você enviará os captchas.
-   1. **Nota para DeathByCaptcha:** Para identificar um usuário, a API do DeathByCaptcha usa um nome de usuário e uma senha, não uma chave de API. Nesse caso, insira a chave de API do CapMonster Cloud no campo de senha. Coloque qualquer valor no campo de nome de usuário.
-1. Última etapa: faça a correspondência do nosso IP com outro serviço para que CapMonster Cloud possa obter captchas dos serviços mencionados. Para isso, selecione seu sistema operacional, abra o spoiler e siga as instruções.
 
+1. No seu programa, selecione um dos serviços de resolução de captcha compatíveis:
+   `Anti-Captcha (v1.0, v2.0), RuCaptcha, RipCaptcha, 2Captcha, BypassCaptcha, DeathByCaptcha`.
+
+2. Em seguida, especifique sua chave de API pessoal do CapMonsterCloud no campo correspondente do programa a partir do qual você enviará captchas.
+
+> **observação para DeathByCaptcha:** para identificar um usuário, a API do DeathByCaptcha usa nome de usuário e senha, não uma chave de API. Nesse caso, especifique a chave de API do CapMonsterCloud no campo de senha. Insira qualquer valor no campo de nome de usuário.
+
+3. Última etapa: associe nosso IP a outro serviço para que o CapMonster Cloud possa receber captchas dos serviços mencionados acima. Para isso, selecione seu sistema operacional, abra o spoiler e siga as instruções.
 <details>
    <summary>Eu tenho Windows</summary>
 
-Vá para: C:\Windows\System32\drivers\etc\ e encontre o arquivo **hosts**. Abra-o com o Bloco de Notas e adicione as seguintes linhas ao final do documento:
+Vá para: C:\Windows\System32\drivers\etc\ e encontre o arquivo `hosts`. Abra-o com o Bloco de Notas e adicione as seguintes linhas ao final do documento:
 
 ```
 # capmonster.cloud begin
@@ -110,18 +115,19 @@ Vá para: C:\Windows\System32\drivers\etc\ e encontre o arquivo **hosts**. Abra-
 # capmonster.cloud end
 ```
 Salve.
+
 :::info
 Em alguns casos, pode ser necessário ter direitos de administrador para salvar o arquivo. Nesse caso, você precisará seguir estas instruções simples:
 
-1. Comece a digitar "Bloco de Notas" na barra de pesquisa da barra de tarefas. Assim que o resultado for encontrado, clique com o botão direito do mouse sobre ele e clique em "Executar como administrador".
+1. Comece a digitar `Bloco de Notas` na barra de pesquisa da barra de tarefas. Quando o resultado for encontrado, clique nele com o botão direito do mouse e clique em `Executar como administrador`.
 
-   ![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.008.png)
+  ![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.008.png)
 
-1. No menu superior do Bloco de Notas, clique em Arquivo — Abrir e especifique o caminho para "hosts": *C:\Windows\System32\drivers\etc.* Se houver vários arquivos com esse nome na pasta, abra o arquivo que não possui extensão.
-1. Faça as alterações no arquivo "hosts" e depois salve o arquivo no menu.
+2. No menu superior do Bloco de Notas, clique em `Arquivo` — abrir e especifique o caminho para `hosts`: *C:\Windows\System32\drivers\etc.* Se houver vários arquivos com esse nome na pasta, abra o arquivo que não tem extensão.
+3. Faça alterações no arquivo `hosts` e depois salve o arquivo no menu.
 :::
 
-Tente visitar qualquer um desses domínios. Se tudo estiver correto, uma página em branco será aberta. Se você não conseguiu, entre em contato com [suporte](https://helpdesk.zennolab.com/conversation/new), nós ajudaremos com todas as configurações!
+Tente acessar qualquer um desses domínios. Se tudo estiver correto, uma página branca será aberta. Se você não conseguir fazer isso, entre em contato com o [suporte](https://helpdesk.zennolab.com/en-us/conversation/new), nós ajudaremos você com todas as configurações!
 </details>
 
 <details>
@@ -197,7 +203,7 @@ Após fazer as alterações, clique em Ctrl+O para aplicá-las. Em seguida, cliq
 
 Para ver as alterações, limpe o cache de DNS. Para isso, insira o comando: `sudo killall -HUP mDNSResponder`. Isso limpará o cache de DNS no seu Mac, e o sistema operacional verá as alterações no arquivo Hosts.
 
-Tente visitar qualquer um desses domínios. Se tudo estiver correto, uma página em branco será aberta. Se você não conseguiu, entre em contato com [suporte](https://helpdesk.zennolab.com/conversation/new), nós ajudaremos com todas as configurações.
+Tente visitar qualquer um desses domínios. Se tudo estiver correto, uma página em branco será aberta. Se você não conseguiu, entre em contato com [suporte](https://helpdesk.zennolab.com/en-us/conversation/new), nós ajudaremos com todas as configurações.
 </details>
 
 <details>
@@ -256,7 +262,7 @@ Adicione as seguintes linhas ao final do documento:
 
 Após fazer as alterações, clique em Ctrl+X e depois Y para aplicá-las.
 
-Tente visitar qualquer um desses domínios. Se tudo estiver correto, uma página em branco será aberta. Se você não conseguiu, entre em contato com [suporte](https://helpdesk.zennolab.com/conversation/new), nós ajudaremos com todas as configurações.
+Tente visitar qualquer um desses domínios. Se tudo estiver correto, uma página em branco será aberta. Se você não conseguiu, entre em contato com [suporte](https://helpdesk.zennolab.com/en-us/conversation/new), nós ajudaremos com todas as configurações.
 </details>
 
 Este método funciona para muitos aplicativos, incluindo os seguintes:
@@ -265,7 +271,7 @@ Este método funciona para muitos aplicativos, incluindo os seguintes:
 - Жукладочник
 - Определяйка
 - Scripts PHP
-- Словоёб
+- СловоЕБ
 - Add2Board
 - AddNews
 - AddSite
@@ -321,7 +327,7 @@ Este método funciona para muitos aplicativos, incluindo os seguintes:
 
 :::info
 
-Se você não conseguiu conectar o CapMonster Cloud ao seu aplicativo, entre em contato com [suporte](https://helpdesk.zennolab.com/conversation/new), nós ajudaremos com todas as configurações.
+Se você não conseguiu conectar o CapMonster Cloud ao seu aplicativo, entre em contato com [suporte](https://helpdesk.zennolab.com/en-us/conversation/new), nós ajudaremos com todas as configurações.
 
 :::
 
