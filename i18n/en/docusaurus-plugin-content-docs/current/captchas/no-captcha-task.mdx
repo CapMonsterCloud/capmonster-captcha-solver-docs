@@ -247,25 +247,25 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request an
 
 **Elements** tab: look for a `<div class="g-recaptcha">` element on the page. Copy the value of the *data-sitekey* attribute, for example:
 
-![sitekey](images\no-captcha\sitekey.png)
+![sitekey](images/no-captcha/sitekey.png)
 
 **Network** tab:
 
 Open the **Network** tab and reload the page with the captcha. Look for a request like the one below (the **k** value is the *data-sitekey*):
 
-![sitekey1](images\no-captcha\sitekey1.png)
+![sitekey1](images/no-captcha/sitekey1.png)
 
 #### recaptchaDataSValue (if used)
 
 If the page contains a *data-s* attribute, find it in the HTML:
 
-![datas](images\no-captcha\data-s.png)
+![datas](images/no-captcha/data-s.png)
 
 #### isInvisible
 
 **Network** tab: if the captcha is invisible, the element will contain the attribute *size="invisible"*, for example:
 
-![isinvisible](images\no-captcha\isinvisible.png)
+![isinvisible](images/no-captcha/isinvisible.png)
 
 ### Automatically
 

@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 0
 sidebar_label: reCAPTCHA v2
 ---
@@ -246,25 +246,25 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 在 **Elements（元素）** 标签页中：查找页面上的 `<div class="g-recaptcha">` 元素。复制其 *data-sitekey* 属性的值，例如：
 
-![sitekey](images\no-captcha\sitekey.png)
+![sitekey](images/no-captcha/sitekey.png)
 
 在 **Network（网络）** 标签页：
 
 打开 **Network** 标签页并重新加载包含验证码的页面。查找如下请求（**k** 值即为 *data-sitekey*）：
 
-![sitekey1](images\no-captcha\sitekey1.png)
+![sitekey1](images/no-captcha/sitekey1.png)
 
 #### recaptchaDataSValue（如果使用）
 
 如果页面包含 *data-s* 属性，在 HTML 中查找它：
 
-![datas](images\no-captcha\data-s.png)
+![datas](images/no-captcha/data-s.png)
 
 #### isInvisible（是否为隐形验证码）
 
 在 **Network** 标签页中：如果是隐形验证码，元素将包含 *size="invisible"* 属性，例如：
 
-![isinvisible](images\no-captcha\isinvisible.png)
+![isinvisible](images/no-captcha/isinvisible.png)
 
 ### 自动方法
 
