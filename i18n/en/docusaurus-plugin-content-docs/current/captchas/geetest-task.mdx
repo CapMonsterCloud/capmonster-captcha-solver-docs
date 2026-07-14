@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 6
 sidebar_label: GeeTest
 title: 'Recognise and resolve GeeTest - GeeTest Task | API'
@@ -85,6 +85,7 @@ V4 (captcha_id = gt)
 <br />
 
 
+  <Tabs>
   <TabItem value="proxy" label="GeeTestTask (with proxy)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
@@ -157,6 +158,7 @@ You need to analyze the network requests and identify the request whose response
     Proxy-server password.
 
   </TabItem>
+  </Tabs>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
@@ -236,6 +238,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the re
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result method</span>
 
+    <Tabs>
     <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
     	<MethodItem>
     		```http
@@ -264,6 +267,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the re
 ```
     	</MethodDescription>
     </TabItem>
+    </Tabs>
 
 <br />
 
@@ -303,7 +307,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the re
 
 All parameters can be found in _init-params_ among the requests:
 
-![paramsv3](images\geetest-task\init-params.png)
+![paramsv3](images/geetest-task/init-params.png)
 
 ### Automatically
 
@@ -747,6 +751,7 @@ solveGeeTest().catch(console.error);
 
 ### <span style={{fontSize: '1.5rem'}}>Request parameters</span>
 
+  <Tabs>
   <TabItem value="proxy" label="GeeTestTask (with proxy)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
@@ -816,6 +821,7 @@ solveGeeTest().catch(console.error);
     Proxy-server password.
 
   </TabItem>
+  </Tabs>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
@@ -897,6 +903,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to get the result of
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result method</span>
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -927,6 +934,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to get the result of
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -988,7 +996,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to get the result of
 5. Find a request like `load?callback=...` — it usually contains CAPTCHA parameters.
 6. Click on this request and open the **Payload** tab to view the required data.
 
-![paramsv4](images\geetest-task\load-callback.png)
+![paramsv4](images/geetest-task/load-callback.png)
 
 ### Automatically
 

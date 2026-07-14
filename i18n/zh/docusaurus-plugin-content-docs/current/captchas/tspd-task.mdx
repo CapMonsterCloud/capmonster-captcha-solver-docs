@@ -43,6 +43,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxy" label="CastleTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
@@ -108,9 +109,11 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 代理密码
 
 </TabItem>
+</Tabs>
 
 ## 创建任务方法
 
+<Tabs>
 <TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
     <MethodItem>
       ```http
@@ -146,6 +149,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
       ```
     </MethodDescription>
   </TabItem>
+</Tabs>
 
 ## 获取任务结果方法
 
@@ -153,6 +157,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 
 > **重要**：在成功通过验证后，在较新的 TSPD 版本中可能会返回 `TSPD_101_DID` cookie，而在较旧的版本中可能不会包含该 cookie。
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -190,6 +195,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 与 TSPD 页面交互
 

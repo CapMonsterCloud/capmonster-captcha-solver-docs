@@ -53,6 +53,7 @@ CapMonster Cloud can return the solution result as either a **token** or a **cf_
 * After solving, you will receive a **token** to confirm captcha completion.
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -132,6 +133,7 @@ CapMonster Cloud can return the solution result as either a **token** or a **cf_
   Proxy password.
 
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -178,6 +180,7 @@ When `window.turnstile.render(el, paramsObj)` is called, the captcha loads on th
 * After solving, you will receive **special cookies** to add to your browser.
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -249,6 +252,7 @@ console.log(htmlBase64);
   Proxy password.
 
 </TabItem>
+</Tabs>
 
 ---
 
@@ -335,6 +339,7 @@ console.log(htmlBase64);
 
 ---
 ### Option 2. Challenge (cookie)
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -370,12 +375,14 @@ console.log(htmlBase64);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 ---
 
 ## Get task result method
 
 ### Option 1. Challenge (token)
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (proxyless)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -404,6 +411,7 @@ console.log(htmlBase64);
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve the Challenge solution. Depending on system load, the response can take between 5 and 20 seconds.
 
@@ -413,6 +421,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
 
 ### Option 2. Challenge (cookie)
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -440,6 +449,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |

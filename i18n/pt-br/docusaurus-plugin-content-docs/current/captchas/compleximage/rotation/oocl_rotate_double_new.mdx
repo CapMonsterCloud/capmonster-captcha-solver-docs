@@ -38,6 +38,7 @@ A solicitação deve conter três imagens: fundo, anel e círculo.
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -58,9 +59,11 @@ Array de imagens codificadas em formato base64.
 Nome da tarefa: `"oocl_rotate_double_new"`
 
 </TabItem>
+</Tabs>
 
 ## Método para criar tarefa
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -110,9 +113,11 @@ Círculo (*circle_base64*):
 </MethodDescription>
 
 </TabItem>
+</Tabs>
 
 ## Método para obter o resultado da tarefa
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -147,6 +152,7 @@ Círculo (*circle_base64*):
 </MethodDescription>
 
 </TabItem>
+</Tabs>
 
 ## Como obter Base64
 
@@ -155,4 +161,4 @@ As imagens nas páginas podem ser representadas tanto como uma URL quanto já co
 1. Abra o seu site onde a captcha é exibida no navegador.
 2. Clique com o botão direito no elemento da captcha e selecione **Inspect (Inspecionar)**.
 
-![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)
+![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)

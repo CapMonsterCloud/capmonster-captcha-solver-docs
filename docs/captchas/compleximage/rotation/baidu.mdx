@@ -38,6 +38,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -58,6 +59,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     Название задания: `"baidu"`
 
 </TabItem>
+</Tabs>
 
 ## Создание задачи
 
@@ -65,6 +67,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 В начале процесса решения возможны временные *unsolvable*-ответы. Это **не является ошибкой** - капча продолжит успешно решаться после инициализации.  
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -102,9 +105,11 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     </MethodDescription>
 
 </TabItem>
+</Tabs>
 
 ## Получение результата задачи
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -136,6 +141,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
       ```
 	</MethodDescription>
     </TabItem>
+</Tabs>
 
 ## Как получить Base64
 
@@ -144,4 +150,4 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 1. Откройте ваш сайт, где отображается капча, в браузере.
 2. Правой кнопкой кликните по элементу капчи и выберите **Inspect**.
 
-![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)
+![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)

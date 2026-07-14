@@ -51,6 +51,7 @@ O CapMonster Cloud pode retornar o resultado da solução como um **token** ou c
 * Após resolver, você receberá um **token** para confirmar a conclusão do captcha.
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -131,6 +132,7 @@ Senha do servidor proxy.
 
 
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -179,6 +181,7 @@ Quando `window.turnstile.render(el, paramsObj)` é chamado, o captcha é carrega
 
 #### Parâmetros da Requisição
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -250,6 +253,7 @@ console.log(htmlBase64);
   Senha do proxy.
 
 </TabItem>
+</Tabs>
 
 ---
 
@@ -335,6 +339,7 @@ console.log(htmlBase64);
 
 ---
 ### Opção 2. Challenge (cookie)
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (sem proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -370,12 +375,14 @@ console.log(htmlBase64);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 ---
 
 ## Método de obter resultado da tarefa
 
 ### Opção 1. Challenge (token)
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (proxyless)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -404,6 +411,7 @@ console.log(htmlBase64);
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 Use o método **[getTaskResult](../api/methods/get-task-result.mdx)** para obter a solução do Challenge. Dependendo da carga do sistema, a resposta pode levar entre **5 e 20 segundos**.
 
@@ -413,6 +421,7 @@ Use o método **[getTaskResult](../api/methods/get-task-result.mdx)** para obter
 
 ### Opção 2. Challenge (cookie)
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -440,6 +449,7 @@ Use o método **[getTaskResult](../api/methods/get-task-result.mdx)** para obter
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 | **Propriedade** | **Tipo** | **Descrição**                                                          |
 | :-------------- | :------- | :--------------------------------------------------------------------- |

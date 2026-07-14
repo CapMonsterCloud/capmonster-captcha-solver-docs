@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 4
 sidebar_label: reCAPTCHA (click)
 ---
@@ -40,6 +40,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -88,6 +89,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
     <ParamItem title="websiteURL" type="string" />
     URL da página onde o captcha está sendo resolvido.
   </TabItem>
+</Tabs>
 
 ### Descrição dos parâmetros
 
@@ -110,6 +112,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 ## Criar tarefa
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
 <MethodItem>
   ```http
@@ -145,12 +148,14 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha. Dependendo da carga do sistema, você receberá uma resposta em um intervalo de tempo de 300ms a 6s.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
     <MethodItem>
 ```http
@@ -177,6 +182,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
   </MethodDescription>
   </TabItem>
+</Tabs>
 
 <br />
 
@@ -199,17 +205,17 @@ O processo é semelhante a encontrar o websitekey para [ReCaptchaV2Task](https:/
 
 Encontre a URL nos atributos do elemento:
 
-![imgUrl](images\recaptcha-click\img-url-elements.png)
+![imgUrl](images/recaptcha-click/img-url-elements.png)
 
 Você também pode obter a URL completa da imagem clicando com o botão direito na imagem e selecionando **Abrir imagem em uma nova guia**. Em seguida, copie a URL diretamente da barra de endereços do navegador.
 
-![imgUrl1](images\recaptcha-click\recap-img-url.png)
+![imgUrl1](images/recaptcha-click/recap-img-url.png)
 
 #### Task (dentro da metadata)
 
 Descrição da tarefa. Clique com o botão direito no texto da tarefa e, nas **Ferramentas do Desenvolvedor**, encontre o elemento correspondente na estrutura da página:
 
-![metadata](images\recaptcha-click\metadata.png)
+![metadata](images/recaptcha-click/metadata.png)
 
 ### Automaticamente
 

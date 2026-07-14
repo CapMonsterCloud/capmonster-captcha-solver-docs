@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 4
 sidebar_label: reCAPTCHA (click)
 title: "ComplexImageTask reCAPTCHA — автоматическое распознавание и решение капч с кликами по изображениям | API"
@@ -40,6 +40,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -90,6 +91,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     <ParamItem title="websiteURL" type="string" />
     Адрес страницы, на которой решается капча.
 </TabItem>
+</Tabs>
 
 ### Описание параметров
 
@@ -110,6 +112,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 **websiteURL**: адрес веб-страницы с капчей. 
 
 ## Метод создания задачи
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -146,11 +149,13 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение капчи. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 300мс до 6 с.
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -177,6 +182,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -199,17 +205,17 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Найдите ссылку в атрибутах элемента:
 
-![imgUrl](images\recaptcha-click\img-url-elements.png)
+![imgUrl](images/recaptcha-click/img-url-elements.png)
 
 Также ссылку цельного изображения можно получить, просто кликнув правой кнопкой мыши по изображению и выбрать **Открыть изображение в новой вкладке**. После этого ссылку можно скопировать прямо из адресной строки браузера.
 
-![imgUrl1](images\recaptcha-click\recap-img-url.png)
+![imgUrl1](images/recaptcha-click/recap-img-url.png)
 
 #### Task (внутри metadata)
 
 Описание задания. Кликните правой кнопкой мыши на текст задания и в **Инструментах разработчика** найдите соответствующий элемент в структуре страницы:
 
-![metadata](images\recaptcha-click\metadata.png)
+![metadata](images/recaptcha-click/metadata.png)
 
 ### Автоматически
 

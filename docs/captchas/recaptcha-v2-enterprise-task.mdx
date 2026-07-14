@@ -45,6 +45,7 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
 
 ## Параметры запроса
   
+  <Tabs>
   <TabItem value="proxy" label="RecaptchaV2EnterpriseTask (при использовании прокси)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
@@ -128,6 +129,7 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     Пароль прокси-сервера.
 
   </TabItem>  
+  </Tabs>
 
 <br />
 Для `enterprisePayload` - необходимо заменять функцию `grecaptcha.enterprise.render` перед её вызовом на свою и забирать значение из её параметров. Функция существует после загрузки скрипта, а рендерится капча обычно сразу или по событию страницы, если капча отрендерится с текущим полем `s` на клиенте, то токен с большой вероятностью принят не будет. Оригинальную функцию можно вызывать без поля `s`.
@@ -253,6 +255,7 @@ Object.defineProperty(window, 'grecaptcha', {
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение ReCaptcha2. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 80 с.
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -279,6 +282,7 @@ Object.defineProperty(window, 'grecaptcha', {
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -297,11 +301,11 @@ Object.defineProperty(window, 'grecaptcha', {
 
 Публичный ключ сайта (sitekey). Найти websiteKey можно в **Элементах**:
 
-![sitekeyEntpr](images\recaptcha-enterprise\sitekey-elements-entpr.png)
+![sitekeyEntpr](images/recaptcha-enterprise/sitekey-elements-entpr.png)
 
 Или в **Запросах**:
 
-![sitekeyEntpr1](images\recaptcha-enterprise\sitekey-network-entpr.png)
+![sitekeyEntpr1](images/recaptcha-enterprise/sitekey-network-entpr.png)
 
 ### Автоматически
 

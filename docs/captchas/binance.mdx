@@ -42,6 +42,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
   
+  <Tabs>
   <TabItem value="proxy" label="BinanceTask (при использовании прокси)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **BinanceTask**
@@ -100,6 +101,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     Пароль прокси-сервера.
 
   </TabItem>
+  </Tabs>
 
 
 ## Метод создания задачи
@@ -174,6 +176,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Binance.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -201,6 +204,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Как получить `websiteKey` и `validateId`
 Включите инструменты разработчика, перейдите на вкладку Network, активируйте капчу и посмотрите запросы. В некоторых из них будет нужное вам значение параметров. 

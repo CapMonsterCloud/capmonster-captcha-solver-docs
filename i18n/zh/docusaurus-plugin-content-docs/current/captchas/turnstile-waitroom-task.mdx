@@ -49,6 +49,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless（无需代理）" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -120,9 +121,11 @@ console.log(htmlBase64);
   代理密码
 
 </TabItem>
+</Tabs>
 ---
 ## 创建任务方法
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask（无需代理）" default className="method-panel">
 	<MethodItem>
 		```http
@@ -158,11 +161,13 @@ console.log(htmlBase64);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 ---
 
 ## 获取任务结果方法
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取等待室解决方案。根据系统负载，响应可能需要 5 到 20 秒。
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask（无需代理）" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -190,6 +195,7 @@ console.log(htmlBase64);
     ```
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 |**属性**|**类型**|**说明**|
 | :- | :- | :- |

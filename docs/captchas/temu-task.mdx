@@ -50,6 +50,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -109,6 +110,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
     --- 
 </TabItem>
+</Tabs>
 
 
 ## Метод создания задачи
@@ -199,6 +201,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 **Важно!** После получения решения, необходимо очистить куки и подставить новые полученные куки. 
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -241,6 +244,7 @@ CapMonster Cloud по умолчанию работает через встро�
 	```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ### Как получить cookie
 Значение для параметра `cookie` можно получить на странице с капчей через свойство `document.cookie`.

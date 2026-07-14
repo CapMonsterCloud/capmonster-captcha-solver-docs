@@ -36,6 +36,7 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 ## Parâmetros da solicitação
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3TaskProxyless (sem proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
@@ -67,11 +68,13 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
     <ParamItem title="pageAction" type="string" />
     <p>Valor de ação do widget. O proprietário do site define o que o usuário está fazendo na página através deste parâmetro. Valor padrão: *verify*</p><p>Exemplo:<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
+</Tabs>
 
 
 ## Método de criar tarefa
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
 <MethodItem>
   ```http
@@ -103,6 +106,7 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Método de obter resultado da tarefa
 
@@ -112,6 +116,7 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta do ReCaptcha3. Você receberá a resposta dentro de um período de 10 a 30 segundos, dependendo da carga de trabalho do serviço.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
     <MethodItem>
 ```http
@@ -153,6 +158,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
   </MethodDescription>
   </TabItem>
+</Tabs>
 
 <br />
 
@@ -173,17 +179,17 @@ A chave pública do site (sitekey). Normalmente, pode ser encontrada no script i
 
 Em **Elements**:
 
-![elements](images\recaptcha-v3\sitekey-elements.png)
+![elements](images/recaptcha-v3/sitekey-elements.png)
 
 Na aba **Network**:
 
-![network](images\recaptcha-v3\sitekey-network.png)
+![network](images/recaptcha-v3/sitekey-network.png)
 
 #### pageAction
 
 O nome da ação passada para *grecaptcha.execute()*. Por exemplo:
 
-![action](images\recaptcha-v3\action.png)
+![action](images/recaptcha-v3/action.png)
 
 ### Automaticamente
 

@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 12
 sidebar_label: ImageToText
 title: "Автоматическое распознавание и обход простой текстовой капчи — Image-to-Text | API"
@@ -39,6 +39,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="ImageToTextTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ImageToTextTask**
@@ -77,6 +78,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 `true` — капча требует выполнения математического действия (например, капча `2 + 6` вернёт значение `8`).  
 **Важно:** для модуля `captcha_math` **не используйте** параметр `math: true`. 
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -110,6 +112,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 ## Метод создания задачи
 
+<Tabs>
 <TabItem value="proxyless" label="ImageToTextTask (без прокси)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -136,11 +139,13 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение капчи. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 300 мс до 6 с.
 
+<Tabs>
 <TabItem value="proxyless" label="ImageToTextTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -167,6 +172,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -185,11 +191,11 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 Найдите нужный элемент в DOM-дереве и наведите на него курсор – закодированное в *base64* изображение отобразится непосредственно в атрибутах элемента:
 
-![base64elements](images\image-to-text\base64-elements.png)
+![base64elements](images/image-to-text/base64-elements.png)
 
 Если изображение ссылается на внешний URL, а не содержит данные в формате base64, его можно найти в разделе сетевых запросов (**Network**). Кликните правой кнопкой мыши по нужному запросу и выберите **Copy image as data URI**. Вы сразу получите кодировку изображения в формате *base64*, скопированную в буфер обмена.
 
-![base64network](images\image-to-text\base64-network.png)
+![base64network](images/image-to-text/base64-network.png)
 
 ### Автоматически
 

@@ -40,6 +40,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
@@ -116,6 +117,7 @@ cookieName1=value1; cookieName2=value2
 代理服务器登录密码。
 
 </TabItem>
+</Tabs>
 
 ## 创建任务的方法
 
@@ -193,6 +195,7 @@ https://api.capmonster.cloud/createTask
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 获取 FunCaptcha 解决方案。
 
+<Tabs>
 <TabItem value="proxyless" label="FunCaptchaTask（无代理）" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -225,6 +228,7 @@ https://api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 获取 FunCaptcha 参数
 
@@ -296,6 +300,7 @@ console.log("surl:", decodeURIComponent(p.surl));
 
 ---
 
+<Tabs>
 <TabItem value="js" label="JavaScript" default className="method-panel">
 <details>
 <summary>Node.js</summary>
@@ -430,9 +435,11 @@ async function getTaskResult(taskId) {
 
 </details>
 </TabItem>
+</Tabs>
 
 ---
 
+<Tabs>
 <TabItem value="python" label="Python" className="method-panel">
 <details>
 <summary>Python</summary>
@@ -570,9 +577,11 @@ asyncio.run(main())
 
 </details>
 </TabItem>
+</Tabs>
 
 ---
 
+<Tabs>
 <TabItem value="js" label="JavaScript" default className="method-panel">
 <details>
 <summary>C#</summary>
@@ -747,3 +756,4 @@ class Program
 
 </details>
 </TabItem>
+</Tabs>

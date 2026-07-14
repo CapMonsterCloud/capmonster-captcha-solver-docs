@@ -40,6 +40,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+  <Tabs>
   <TabItem value="proxy" label="BinanceTask (com proxy)" default className="bordered-panel">
 
     <ParamItem title="type" required type="string" />
@@ -96,6 +97,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 	Senha do servidor proxy.
 
   </TabItem>
+  </Tabs>
 
 
 ## Criar método de tarefa
@@ -170,6 +172,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução Binance.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -197,6 +200,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ### Como obter `websiteKey` e `validateId`
 Habilite as ferramentas de desenvolvedor, vá para a aba "Network", ative o CAPTCHA e observe as requisições. Algumas delas conterão os valores dos parâmetros necessários.

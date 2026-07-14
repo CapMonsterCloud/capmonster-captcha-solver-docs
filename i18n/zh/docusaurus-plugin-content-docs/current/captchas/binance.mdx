@@ -41,6 +41,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+  <Tabs>
   <TabItem value="proxy" label="BinanceTask (使用代理)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **BinanceTask**
@@ -96,6 +97,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     代理密码。
 
   </TabItem>
+  </Tabs>
 
 
 ## 创建任务方法
@@ -170,6 +172,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ## 获取任务结果方法
 使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 获取币安解决方案。
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -198,6 +201,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 如何获取 `websiteKey` 和 `validateId`
 启用开发者工具，进入 "Network"（网络）标签，激活 CAPTCHA，然后查看请求。有些请求会包含所需的参数值。

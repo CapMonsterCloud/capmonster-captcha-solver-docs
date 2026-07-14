@@ -40,6 +40,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
@@ -114,6 +115,7 @@ IP адрес прокси IPv4/IPv6. Не допускается:
 Пароль прокси-сервера.
 
 </TabItem>
+</Tabs>
 
 ## Метод создания задачи
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -188,6 +190,7 @@ https://api.capmonster.cloud/createTask
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение FunCaptcha.
 
+<Tabs>
 <TabItem value="proxyless" label="FunCaptchaTask (без прокси)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -218,6 +221,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Поиск параметров FunCaptcha
 
@@ -291,6 +295,7 @@ console.log("surl:", decodeURIComponent(p.surl));
 
 ---
 
+<Tabs>
 <TabItem value="js" label="JavaScript" default className="method-panel">
     <details>
       <summary>Node.js</summary>
@@ -424,9 +429,11 @@ async function getTaskResult(taskId) {
 ```
 </details>
   </TabItem>
+</Tabs>
 
 ---
 
+<Tabs>
 <TabItem value="python" label="Python" className="method-panel">
     <details>
       <summary>Python</summary>
@@ -569,9 +576,11 @@ asyncio.run(main())
 ```
 </details>
   </TabItem>
+</Tabs>
 
 ---
 
+<Tabs>
 <TabItem value="js" label="JavaScript" default className="method-panel">
     <details>
       <summary>C#</summary>
@@ -744,3 +753,4 @@ class Program
 ```
 </details>
   </TabItem>
+</Tabs>

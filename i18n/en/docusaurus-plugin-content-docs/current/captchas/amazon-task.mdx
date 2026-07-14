@@ -55,6 +55,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 <br />
 
 ### Option 1
+<Tabs>
 <TabItem value="proxyless" label="AmazonTask (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -120,8 +121,10 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
   ---
 </TabItem>
+</Tabs>
 
 ### Option 2 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -197,12 +200,14 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 ---
 
 </TabItem>
+</Tabs>
 
 ### Option 3
 
 If the site uses an invisible captcha and only `challenge.js` is loaded, use this option.  
 In this case, you don’t need to pass all parameters from option 2 — they can remain empty. Pass only the `challenge.js` value.
 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -267,6 +272,7 @@ In this case, you don’t need to pass all parameters from option 2 — they can
 ---
 
 </TabItem>
+</Tabs>
 
 
 ### How to obtain `websiteKey`, `context`, `iv`, and `challengeScript` parameters
@@ -525,6 +531,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Am
 
 
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -554,6 +561,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Am
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## How to find all required parameters for task creation
 

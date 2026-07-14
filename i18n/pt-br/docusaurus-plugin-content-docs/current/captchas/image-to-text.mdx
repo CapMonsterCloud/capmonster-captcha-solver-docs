@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 12
 sidebar_label: ImageToText
 ---
@@ -37,6 +37,7 @@ O uso de servidores proxy para esta tarefa não é necessário.
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **ImageToTextTask**
@@ -73,6 +74,7 @@ Valores possíveis: 0, 1
 <ParamItem title="math" type="boolean" />
 false — indefinido;<br />true — se o captcha exigir uma operação matemática (por exemplo: captcha 2 + 6 = retornará o valor 8). **Importante:** Não use o parâmetro `math: true` para o módulo `captcha_math`.
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -107,6 +109,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ## Criar tarefa
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
 <MethodItem>
   ```http
@@ -134,10 +137,12 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha. Dependendo da carga do sistema, você receberá uma resposta em um intervalo de 300ms a 6s.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -164,6 +169,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -182,11 +188,11 @@ https://api.capmonster.cloud/getTaskResult
 
 Localize o elemento necessário na árvore DOM e passe o mouse sobre ele – a imagem codificada em *base64* será exibida diretamente nos atributos do elemento:
 
-![base64elements](images\image-to-text\base64-elements.png)
+![base64elements](images/image-to-text/base64-elements.png)
 
 Se a imagem fizer referência a uma URL externa em vez de conter dados codificados em base64, você pode encontrá-la nas requisições de rede (**Network**). Clique com o botão direito na requisição relevante e selecione **Copiar imagem como URI de dados**. Isso copiará os dados da imagem codificados em *base64* para sua área de transferência.
 
-![base64network](images\image-to-text\base64-network.png)
+![base64network](images/image-to-text/base64-network.png)
 
 ### Automaticamente
 

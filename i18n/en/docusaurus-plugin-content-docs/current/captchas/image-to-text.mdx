@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 12
 sidebar_label: ImageToText
 title: "Automatically recognise and bypass simple image-to-text captcha - Image-to-Text | API"
@@ -41,6 +41,7 @@ Using proxy servers is not required for this task.
 <br />
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ImageToTextTask**
@@ -77,6 +78,7 @@ Using proxy servers is not required for this task.
     <ParamItem title="math" type="boolean" />
     false — undefined;<br />true — if captcha requires a mathematical operation (for example: captcha 2 + 6 = will return a value of 8). **Important:** Do not use the `math: true` parameter for the `captcha_math` module.
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -110,6 +112,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 ## Create task method
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -136,10 +139,12 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the captcha solution. Depending on the system load, you will receive an answer within an interval from 300 ms to 6 s
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -166,6 +171,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the ca
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -184,11 +190,11 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the ca
 
 Locate the required element in the DOM tree and hover over it – the *base64*-encoded image will be displayed directly in the element's attributes:
 
-![base64elements](images\image-to-text\base64-elements.png)
+![base64elements](images/image-to-text/base64-elements.png)
 
 If the image references an external URL rather than containing base64-encoded data, you can find it in the network requests (**Network**). Right-click on the relevant request and select **Copy image as data URI**. This will copy the *base64*-encoded image data to your clipboard.
 
-![base64network](images\image-to-text\base64-network.png)
+![base64network](images/image-to-text/base64-network.png)
 
 ### Automatically
 

@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 15
 sidebar_label: Amazon (AWS WAF)
 title: "通过 Capmonster Cloud API 自动识别和绕过 Amazon AWS WAF 验证码"
@@ -55,6 +55,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 <br />
 
 ### 选项 1
+<Tabs>
 <TabItem value="proxyless" label="AmazonTask (无代理)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -115,8 +116,10 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   ---
 
 </TabItem>
+</Tabs>
 
 ### 选项 2 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (无代理)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -192,12 +195,14 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ---
 
 </TabItem>
+</Tabs>
 
 ### 选项 3
 
 如果网站使用隐形验证码且仅加载 `challenge.js`，请使用此选项。  
 在这种情况下，不需要传递选项 2 的所有参数 — 可保留为空。只需传递 `challenge.js` 的值。
 
+<Tabs>
 <TabItem value="proxyless" label="AmazonTaskProxyless (无代理)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
@@ -268,6 +273,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ---
 
 </TabItem>
+</Tabs>
 
 
 ### 如何获取 `websiteKey`、`context`、`iv` 和 `challengeScript` 参数
@@ -524,6 +530,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ## 获取任务结果方法
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取 AmazonTask 的解决方案。
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -553,6 +560,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 如何查找任务创建所需的所有参数
 

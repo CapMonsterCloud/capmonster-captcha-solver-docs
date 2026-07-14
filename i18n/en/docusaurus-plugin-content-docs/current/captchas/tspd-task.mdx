@@ -43,6 +43,7 @@ TSPD is a WAF (Web Application Firewall) protection designed to prevent automate
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxy" label="CastleTask" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
@@ -110,9 +111,11 @@ Browser User-Agent.<br />
   Proxy password.
 
 </TabItem>
+</Tabs>
 
 ## Create task method
 
+<Tabs>
 <TabItem value="proxy" label="CustomTask (with proxy)" className="method-panel">
     <MethodItem>
       ```http
@@ -148,6 +151,7 @@ Browser User-Agent.<br />
       ```
     </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Get task result method
 
@@ -155,6 +159,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the so
 
 > **Important**: upon successful completion, newer versions of TSPD may return the `TSPD_101_DID` cookie, whereas older versions may not include it.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -192,6 +197,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the so
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Working with a page containing TSPD
 

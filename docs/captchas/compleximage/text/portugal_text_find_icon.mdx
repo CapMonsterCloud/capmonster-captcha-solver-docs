@@ -39,6 +39,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -67,9 +68,11 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
  Например, для текста `"Por favor, clique no(a) avião."` необходимо передать строку `"Por favor, clique no(a) avi\\u00E3o."` (*см. пример в разделе [Примеры автоматического распознавания и решения](#примеры-автоматического-распознавания-и-решения)*).
 
 </TabItem>
+</Tabs>
 
 ## Создание задачи
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -105,6 +108,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     </MethodDescription>
 
 </TabItem>
+</Tabs>
 
 Пример задания:
 
@@ -118,6 +122,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
 ## Получение результата задачи
 
+<Tabs>
 <TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -150,6 +155,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Примеры автоматического распознавания и решения
 

@@ -29,37 +29,42 @@ To get started with the extension, click on its icon to the right of the address
 
 1. Download the [archive with the extension](https://zenno.link/chrome-actual-build).
 
-2. Unpack it to any folder. 
-   
-   **WARNING**: the folder shouldn’t be deleted, otherwise the extension stop working.
-3. In the Google Chrome browser open the “Extension” page. There are several ways to do this:
-   1. Type `chrome://extensions` in the address bar of a browser and press **Enter**.
-   2. From the menu: click the three vertical dots in the upper right corner (near the profile picture), then **More Tools** -> **Extensions**.
+2. Extract the downloaded archive to a folder with any name.
 
-  ![](./images/extension-main-firefox/359d5afb-d644-45c2-a882-e7fc3da759eb.png)
+   > `Important:` after installation, do not delete the folder with the extension, otherwise the browser will no longer be able to use it.
 
-   3. Or go to the Google Chrome settings and select **Extensions** (at the very bottom) in the right menu.
+3. Enter `chrome://extensions` in the browser address bar and press `Enter`.
 
-  ![](./images/extension-main-firefox/61a9b824-b0d2-4808-8bb8-feac4b25d0b7.png)
+   You can open the extensions page in one of the following ways:
 
-4. Enable **Developer Mode**.
-5. Then click on **Load unpacked**.
+   - Through the menu: click `⋮` in the upper-right corner, next to the profile image → `Extensions` → `Manage extensions`.
 
-  ![](./images/extension-main-firefox/load-unpacked.png)
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.004.png)
 
-6. Find and choose the folder where you unpacked the extension.
-7. After that the extension should appear in the list of the installed extensions.
+   - Or open Google Chrome settings and select `Extensions` in the left menu, at the very bottom of the list.
 
-![](./images/extension-main-firefox/919a2eab-1651-4b48-8980-b69346d700fd.png)
+     ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.005.png)
+
+4. Enable `Developer mode`.
+
+5. A panel will appear at the top of the page. Click the `Load unpacked` button.
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.006.png)
+
+6. In the window that opens, select the folder where the archive was extracted.
+
+7. After that, the extension will appear in the list of installed extensions.
+
+   ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.007.png)
 
   </details>
 
 <details>
     <summary>Manual update of the extension</summary>
 
-If you are installing the extension over the previous version, then when you update the original extension files, you also need to click the update button on the **Extensions** page (how to open this page is described above in the **Manual installation** section).
+If you are installing the extension over the previous version, then when you update the original extension files, you also need to click the update button on the `Extensions` page (how to open this page is described above in the `Manual installation` section).
 
-![](./images/extension-main-firefox/manual-update.png)
+![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.008.png)
 </details>
 
 -----
@@ -91,12 +96,14 @@ You may need to reload the page with captcha for the changes to take effect!
 :::
 ### <a name="id-browserextension-repeatcaptchasolvingincaseofanerror"></a>Repeat captcha solving in case of an error
 If the first attempt to solve the captcha is failed, the extension will send repeated tasks until the captcha is not solved, or until the limit specified in this setting will not be reached.
+
 ### <a name="id-browserextension-proxy"></a>Proxy
 ![](./images/extension-main-firefox/proxy.png) 
 
-Here you can specify the proxy that will be sent along with the recognition task.
+In this section, you can specify a proxy that will be passed along with the recognition task.
 
-The "Login" and "Password" are optional.
+The **Login** and **Password** fields are optional. The extension also supports proxies with **IPv6**.
+
 ### <a name="id-browserextension-blacklistcontrol"></a>Blacklist control
 Using the blacklist you can configure the extension to ignore captchas on specific websites.
 
@@ -126,27 +133,34 @@ The **CapMonster Cloud** extension provides a convenient way to view the paramet
 
 ### Supported captcha types and their parameters
 
-| Captcha Type                | Displayed Parameters                                                                                                      |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Invisible**  | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise** | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V3**            | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
-| **GeeTest v3**              | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
-| **GeeTest v4**              | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
-| **Cloudflare Turnstile**    | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
-| **Cloudflare Challenge**    | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
-| **ImageToText**             | `body` (in `base64` format), `type`                                                                                       |
-| **BLS**                     | `class`, `imagesBase64`, `Task` (inside `metadata`), `TaskArgument` (inside `metadata`), `type`                           |
-| **Binance**                 | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
+| Captcha type                        | Displayed parameters                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                    |
+| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
+| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
+| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
+| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
+| **ImageToText**                     | `body` (in `base64` format), `type`                                                                                       |
+| **BLS**                             | `class`, `imagesBase64`, `Task` (inside `metadata`), `TaskArgument` (inside `metadata`), `type`                           |
+| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
 
-To use this feature, activate the extension, open the captcha page (make sure the captcha type is supported and selected for solving), then follow these steps:
 
-1. Open **Developer Tools** (DevTools) and go to the **CapMonster Cloud tab**:  
+To use this feature, enable the extension, specify your API key in the settings, and make sure there are funds on your balance. Then open the page with the captcha, check that its type is supported and selected for solving, and follow these steps:
+
+1. Open **Developer Tools** and go to the **Capmonster Cloud** tab:  
    
    ![](./images/params_extension.png)
 
 2. Reload the page.
+
+:::warning **Important**
+For API requests, use an up-to-date `userAgent` supported by [our service](https://capmonster.cloud/api/useragent/actual).
+:::
 
 Captcha parameters will be displayed automatically:  
 

@@ -45,6 +45,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -117,6 +118,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 	
      ---
 </TabItem>
+</Tabs>
 
 
 ## Метод создания задачи
@@ -132,6 +134,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 ![](./images/datadome/datadome_ijs.png)
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -170,11 +173,13 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение DataDome.
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -213,6 +218,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## Как найти `datadomeCookie`
 

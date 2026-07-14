@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 7
 sidebar_label: Cloudflare Turnstile
 title: "识别并解决 Cloudflare Turnstile | API"
@@ -52,6 +52,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
 
 您需要解决一个**标准（regular）**的 Turnstile 验证码，例如 [这个示例](https://zenno.link/zl-support)。请注意，Cloudflare 页面上的验证码在外观上可能完全相同。请参阅[如何区分标准 Turnstile 与 Cloudflare Challenge](#如何区分-cloudflare-turnstile-与-cloudflare-challenge)。
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask（无代理）" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
@@ -115,6 +116,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
   代理密码。
 
 </TabItem>
+</Tabs>
 ---
 ## 创建任务方法
 
@@ -192,6 +194,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取 Turnstile 的解决结果。根据系统负载情况，响应时间可能在 **5 到 20 秒**之间。
 
+<Tabs>
 <TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel-full">
   <MethodItem>
     ```http
@@ -221,6 +224,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
 
   </MethodDescription>
 </TabItem>
+</Tabs>
 
 | **参数** | **类型** | **说明**                      |
 | :----- | :----- | :-------------------------- |

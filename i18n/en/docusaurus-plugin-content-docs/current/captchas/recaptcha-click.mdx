@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 4
 sidebar_label: reCAPTCHA (click)
 title: "ComplexImageTask reCAPTCHA - automatic recognition and solution of captchas with image clicks | API"
@@ -43,6 +43,7 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
@@ -91,6 +92,7 @@ The object contains data about the task for solving ReCaptcha2 from Google.
     <ParamItem title="websiteURL" type="string" />
     URL of the page where the captcha is solved.
 </TabItem>
+</Tabs>
 
 ### Description of parameters
 
@@ -112,6 +114,7 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 
 ## Create task method
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -148,11 +151,13 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the captcha solution. Depending on the system load, you will receive a response after a time ranging from 300ms to 6s.
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -179,6 +184,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the ca
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -201,17 +207,17 @@ The process is similar to finding the websitekey for [ReCaptchaV2Task](https://d
 
 Find the URL in the element attributes:
 
-![imgUrl](images\recaptcha-click\img-url-elements.png)
+![imgUrl](images/recaptcha-click/img-url-elements.png)
 
 You can also get the full image URL by right-clicking on the image and selecting **Open image in a new tab**. Then, copy the URL directly from the browser's address bar.
 
-![imgUrl1](images\recaptcha-click\recap-img-url.png)
+![imgUrl1](images/recaptcha-click/recap-img-url.png)
 
 #### Task (inside metadata)
 
 Task description. Right-click on the task text and in **Developer Tools**, find the corresponding element in the page structure:
 
-![metadata](images\recaptcha-click\metadata.png)
+![metadata](images/recaptcha-click/metadata.png)
 
 ### Automatically
 

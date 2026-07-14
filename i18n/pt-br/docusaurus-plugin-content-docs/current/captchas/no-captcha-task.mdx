@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 0
 sidebar_label: reCAPTCHA v2
 ---
@@ -43,6 +43,7 @@ No entanto, se o token não for aceito pelo site alvo, tente novamente usando [s
 
 ## Parâmetros da solicitação
 
+<Tabs>
 <TabItem value="proxy" label="RecaptchaV2Task (com proxy)" className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **RecaptchaV2Task**
@@ -107,6 +108,7 @@ Login do servidor proxy.
 Senha do servidor proxy.
 
 </TabItem>
+</Tabs>
 
 ## Método para criar tarefa
 
@@ -183,6 +185,7 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta para o ReCaptcha2. Você receberá uma resposta em 100 ms, dependendo da carga do serviço.
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2Task (sem proxy)" default className="method-panel-full">
 <MethodItem>
 ```http
@@ -226,6 +229,7 @@ https://api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -244,25 +248,25 @@ https://api.capmonster.cloud/getTaskResult
 
 **Aba "Elements"**: procure um elemento `<div class="g-recaptcha">` na página. Copie o valor do atributo *data-sitekey*, por exemplo:
 
-![sitekey](images\no-captcha\sitekey.png)
+![sitekey](images/no-captcha/sitekey.png)
 
 **Aba "Network"**:
 
 Abra a aba **Network** e recarregue a página com o captcha. Procure uma requisição como a abaixo (o valor de **k** é o *data-sitekey*):
 
-![sitekey1](images\no-captcha\sitekey1.png)
+![sitekey1](images/no-captcha/sitekey1.png)
 
 #### recaptchaDataSValue (se usado)
 
 Se a página contiver um atributo *data-s*, encontre-o no HTML:
 
-![datas](images\no-captcha\data-s.png)
+![datas](images/no-captcha/data-s.png)
 
 #### isInvisible
 
 **Aba "Network"**: se o captcha for invisível, o elemento conterá o atributo *size="invisible"*, por exemplo:
 
-![isinvisible](images\no-captcha\isinvisible.png)
+![isinvisible](images/no-captcha/isinvisible.png)
 
 ### Automaticamente
 

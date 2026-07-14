@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 6
 sidebar_label: GeeTest
 title: "Распознавание и решение GeeTest — GeeTest Task | API"
@@ -78,6 +78,7 @@ V4 (captcha_id = gt)
 </span>
 <br />
 
+  <Tabs>
   <TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
@@ -156,6 +157,7 @@ V4 (captcha_id = gt)
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
   </TabItem>
+  </Tabs>
   
 
 
@@ -236,6 +238,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -264,6 +267,7 @@ V4 (captcha_id = gt)
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -284,7 +288,7 @@ V4 (captcha_id = gt)
 
 Все параметры можно найти в *init-params* среди запросов:
 
-![paramsv3](images\geetest-task\init-params.png)
+![paramsv3](images/geetest-task/init-params.png)
 
 #### Автоматически
 
@@ -726,6 +730,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Параметры запроса</span>
 
+  <Tabs>
   <TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
@@ -802,6 +807,7 @@ V4 (captcha_id = gt)
     Пароль прокси-сервера.
 
   </TabItem>
+  </Tabs>
 
 
 ### <span style={{fontSize: '1.5rem'}}>Метод создания задачи</span>
@@ -883,6 +889,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -913,6 +920,7 @@ V4 (captcha_id = gt)
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -947,7 +955,7 @@ input[name=captcha_output]</td>
 6. Кликните по этому запросу и откройте вкладку **Payload**, чтобы просмотреть необходимые данные.
 
 
-![paramsv4](images\geetest-task\load-callback.png)
+![paramsv4](images/geetest-task/load-callback.png)
 
 #### Автоматически
 

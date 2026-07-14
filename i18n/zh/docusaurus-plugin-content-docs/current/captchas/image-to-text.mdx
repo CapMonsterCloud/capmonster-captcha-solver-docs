@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 12
 sidebar_label: ImageToText
 ---
@@ -38,6 +38,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <br />
 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ImageToTextTask**
@@ -74,6 +75,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="math" type="boolean" />
     false — 未定义；<br />true — 如果验证码需要数学操作（例如：验证码 2 + 6 = 将返回值 8）。**重要提示：** 请勿在 `captcha_math` 模块中使用 `math: true` 参数。
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -107,6 +109,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 ## 创建任务方法 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
 	<MethodItem>
 		```http
@@ -133,11 +136,13 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 
 ## 获取任务结果方法
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取验证码的解决方案。根据系统负载，您将在300毫秒到6秒的时间范围内收到答案。
 
+<Tabs>
 <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -164,6 +169,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 <br />
 
@@ -182,11 +188,11 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
 在 DOM 树中找到所需的元素并将鼠标悬停在其上——*base64* 编码的图片会直接显示在元素的属性中：
 
-![base64elements](images\image-to-text\base64-elements.png)
+![base64elements](images/image-to-text/base64-elements.png)
 
 如果图片引用的是外部 URL，而不是包含 base64 编码的数据，你可以在网络请求（**Network**）中找到它。右键点击相关请求，选择 **复制图片为数据 URI**。这会将 *base64* 编码的图片数据复制到剪贴板。
 
-![base64network](images\image-to-text\base64-network.png)
+![base64network](images/image-to-text/base64-network.png)
 
 ### 自动方法
 

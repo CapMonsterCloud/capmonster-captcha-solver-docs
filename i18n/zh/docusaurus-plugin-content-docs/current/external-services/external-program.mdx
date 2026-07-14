@@ -19,7 +19,7 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 <details>
 <summary>KeyCollector</summary>
 
-选择“使用 CapMonster Cloud”并输入您的个人 API 密钥。
+选择 **Use CapMonster Cloud** 并输入您的个人 API 密钥。
 
 ![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.003.png)
 </details>
@@ -27,13 +27,15 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 <details>
 <summary>A-Parser</summary>
 
-要解决 reCAPTCHA，请选择 Util::ReCaptcha2 并在提供者字段中指定密钥。
+要解决 reCAPTCHA，请选择 `Util::ReCaptcha2`，并在 `Provider` 字段中选择 `CapMonster Cloud`。
 
-![](./images/external-program/aparser.png)
+![](./images/external-program/aparser.png) 
+![](./images/external-program/aparser1.png) 
 
-要解决标准验证码，请选择“Util::Antigate”并将“api.capmonster.cloud”指定为“Antigate domain”的值。在“key”字段中指定您的个人 API 密钥。
+要解决标准验证码，请选择 `Util::Antigate`，并在 `Provider` 字段中选择 `CapMonster Cloud`。在 `Client key` 字段中输入您的 CapMonster Cloud API 密钥。
 
 ![](./images/external-program/aparser2.png)
+![](./images/external-program/aparser3.png)
 </details>
 
 <details>
@@ -52,16 +54,20 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 ![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.007.png)
 </details>
 ## 连接到其他程序的三个步骤
-1. 在您的程序中，选择我们支持的一个验证码解决方案：
-   ` Anti-Captcha（v1.0, v2.0）, RuCaptcha, RipCaptcha, 2Captcha, BypassCaptcha, DeathByCaptcha`。
-1. 然后在您的程序中的相应字段中指定您的 CapMonster Cloud 个人 API 密钥，用于发送验证码。
-   1. **对于 DeathByCaptcha 的注意事项：** DeathByCaptcha API 使用用户名和密码而不是 API 密钥来识别用户。在这种情况下，请在密码字段中指定 CapMonster Cloud 的 API 密钥。在用户名字段中输入任何值。
-1. 最后一步：将我们的 IP 地址与另一个服务匹配，以便 CapMonster Cloud 可以从上述服务获取验证码。为此，请选择您的操作系统，点击下拉箭头，并按照说明操作。
+
+1. 在您的程序中，选择我们支持的验证码识别服务之一：
+   `Anti-Captcha (v1.0, v2.0), RuCaptcha, RipCaptcha, 2Captcha, BypassCaptcha, DeathByCaptcha`。
+
+2. 然后，在您用于发送验证码的程序中的相应字段里，指定您的 CapMonsterCloud 个人 API 密钥。
+
+> **DeathByCaptcha 注意事项：** DeathByCaptcha API 使用用户名和密码来识别用户，而不是 API 密钥。在这种情况下，请在密码字段中指定 CapMonsterCloud 的 API 密钥。用户名字段中可以输入任意值。
+
+3. 最后一步：将我们的 IP 与另一个服务进行匹配，以便 CapMonster Cloud 可以从上述服务接收验证码。为此，请选择您的操作系统，展开折叠部分，并按照说明操作。
 
 <details>
 <summary>我使用 Windows</summary>
 
-打开这个路径：C:\Windows\System32\drivers\etc\ 并找到名为 **hosts** 的文件。用记事本打开它，并在文档末尾添加以下行：
+打开这个路径：C:\Windows\System32\drivers\etc\ 并找到名为 `hosts` 的文件。用记事本打开它，并在文档末尾添加以下行：
 
 ```
 # capmonster.cloud 开始
@@ -110,18 +116,19 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 ```
 
 保存。
+
 :::info 信息
 ` `在某些情况下，您可能需要管理员权限来保存文件。在这种情况下，您将需要遵循这些简单的指示：
 
-1. 在任务栏的搜索栏中开始输入“记事本”。一旦找到结果，请右键单击它，然后选择“以管理员身份运行”。
+1. 开始在任务栏的搜索栏中输入 `记事本`。找到结果后，右键单击它，然后点击 `以管理员身份运行`。
 
-![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.008.png)
+  ![](./images/external-program/Aspose.Words.65ffb1d6-0a55-415c-84ac-f87a8022a7cc.008.png)
 
-1. 在记事本的上部菜单中，点击“文件” — “打开”，并指定路径到“hosts”文件：*C:\Windows\System32\drivers\etc.* 如果在文件夹中有多个同名文件，请打开没有扩展名的文件。
-1. 对“hosts”文件进行更改，然后在菜单中保存文件。
-   :::
+2. 在记事本顶部菜单中，点击 `文件` — 打开，并指定 `hosts` 的路径：*C:\Windows\System32\drivers\etc.* 如果该文件夹中有多个同名文件，请打开没有扩展名的文件。
+3. 对 `hosts` 进行更改，然后在菜单中保存文件。
+:::
 
-尝试访问这些任何一个域名。如果一切正确，将会打开一个空白页面。果您无法完成此操作，请联系[support](https://helpdesk.zennolab.com/conversation/new)，我们将帮助您进行所有配置！
+尝试访问这些域名中的任意一个。如果一切正确，将打开一个空白页面。如果您无法完成此操作，请联系 [支持团队](https://helpdesk.zennolab.com/zh-cn/conversation/new)，我们会帮助您完成所有配置！
 </details>
 
 <details>
@@ -196,7 +203,7 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 
 要查看更改，请清除 DNS 缓存。为此，请输入以下命令：`sudo killall -HUP mDNSResponder`。这将清除您的 Mac 上的 DNS 缓存，并使操作系统看到 Hosts 文件中的更改。
 
-尝试访问这些任何一个域名。如果一切正确，将会打开一个空白页面。如果您无法完成此操作，请联系[support](https://helpdesk.zennolab.com/conversation/new)，我们将帮助您进行所有配置。
+尝试访问这些任何一个域名。如果一切正确，将会打开一个空白页面。如果您无法完成此操作，请联系[support](https://helpdesk.zennolab.com/zh-cn/conversation/new)，我们将帮助您进行所有配置。
 </details>
 
 <details>
@@ -255,16 +262,16 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 
 完成修改后，点击 Ctrl+X 然后按 Y 来应用这些更改。
 
-尝试访问这些任何一个域名。如果一切正确，将会打开一个空白页面。如果您无法完成此操作，请联系[support](https://helpdesk.zennolab.com/conversation/new)，我们将帮助您进行所有配置。
+尝试访问这些任何一个域名。如果一切正确，将会打开一个空白页面。如果您无法完成此操作，请联系[support](https://helpdesk.zennolab.com/zh-cn/conversation/new)，我们将帮助您进行所有配置。
 </details>
 
 这种方法适用于许多应用程序，包括以下：
 
 - BroBot
-- Жукладочник（识别工具）
-- Определяйка（识别工具）
-- PHP скрипты（PHP 脚本）
-- 文字迷
+- Жукладочник
+- Определяйка
+- Scripts PHP
+- СловоЕБ
 - Add2Board
 - AddNews
 - AddSite
@@ -278,7 +285,7 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 - ComparseR
 - Dark Sender
 - DVChecker
-- eTXT Антиплагиат（eTXT 反抄袭）
+- eTXT Антиплагиат
 - FastTrust
 - GSA Search Engine Ranker (GSA SER)
 - VKCH
@@ -320,7 +327,7 @@ CapMonster Cloud 兼容所有验证码解决方案。要将 CapMonster Cloud 连
 
 :::info 信息！
 
-如果您无法将 CapMonster Cloud 连接到您的应用程序，请联系[support](https://helpdesk.zennolab.com/conversation/new)，我们将帮助您完成所有配置。
+如果您无法将 CapMonster Cloud 连接到您的应用程序，请联系[support](https://helpdesk.zennolab.com/zh-cn/conversation/new)，我们将帮助您完成所有配置。
 
 :::
 

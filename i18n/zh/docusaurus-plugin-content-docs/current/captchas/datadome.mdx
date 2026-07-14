@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 11
 sidebar_label: DataDome
 title: "DataDome验证码自动识别与绕过 | API"
@@ -45,6 +45,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <br />
 
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -118,6 +119,7 @@ DataDome 解决方法版本。
 ---
 
 </TabItem>
+</Tabs>
 
 ## 任务创建方法
 
@@ -134,6 +136,7 @@ DataDome 解决方法版本。
 
 ![](./images/datadome/datadome_ijs.png)
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
 	<MethodItem>
 		```http
@@ -172,11 +175,13 @@ DataDome 解决方法版本。
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 获取任务结果的方法
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取DataDome验证码的解决方案。
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -215,6 +220,7 @@ DataDome 解决方法版本。
 ```
 </MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 如何找到 `datadomeCookie`
 

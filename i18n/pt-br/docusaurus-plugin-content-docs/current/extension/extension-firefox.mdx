@@ -1,6 +1,6 @@
 ﻿---
 sidebar_position: 1
-sidebar_label: Extensão do navegador Firefox
+sidebar_label: Extensão para o navegador Firefox
 ---
 
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
@@ -30,25 +30,32 @@ Para começar a usar a extensão, clique em seu ícone à direita da barra de en
 
 1. Baixe o [arquivo com a extensão](https://zenno.link/firefox-actual-build).
 
-2. Abra o navegador Firefox e vá trabalhar com as extensões:
+2. Abra o navegador Firefox e acesse o gerenciamento de extensões:
    ![](./images/extension-main-firefox/extension-menu.png)
-   
-3. Clique no botão de engrenagem e, na lista suspensa que se abre, selecione **Instalar add-on a partir do arquivo...**
+
+3. Vá para `Gerenciamento de extensões`, clique no botão de engrenagem e, no menu suspenso que será aberto, selecione `Instalar de um arquivo…`
    ![](./images/extension-main-firefox/extension-installation.png)
-   
+
 4. Selecione o arquivo baixado com a extensão.
 
-5. Após baixar a extensão, vá para **Gerenciar suas Extensões** e clique na extensão instalada.
+5. Após a extensão ser carregada, vá para `Gerenciamento de extensões` e clique na extensão instalada.
    ![](./images/extension-main-firefox/extension1.png)
-   
-6. Vá para a aba **Permissões** e certifique-se de que todas as permissões estão concedidas.
+
+6. Acesse a guia `Permissões` e verifique se todas as permissões foram concedidas.
    ![](./images/extension-main-firefox/extension2.png)
+
+Se ocorrerem erros durante a instalação padrão, utilize o modo de depuração de complementos:
+
+1. Vá para `Gerenciamento de extensões`, clique no botão de engrenagem e, no menu suspenso que será aberto, selecione `Depurar extensões`.
+   ![](./images/extension-main-firefox/ext-firefox-fix.png)
+
+2. Na janela que será aberta, clique em `Carregar extensão temporária` e selecione o arquivo baixado com a extensão.
 </details>
 
 <details>
     <summary>Atualização manual da extensão</summary>
 
-Se você estiver instalando a extensão sobre a versão anterior, ao atualizar os arquivos originais da extensão, também precisará clicar no botão de atualização na página **Extensões** (como abrir esta página está descrito acima na seção **Instalação manual**).
+Se você estiver instalando a extensão sobre a versão anterior, ao atualizar os arquivos originais da extensão, também precisará clicar no botão de atualização na página `Extensões` (como abrir esta página está descrito acima na seção `Instalação manual`).
 </details>
 
 -----
@@ -62,7 +69,7 @@ Por padrão, uma extensão recém-instalada é fixada automaticamente no painel 
 
 Após iniciar a extensão, você verá esta janela:
 
-![](./images/extension-main-firefox/ext.screen.enf.png)
+![](./images/extension-main-firefox/ext.screen.en.png)
 ### <a name="id-browserextension-apikey"></a>Chave API
 Insira a chave da API no campo correspondente (1), pressione o botão salvar (2). Se você inseriu a chave correta, seu saldo será exibido abaixo (3).
 
@@ -70,20 +77,25 @@ Insira a chave da API no campo correspondente (1), pressione o botão salvar (2)
 ### <a name="id-browserextension-automaticcaptchasolving"></a>Solução automática de captchas
 Aqui você pode selecionar os tipos de captchas que a extensão reconhecerá automaticamente.
 
-![](./images/extension-main-firefox/extension.examplef.png)
+![](./images/extension-main-firefox/extension.example.png)
 
 :::info !
 
 Pode ser necessário recarregar a página com captcha para que as alterações tenham efeito!
+:::
 
 ### <a name="id-browserextension-repeatcaptchasolvingincaseofanerror"></a>Repetir solução de captcha em caso de erro
+
 Se a primeira tentativa de resolver o captcha falhar, a extensão enviará tarefas repetidas até que o captcha seja resolvido ou até que o limite especificado nesta configuração seja atingido.
+
 ### <a name="id-browserextension-proxy"></a>Proxy
-![](./images/extension-main-firefox/proxy.png) 
 
-Aqui você pode especificar o proxy que será enviado junto com a tarefa de reconhecimento.
+![](./images/extension-main-firefox/proxy.png)
 
-O "Login" e a "Senha" são opcionais.
+Nesta seção, você pode especificar um proxy que será enviado juntamente com a tarefa de reconhecimento.
+
+Os campos **Login** e **Senha** são opcionais. A extensão também oferece suporte a proxies com **IPv6**.
+
 ### <a name="id-browserextension-blacklistcontrol"></a>Controle de lista negra
 Usando a lista negra, você pode configurar a extensão para ignorar captchas em sites específicos.
 
@@ -114,28 +126,34 @@ A extensão **CapMonster Cloud** oferece uma maneira prática de visualizar os p
 
 ### Tipos de captcha suportados e seus parâmetros
 
-| Tipo de Captcha             | Parâmetros Exibidos                                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Invisible**  | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise** | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V3**            | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                                    |
-| **GeeTest v3**              | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                            |
-| **GeeTest v4**              | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                               |
-| **Cloudflare Turnstile**    | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
-| **Cloudflare Challenge**    | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                         |
-| **ImageToText**             | `body` (em formato `base64`), `type`                                                                                            |
-| **BLS**                     | `class`, `imagesBase64`, `Task` (dentro de `metadata`), `TaskArgument` (dentro de `metadata`), `type`                           |
-| **Binance**                 | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                                   |
+| Tipo de captcha                     | Quais parâmetros são exibidos                                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
+| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                          |
+| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                                    |
+| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                            |
+| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                               |
+| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
+| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                         |
+| **ImageToText**                     | `body` (no formato `base64`), `type`                                                                                            |
+| **BLS**                             | `class`, `imagesBase64`, `Task` (dentro de `metadata`), `TaskArgument` (dentro de `metadata`), `type`                           |
+| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                                   |
 
-Para utilizar este recurso, ative a extensão, abra a página do captcha (certifique-se de que o tipo é suportado e está selecionado para resolução), e siga os passos abaixo:
+Para usar esta função, ative a extensão, informe a chave de API nas configurações e verifique se há saldo disponível. Em seguida, abra a página com o captcha, confirme se o tipo dele é compatível e está selecionado para resolução, e siga estas etapas:
 
 1. Abra as Ferramentas de **Desenvolvedor** (DevTools) e vá até a aba **CapMonster Cloud**:  
    
-   ![](./images/extension-main-firefox/params_extenstion2.png)
+![](./images/extension-main-firefox/params_extension2.png)
 
 2. Recarregue a página.
 
+:::warning **Importante**
+Para solicitações de API, use um `userAgent` atualizado, compatível com [nosso serviço](https://capmonster.cloud/api/useragent/actual).
+:::
+
 Os parâmetros do captcha selecionado serão exibidos automaticamente:  
 
-![](./images/extension-main-firefox/params_extenstion3.png)
+![](./images/extension-main-firefox/params_extension3.png)

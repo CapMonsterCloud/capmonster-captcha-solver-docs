@@ -48,6 +48,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -101,6 +102,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     代理密码。
 
 </TabItem>
+</Tabs>
 
 
 ## 创建任务方法
@@ -192,6 +194,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
  
 **重要!** 获取解决方案后，您必须清除 cookies 并设置新获取的 cookies。 
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -233,6 +236,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 	```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ## 如何获取 cookie（在 metadata 中） 参数
 可以通过 `document.cookie` 属性在验证码页面上获取 `cookie` 参数的值。

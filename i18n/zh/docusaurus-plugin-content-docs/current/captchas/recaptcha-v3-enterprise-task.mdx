@@ -39,6 +39,7 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 您也可以使用 reCAPTCHA v3 任务类型，并通过指定 `isEnterprise` 参数来解决 reCAPTCHA v3 Enterprise [(*参见 reCAPTCHA v3 部分*)](../recaptcha-v3-task/)。
 :::
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
@@ -72,9 +73,11 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
       <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*
     </p>
 </TabItem>
+</Tabs>
 
 ## 创建任务方法 
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="method-panel">
 	<MethodItem>
 		```http
@@ -103,6 +106,7 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 		```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 :::warning **警告！**
 在某些网站上，确保 UserAgent 与解决验证码时使用的 UserAgent 相匹配非常重要。因此，如果 CapMonster Cloud 在返回令牌的同时提供了 UserAgent，**请始终**在提交表单或在目标页面确认解决方案时使用该 UserAgent。
@@ -110,6 +114,7 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 请求获取 ReCaptcha3 的答案。根据服务负载情况，您将在 10 到 30 秒内收到响应。
 
+<Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
@@ -149,6 +154,7 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 ```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 <br />
 
 |**属性**|**类型**|**描述**|

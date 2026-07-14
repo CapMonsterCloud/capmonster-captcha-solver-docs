@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 1
 sidebar_label: Расширение для браузера Firefox
 ---
@@ -33,22 +33,29 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 2. Откройте браузер Firefox и перейдите к работе с расширениями:
    ![](./images/extension-main-firefox/extension-menu.png)
    
-3. Нажмите кнопку шестеренки, в открывшемся выпадающем списке выберите пункт **Установить дополнение из файла…**
+3. Перейдите в раздел `Управление расширениями`, нажмите кнопку шестерёнки, в открывшемся выпадающем списке выберите пункт `Установить дополнение из файла…`
    ![](./images/extension-main-firefox/extension-installation.png)
    
 4. Выберите скачанный архив с расширением.
 
-5. После загрузки расширения перейдите в **Управление расширениями** и нажмите на установленное расширение. 
+5. После загрузки расширения перейдите в `Управление расширениями` и нажмите на установленное расширение. 
    ![](./images/extension-main-firefox/extension1.png)
    
-6. Перейдите во вкладку **Разрешения** и убедитесь, что все разрешения выданы.
+6. Перейдите во вкладку `Разрешения` и убедитесь, что все разрешения выданы.
    ![](./images/extension-main-firefox/extension2.png)
+
+Если при стандартной установке возникают ошибки, используйте режим отладки дополнений:
+
+1. Перейдите в `Управление расширениями`, нажмите кнопку шестерёнки, в открывшемся выпадающем списке выберите пункт `Отладка дополнений`
+![](./images/extension-main-firefox/ext-firefox-fix.png)
+2. В открывшемся окне нажмите кнопку `Загрузить временное дополнение` и выберите скачанный архив с расширением.
+
 </details>
 
 <details>
     <summary>Ручное обновление расширения</summary>
 
-Если вы устанавливаете расширение поверх предыдущей версии, после обновления исходных файлов необходимо также нажать кнопку **Обновить** на странице **Управление расширениями**. (Инструкции по открытию этой страницы приведены выше в разделе **Ручная установка**.)
+Если вы устанавливаете расширение поверх предыдущей версии, после обновления исходных файлов необходимо также нажать кнопку `Обновить` на странице `Управление расширениями`. (Инструкции по открытию этой страницы приведены выше в разделе `Ручная установка`.)
 </details>
 
 -----
@@ -82,9 +89,10 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ### <a name="id-расширениедлябраузера-прокси"></a>Прокси
 ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.013.png) 
 
-Здесь можно указать прокси, который будет отправлен вместе с задачей на распознавание.
+В этом разделе можно указать прокси, который будет передан вместе с задачей на распознавание.
 
-“Логин” и “Пароль” указывать необязательно.
+Поля **Логин** и **Пароль** заполнять необязательно. Расширение также поддерживает прокси с **IPv6**.
+
 ### <a name="id-расширениедлябраузера-управлениечёрнымсписком"></a>Управление чёрным списком
 С помощью чёрного списка можно настроить сайты, на которых расширение будет игнорировать капчу.
 
@@ -115,28 +123,36 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ### Поддерживаемые типы капч и их параметры
 
 
-| Тип капчи                   | Какие параметры отображаются                                                                                              |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2**            | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Invisible**  | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise** | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V3**            | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
-| **GeeTest v3**              | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
-| **GeeTest v4**              | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
-| **Cloudflare Turnstile**    | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
-| **Cloudflare Challenge**    | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
-| **ImageToText**             | `body` (в формате `base64`), `type`                                                                                       |
-| **BLS**                     | `class`, `imagesBase64`, `Task` (внутри `metadata`), `TaskArgument` (внутри `metadata`), `type`                           |
-| **Binance**                 | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
+| Тип капчи                           | Какие параметры отображаются                                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (внутри `metadata`), `Grid` (внутри `metadata`), `recognizingThreshold`, `userAgent`, `type` |
+| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                    |
+| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
+| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
+| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
+| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
+| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
+| **ImageToText**                     | `body` (в формате `base64`), `type`                                                                                       |
+| **BLS**                             | `class`, `imagesBase64`, `Task` (внутри `metadata`), `TaskArgument` (внутри `metadata`), `type`                           |
+| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
 
-Чтобы воспользоваться этой функцией, активируйте расширение, откройте страницу с капчей (убедитесь, что её тип поддерживается и выбран для решения), затем выполните следующие шаги:
+
+Чтобы воспользоваться этой функцией, активируйте расширение, укажите API-ключ в настройках и убедитесь, что на балансе есть средства. Затем откройте страницу с капчей, проверьте, что её тип поддерживается и выбран для решения, и выполните следующие шаги:
 
 1. Откройте **Инструменты разработчика (DevTools)** и перейдите на вкладку **Capmonster Cloud**:
    
-   ![](.\images\extension-main-firefox\params_extenstion2.png)
+   ![](./images/extension-main-firefox/params_extenstion2.png)
 
 2. Перезагрузите страницу.
 
+
+:::warning **Важно**
+Для API-запросов используйте актуальный `userAgent`, поддерживаемый [нашим сервисом](https://capmonster.cloud/api/useragent/actual).
+:::
+
 Параметры выбранной капчи отобразятся автоматически:
 
-![](.\images\extension-main-firefox\params_extenstion3.png)
+![](./images/extension-main-firefox/params_extenstion3.png)
