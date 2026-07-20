@@ -1,0 +1,223 @@
+---
+sidebar_position: 3
+sidebar_label: How to use the CapMonster Cloud node in n8n?
+title: "Installation and usage guide for the CapMonster Cloud node in n8n workflows"
+description: "Detailed installation and usage guide for the CapMonster Cloud node in n8n workflows"
+---
+
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<ArticleHead slug="external-services/external-n8n" />
+
+# **How to install and use the CapMonster Cloud node for n8n**
+
+[**n8n**](https://n8n.io/) is an open workflow automation platform where business logic is built from nodes that exchange data via HTTP APIs, webhooks, and integrations with external services. Its key advantage is the ability to run automations both in the n8n Cloud (for a [reasonable price](https://n8n.io/pricing/)) and on your own server.
+
+The **CapMonster Cloud node** adds automatic CAPTCHA solving to these workflows: it sends tasks to CapMonster Cloud, receives ready tokens or answers, and passes them further down the chain. This allows n8n to reliably automate scenarios involving web forms, registrations, logins, scraping, and other operations that are otherwise blocked by CAPTCHA protection.
+
+The node supports almost all types of tasks that CapMonster Cloud API provides solutions for, and is updated regularly.
+
+Some task types support optional proxy parameters. The need to use your own proxies can be found on the [pages of specific captchas](https://docs.capmonster.cloud/docs/captchas/).
+
+## **Node Installation**
+
+Depending on your n8n setup you can install the **CapMonster Cloud node** as described below.
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+	<TabItem value="self-hosted" label="Self-Hosted n8n Server" default className="method-panel">
+
+        ### <span style={{padding: '0px 0px 0px 15px', marginTop: '15px', display: 'inline-block'}}>Installation via CLI</span>
+
+        1. Log in to your n8n instance via CLI
+        2. Switch to the directory where the n8n nodes are usually installed (for example, `~/.n8n/nodes`)
+        3. Install the package as a community node:
+
+           `npm install @zennolab_com/n8n-nodes-capmonstercloud`
+
+        4. Restart n8n with the command:
+
+           `n8n`
+
+        5. Done.
+
+        ### <span style={{padding: '0px 0px 0px 15px', marginTop: '15px', display: 'inline-block'}}>Installation via UI</span>
+
+        1. Open your n8n UI in the web browser
+        2. Go to the **Settings → Community nodes**
+
+           ![](./images/external-n8n/03.png)
+
+        3. Click **Install a community node**
+
+           ![](./images/external-n8n/02.jpg)
+
+        4. Enter `@zennolab_com/n8n-nodes-capmonstercloud` in the **npm Package Name**, check the “I understand the risks…” checkbox, and click **Install**
+
+           ![](./images/external-n8n/01.jpg)
+
+        5. Done.
+
+    </TabItem>
+
+	<TabItem value="n8n-cloud" label="n8n Cloud" default className="method-panel">
+
+        <span style={{padding: '0px 0px 0px 15px', marginTop: '15px', display: 'inline-block'}}>To install the CapMonster Cloud community node to your n8n Cloud instance:</span>
+
+        1. Open your [n8n Dashboard](https://app.n8n.cloud/dashboard) and go to the one of your n8n instances.
+        2. Create a new workflow or open any existing one.
+        3. Go to the **Canvas** and open the nodes panel either by selecting **\+** or pressing **N**
+
+           ![](./images/external-n8n/08.png)
+
+        4. Search for the **CapMonster Cloud** node and select it
+
+           ![](./images/external-n8n/07.png)
+
+        5. Click **Install node**
+
+           ![](./images/external-n8n/06.png)
+
+        6. You can now add the node to your workflows.
+
+    </TabItem>
+
+</Tabs>
+
+## **Usage Example**
+
+Here is the step-by-step guide of a sample workflow demonstrating the CapMonster Cloud node usage.
+
+![](./images/external-n8n/04.png)
+
+If you are an experienced n8n user, you can [download](./images/external-n8n/CapMonster_Cloud_node_for_n8n_Demo.json) this workflow, import it to your project and explore it yourself.
+
+### Prerequisites
+
+* CapMonster Cloud account
+* CapMonster Cloud API key (obtained from your [CapMonster Cloud Dashboard](https://dash.capmonster.cloud/))
+
+### Step 1 — Create a new workflow
+
+1. In the left sidebar click **\+ New workflow**
+2. Click the title at the top and rename it: `CapMonster Cloud — reCAPTCHA v2 Demo` (for example)
+
+### Step 2 — Manual Trigger
+
+1. On the canvas click **\+** → find **Manual Trigger** → add it
+2. Double-click the node → set **Name** to `Run Test`
+3. Close the panel
+
+### Step 3 — HTTP Request (fetch current User-Agent)
+
+This node fetches an up-to-date browser User-Agent string from CapMonster Cloud's own endpoint, which improves token acceptance rate.
+
+1. Click **\+** after `Run Test` → find **HTTP Request** → add it
+2. Rename the node: `HTTP Request`
+3. Fill in the parameters:
+
+    | Field | Value |
+    | ----- | ----- |
+    | **Method** | GET |
+    | **URL** | `https://capmonster.cloud/api/useragent/actual` |
+
+4. Leave all other settings at their defaults
+5. Close the panel
+
+### Step 4 — CapMonster Cloud (solve the CAPTCHA)
+
+This example shows the node settings for solving reCAPTCHA v2 on the dedicated CapMonster Cloud demo page.
+
+1. Click **\+** after `HTTP Request` → find **CapMonster Cloud** → add it
+2. Rename the node: `Solve reCAPTCHA v2`
+3. Fill in the parameters:
+
+    | Field | Value |
+    | ----- | ----- |
+    | **Task Type** | RecaptchaV2 (reCAPTCHA V2) |
+    | **Website URL** | `https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high` |
+    | **Website Key** | `6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd` |
+    | **User Agent** | switch to expression mode (`=`) and enter `{{ $json.data }}` |
+    | **Is Invisible** | off (false) |
+
+4. In the **Credential** section click **Create new credential**:
+   * Paste your CapMonster Cloud API key into the **Client Key** field
+   * Click **Save**
+5. Close the panel
+
+### Step 5 — HTTP Request (submit the token)
+
+1. Click **\+** after `Solve reCAPTCHA v2` → find **HTTP Request** → add it
+2. Rename the node: `Submit Form with Token`
+3. Fill in the parameters:
+
+    | Field | Value |
+    | ----- | ----- |
+    | **Method** | POST |
+    | **URL** | `https://lessons.zennolab.com/captchas/recaptcha/verify.php?type=v2&subtype=simple&level=high` |
+
+4. Enable the **Send Body** toggle:
+
+   * **Body Content Type** → `Form Urlencoded`
+   * **Specify Body** → `Using Fields Below`
+   * Click **Add Field**:
+     * **Name**: `g-recaptcha-response`
+     * **Value**: switch to expression mode (`=`) and enter `{{ $json.gRecaptchaResponse }}`
+5. Expand the **Options** section at the bottom:
+
+   * Open **Response**
+   * Enable **Full Response** (returns status code and headers)
+   * Enable **Never Error** (no exception on non-2xx responses)
+   * **Response Format** → `Text`
+6. Close the panel
+
+### Step 6 — Code (parse the server response)
+
+The ZennoLab server returns an HTML page. The verification result JSON is embedded inside a `<pre>` tag. This Code node extracts it.
+
+1. Click **\+** after `Submit Form with Token` → find **Code** → add it
+2. Rename the node: `Parse Response`
+3. Set **Language** to `JavaScript`
+4. Replace the default code with the following:
+
+    ```javascript
+    const html = $input.first().json.data;
+    const match = html.match(/<pre>([\s\S]*?)<\/pre>/);
+    if (!match) {
+      return [{ json: { success: false, challenge_ts: null, hostname: null, _error: 'No pre tag found' } }];
+    }
+    const parsed = JSON.parse(match[1].trim());
+    return [{ json: parsed }];
+    ```
+
+5. Close the panel
+
+### Step 8 — Verify the connections
+
+Make sure the arrows follow this exact order:
+
+**Run Test → HTTP Request → Solve reCAPTCHA v2 → Submit Form with Token → Parse Response**
+
+If any node is disconnected — drag an arrow from the output of the previous node to the input of the next one.
+
+### Step 9 — Save and run
+
+1. Press **Ctrl+S** (or click **Save** at the top) to save the workflow
+2. Click **Test workflow** (or click **Execute** on the `Run Test` node)
+3. Wait \~15–20 seconds while CapMonster Cloud solves the CAPTCHA
+
+### Expected result
+
+In the **`Parse Response`** node output you should see:
+
+```json
+{
+  "success": true,
+  "challenge_ts": "2026-07-17T14:15:48Z",
+  "hostname": "lessons.zennolab.com"
+}
+```
+
+`"success": true` confirms the CAPTCHA token was solved by CapMonster Cloud and accepted by Google's verification API.

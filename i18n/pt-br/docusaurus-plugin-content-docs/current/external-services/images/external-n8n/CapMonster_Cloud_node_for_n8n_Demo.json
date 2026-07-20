@@ -1,0 +1,176 @@
+{
+  "name": "CapMonster Cloud — reCAPTCHA v2 Demo",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## CapMonster Cloud — reCAPTCHA v2 (ZennoLab Test)\n\n**What this workflow does:**\n1. **Run Test** — manual trigger\n2. **HTTP Request** — fetches the latest browser User-Agent from CapMonster Cloud\n3. **Solve reCAPTCHA v2** — solves the CAPTCHA on the ZennoLab test page\n4. **Submit Form with Token** — POSTs `g-recaptcha-response` to the form endpoint\n5. **Parse Response** — extracts the JSON result from the HTML `<pre>` tag\n\n**Parameters:**\n- **URL:** https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high\n- **Sitekey:** `6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd`\n- **Submit endpoint:** POST /captchas/recaptcha/verify.php?type=v2&subtype=simple&level=high\n\n**Credentials:** CapMonster Cloud API — https://dash.capmonster.cloud",
+        "height": 648,
+        "width": 460
+      },
+      "id": "b64e9e2a-fff8-4dba-bd1d-927cded47179",
+      "name": "Sticky Note 455fea07",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        -272
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6700ef50-7b0c-4b5d-9933-c76cd8c0b28f",
+      "name": "Run Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://capmonster.cloud/api/useragent/actual",
+        "options": {}
+      },
+      "id": "36c177f5-48c5-4916-9364-0762e0d87f1b",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
+        "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+        "userAgent": "={{ $json.data }}"
+      },
+      "id": "268625d6-3405-4577-a55b-24d3e3ea791d",
+      "name": "Solve reCAPTCHA v2",
+      "type": "@zennolab_com/n8n-nodes-capmonstercloud.capmonsterCloud",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "credentials": {
+        "capmonsterCloudApi": {
+          "id": "yJEXzURkXG1dTPl7",
+          "name": "Capmonster Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://lessons.zennolab.com/captchas/recaptcha/verify.php?type=v2&subtype=simple&level=high",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "g-recaptcha-response",
+              "value": "={{ $json.gRecaptchaResponse }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "e85f2231-cfaa-492c-a6db-6cbf40509fd3",
+      "name": "Submit Form with Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.data;\nconst match = html.match(/<pre>([\\s\\S]*?)<\\/pre>/);\nif (!match) {\n  return [{ json: { success: false, challenge_ts: null, hostname: null, _error: 'No pre tag found' } }];\n}\nconst parsed = JSON.parse(match[1].trim());\nreturn [{ json: parsed }];"
+      },
+      "id": "d500878b-13fb-4899-93ae-2e2e6b57a3e0",
+      "name": "Parse Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Run Test": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Solve reCAPTCHA v2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solve reCAPTCHA v2": {
+      "main": [
+        [
+          {
+            "node": "Submit Form with Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Form with Token": {
+      "main": [
+        [
+          {
+            "node": "Parse Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Response": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "283683a8-c89a-492a-8f74-600b101fbc3f",
+  "meta": {
+    "instanceId": "f781b36179a005ae72d0f6c77b75d6357c16f4182cc4d10b9e868fd522b0c344"
+  },
+  "nodeGroups": [],
+  "id": "yrSsxPdPchMh5z89",
+  "tags": []
+}
