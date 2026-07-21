@@ -48,8 +48,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -106,8 +105,7 @@ Login do servidor proxy.
 <ParamItem title="proxyPassword" type="string" />
 Senha do servidor proxy.
 
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Método de criação de tarefa
@@ -190,8 +188,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 
 **Importante!** Após receber a solução, você deve limpar os cookies e definir os novos cookies obtidos. 
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -231,8 +228,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 }
 	```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ### Como obter o parâmetro cookie (dentro da metadata)
 O valor do parâmetro `cookie` pode ser obtido na página da CAPTCHA via a propriedade `document.cookie`.

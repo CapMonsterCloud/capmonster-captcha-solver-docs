@@ -40,8 +40,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -90,8 +89,7 @@ O formato deve ser o seguinte: [ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"] (*sem o prefi
 
     <ParamItem title="websiteURL" type="string" />
     URL da página onde o captcha está sendo resolvido.
-  </TabItem>
-</Tabs>
+  </div>
 
 ### Descrição dos parâmetros
 
@@ -114,8 +112,7 @@ O formato deve ser o seguinte: [ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"] (*sem o prefi
 ## Criar tarefa
 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 <MethodItem>
   ```http
   https://api.capmonster.cloud/createTask
@@ -151,16 +148,14 @@ O formato deve ser o seguinte: [ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"] (*sem o prefi
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha. Dependendo da carga do sistema, você receberá uma resposta em um intervalo de tempo de 300ms a 6s.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
@@ -185,8 +180,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
   </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 <br />
 

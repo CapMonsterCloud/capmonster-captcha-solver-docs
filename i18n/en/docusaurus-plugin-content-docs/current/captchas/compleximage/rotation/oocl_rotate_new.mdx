@@ -37,8 +37,7 @@ The request must contain two images: background and circle.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -57,13 +56,11 @@ The request must contain two images: background and circle.
     <ParamItem title="Task (inside metadata)" required type="string" />
     Task name: `"oocl_rotate_new"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -105,13 +102,11 @@ The request must contain two images: background and circle.
 	```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Get task result method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -143,8 +138,7 @@ The request must contain two images: background and circle.
   ```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get Base64
 

@@ -85,8 +85,7 @@ V4 (captcha_id = gt)
 <br />
 
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask (with proxy)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -157,8 +156,7 @@ You need to analyze the network requests and identify the request whose response
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
@@ -238,8 +236,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the re
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result method</span>
 
-    <Tabs>
-    <TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+    <div className="method-panel-full">
     	<MethodItem>
     		```http
     		https://api.capmonster.cloud/getTaskResult
@@ -266,8 +263,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the re
 }
 ```
     	</MethodDescription>
-    </TabItem>
-    </Tabs>
+    </div>
 
 <br />
 
@@ -751,8 +747,7 @@ solveGeeTest().catch(console.error);
 
 ### <span style={{fontSize: '1.5rem'}}>Request parameters</span>
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask (with proxy)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -820,8 +815,7 @@ solveGeeTest().catch(console.error);
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
@@ -903,8 +897,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to get the result of
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result method</span>
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -933,8 +926,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to get the result of
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

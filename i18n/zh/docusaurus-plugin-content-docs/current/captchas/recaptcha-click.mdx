@@ -41,8 +41,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -92,8 +91,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
     <ParamItem title="websiteURL" type="string" />
     解决验证码的页面 URL。
-</TabItem>
-</Tabs>
+</div>
 
 ### 参数说明
 
@@ -115,8 +113,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## 创建任务方法 
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -151,16 +148,14 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## 获取任务结果方法
 
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取验证码解决方案。根据系统负载情况，您将在300毫秒到6秒的时间内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -185,8 +180,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

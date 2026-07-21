@@ -40,8 +40,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-  <Tabs>
-  <TabItem value="proxy" label="BinanceTask (com proxy)" default className="bordered-panel">
+  <div className="bordered-panel">
 
     <ParamItem title="type" required type="string" />
     **BinanceTask**
@@ -100,8 +99,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 	<ParamItem title="proxyPassword" type="string" />
 	Senha do servidor proxy.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ## Criar método de tarefa
@@ -177,8 +175,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução Binance.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -204,8 +201,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ### Como obter `websiteKey` e `validateId`
 Habilite as ferramentas de desenvolvedor, vá para a aba "Network", ative o CAPTCHA e observe as requisições. Algumas delas conterão os valores dos parâmetros necessários.

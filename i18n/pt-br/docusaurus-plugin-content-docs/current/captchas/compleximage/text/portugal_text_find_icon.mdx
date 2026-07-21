@@ -38,8 +38,7 @@ A solicitação deve conter uma única imagem em formato base64, composta por 5 
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -67,13 +66,11 @@ Texto da tarefa que define qual ícone deve ser encontrado. Exemplo: `"Clique no
 Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar `"Por favor, clique no(a) avi\\u00E3o."`
 (*veja o exemplo na seção [Exemplos automáticos de reconhecimento e resolução](#exemplos-automatizados-de-reconhecimento-e-resolução)*).
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -107,8 +104,7 @@ Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar 
 	```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 Exemplo de tarefa:
 
@@ -122,8 +118,7 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -158,8 +153,7 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Exemplos automatizados de reconhecimento e resolução
 

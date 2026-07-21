@@ -67,8 +67,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="YidunTask (com proxy)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **YidunTask**
@@ -156,8 +155,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
   ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método de criação da tarefa
 
@@ -232,8 +230,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha Yidun.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -264,8 +261,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 ```
 
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ### Quando usar `yidunGetLib` e `yidunApiServerSubdomain`?
 

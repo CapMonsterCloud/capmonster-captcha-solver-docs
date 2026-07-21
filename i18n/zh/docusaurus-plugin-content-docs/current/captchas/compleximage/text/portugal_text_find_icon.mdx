@@ -39,8 +39,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -67,13 +66,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     **重要**：任务文本中的某些字符必须经过序列化转义，以避免在处理和解决任务时出现错误。
  例如，对于文本 `"Por favor, clique no(a) avião."`，必须传递字符串 `"Por favor, clique no(a) avi\\u00E3o."`（*参见[自动识别与解决示例](#自动识别与解决示例)章节中的示例*）。
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -107,8 +104,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 示例任务：
 
@@ -122,8 +118,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 ## 获取任务结果方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -156,8 +151,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 自动识别与解决示例
 

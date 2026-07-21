@@ -76,8 +76,7 @@ V4 (captcha_id = gt)
 </span>
 <br />
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask（使用代理时）" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -154,8 +153,7 @@ V4 (captcha_id = gt)
 
     <ParamItem title="proxyPassword" type="string" />
     代理服务器密码。
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ### <span style={{fontSize: '1.5rem'}}>创建任务</span>
@@ -236,8 +234,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result</span>
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -264,8 +261,7 @@ V4 (captcha_id = gt)
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -728,8 +724,7 @@ class Program
 
 ### <span style={{fontSize: '1.5rem'}}>请求参数</span>
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask（使用代理时）" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -797,8 +792,7 @@ class Program
     <ParamItem title="proxyPassword" type="string" />
     代理服务器密码。
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
@@ -881,8 +875,7 @@ class Program
 
 ### <span style={{fontSize: '1.5rem'}}>获取任务结果方法</span>
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -911,8 +904,7 @@ class Program
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

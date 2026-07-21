@@ -45,9 +45,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## 对象结构
 
-<Tabs>
-
-  <TabItem value="proxy" label="RecaptchaV2Task (使用代理)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2Task**
 
@@ -114,8 +112,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="proxyPassword" type="string" />
     代理密码。
 
-  </TabItem>  
-  </Tabs>
+  </div>
 
 ## 创建任务方法
 
@@ -191,8 +188,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法请求 ReCaptcha2 的答案。根据服务工作负载，您将在 100 毫秒内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2Task (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -232,8 +228,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

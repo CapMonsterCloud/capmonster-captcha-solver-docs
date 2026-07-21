@@ -53,8 +53,7 @@ CapMonster Cloud can return the solution result as either a **token** or a **cf_
 * After solving, you will receive a **token** to confirm captcha completion.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -134,8 +133,7 @@ CapMonster Cloud can return the solution result as either a **token** or a **cf_
   <ParamItem title="proxyPassword" type="string" />
   Proxy password.
 
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -183,8 +181,7 @@ Calling `window.turnstile.render(el, paramsObj)` loads the captcha on the page. 
 * After solving, you will receive **special cookies** to add to your browser.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -254,8 +251,7 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   Proxy password.
 
-</TabItem>
-</Tabs>
+</div>
 ---
 
 ## Create task method
@@ -341,8 +337,7 @@ console.log(htmlBase64);
 
 ---
 ### Option 2. Challenge (cookie)
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -376,16 +371,14 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 ---
 
 ## Get task result method
 
 ### Option 1. Challenge (token)
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -412,8 +405,7 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |
@@ -421,8 +413,7 @@ console.log(htmlBase64);
 
 ### Option 2. Challenge (cookie)
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -448,8 +439,7 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |

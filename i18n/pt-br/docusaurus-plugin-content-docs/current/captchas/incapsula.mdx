@@ -46,8 +46,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <br />
 
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
 
 <ParamItem title="type" required type="string" />
 **CustomTask**
@@ -116,14 +115,12 @@ O nome do endpoint para onde a impressão digital reese84 é enviada pode ser en
 User-Agent do navegador. <br />
 **Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
 
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Criar método de tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
   <MethodItem>
 
 ```http
@@ -168,14 +165,12 @@ https://api.capmonster.cloud/createTask
 ```
 
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução Imperva.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -206,8 +201,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Access denied
 

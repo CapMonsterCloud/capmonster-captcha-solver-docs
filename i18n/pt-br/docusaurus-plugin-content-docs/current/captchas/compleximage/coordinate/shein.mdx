@@ -38,8 +38,7 @@ A solicitação deve conter uma única imagem no formato base64.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -58,13 +57,11 @@ A solicitação deve conter uma única imagem no formato base64.
     <ParamItem title="Task (dentro de metadata)" required type="string" />
     Nome da tarefa: `"shein"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -102,13 +99,11 @@ A solicitação deve conter uma única imagem no formato base64.
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -144,8 +139,7 @@ A solicitação deve conter uma única imagem no formato base64.
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Como obter Base64
 

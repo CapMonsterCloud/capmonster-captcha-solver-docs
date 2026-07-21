@@ -45,8 +45,7 @@ This type of captcha usually requires the user to solve a puzzle by moving a sli
 <br />
 
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
     
@@ -121,8 +120,7 @@ Browser User-Agent.
 
 ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
@@ -137,8 +135,7 @@ Before solving, check which script is loaded (**DevTools → Network / HTML**).
 
 ![](./images/datadome/datadome_ijs.png)
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -175,15 +172,13 @@ Before solving, check which script is loaded (**DevTools → Network / HTML**).
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Get task result method
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the solved DataDome captcha.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -221,8 +216,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the so
 ```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## How to find `datadomeCookie`
 

@@ -43,8 +43,7 @@ TSPD is a WAF (Web Application Firewall) protection designed to prevent automate
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="CastleTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -110,13 +109,11 @@ Browser User-Agent.<br />
   <ParamItem title="proxyPassword" required type="string" />
   Proxy password.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (with proxy)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -150,8 +147,7 @@ Browser User-Agent.<br />
       }
       ```
     </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Get task result method
 
@@ -159,8 +155,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the so
 
 > **Important**: upon successful completion, newer versions of TSPD may return the `TSPD_101_DID` cookie, whereas older versions may not include it.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -196,8 +191,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the so
       }
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Working with a page containing TSPD
 

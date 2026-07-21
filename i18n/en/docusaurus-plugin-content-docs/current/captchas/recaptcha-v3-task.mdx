@@ -38,8 +38,7 @@ When creating a task, it is recommended to provide two parameters: `pageAction` 
 ## Request parameters
 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -72,14 +71,12 @@ It typically has the following format: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob
 
     <ParamItem title="pageAction" type="string" />
     <p>Widget action value. Website owner defines what user is doing on the page through this parameter. Default value: *verify*</p><p>Example:<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -108,8 +105,7 @@ It typically has the following format: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Get task result method
@@ -120,8 +116,7 @@ On some websites, it is important that the UserAgent matches the one used when s
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer for ReCaptcha3. You will get response within 10 - 30 sec period depending on service workload.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -161,8 +156,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer fo
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

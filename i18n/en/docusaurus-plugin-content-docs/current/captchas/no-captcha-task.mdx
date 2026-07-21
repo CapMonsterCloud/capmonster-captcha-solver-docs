@@ -44,8 +44,7 @@ However, if the token is not accepted by the target site, try again with [your o
 
 ## Request parameters
 
-  <Tabs>
-  <TabItem value="proxy" label="RecaptchaV2Task" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2Task**
 
@@ -111,8 +110,7 @@ However, if the token is not accepted by the target site, try again with [your o
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>  
-  </Tabs>
+  </div>
 
 ## Create task method
 
@@ -188,8 +186,7 @@ On some websites, it is important that the UserAgent matches the one used when s
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request answer for ReCaptcha2. You will get response within 100 ms depending on service workload.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2Task (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -230,8 +227,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request an
 ```
 
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

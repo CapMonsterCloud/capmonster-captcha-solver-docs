@@ -41,8 +41,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-  <Tabs>
-  <TabItem value="proxy" label="BinanceTask (with proxy)" default className="bordered-panel">
+  <div className="bordered-panel">
 
     <ParamItem title="type" required type="string" />
     **BinanceTask**
@@ -98,8 +97,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ## Create task method
@@ -176,8 +174,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ## Get task result method
 Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the Binance solution.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -203,8 +200,7 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get `websiteKey` and `validateId`
 Enable Developer Tools, go to the Network tab, activate the CAPTCHA, and look at the requests. Some of them will contain the required parameter values.

@@ -41,8 +41,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -66,13 +65,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     <ParamItem title="TaskArgument（位于 metadata 中）" required type="string" />
     需要在图像中查找的数字值。例如：`"123"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -133,13 +130,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取任务结果方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -171,8 +166,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 ```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 替代解决方法（bls_text）
 
@@ -189,8 +183,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 ### 请求示例
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -224,8 +217,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 }
 ```
     </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ### 自动化 bls_text 解决示例
 

@@ -53,8 +53,7 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
 * 完成验证后，您将收到一个 **token** 用于确认验证码已完成。
   :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -134,8 +133,7 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
   <ParamItem title="proxyPassword" type="string" />
   代理密码
 
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -181,8 +179,7 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
 * 完成后，你将收到 **特殊的 cookie**，需添加到浏览器中。
   :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -252,8 +249,7 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   代理密码
 
-</TabItem>
-</Tabs>
+</div>
 
 ---
 ## 创建任务方法
@@ -341,8 +337,7 @@ console.log(htmlBase64);
 
 ### 选项 2. Challenge（cookie）
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -376,15 +371,13 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 ---
 ## 获取任务结果方法
 
 ### 选项 1. Challenge（token）
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -411,8 +404,7 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**属性**|**类型**|**说明**|
 | :- | :- | :- |
@@ -420,8 +412,7 @@ console.log(htmlBase64);
 
 ### 选项 2. Challenge（cookie）
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -447,8 +438,7 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**属性**|**类型**|**说明**|
 | :- | :- | :- |

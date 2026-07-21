@@ -43,8 +43,7 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -68,13 +67,11 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
     <ParamItem title="TaskArgument (dentro de metadata)" required type="string" />
     Valor do número que deve ser encontrado nas imagens. Exemplo: `"123"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -135,13 +132,11 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -174,8 +169,7 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método alternativo de resolução (bls_text)
 
@@ -192,8 +186,7 @@ Este método é implementado por meio da tarefa `ImageToTextTask` com o módulo 
 
 ### Exemplo de requisição
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -229,8 +222,7 @@ Este método é implementado por meio da tarefa `ImageToTextTask` com o módulo 
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ### Exemplo de resolução automatizada bls_text
 

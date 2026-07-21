@@ -53,8 +53,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="HuntTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -126,8 +125,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 <ParamItem title="proxyPassword" required type="string" />
 代理密码
 
-</TabItem>
-</Tabs>
+</div>
 --- 
 
 **该解决方案支持两种工作模式：**
@@ -175,8 +173,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 
 ### 创建用于生成 X-HD 的任务方法
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -209,8 +206,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 }
 ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ---
 
@@ -243,8 +239,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 
 需要将 `meta.token` 的值传递到 `data` 参数中。
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -278,8 +273,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
     }
       ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## 获取任务结果的方法
 
@@ -293,8 +287,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 * 在验证码求解模式下 —— `solution.data.token` 是验证码解决令牌，需要将其提交回网站以确认操作。
   :::
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -321,8 +314,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Cookies 的使用

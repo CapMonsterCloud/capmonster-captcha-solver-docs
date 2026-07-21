@@ -35,8 +35,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 :::
 
 ## 请求参数
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -95,8 +94,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     <ParamItem title="proxyPassword" type="string" />
     代理密码。
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法 
 
@@ -180,8 +178,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ## 获取任务结果方法
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取TenDI的解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -212,8 +209,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 如何获取网站密钥（captchaAppId）
 打开开发者工具，转到网络标签，激活验证码并查看请求。其中一些将包含您需要的参数值。在这种情况下，`websiteKey=aid`

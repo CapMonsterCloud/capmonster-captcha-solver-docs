@@ -52,8 +52,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
 
 您需要解决一个**标准（regular）**的 Turnstile 验证码，例如 [这个示例](https://zenno.link/zl-support)。请注意，Cloudflare 页面上的验证码在外观上可能完全相同。请参阅[如何区分标准 Turnstile 与 Cloudflare Challenge](#如何区分-cloudflare-turnstile-与-cloudflare-challenge)。
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -116,8 +115,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
   <ParamItem title="proxyPassword" type="string" />
   代理密码。
 
-</TabItem>
-</Tabs>
+</div>
 ---
 ## 创建任务方法
 
@@ -192,8 +190,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Turnstile 的解决结果。根据系统负载，您将在 5 到 20 秒内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -220,8 +217,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**属性**|**类型**|**说明**|
 | :- | :- | :- |

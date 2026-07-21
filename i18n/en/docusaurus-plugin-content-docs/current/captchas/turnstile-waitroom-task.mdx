@@ -49,8 +49,7 @@ You can also identify this Cloudflare type via the page header:
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -120,14 +119,12 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   Proxy password.
 
-</TabItem>
-</Tabs>
+</div>
 ---
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -161,14 +158,12 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 ---
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve the Waiting Room solution. Depending on system load, the response can take between 5 and 20 seconds.
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (proxyless)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -194,8 +189,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |

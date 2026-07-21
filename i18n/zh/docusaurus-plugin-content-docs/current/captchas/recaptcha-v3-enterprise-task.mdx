@@ -39,8 +39,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 您也可以使用 reCAPTCHA v3 任务类型，并通过指定 `isEnterprise` 参数来解决 reCAPTCHA v3 Enterprise [(*参见 reCAPTCHA v3 部分*)](../recaptcha-v3-task/)。
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
 
@@ -68,13 +67,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <p>ReCaptcha 小部件传递给 Google 的 `action` 参数值，网站所有者在服务器端后续验证时可以看到该值。如果该值不同于默认值 *verify*，请指定此参数。</p>
 	<p>html 示例：
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -101,8 +98,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## 获取任务结果的方法
@@ -113,8 +109,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 ReCaptcha3 的解决结果。根据系统负载，您将在 10 秒到 30 秒内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -152,8 +147,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

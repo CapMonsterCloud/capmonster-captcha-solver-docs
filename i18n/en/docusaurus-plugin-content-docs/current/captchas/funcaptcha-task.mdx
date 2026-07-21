@@ -40,8 +40,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
 
@@ -115,8 +114,7 @@ cookieName1=value1; cookieName2=value2
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Create task method
 
@@ -195,8 +193,7 @@ https://api.capmonster.cloud/createTask
 
 Use [getTaskResult](../api/methods/get-task-result.mdx) to get the FunCaptcha solution.
 
-<Tabs>
-<TabItem value="proxyless" label="FunCaptchaTask (proxyless)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
@@ -227,8 +224,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Finding FunCaptcha parameters
 

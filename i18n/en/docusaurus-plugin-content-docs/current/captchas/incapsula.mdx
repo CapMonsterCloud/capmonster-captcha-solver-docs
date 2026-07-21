@@ -47,8 +47,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -115,14 +114,12 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     Browser User-Agent.  
   **Pass only a valid UA from Windows OS. Currently it is**: `userAgentPlaceholder`
 
-  </TabItem>
-</Tabs>
+  </div>
 
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -164,14 +161,12 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ```
 
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Get task result method
 Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the Imperva solution.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -202,8 +197,7 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Access denied
 

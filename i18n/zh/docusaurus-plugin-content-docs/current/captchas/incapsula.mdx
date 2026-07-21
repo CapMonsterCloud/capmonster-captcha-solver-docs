@@ -47,8 +47,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -115,13 +114,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 	浏览器的 User-Agent。<br />
 **请仅传递当前 Windows 系统下的有效 UA。当前推荐值为**：`userAgentPlaceholder`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务的方法
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -162,15 +159,13 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ```
 
     </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## 获取任务结果方法
 使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 来获取 Imperva 解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -201,8 +196,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Access denied
 

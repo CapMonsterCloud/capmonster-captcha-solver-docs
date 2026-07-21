@@ -38,8 +38,7 @@ A solicitação deve conter três imagens: fundo, anel e círculo.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -58,13 +57,11 @@ Array de imagens codificadas em base64 (sem o prefixo `data:image/png;base64,`).
 <ParamItem title="Task (dentro de metadata)" required type="string" />
 Nome da tarefa: `"oocl_rotate_double_new"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -112,13 +109,11 @@ Círculo (*circle_base64*):
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -152,8 +147,7 @@ Graus em que é necessário girar o anel no sentido anti-horário e o círculo n
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Como obter Base64
 

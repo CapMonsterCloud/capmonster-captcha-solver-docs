@@ -38,8 +38,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -58,13 +57,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"oocl_rotate_double_new"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -111,13 +108,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取任务结果方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -147,8 +142,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 如何获取 Base64
 

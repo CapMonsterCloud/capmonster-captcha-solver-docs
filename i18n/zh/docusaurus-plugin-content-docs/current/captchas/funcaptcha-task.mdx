@@ -40,8 +40,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
 
@@ -118,8 +117,7 @@ cookieName1=value1; cookieName2=value2
 <ParamItem title="proxyPassword" type="string" />
 代理服务器登录密码。
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务的方法
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -196,8 +194,7 @@ https://api.capmonster.cloud/createTask
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 获取 FunCaptcha 解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="FunCaptchaTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
@@ -226,8 +223,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取 FunCaptcha 参数
 

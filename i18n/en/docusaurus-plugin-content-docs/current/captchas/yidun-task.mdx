@@ -67,8 +67,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="YidunTask (with proxy)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **YidunTask**
@@ -156,8 +155,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
   ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
@@ -230,8 +228,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve the Yidun captcha solution.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -261,8 +258,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
 ```
 
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ### When are `yidunGetLib` and `yidunApiServerSubdomain` needed?
 

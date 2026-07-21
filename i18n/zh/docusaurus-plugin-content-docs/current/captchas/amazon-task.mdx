@@ -55,8 +55,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 <br />
 
 ### 选项 1
-<Tabs>
-<TabItem value="proxyless" label="AmazonTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -122,12 +121,10 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
   ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ### 选项 2 
-<Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -206,15 +203,13 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ### 选项 3
 
 如果网站使用隐形验证码并且只加载 `challenge.js`，请使用此方案。在这种情况下，无需像方案 2 那样传递所有参数——这些值可以留空。仅传递 `challenge.js` 的值。
 
-<Tabs>
-<TabItem value="proxyless" label="AmazonTask" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -277,8 +272,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ---
 
-</TabItem>
-</Tabs>
+</div>
 
 
 ### 如何获取 `websiteKey`、`context`、`iv` 和 `challengeScript` 参数
@@ -535,8 +529,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ## 获取任务结果方法
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取 AmazonTask 的解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -564,8 +557,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 如何查找任务创建所需的所有参数
 

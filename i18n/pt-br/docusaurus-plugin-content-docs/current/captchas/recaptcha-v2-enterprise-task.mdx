@@ -43,8 +43,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da solicitação
 
-  <Tabs>
-  <TabItem value="proxy" label="RecaptchaV2EnterpriseTask (usando proxy)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
 
@@ -132,8 +131,7 @@ grecaptcha.enterprise.render("some-div-id", {
     <ParamItem title="proxyPassword" type="string" />
     Senha do servidor proxy.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 <br />
 Para `enterprisePayload` - antes de chamá-lo, você precisa substituir a função `grecaptcha.enterprise.render` pela sua própria e capturar o valor de seus parâmetros. A função existe após o carregamento do script, e o captcha geralmente é renderizado imediatamente ou com base em um evento da página. Se o captcha for renderizado com o campo `s` atual no cliente, o token provavelmente não será aceito. 
@@ -261,8 +259,7 @@ Object.defineProperty(window, 'grecaptcha', {
 ## Método Get task result
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta para o ReCaptcha2. Você receberá a resposta em um período de 10 a 80 segundos, dependendo da carga de trabalho do serviço.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
@@ -287,8 +284,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 <br />
 

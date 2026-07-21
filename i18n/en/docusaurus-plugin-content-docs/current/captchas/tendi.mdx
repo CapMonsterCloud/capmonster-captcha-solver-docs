@@ -34,8 +34,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 :::
 
 ## Request parameters
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -94,8 +93,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -178,8 +176,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the TenDI solution.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -210,8 +207,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Te
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get websiteKey (captchaAppId)
 Turn on the *Developer Tools*, go to the **Network** tab, activate the captcha and look at the requests. Some of them will contain the parameter value you need. In this case `websiteKey=aid`
