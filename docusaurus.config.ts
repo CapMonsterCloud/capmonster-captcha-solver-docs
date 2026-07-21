@@ -65,11 +65,26 @@ const config: Config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-        googleTagManager: {
-          containerId: 'GTM-PZCSDCS',
-        },
       },
     ],
+  ],
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {
+        async: 'true',
+        src: 'https://www.googletagmanager.com/gtm.js?id=GTM-PZCSDCS',
+      },
+    },
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      `,
+    },
   ],
   themeConfig: {
     // announcementBar: {
