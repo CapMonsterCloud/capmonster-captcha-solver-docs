@@ -49,8 +49,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
   
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -141,8 +140,7 @@ CapMonster Cloud по умолчанию работает через встро�
   Пароль прокси-сервера.
 
   ---
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -228,8 +226,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Altcha.
 
-<Tabs>
-<TabItem value="proxyless" label="Altcha CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -257,8 +254,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти все нужные параметры для создания задачи
 

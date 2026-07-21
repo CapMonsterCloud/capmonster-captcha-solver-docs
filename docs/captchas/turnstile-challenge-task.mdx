@@ -52,8 +52,7 @@ CapMonster Cloud может возвращать результат решени
 * После решения вы получите **токен** для подтверждения прохождения проверки.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -134,8 +133,7 @@ CapMonster Cloud может возвращать результат решени
     Пароль прокси-сервера.
   
 
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -183,8 +181,7 @@ CapMonster Cloud может возвращать результат решени
 * После решения вы получите **специальные cookie**, которые необходимо добавить в браузер.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -254,8 +251,7 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   Пароль прокси-сервера.
 
-</TabItem>
-</Tabs>
+</div>
 ---
 
 ## Метод создания задачи
@@ -341,8 +337,7 @@ console.log(htmlBase64);
 
 ---
 ### Вариант 2. Challenge (cookie)
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -376,8 +371,7 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 ---
 
 ## Метод получения результата задачи
@@ -385,8 +379,7 @@ console.log(htmlBase64);
 
 ### Вариант 1. Challenge (token)
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -413,8 +406,7 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Свойство**|**Тип**|**Описание**|
 | :- | :- | :- |
@@ -422,8 +414,7 @@ console.log(htmlBase64);
 
 ### Вариант 2. Challenge (cookie)
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -449,8 +440,7 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Свойство**|**Тип**|**Описание**|
 | :- | :- | :- |
@@ -2397,4 +2387,3 @@ class Program
 </details>
   </TabItem>
 </Tabs>
-

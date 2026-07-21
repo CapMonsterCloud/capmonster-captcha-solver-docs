@@ -52,8 +52,7 @@ Hunt-капча — это антибот-система, используема
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="HuntTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -125,8 +124,7 @@ User-Agent браузера. <br />
 <ParamItem title="proxyPassword" required type="string" />
 Пароль прокси-сервера.
 
-</TabItem>
-</Tabs>
+</div>
 --- 
 
 **Решение поддерживает два режима работы:**
@@ -174,8 +172,7 @@ User-Agent браузера. <br />
 
 ### Метод создания задачи для генерации X-HD
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (c прокси)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -208,8 +205,7 @@ User-Agent браузера. <br />
 }
 ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Режим 2. Решение капчи. 
 
@@ -240,8 +236,7 @@ User-Agent браузера. <br />
 
 Значение `meta.token` нужно передать в `data`.
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (c прокси)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -275,8 +270,7 @@ User-Agent браузера. <br />
     }
       ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Метод получения результата задачи
 
@@ -289,8 +283,7 @@ User-Agent браузера. <br />
 * В режиме **решения капчи** `solution.data.token` — это токен решения, который необходимо передать обратно на сайт для подтверждения действия.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -317,8 +310,7 @@ User-Agent браузера. <br />
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Работа с cookies

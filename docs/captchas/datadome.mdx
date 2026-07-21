@@ -45,8 +45,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -117,8 +116,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
 	
      ---
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод создания задачи
@@ -134,8 +132,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 ![](./images/datadome/datadome_ijs.png)
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -172,15 +169,13 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение DataDome.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -217,8 +212,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти `datadomeCookie`
 

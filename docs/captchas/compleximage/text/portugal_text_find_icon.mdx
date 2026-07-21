@@ -39,8 +39,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -67,13 +66,11 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     **Важно**: некоторые символы в тексте задания необходимо сериализованно экранировать, чтобы избежать ошибок при обработке и решении задачи.
  Например, для текста `"Por favor, clique no(a) avião."` необходимо передать строку `"Por favor, clique no(a) avi\\u00E3o."` (*см. пример в разделе [Примеры автоматического распознавания и решения](#примеры-автоматического-распознавания-и-решения)*).
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Создание задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -107,8 +104,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 Пример задания:
 
@@ -122,8 +118,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
 ## Получение результата задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -154,8 +149,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 }     
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Примеры автоматического распознавания и решения
 

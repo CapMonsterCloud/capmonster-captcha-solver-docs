@@ -42,8 +42,7 @@ TSPD — это WAF-защита (Web Application Firewall), предназна�
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="CastleTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -107,13 +106,11 @@ User-Agent браузера. <br />
 <ParamItem title="proxyPassword" required type="string" />
 Пароль прокси-сервера.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (c прокси)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -147,16 +144,14 @@ User-Agent браузера. <br />
     }
       ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение TSPD.
 
 > **Важно**: при успешном прохождении в новых версиях TSPD может возвращаться cookie `TSPD_101_DID`, тогда как в более старых версиях он может отсутствовать.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -192,8 +187,7 @@ User-Agent браузера. <br />
       }
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Работа со страницей с TSPD
 

@@ -36,7 +36,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 :::info
 - Параметры `gt`, `challenge` и `geetestApiServerSubdomain` чаще всего находятся внутри JavaScript функции `initGeetest`.
-- Также, эти параметры можно получить из HTML кода страницы. Их можно найти в блоке `<sсript>`, который появляется после полной загрузки страницы в браузере.
+- Также, эти параметры можно получить из HTML кода страницы. Их можно найти в блоке `<sсript>`, который появляется после полной загрузки страницы в браузере.
   
 V3
 
@@ -78,8 +78,7 @@ V4 (captcha_id = gt)
 </span>
 <br />
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -157,8 +156,7 @@ V4 (captcha_id = gt)
 
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
-  </TabItem>
-  </Tabs>
+  </div>
   
 
 
@@ -239,8 +237,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -267,8 +264,7 @@ V4 (captcha_id = gt)
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -731,8 +727,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Параметры запроса</span>
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -807,8 +802,7 @@ V4 (captcha_id = gt)
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ### <span style={{fontSize: '1.5rem'}}>Метод создания задачи</span>
@@ -890,8 +884,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -920,8 +913,7 @@ V4 (captcha_id = gt)
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

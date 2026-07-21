@@ -38,8 +38,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -58,13 +57,11 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     <ParamItem title="Task (внутри metadata)" required type="string" />
     Название задания: `"dli"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Создание задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -102,13 +99,11 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Получение результата задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -141,8 +136,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как получить Base64
 

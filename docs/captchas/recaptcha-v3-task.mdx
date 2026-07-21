@@ -38,8 +38,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 ## Параметры запроса
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -74,13 +73,11 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
     <p>Значение параметра action, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если его значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод создания задачи
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -110,8 +107,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод получения результата задачи
@@ -122,8 +118,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение ReCaptcha3. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 30 с.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -164,8 +159,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

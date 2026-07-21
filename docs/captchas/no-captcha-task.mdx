@@ -45,8 +45,7 @@ CapMonster Cloud по умолчанию использует встроенны
 ## Параметры запроса
 
   
-  <Tabs>
-  <TabItem value="proxy" label="RecaptchaV2Task" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2Task**
 
@@ -66,7 +65,7 @@ CapMonster Cloud по умолчанию использует встроенны
 
     <ParamItem title="recaptchaDataSValue" type="string" />
     Некоторые реализации виджета ReCaptcha2 могут содержать дополнительный параметр "data-s" в div'е ReCaptcha2, который является одноразовым токеном и должен собираться каждый раз при решении ReCaptcha2.
-	<br />`<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_ONE"></div>`
+	<br />`<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_ONE"></div>`
 
      ---
 
@@ -116,8 +115,7 @@ CapMonster Cloud по умолчанию использует встроенны
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-  </TabItem>  
-  </Tabs>
+  </div>
 
 ## Метод создания задачи
 
@@ -193,8 +191,7 @@ CapMonster Cloud по умолчанию использует встроенны
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение ReCaptcha2. В зависимости от загрузки системы вы получите ответ через время от 100 мс.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2Task (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -235,8 +232,7 @@ CapMonster Cloud по умолчанию использует встроенны
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
