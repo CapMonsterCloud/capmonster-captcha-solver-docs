@@ -52,8 +52,8 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Аудио в кодировке base64.
-    Пример: `[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+    Аудио в кодировке base64, обёрнутое в массив.<br />
+    Пример: `[ "UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"]`
 
     ---
 
@@ -78,7 +78,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
 ```json
 {
     "clientKey": "API_KEY",
@@ -96,7 +96,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 }
 ```
 
-    **Ответ**
+    **Пример ответа**
     ```json
     {
         "errorId": 0,
@@ -117,14 +117,15 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ```
     </MethodItem>
     <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
         "clientKey": "API_KEY",
         "taskId": 143998457
     }
     ```
-    **Ответ:**  в ответе возвращаются цифры из аудио.
+    **Пример ответа**  <br/>
+    В ответе возвращаются цифры из аудио:
     ```json
     {
       "solution": {

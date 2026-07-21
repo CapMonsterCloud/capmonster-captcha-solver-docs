@@ -54,13 +54,14 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
     <ParamItem title="imageUrls" required="required (если не заполнено imagesBase64)" type="array" />
     Цельное изображение 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) или новой части капчи 1x1 (в массиве).
-    Пример: [“[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)”]\
+    Пример: ["[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)"]
 
     ---
 
     <ParamItem title="imagesBase64" required="required (если не заполнено imageUrls)" type="array" />
-    Цельное изображение 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) или новой части капчи 1x1 в формате base64 (в массиве).
-    Пример: [ “/9j/4AAQSkZJRgABAQEAAAAAAAD…”]
+    Цельное изображение 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) или новой части капчи 1x1 в формате base64 (в массиве).<br />
+
+    Формат должен быть следующим: [ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"] (*без префикса data:image/jpeg;base64,*).
 
     ---
 
@@ -107,7 +108,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 **Task (внутри metadata)**: дополнительные метаданные, связанные с задачей.
 
-**userAgent**: информация о пользовательском агенте. Актуальный userAgent: userAgentPlaceholder
+**userAgent**: информация о пользовательском агенте. Актуальный userAgent, поддерживаемый нашим сервисом: `userAgentPlaceholder`
 
 **websiteURL**: адрес веб-страницы с капчей. 
 
@@ -120,7 +121,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -136,11 +137,11 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
       "TaskDefinition": "/m/015qff"
     },
     "userAgent": "userAgentPlaceholder",
-    "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"
+    "websiteUrl": "https://mydomain.com/page-with-recaptcha"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -163,14 +164,14 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -199,7 +200,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 #### websitekey:
 
-Процесс поиска аналогичен поиску websitekey [ReCaptchaV2Task](https://docs.capmonster.cloud/ru/docs/captchas/no-captcha-task#как-найти-все-нужные-параметры-для-создания-задачи-на-решение) и [ReCaptchaV2Enterprise](https://docs.capmonster.cloud/ru/docs/captchas/recaptcha-v2-enterprise-task#как-найти-все-нужные-параметры-для-создания-задачи-на-решение).
+Процесс поиска аналогичен поиску websitekey [reCAPTCHA V2](https://docs.capmonster.cloud/ru/docs/captchas/no-captcha-task#как-найти-все-нужные-параметры-для-создания-задачи-на-решение) и [reCAPTCHA V2 Enterprise](https://docs.capmonster.cloud/ru/docs/captchas/recaptcha-v2-enterprise-task#как-найти-все-нужные-параметры-для-создания-задачи-на-решение).
 
 #### imageUrls:
 
@@ -544,7 +545,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
                 Task: 'Please click each image containing a mountain',
                 TaskDefinition: '/m/015qff'
             },
-            websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL страницы с капчей
+            websiteURL: 'https://mydomain.com/page-with-recaptcha' // URL страницы с капчей
         });
 
         const result = await cmcClient.Solve(complexImageRecaptchaRequest);
@@ -579,7 +580,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
                   Task: 'Please click each image containing a mountain',
                   TaskDefinition: '/m/015qff'
               },
-              websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL страницы с капчей
+              websiteURL: 'https://mydomain.com/page-with-recaptcha' // URL страницы с капчей
           });
 
           const result = await cmcClient.Solve(complexImageRecaptchaRequest);
@@ -612,7 +613,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
             "Task": "Click on traffic lights",
             "Grid": "3x3",
             "TaskDefinition": "/m/015qff",
-            "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"  # URL страницы с капчей
+            "websiteUrl": "https://mydomain.com/page-with-recaptcha"  # URL страницы с капчей
         }
     )
 

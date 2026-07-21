@@ -57,33 +57,34 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
----
+  ---
 
   <ParamItem title="websiteURL" required type="string" />
   进行验证码验证的页面 URL
 
----
+  ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Turnstile 的 site key
+  Turnstile 密钥 	<br />
+  大致格式应如下：`0x4AAAAAAABUYP0XeMJF0xoy`
 
----
+  ---
 
   <ParamItem title="userAgent" type="string" />
   浏览器 User-Agent。  
   **请仅传递来自 Windows 系统的有效 UA。目前值为**: `userAgentPlaceholder`
 
----
+  ---
 
   <ParamItem title="pageAction" type="string" />
-  验证码加载时，在回调函数中找到的 `action` 字段
+  可在加载验证码的 callback 函数中找到 `action` 字段
 
----
-
+  ---
+  
   <ParamItem title="data" type="string" />
-  *data* 字段的值，来自 `cData` 参数
+  *data* 字段的值可从 `cData` 参数中获取。
 
----
+  ---
 
   <ParamItem title="proxyType" type="string" />
   **http** — 标准 http/https 代理；<br />
@@ -91,7 +92,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
   **socks4** — socks4 代理；<br />
   **socks5** — socks5 代理。
 
----
+     ---
 
   <ParamItem title="proxyAddress" type="string" />
   <p>
@@ -100,17 +101,17 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
     - 使用本地机器上的代理。
   </p>
 
----
+     ---
 
   <ParamItem title="proxyPort" type="integer" />
   代理端口。
 
----
+     ---
 
   <ParamItem title="proxyLogin" type="string" />
   代理用户名。
 
----
+     ---
 
   <ParamItem title="proxyPassword" type="string" />
   代理密码。
@@ -129,27 +130,26 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "http://tsmanaged.zlsupport.com",
-          "websiteKey": "0x4AAAAAAABUYP0XeMJF0xoy"
+          "websiteURL": "https://yourwebsite.com/page-with-turnstile",
+          "websiteKey": "your-website-key"
         }
       }
       ```
 
-  **响应**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533072
-  }
-  ```
-</MethodDescription>
-
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533072
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 
   <TabItem value="proxy" label="TurnstileTask（使用代理）" className="method-panel">
@@ -159,40 +159,38 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "http://tsmanaged.zlsupport.com",
-          "websiteKey": "0x4AAAAAAABUYP0XeMJF0xoy",
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "websiteURL": "https://yourwebsite.com/page-with-turnstile",
+          "websiteKey": "your-website-key",
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-  **响应**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533072
-  }
-  ```
-</MethodDescription>
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533072
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 
 </Tabs>
-
 ---
-
 ## 获取任务结果方法
 
-使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取 Turnstile 的解决结果。根据系统负载情况，响应时间可能在 **5 到 20 秒**之间。
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Turnstile 的解决结果。根据系统负载，您将在 5 到 20 秒内收到响应。
 
 <Tabs>
 <TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel-full">
@@ -202,7 +200,7 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
     ```
   </MethodItem>
   <MethodDescription>
-    **请求**
+    **请求示例**
     ```json
     {
       "clientKey": "API_KEY",
@@ -210,27 +208,24 @@ Turnstile 的所有子类型都会被自动支持：**手动（manual）**、**�
     }
     ```
 
-**响应**
-```json
-{
-  "errorId": 0,
-  "status": "ready",
-  "solution": {
-    "userAgent": "userAgentPlaceholder",
-    "token": "0.iGX3xsyFCkbGePM3jP4P4khLo6TrLukt8ZzBvwuQOvbC...f61f3082"
-  }
-}
-```
-
+    **响应示例**
+    ```json
+    {
+      "errorId": 0,
+      "status": "ready",
+      "solution": {
+        "userAgent": "userAgentPlaceholder",
+        "token": "0.iGX3xsyFCkbGePM3jP4P4khLo6TrLukt8ZzBvwuQOvbC...f61f3082"
+      }
+    }
+    ```
   </MethodDescription>
 </TabItem>
 </Tabs>
 
-| **参数** | **类型** | **说明**                      |
-| :----- | :----- | :-------------------------- |
-| token  | String | 在输入字段中使用该 token，或在调用回调函数时使用 |
-
----
+|**属性**|**类型**|**说明**|
+| :- | :- | :- |
+|token|String|在 input 字段中或调用 callback 函数时使用此令牌|
 
 ## 如何区分 Cloudflare Turnstile 与 Cloudflare Challenge
 
@@ -516,8 +511,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com", // CAPTCHA 页面 URL
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy"        // 替换为正确的值
+        websiteURL: "https://yourwebsite.com/page-with-turnstile", // 包含验证码的页面 URL
+        websiteKey: "your-website-key"        // 替换为正确的值
     });
 
     // 使用您自己的代理的示例
@@ -533,8 +528,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL: "https://yourwebsite.com/page-with-turnstile",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -547,7 +542,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const result = await client.Solve(turnstileRequest);
     console.log("Solution:", result);
 });
-```
+````
 
 </details>
 
@@ -569,8 +564,8 @@ async function solveTurnstile() {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com", // CAPTCHA 页面 URL
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy"        // 替换为正确的值
+        websiteURL: "https://yourwebsite.com/page-with-turnstile", // 包含验证码的页面 URL
+        websiteKey: "your-website-key"        // 替换为正确的值
     });
 
     // 使用您自己的代理的示例
@@ -586,8 +581,8 @@ async function solveTurnstile() {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL: "https://yourwebsite.com/page-with-turnstile",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -629,8 +624,8 @@ async def solve_turnstile_token():
     # 基本示例，无需代理
     # CapMonster Cloud 会自动使用它们的代理
     turnstile_request = TurnstileRequest(
-        websiteURL="http://tsmanaged.zlsupport.com",
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL="https://yourwebsite.com/page-with-turnstile",
+        websiteKey="your-website-key",
     )
 
     # 使用您自己的代理的示例
@@ -645,8 +640,8 @@ async def solve_turnstile_token():
     # )
     #
     # turnstile_request = TurnstileRequest(
-    #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+    #     websiteURL="https://yourwebsite.com/page-with-turnstile",
+    #     websiteKey="your-website-key",
     #     proxy=proxy
     # )
 
@@ -692,8 +687,8 @@ class Program
         // CapMonster Cloud 会自动使用它们的代理
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "http://tsmanaged.zlsupport.com", // 验证码页面的 URL
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy"       // 替换为正确的值
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile", // 包含验证码的页面 URL
+            WebsiteKey = "your-website-key"       // 替换为正确的值
         };
 
         // 使用您自己的代理的示例
@@ -702,8 +697,8 @@ class Program
         /*
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "http://tsmanaged.zlsupport.com",
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile",
+            WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89", 

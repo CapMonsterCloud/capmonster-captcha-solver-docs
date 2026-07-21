@@ -57,7 +57,10 @@ However, if the token is not accepted by the target site, try again with [your o
      ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Recaptcha website key.<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+    ReCaptcha2 site key identifier on the target page: `<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`<br />
+    
+    It typically has the following format: `6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd`
+
 
      ---
 
@@ -121,18 +124,18 @@ However, if the token is not accepted by the target site, try again with [your o
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Request**
+			**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key"
   }
 }
 ```
-			**Response**
+			**Response example**
 ```json
 {
   "errorId":0,
@@ -149,24 +152,24 @@ However, if the token is not accepted by the target site, try again with [your o
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Request**
+			**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-			**Response**
+			**Response example**
 ```json
 {
   "errorId":0,
@@ -193,14 +196,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request an
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -454,8 +457,8 @@ The provided code snippets are basic examples for learning how to extract the re
       // Basic example without proxy
       // CapMonster Cloud automatically uses its own proxies
       let recaptchaV2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key"
       });
 
       // Example of using your own proxy
@@ -465,14 +468,14 @@ The provided code snippets are basic examples for learning how to extract the re
       const proxy = {
           proxyType: "http",
           proxyAddress: "123.45.67.89",
-          proxyPort: 8080,
+          proxyPort: 1234,
           proxyLogin: "username",
           proxyPassword: "password"
       };
 
       recaptchaV2Request = new RecaptchaV2Request({
-          websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-          websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+          websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+          websiteKey: "your-website-key",
           proxy,
           userAgent: "userAgentPlaceholder"
       });
@@ -501,8 +504,8 @@ The provided code snippets are basic examples for learning how to extract the re
           // Basic example without proxy
           // CapMonster Cloud automatically uses its own proxies
           let recaptcha2Request = new RecaptchaV2Request({
-              websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+              websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+              websiteKey: "your-website-key"
           });
 
           // Example of using your own proxy
@@ -512,14 +515,14 @@ The provided code snippets are basic examples for learning how to extract the re
           const proxy = {
               proxyType: "http",
               proxyAddress: "123.45.67.89",
-              proxyPort: 8080,
+              proxyPort: 1234,
               proxyLogin: "username",
               proxyPassword: "password"
           };
 
           recaptcha2Request = new RecaptchaV2Request({
-              websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+              websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+              websiteKey: "your-website-key",
               proxy,
               userAgent: "userAgentPlaceholder"
           });
@@ -560,8 +563,8 @@ The provided code snippets are basic examples for learning how to extract the re
         # Basic example without proxy
         # CapMonster Cloud automatically uses its own proxies
         recaptcha2_request = RecaptchaV2Request(
-            websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-            websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+            websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+            websiteKey="your-website-key"
         )
 
         # Example of using your own proxy
@@ -570,14 +573,14 @@ The provided code snippets are basic examples for learning how to extract the re
         # proxy = ProxyInfo(
         #     proxyType="http",
         #     proxyAddress="123.45.67.89",
-        #     proxyPort=8080,
+        #     proxyPort=1234,
         #     proxyLogin="username",
         #     proxyPassword="password"
         # )
 
         # recaptcha2_request = RecaptchaV2Request(
-        #     websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        #     websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+        #     websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        #     websiteKey="your-website-key",
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
@@ -623,8 +626,8 @@ The provided code snippets are basic examples for learning how to extract the re
 
             var recaptchaV2Request = new RecaptchaV2Request
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high", // URL of the page with the captcha
-                WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"  // Replace with the correct value
+                WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha", // URL of the page with the captcha
+                WebsiteKey = "your-website-key"  // Replace with the correct value
             };
 
             // Example of using your own proxy
@@ -633,12 +636,12 @@ The provided code snippets are basic examples for learning how to extract the re
             /*
             var recaptchaV2Request = new RecaptchaV2Request
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-                WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+                WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+                WebsiteKey = "your-website-key",
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89",        
-                    8080,              
+                    1234,              
                     ProxyType.Http,   
                     "username", 
                     "password"

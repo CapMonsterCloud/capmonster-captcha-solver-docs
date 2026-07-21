@@ -51,7 +51,10 @@ When creating a task, it is recommended to provide two parameters: `pageAction` 
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Recaptcha website key.<br/>https://www.google.com/recaptcha/api.js?render=THIS_ONE
+    The ReCaptcha3 site key on the target page.
+`https://www.google.com/recaptcha/api.js?render=THIS_ONE`<br/>
+
+It typically has the following format: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob`
 
     ---
 
@@ -83,21 +86,21 @@ When creating a task, it is recommended to provide two parameters: `pageAction` 
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3TaskProxyless",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
     "isEnterprise": false,
     "minScore": 0.7,
-    "pageAction": "myverify"
+    "pageAction": "your-verify"
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -125,14 +128,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer fo
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -261,7 +264,7 @@ The provided code snippets are basic examples for learning how to extract the re
           } catch (e) {}
         });
 
-        const targetUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta";
+        const targetUrl = "https://yourwebsite.com/page-with-recaptcha";
         await page.goto(targetUrl, { timeout: 60000 });
         await page.waitForTimeout(3000);
 
@@ -313,8 +316,8 @@ The provided code snippets are basic examples for learning how to extract the re
               page = await context.new_page()
 
               execute_pattern = re.compile(
-                  r"grecaptcha\.execute\(\s*['\"]"
-                  r"(?P<sitekey>[^'\"]+)['\"]\s*,\s*\{[^}]*action\s*:\s*['\"](?P<action>[^'\"]+)['\"]",
+                  r"grecaptcha\.execute\(\s*['\"]
+                  (?P<sitekey>[^'\"]+)['\"]\s*,\s*\{[^}]*action\s*:\s*['\"](?P<action>[^'\"]+)['\"]",
                   re.IGNORECASE
               )
 
@@ -353,7 +356,7 @@ The provided code snippets are basic examples for learning how to extract the re
                   "action": found_action
               })
 
-      asyncio.run(extract_recaptcha_v3_execute("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta"))
+      asyncio.run(extract_recaptcha_v3_execute("https://yourwebsite.com/page-with-recaptcha"))
       ```
     </details>
   </TabItem>
@@ -374,7 +377,7 @@ The provided code snippets are basic examples for learning how to extract the re
           public static async Task Main(string[] args)
           {
               await ExtractRecaptchaV3Execute
-              ("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta");
+              ("https://yourwebsite.com/page-with-recaptcha");
           }
 
           public static async Task ExtractRecaptchaV3Execute(string url)
@@ -468,10 +471,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Balance:', balance);
 
   const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-    websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // URL of your page with captcha
-    websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-    minScore: 0.6,  
-    pageAction: 'myverify',
+    websiteURL: 'https://yourwebsite.com/page-with-recaptcha', // URL of your page with captcha
+    websiteKey: 'your-website-key',
+    minScore: 0.7,  
+    pageAction: 'your-verify',
   });
 
   const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -500,10 +503,10 @@ async function solveRecaptchaV3() {
     console.log("Balance:", balance);
 
     const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta", // URL of your page with captcha
-        websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-        minScore: 0.6,
-        pageAction: "myverify",
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha", // URL of your page with captcha
+        websiteKey: "your-website-key",
+        minScore: 0.7,
+        pageAction: "your-verify",
     });
 
     const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -536,10 +539,10 @@ balance = asyncio.run(cap_monster_client.get_balance())
 print("Balance:", balance)
 
 recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-    websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # URL of your page with captcha
-    websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-    minScore=0.6,
-    pageAction="myverify"
+    websiteUrl="https://yourwebsite.com/page-with-recaptcha",  # URL of your page with captcha
+    websiteKey="your-website-key",
+    minScore=0.7,
+    pageAction="your-verify"
 )
 
 async def solve_captcha():
@@ -579,10 +582,10 @@ class Program
 
         var recaptchaV3Request = new RecaptchaV3ProxylessRequest
         {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // URL of your page with captcha
-            WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-            MinScore = 0.6,
-            PageAction = "myverify"
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",  // URL of your page with captcha
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
         };
 
         var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);

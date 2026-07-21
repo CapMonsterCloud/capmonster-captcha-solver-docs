@@ -65,7 +65,8 @@ CapMonster Cloud может возвращать результат решени
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Ключ Turnstile (*см. раздел [Как найти все нужные параметры для создания задачи](#как-найти-все-нужные-параметры-для-создания-задачи)*)
+  Ключ Cloudflare Challenge (*см. раздел [Как найти все нужные параметры для создания задачи](#как-найти-все-нужные-параметры-для-создания-задачи)*) <br />
+  Имеет следующий примерный формат: `0x4AAAAAAABUYP0XeMJF0xoy`
 
   ---
 
@@ -86,12 +87,14 @@ CapMonster Cloud может возвращать результат решени
   ---
 
   <ParamItem title="data" required type="string" />
-  Значение поля *data* можно взять из параметра `cData`.
+  Значение поля *data* можно взять из параметра `cData`.<br />
+  Пример: `874291f4retD1366`
 
   ---
 
   <ParamItem title="pageData" required type="string" />
-  Значение поля *pageData* можно взять из параметра `chlPageData`.
+  Значение поля *pageData* можно взять из параметра `chlPageData`.<br />
+  Пример: `HUHDWUHuhuwfiweh32..uh2uhuhyugYUG=`
   
   ---
   
@@ -193,7 +196,7 @@ CapMonster Cloud может возвращать результат решени
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Ключ Turnstile(можно передать любую строку)
+  Ключ Cloudflare Challenge. Допускается передача любой строки, например: `xxxxxx`.
 
   ---
 
@@ -268,24 +271,24 @@ console.log(htmlBase64);
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "https://example.com",
-          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
+          "websiteURL": "https://yourwebsite.com/page-with-cf-challenge",
+          "websiteKey": "your-website-key",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
-          "pageAction": "managed",
-          "pageData": "HUHDWUHuhuwfiweh32..uh2uhuhyugYUG=",
-          "data": "874291f4retD1366"
+          "pageAction": "your-page-action",
+          "pageData": "your-page-data",
+          "data": "your-data"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -302,29 +305,29 @@ console.log(htmlBase64);
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "https://example.com",
-          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
+          "websiteURL": "https://yourwebsite.com/page-with-cf-challenge",
+          "websiteKey": "your-website-key",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
-          "pageAction": "managed",
-          "pageData": "HUHDWUHuhuwfiweh32..uh2uhuhyugYUG=",
-          "data": "874291f4retD1366",
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "pageAction": "your-page-action",
+          "pageData": "your-page-data",
+          "data": "your-data",
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -346,26 +349,26 @@ console.log(htmlBase64);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-challenge",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "cf_clearance",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -390,7 +393,7 @@ console.log(htmlBase64);
     ```
   </MethodItem>
   <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
       "clientKey": "API_KEY",
@@ -398,7 +401,7 @@ console.log(htmlBase64);
     }
     ```
 
-    **Ответ**
+    **Пример ответа**
     ```json
     {
       "errorId": 0,
@@ -427,7 +430,7 @@ console.log(htmlBase64);
     ```
   </MethodItem>
   <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
       "clientKey": "API_KEY",
@@ -435,7 +438,7 @@ console.log(htmlBase64);
     }
     ```
 
-    **Ответ**
+    **Пример ответа**
     ```json
     {
       "errorId": 0,
@@ -524,7 +527,7 @@ console.log(htmlBase64);
 
         try {
           while (!params) {
-            await page.goto("https://example.com");
+            await page.goto("https://yourwebsite.com/page-with-cf-challenge");
 
             await page.evaluate(() => {
               window.turnstile = new Proxy(window.turnstile, {
@@ -581,7 +584,7 @@ console.log(htmlBase64);
         let websiteKey = null;
 
         while (!websiteKey) {
-          await page.goto("https://example.com");
+          await page.goto("https://yourwebsite.com/page-with-cf-challenge");
 
           await page.evaluate(() => {
             window.turnstile = new Proxy(window.turnstile, {
@@ -641,7 +644,7 @@ console.log(htmlBase64);
               params = None
 
               while not params:
-                  await page.goto("https://example.com")
+                  await page.goto("https://yourwebsite.com/page-with-cf-challenge")
 
                   await page.evaluate("""
                       window.turnstile = new Proxy(window.turnstile, {
@@ -696,7 +699,7 @@ console.log(htmlBase64);
               website_key = None
 
               while not website_key:
-                  await page.goto("https://example.com")
+                  await page.goto("https://yourwebsite.com/page-with-cf-challenge")
 
                   await page.evaluate("""
                       () => {
@@ -764,7 +767,7 @@ console.log(htmlBase64);
 
               while (parameters == null)
               {
-                  await page.GotoAsync("https://example.com");
+                  await page.GotoAsync("https://yourwebsite.com/page-with-cf-challenge");
 
                   await page.EvaluateAsync(@"() => {
                       window.turnstile = new Proxy(window.turnstile, {
@@ -829,7 +832,7 @@ console.log(htmlBase64);
 
               while (websiteKey == null)
               {
-                  await page.GotoAsync("https://example.com");
+                  await page.GotoAsync("https://yourwebsite.com/page-with-cf-challenge");
 
                   await page.EvaluateAsync(@"() => {
                       window.turnstile = new Proxy(window.turnstile, {
@@ -899,12 +902,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Базовый пример без прокси
     // CapMonster Cloud автоматически использует свои прокси
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com", // URL страницы с капчей
-        websiteKey: "YOUR_WEBSITE_KEY_HERE", // Замените на корректное значение
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge", // URL страницы с капчей
+        websiteKey: "your-website-key", // Замените на нужное значение
+        data: "your-data",              
+        pageAction: "managed",  // Замените на нужное значение
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
 
@@ -921,13 +924,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "YOUR_WEBSITE_KEY_HERE",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge", // Замените на корректное значение
+        websiteKey: "your-website-key",
         proxy,
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        data: "your-data",
+        pageAction: "managed",  // Замените на нужное значение
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
     */
@@ -974,9 +977,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Cloudflare cf_clearance решается только с вашим прокси
     const turnstileRequest = new TurnstileRequest({
-        websiteURL: 'https://example.com/',
+        websiteURL: 'https://yourwebsite.com/page-with-cf-challenge/',   // Замените на корректное значение
         websiteKey: 'xxxxx',
-        cloudflareTaskType: 'cf_clearance',
+        cloudflareTaskType: 'cf_clearance', 
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
         userAgent: 'userAgentPlaceholder'
@@ -1015,12 +1018,12 @@ const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster
     // Базовый пример без прокси
     // CapMonster Cloud автоматически использует свои прокси
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com", // URL страницы с капчей
-        websiteKey: "YOUR_WEBSITE_KEY_HERE", // Замените на корректное значение
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge", // URL страницы с капчей
+        websiteKey: "your-website-key", // Замените на нужное значение
+        data: "your-data",
+        pageAction: "managed",  // Замените на нужное значение
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
 
@@ -1037,13 +1040,13 @@ const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "YOUR_WEBSITE_KEY_HERE", 
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge",
+        websiteKey: "your-website-key", 
         proxy,
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        data: "your-data",
+        pageAction: "managed", // Замените на нужное значение
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
     */
@@ -1086,8 +1089,8 @@ async function main() {
 
     // Cloudflare cf_clearance решается только с вашим прокси
     const turnstileRequest = new TurnstileRequest({
-        websiteURL: 'https://example.com/',
-        websiteKey: 'xxxxx', // Замените на корректное значение
+        websiteURL: 'https://yourwebsite.com/page-with-cf-challenge/', // Замените на корректное значение
+        websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
@@ -1126,12 +1129,12 @@ async def solve_turnstile_token():
     # Базовый пример без прокси
     # CapMonster Cloud автоматически использует свои прокси
     turnstile_request = TurnstileRequest(
-        websiteURL="http://example.com",  # URL страницы с капчей
-        websiteKey="YOUR_WEBSITE_KEY_HERE",        # Замените на корректное значение
-        data="YOUR_DATA_HERE",
-        pageAction="managed",
+        websiteURL="https://yourwebsite.com/page-with-cf-challenge/",  # URL страницы с капчей
+        websiteKey="your-website-key",        # Замените на нужное значение
+        data="your-data",
+        pageAction="managed",  # Замените на нужное значение
         cloudflareTaskType="token",
-        pageData="YOUR_PAGE_DATA_HERE",
+        pageData="your-page-data",
         userAgent="userAgentPlaceholder"
     )
 
@@ -1147,13 +1150,13 @@ async def solve_turnstile_token():
     # )
     #
     # turnstile_request = TurnstileRequest(
-    #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="YOUR_WEBSITE_KEY_HERE",
+    #     websiteURL="https://yourwebsite.com/page-with-cf-challenge/",
+    #     websiteKey="your-website-key",
     #     proxy=proxy,
-    #     data="YOUR_DATA_HERE",
+    #     data="your-data",
     #     pageAction="managed",
     #     cloudflareTaskType="token",
-    #     pageData="YOUR_PAGE_DATA_HERE",
+    #     pageData="your-page-data",
     #     userAgent="userAgentPlaceholder"
     # )
 
@@ -1197,7 +1200,7 @@ async def solve_cf_clearance():
 
     # Cloudflare cf_clearance решается только с вашим прокси
     turnstile_request = TurnstileRequest(
-        websiteURL="https://example.com",
+        websiteURL="https://yourwebsite.com/page-with-cf-challenge",
         websiteKey="xxxxx",
         cloudflareTaskType="cf_clearance",
         htmlPageBase64="BASE64_HTML_PAGE_HERE",
@@ -1247,12 +1250,12 @@ class Program
         // CapMonster Cloud автоматически использует свои прокси
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://example.com",           // URL страницы с капчей
-            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",      // Ваш sitekey
-            Data = "YOUR_DATA_HERE",
-            PageAction = "managed",
+            WebsiteUrl = "https://yourwebsite.com/page-with-cf-challenge",           // URL страницы с капчей
+            WebsiteKey = "your-website-key",      // Ваш sitekey
+            Data = "your-data",
+            PageAction = "managed",  // Замените на нужное значение
             CloudflareTaskType = "token",
-            PageData = "YOUR_PAGE_DATA_HERE",
+            PageData = "your-page-data",
             UserAgent = "userAgentPlaceholder"
         };
 
@@ -1262,12 +1265,12 @@ class Program
         /*
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://example.com",
-            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",
-            Data = "YOUR_DATA_HERE",
-            PageAction = "managed",
+            WebsiteUrl = "https://yourwebsite.com/page-with-cf-challenge",
+            WebsiteKey = "your-website-key",
+            Data = "your-data",
+            PageAction = "managed",  // Замените на нужное значение
             CloudflareTaskType = "token",
-            PageData = "YOUR_PAGE_DATA_HERE",
+            PageData = "your-page-data",
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(
@@ -1315,7 +1318,7 @@ class Program
 
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://example.com",     // URL страницы с капчей        
+            WebsiteUrl = "https://yourwebsite.com/page-with-cf-challenge",     // URL страницы с капчей        
             WebsiteKey = "xxxxx",   
             CloudflareTaskType = "cf_clearance",                                    
             HtmlPageBase64 = "htmlPageBase64Here",        
@@ -1364,7 +1367,7 @@ const URL = "https://www.example.com"; // Замените на целевой U
 const SITEKEY = "xxxxxx";
 
 const UA =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+  "userAgentPlaceholder";
 
 // ================= ПРОКСИ (ЗАМЕНИТЕ НА ДАННЫЕ ВАШЕГО ПРОКСИ) =================
 
@@ -1396,7 +1399,7 @@ const headers = {
   "Sec-Fetch-Site": "none",
   "Sec-Fetch-User": "?1",
   "sec-ch-ua":
-    '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
 };
@@ -1540,7 +1543,7 @@ const URL = "https://www.example.com"; // Замените на ваш URL
 const SITEKEY = "xxxxxx";
 
 const UA =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+  "userAgentPlaceholder";
 
 // ================= ПРОКСИ (ЗАМЕНИТЕ НА ДАННЫЕ ВАШЕГО ПРОКСИ) =================
 
@@ -1578,7 +1581,7 @@ const headers = {
   "Sec-Fetch-Site": "none",
   "Sec-Fetch-User": "?1",
   "sec-ch-ua":
-    '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
 };
@@ -1687,7 +1690,7 @@ API_KEY = "YOUR_API_KEY" # Замените на ваш API-ключ CapMonster 
 URL = "https://www.example.com" # Замените на целевой URL
 SITEKEY = "xxxxxx"
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+UA = "userAgentPlaceholder"
 
 # ================= ПРОКСИ (ЗАМЕНИТЕ НА ДАННЫЕ ВАШЕГО ПРОКСИ) =================
 
@@ -1719,7 +1722,7 @@ session.headers.update({
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
     "Sec-Fetch-User": "?1",
-    "sec-ch-ua": '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    "sec-ch-ua": '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"'
 })
@@ -1838,7 +1841,7 @@ API_KEY = "YOUR_API_KEY" # Замените на ваш API-ключ CapMonster 
 URL = "https://www.example.com" # Замените на целевой URL
 SITEKEY = "xxxxxx"
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+UA = "userAgentPlaceholder"
 
 # ================= ПРОКСИ (ЗАМЕНИТЕ НА ДАННЫЕ ВАШЕГО ПРОКСИ) =================
 
@@ -1870,7 +1873,7 @@ session.headers.update({
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
     "Sec-Fetch-User": "?1",
-    "sec-ch-ua": '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    "sec-ch-ua": '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"'
 })
@@ -1981,7 +1984,7 @@ class Program
     const string SITEKEY = "xxxxxx";
 
     const string UA =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+        "userAgentPlaceholder";
 
 
     // ================= ПРОКСИ (ЗАМЕНИТЕ НА ДАННЫЕ ВАШЕГО ПРОКСИ) =================
@@ -2031,7 +2034,7 @@ class Program
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Site", "none");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-User", "?1");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua",
-            "\"Chromium\";v=\"149\", \"Google Chrome\";v=\"149\", \"Not:A-Brand\";v=\"99\"");
+            "\"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\", \"Not:A-Brand\";v=\"99\"");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-mobile", "?0");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-platform",
             "\"Windows\"");
@@ -2209,7 +2212,7 @@ class Program
     const string SITEKEY = "xxxxxx";
 
     const string UA =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+        "userAgentPlaceholder";
 
     // ================= ПРОКСИ (ЗАМЕНИТЕ НА ДАННЫЕ ВАШЕГО ПРОКСИ) =================
 
@@ -2256,7 +2259,7 @@ class Program
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Site", "none");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-User", "?1");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua",
-            "\"Chromium\";v=\"149\", \"Google Chrome\";v=\"149\", \"Not:A-Brand\";v=\"99\"");
+            "\"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\", \"Not:A-Brand\";v=\"99\"");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-mobile", "?0");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-platform",
             "\"Windows\"");

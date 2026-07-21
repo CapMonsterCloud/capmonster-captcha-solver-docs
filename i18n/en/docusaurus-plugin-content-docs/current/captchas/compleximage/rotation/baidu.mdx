@@ -51,7 +51,7 @@ The request must contain a single image in base64 format.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    Base64-encoded image (wrapped in an array, without the `data:image/png;base64,` prefix).
 
     ---
 
@@ -75,7 +75,7 @@ At the beginning of the solving process, temporary *unsolvable* responses may oc
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
@@ -95,7 +95,7 @@ At the beginning of the solving process, temporary *unsolvable* responses may oc
 
     	![](../images/ComplexImageTask-Recognition/baidu.png)
 
-        **Response**
+        **Response example**
         ```json
         {
           "errorId":0,
@@ -117,14 +117,15 @@ At the beginning of the solving process, temporary *unsolvable* responses may oc
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey":"API_KEY",
         "taskId": 143998457
       }
       ```
-		**Response:** degrees by which the image must be rotated clockwise.
+		**Response example:** <br/>
+    The number of degrees by which the image must be rotated clockwise.
       ```json
       {
         "solution":

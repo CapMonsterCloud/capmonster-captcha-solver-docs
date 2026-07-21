@@ -61,8 +61,8 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
   <ParamItem title="sceneId (dentro de metadata)" required type="string" />
-
-  Identificador do cenário do CAPTCHA, enviado no seguinte formato: `"sceneId":"1ww7426c4"` (veja [a seção correspondente](#sceneid) para saber como encontrar este valor)
+  Identificador do cenário do captcha, transmitido no seguinte formato: `"sceneId":"1ww7426c4"`— **o valor é fornecido apenas como exemplo**. <br />
+Utilize o seu próprio valor — as instruções para obtê-lo estão disponíveis na [seção correspondente](#sceneid)
 
   ---
   <ParamItem title="prefix (dentro de metadata)" required type="string" />
@@ -85,31 +85,37 @@ Utilize esses parâmetros apenas quando eles estiverem presentes no site (*veja 
 
 <ParamItem title="userId (dentro de metadata)" type="string" />
 Identificador único do usuário ou da sessão no lado do site. <br />
+Exemplo: `HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=`
 
 ---
 
 <ParamItem title="userUserId (dentro de metadata)" type="string" />
 Identificador adicional (secundário) do usuário. <br />
+Exemplo: `/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=`
 
 ---
 
 <ParamItem title="verifyType (dentro de metadata)" type="string" />
 Versão ou tipo do mecanismo de verificação do captcha. <br />
+Exemplo: `1.0`
 
 ---
 
 <ParamItem title="region (dentro de metadata)" type="string" />
 Região do servidor ou data center onde o captcha é processado. <br />
+Exemplo: `sgp`
 
 ---
 
 <ParamItem title="UserCertifyId (dentro de metadata)" type="string" />
 ID único de verificação associado à sessão atual do captcha. <br />
+Exemplo: `0a03e59417757735511105780e2a5e`
 
 ---
 
 <ParamItem title="apiGetLib (dentro de metadata)" type="string" />
 Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no lado do cliente e pode mudar dinamicamente a cada renderização da página. <br />
+Exemplo: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
 </div>
 
@@ -168,7 +174,7 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     </MethodItem>
     <MethodDescription>
       
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
@@ -178,14 +184,14 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix"
     }
   }
 }     
 ```
 
-      **Resposta**
+      **Exemplo de resposta**
       ```json
       {
         "errorId": 0,
@@ -203,7 +209,7 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     </MethodItem>
     <MethodDescription>
       
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
@@ -213,19 +219,19 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
     }
   }
 }
 ```
 
-      **Resposta**
+      **Exemplo de resposta**
       ```json
       {
         "errorId": 0,
@@ -247,7 +253,7 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     </MethodItem>
     <MethodDescription>
       
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
@@ -257,19 +263,19 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }
   }
 }     
 ```
-  **Resposta**
+  **Exemplo de resposta**
   ```json
   {
     "errorId": 0,
@@ -288,7 +294,7 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     </MethodItem>
     <MethodDescription>
 
-  **Requisição**
+  **Exemplo de requisição**
 
 ```json
 {
@@ -299,24 +305,24 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-  **Resposta**
+  **Exemplo de resposta**
   ```json
   {
     "errorId": 0,
@@ -341,7 +347,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
   </MethodItem>
   <MethodDescription>
 
-  **Requisição**
+  **Exemplo de requisição**
   ```json
   {
     "clientKey": "API_KEY",
@@ -349,7 +355,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
   }
 ```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -493,6 +499,8 @@ this.AliyunGeneratedDynamicJS =
 
 Esses dados são enviados ao nosso serviço de resolução de captcha:
 
+> **Importante:** todos os valores indicados são fornecidos exclusivamente a título de exemplo. Antes de utilizá-los, substitua-os pelos dados atuais do seu projeto.
+
 ```json
 {
   "metadata": {
@@ -604,7 +612,7 @@ class Worker {
 
     this.websiteUrl = "https://example.com/auth"; // Substitua pela URL da página com captcha
     this.userAgent =
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
+      "userAgentPlaceholder";
   }
 
   async executor() {
@@ -629,10 +637,8 @@ class Worker {
       `Resultado da resolução do captcha: `,
       AlibabaSolvedResult?.solution?.data?.tokens,
     );
-
     const RequireAuthorizationResponsesAfterCaptchaBypass =
       await this.sendAuthrozationsRequest();
-
     console.log(RequireAuthorizationResponsesAfterCaptchaBypass);
   }
 
@@ -655,12 +661,12 @@ class Worker {
           Referer: "https://example.com/auth",
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -690,12 +696,12 @@ class Worker {
           Referer: "https://example.com/auth", // Substitua pelo Referer correto do site
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -709,7 +715,6 @@ class Worker {
       console.log(response.body.substring(0, 150));
       return response.body;
     }
-
     console.log(response.body);
     return await this.getAuthorizationResponses();
   }
@@ -722,11 +727,9 @@ class Worker {
       websiteKey: "customTask",
       userAgent: this.userAgent,
     };
-
     if (captchaMetadataParams) {
       cmReqData.metadata = captchaMetadataParams;
     }
-
     const response = await gotScraping.post(
       `${this.providerVendorSolverUrl}/createTask`,
       {
@@ -736,17 +739,13 @@ class Worker {
         },
       },
     );
-
     let JSON_responseData = JSON.parse(response.body);
-
     if (JSON_responseData.errorId) throw new Error("JSON.TaskId.error");
-
     let taskId = JSON_responseData.taskId;
     let responseData;
 
     while (true) {
       let cmTaskRes = { clientKey: this.API_KEY, taskId: taskId };
-
       let task_response = await gotScraping.post(
         `${this.providerVendorSolverUrl}/getTaskResult`,
         {
@@ -756,17 +755,13 @@ class Worker {
           },
         },
       );
-
       let JSON_responseDataTaskResponse = JSON.parse(task_response.body);
-
       if (JSON_responseDataTaskResponse.status !== "processing") {
         responseData = JSON_responseDataTaskResponse;
         break;
       }
-
       await delay(5000);
     }
-
     return responseData;
   }
 
@@ -783,7 +778,6 @@ class Worker {
       u_atoken: JsonData.token,
       u_asig: JsonData.traceid,
     };
-
     return {
       prefix: "57d98d02303c01e7d2f7814c75224396",
       sceneId: JsonData.sceneId,
@@ -883,9 +877,7 @@ class Worker:
 
         self.website_url = "https://example.com/auth"  # Substitua pela URL da página com captcha
         self.user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/146.0.0.0 Safari/537.36"
+            "userAgentPlaceholder"
         )
 
         self.authorization_params = {}
@@ -917,7 +909,7 @@ class Worker:
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            "sec-ch-ua": '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",

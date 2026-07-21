@@ -51,7 +51,7 @@ The request must contain three images: background, ring, and circle.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Array of images encoded in base64 format.
+    An array of Base64-encoded images (without the `data:image/png;base64,` prefix).
 
     ---
 
@@ -132,7 +132,8 @@ The request must contain three images: background, ring, and circle.
 		}
 		```
 
-	**Response:** degrees indicating how much the ring must be rotated counterclockwise and the circle clockwise.
+	**Response:** <br/>
+  The number of degrees by which the ring must be rotated counterclockwise and the circle clockwise.
   ```json
   {
     "errorId":0,

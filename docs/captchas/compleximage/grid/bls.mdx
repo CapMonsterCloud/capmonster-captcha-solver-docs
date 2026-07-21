@@ -56,7 +56,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Массив изображений в кодировке base64.
+    Массив изображений в кодировке base64 (без префикса `data:image/png;base64,`).
 
     ---
 
@@ -83,10 +83,10 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
-        "clientKey":{{API_key}},
+        "clientKey": "API_KEY",
         "task": 
         {
           "type": "ComplexImageTask",
@@ -128,7 +128,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
     	Для данного примера: "TaskArgument": "546"
 
-    	**Ответ**
+    	**Пример ответа**
     	```json
     	{
     	  "errorId":0,
@@ -152,15 +152,15 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Ответ:**
-		массив значений с элементами `true` или `false`, в зависимости от того, является ли число на картинке искомым аргументом или нет.  
+		**Пример ответа:**<br/>
+		Массив значений с элементами `true` или `false`, в зависимости от того, является ли число на картинке искомым аргументом или нет.  
 ```json
 {
   "errorId": 0,
@@ -204,7 +204,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
 
 ```json
 {

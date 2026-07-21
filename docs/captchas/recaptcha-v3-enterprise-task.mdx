@@ -55,7 +55,9 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 
     <ParamItem title="websiteKey" required type="string" />
    Ключ-идентификатор ReCaptcha3 на целевой странице.
-   <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+   <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+
+   Имеет следующий примерный формат: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
    ---
 
@@ -65,7 +67,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Значение по умолчанию: *verify*</p>
+    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
@@ -81,19 +83,19 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -121,14 +123,14 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -162,7 +164,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 |gRecaptchaResponse|String|Хеш, который необходимо подставить в форму с ReCaptcha3 в `<textarea id="g-recaptcha-response" ></textarea>`. Имеет длину от 500 до 2190 байт.|
 
 
-## Отличия **reCAPTCHA v3 Enterprise** от обычной **reCAPTCHA v3**
+## Отличия reCAPTCHA v3 Enterprise от обычной reCAPTCHA v3
 
 | Характеристика                 | reCAPTCHA v3                                              | reCAPTCHA v3 Enterprise                                                                                      |
 | ------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |

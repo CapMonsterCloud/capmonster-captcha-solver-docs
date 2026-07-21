@@ -54,52 +54,55 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
   :::
 
 <Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless（无代理）" default className="bordered-panel">
+<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
----
+  ---
 
   <ParamItem title="websiteURL" required type="string" />
-  需要解验证码的页面 URL
+  解决验证码的页面地址
 
----
+  ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Turnstile 网站 key (*参见章节 [如何获取创建任务所需的所有参数](#如何获取创建任务所需的所有参数)*)
+  Cloudflare Challenge 密钥（*参见[如何查找创建任务所需的全部参数](#如何查找创建任务所需的全部参数)章节*）<br />
+  大致格式如下：`0x4AAAAAAABUYP0XeMJF0xoy`
 
----
+  ---
 
   <ParamItem title="cloudflareTaskType" required type="string" />
   **token**
 
----
+  ---
 
   <ParamItem title="pageAction" required type="string" />
-  在回调函数中找到的 `action` 字段。如果使用 *cloudflareTaskType*，`action` 通常是 “managed” 或 “non-interactive”。
+  可在加载验证码的 callback 函数中找到 `action` 字段。如果使用 *cloudflareTaskType*，则 `action` 通常为 “managed” 或 “non-interactive”。
 
----
+  ---
 
   <ParamItem title="userAgent" required type="string" />
   浏览器 User-Agent。  
   **请仅传递来自 Windows 系统的有效 UA。目前值为**: `userAgentPlaceholder`
 
----
+  ---
 
   <ParamItem title="data" required type="string" />
-  *data* 字段的值，从 `cData` 获取
+  *data* 字段的值可从 `cData` 参数中获取。<br />
+  示例：`874291f4retD1366`
 
----
+  ---
 
-<ParamItem title="pageData" required type="string" />
-  *pageData* 的值，从 `chlPageData` 获取
-
----
-
+  <ParamItem title="pageData" required type="string" />
+  *pageData* 字段的值可从 `chlPageData` 参数中获取。<br />
+  示例：`HUHDWUHuhuwfiweh32..uh2uhuhyugYUG=`
+  
+  ---
+  
   <ParamItem title="apiJsUrl" type="string" />
-  包含验证码脚本 URL 的字符串
+  包含验证码脚本链接的字符串。
 
----
+  ---
 
   <ParamItem title="proxyType" type="string" />
   **http** - 标准 http/https 代理；<br />
@@ -107,7 +110,7 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
   **socks4** - socks4 代理；<br />
   **socks5** - socks5 代理
 
----
+     ---
 
   <ParamItem title="proxyAddress" type="string" />
   <p>
@@ -179,7 +182,7 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
   :::
 
 <Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless（无代理）" default className="bordered-panel">
+<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -191,9 +194,9 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Turnstile 网站 key（可使用任意字符串）
+  Cloudflare Challenge 密钥。可以传递任意字符串，例如：`xxxxxx`。
 
----
+  ---
 
   <ParamItem title="cloudflareTaskType" required type="string" />
   **cf_clearance**
@@ -266,32 +269,31 @@ console.log(htmlBase64);
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "https://example.com",
-          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
+          "websiteURL": "https://yourwebsite.com/page-with-cf-challenge",
+          "websiteKey": "your-website-key",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
-          "pageAction": "managed",
-          "pageData": "HUHDWUHuhuwfiweh32..uh2uhuhyugYUG=",
-          "data": "874291f4retD1366"
+          "pageAction": "your-page-action",
+          "pageData": "your-page-data",
+          "data": "your-data"
         }
       }
       ```
 
-  **响应**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533072
-  }
-  ```
-</MethodDescription>
-
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533072
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 
   <TabItem value="proxy" label="TurnstileTask（使用代理）" className="method-panel">
@@ -301,37 +303,36 @@ console.log(htmlBase64);
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "https://example.com",
-          "websiteKey": "YOUR_WEBSITE_KEY_HERE",
+          "websiteURL": "https://yourwebsite.com/page-with-cf-challenge",
+          "websiteKey": "your-website-key",
           "cloudflareTaskType": "token",
           "userAgent": "userAgentPlaceholder",
-          "pageAction": "managed",
-          "pageData": "HUHDWUHuhuwfiweh32..uh2uhuhyugYUG=",
-          "data": "874291f4retD1366",
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "pageAction": "your-page-action",
+          "pageData": "your-page-data",
+          "data": "your-data",
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-  **响应**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533072
-  }
-  ```
-</MethodDescription>
-
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533072
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 
 </Tabs>
@@ -348,26 +349,26 @@ console.log(htmlBase64);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-challenge",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "cf_clearance",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**响应**
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -390,7 +391,7 @@ console.log(htmlBase64);
     ```
   </MethodItem>
   <MethodDescription>
-    **请求**
+    **请求示例**
     ```json
     {
       "clientKey": "API_KEY",
@@ -398,27 +399,24 @@ console.log(htmlBase64);
     }
     ```
 
-**响应**
-```json
-{
-  "errorId": 0,
-  "status": "ready",
-  "solution": {
-    "userAgent": "userAgentPlaceholder",
-    "token": "0.iGX3xsyFCkbGePM3jP4P4khLo6TrLukt8ZzBvwuQOvbC...f61f3082"
-  }
-}
-```
-
+    **响应示例**
+    ```json
+    {
+      "errorId": 0,
+      "status": "ready",
+      "solution": {
+        "userAgent": "userAgentPlaceholder",
+        "token": "0.iGX3xsyFCkbGePM3jP4P4khLo6TrLukt8ZzBvwuQOvbC...f61f3082"
+      }
+    }
+    ```
   </MethodDescription>
 </TabItem>
 </Tabs>
 
-使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取 Challenge 的解决方案。根据系统负载，响应时间可能在 5 到 20 秒之间。
-
-| **属性** | **类型** | **说明**            |
-| :----- | :----- | :---------------- |
-| token  | String | 在调用回调函数时使用此 token |
+|**属性**|**类型**|**说明**|
+| :- | :- | :- |
+|token|String|调用 callback 函数时使用此令牌|
 
 ### 选项 2. Challenge（cookie）
 
@@ -430,35 +428,32 @@ console.log(htmlBase64);
     ```
   </MethodItem>
   <MethodDescription>
-    **请求**
+    **请求示例**
     ```json
     {
       "clientKey": "API_KEY",
       "taskId": 407533072
     }
     ```
-    
-**响应**
-```json
-{
-  "errorId": 0,
-  "status": "ready",
-  "solution": {
-    "cf_clearance": "1tarGvbY2_ZhQdYxpSBloao.FoOn9VtcJtmb_IQ_hCE-1761217338-1.2.1.1-vyVPoLYIGX0VCJomVuLjF7n0kdM0PXaPjpDsRcohxGr7hb2CE7WfcHpmQZ70goqEjdWxPsDhSVaKNTz9opxWguiNdWEEq_.SceWXIqfP7tnEb69f3bP0mixNqcWy_5P_9INpoAEqr1k7aYU0r45PT4gPr5pwHxedVySyLRdoBXIJasdTE52YOQ3NPdGWTwQ_3h2n_wYqqIvf0kCSAvimRrmsgZxomlyejwqPI6ZHi.w"
-  }
-}
-```
 
+    **响应示例**
+    ```json
+    {
+      "errorId": 0,
+      "status": "ready",
+      "solution": {
+        "cf_clearance": "1tarGvbY2_ZhQdYxpSBloao.FoOn9VtcJtmb_IQ_hCE-1761217338-1.2.1.1-vyVPoLYIGX0VCJomVuLjF7n0kdM0PXaPjpDsRcohxGr7hb2CE7WfcHpmQZ70goqEjdWxPsDhSVaKNTz9opxWguiNdWEEq_.SceWXIqfP7tnEb69f3bP0mixNqcWy_5P_9INpoAEqr1k7aYU0r45PT4gPr5pwHxedVySyLRdoBXIJasdTE52YOQ3NPdGWTwQ_3h2n_wYqqIvf0kCSAvimRrmsgZxomlyejwqPI6ZHi.w"
+      }
+    }
+    ```
   </MethodDescription>
 </TabItem>
 </Tabs>
 
-| **属性**       | **类型** | **说明**                         |
-| :----------- | :----- | :----------------------------- |
-| cf_clearance | String | 特殊的 Cloudflare cookie，可在浏览器中设置 |
-
+|**属性**|**类型**|**说明**|
+| :- | :- | :- |
+|cf_clearance|String|可添加到浏览器中的 Cloudflare 专用 Cookie|
 ---
-
 ## 如何区分 Challenge 与 Turnstile
 
 <details>
@@ -524,9 +519,9 @@ Cloudflare 的验证类型可能会以不同形式出现。
   ```js
   import { chromium } from "playwright";
 
-  (async () => {
-    const browser = await chromium.launch({ headless: false });
-    const page = await browser.newPage();
+      (async () => {
+        const browser = await chromium.launch({ headless: false });
+        const page = await browser.newPage();
 
     let params = null;
 
@@ -885,8 +880,6 @@ Cloudflare 的验证类型可能会以不同形式出现。
   </TabItem>
 </Tabs>
 
-当然，这里是将你的说明文本翻译成中文，但代码保持不变：
-
 ---
 
 ## 使用 SDK 库
@@ -916,12 +909,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com", // 验证码页面的 URL
-        websiteKey: "YOUR_WEBSITE_KEY_HERE", // 替换为正确的值
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge", // 包含验证码的页面 URL
+        websiteKey: "your-website-key", // 替换为所需值
+        data: "your-data",              
+        pageAction: "managed",  // 替换为所需值
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
 
@@ -938,13 +931,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "YOUR_WEBSITE_KEY_HERE",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge", // 替换为正确的值
+        websiteKey: "your-website-key",
         proxy,
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        data: "your-data",
+        pageAction: "managed",  // 替换为所需值
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
     */
@@ -990,9 +983,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Cloudflare cf_clearance 只能使用您的代理解决
     const turnstileRequest = new TurnstileRequest({
-        websiteURL: 'https://example.com/',
+        websiteURL: 'https://yourwebsite.com/page-with-cf-challenge/',   // 替换为正确的值
         websiteKey: 'xxxxx',
-        cloudflareTaskType: 'cf_clearance',
+        cloudflareTaskType: 'cf_clearance', 
         proxy,
         htmlPageBase64: 'PGh0bW...h0bWw+',
         userAgent: 'userAgentPlaceholder'
@@ -1030,12 +1023,12 @@ const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com", // 验证码页面的 URL
-        websiteKey: "YOUR_WEBSITE_KEY_HERE", // 替换为正确的值
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge", // 包含验证码的页面 URL
+        websiteKey: "your-website-key", // 替换为所需值
+        data: "your-data",
+        pageAction: "managed",  // 替换为所需值
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
 
@@ -1052,13 +1045,13 @@ const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "YOUR_WEBSITE_KEY_HERE",
+        websiteURL: "https://yourwebsite.com/page-with-cf-challenge",
+        websiteKey: "your-website-key", 
         proxy,
-        data: "YOUR_DATA_HERE",
-        pageAction: "managed",
+        data: "your-data",
+        pageAction: "managed", // 替换为所需值
         cloudflareTaskType: "token",
-        pageData: "YOUR_PAGE_DATA_HERE",
+        pageData: "your-page-data",
         userAgent: "userAgentPlaceholder"
     });
     */
@@ -1070,7 +1063,6 @@ const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
     const result = await client.Solve(turnstileRequest);
     console.log("Solution:", result);
 })();
-
 ```
 </details>
 
@@ -1101,7 +1093,7 @@ async function main() {
 
     // Cloudflare cf_clearance 只能使用您的代理解决
     const turnstileRequest = new TurnstileRequest({
-        websiteURL: 'https://example.com/',
+        websiteURL: 'https://yourwebsite.com/page-with-cf-challenge/', // 替换为正确的值
         websiteKey: 'xxxxx',
         cloudflareTaskType: 'cf_clearance',
         proxy,
@@ -1109,7 +1101,6 @@ async function main() {
         userAgent: 'userAgentPlaceholder'
     });
 
-    // 发送验证码解决任务
     const result = await cmcClient.Solve(turnstileRequest);
     console.log('Solution:', result.solution);
 }
@@ -1143,12 +1134,12 @@ async def solve_turnstile_token():
     # 基本示例，无需代理
     # CapMonster Cloud 会自动使用它们的代理
     turnstile_request = TurnstileRequest(
-        websiteURL="http://example.com",  # 验证码页面的 URL
-        websiteKey="YOUR_WEBSITE_KEY_HERE",        # 替换为正确的值
-        data="YOUR_DATA_HERE",
-        pageAction="managed",
+        websiteURL="https://yourwebsite.com/page-with-cf-challenge/",  # 包含验证码的页面 URL
+        websiteKey="your-website-key",        # 替换为所需值
+        data="your-data",
+        pageAction="managed",  # 替换为所需值
         cloudflareTaskType="token",
-        pageData="YOUR_PAGE_DATA_HERE",
+        pageData="your-page-data",
         userAgent="userAgentPlaceholder"
     )
 
@@ -1164,13 +1155,13 @@ async def solve_turnstile_token():
     # )
     #
     # turnstile_request = TurnstileRequest(
-    #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="YOUR_WEBSITE_KEY_HERE",
+    #     websiteURL="https://yourwebsite.com/page-with-cf-challenge/",
+    #     websiteKey="your-website-key",
     #     proxy=proxy,
-    #     data="YOUR_DATA_HERE",
+    #     data="your-data",
     #     pageAction="managed",
     #     cloudflareTaskType="token",
-    #     pageData="YOUR_PAGE_DATA_HERE",
+    #     pageData="your-page-data",
     #     userAgent="userAgentPlaceholder"
     # )
 
@@ -1214,7 +1205,7 @@ async def solve_cf_clearance():
 
     # Cloudflare cf_clearance 只能使用您的代理解决
     turnstile_request = TurnstileRequest(
-        websiteURL="https://example.com",
+        websiteURL="https://yourwebsite.com/page-with-cf-challenge",
         websiteKey="xxxxx",
         cloudflareTaskType="cf_clearance",
         htmlPageBase64="BASE64_HTML_PAGE_HERE",
@@ -1226,7 +1217,6 @@ async def solve_cf_clearance():
     balance = await cap_monster_client.get_balance()
     print("Balance:", balance)
 
-    # 发送验证码解决任务
     result = await cap_monster_client.solve_captcha(turnstile_request)
     print("Solution:", result)
 
@@ -1265,12 +1255,12 @@ class Program
         // CapMonster Cloud 会自动使用它们的代理
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://example.com",        // 验证码页面的 URL
-            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",    // 替换为正确的值
-            Data = "data_here",
-            PageAction = "managed",
+            WebsiteUrl = "https://yourwebsite.com/page-with-cf-challenge",           // 包含验证码的页面 URL
+            WebsiteKey = "your-website-key",      // 您的 sitekey
+            Data = "your-data",
+            PageAction = "managed",  // 替换为所需值
             CloudflareTaskType = "token",
-            PageData = "pagedata_here",
+            PageData = "your-page-data",
             UserAgent = "userAgentPlaceholder"
         };
 
@@ -1280,20 +1270,20 @@ class Program
         /*
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://example.com",
-            WebsiteKey = "YOUR_WEBSITE_KEY_HERE",
-            Data = "data_here",
-            PageAction = "managed",
+            WebsiteUrl = "https://yourwebsite.com/page-with-cf-challenge",
+            WebsiteKey = "your-website-key",
+            Data = "your-data",
+            PageAction = "managed",  // 替换为所需值
             CloudflareTaskType = "token",
-            PageData = "pagedata_here",
+            PageData = "your-page-data",
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(
-                "123.45.67.89",      
-                8080,              
-                ProxyType.Http,   
-                "username", 
-                "password"  
+                "123.45.67.89",  
+                8080,       
+                ProxyType.Http,  
+                "username",   
+                "password" 
             )
         };
         */
@@ -1334,18 +1324,18 @@ class Program
         // Cloudflare cf_clearance 只能使用您的代理解决
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://example.com",     // 验证码页面的 URL        
-            WebsiteKey = "xxxxx",    
+            WebsiteUrl = "https://yourwebsite.com/page-with-cf-challenge",     // 包含验证码的页面 URL        
+            WebsiteKey = "xxxxx",   
             CloudflareTaskType = "cf_clearance",                                    
             HtmlPageBase64 = "htmlPageBase64Here",        
             UserAgent = "userAgentPlaceholder", 
 
             Proxy = new ProxyContainer(
-                "123.45.67.89", 
-                8080,             
+                "123.45.67.89",       
+                8080,            
                 ProxyType.Http,  
-                "username",           
-                "password"           
+                "username", 
+                "password" 
             )
         };
 
@@ -1382,7 +1372,7 @@ const URL = "https://www.example.com"; // 替换为目标 URL
 const SITEKEY = "xxxxxx";
 
 const UA =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+  "userAgentPlaceholder";
 
 // ================= 代理（替换为您的代理信息） =================
 
@@ -1414,7 +1404,7 @@ const headers = {
   "Sec-Fetch-Site": "none",
   "Sec-Fetch-User": "?1",
   "sec-ch-ua":
-    '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
 };
@@ -1558,7 +1548,7 @@ const URL = "https://www.example.com"; // 替换为您的 URL
 const SITEKEY = "xxxxxx";
 
 const UA =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+  "userAgentPlaceholder";
 
 // ================= 代理（替换为您的代理数据） =================
 
@@ -1596,7 +1586,7 @@ const headers = {
   "Sec-Fetch-Site": "none",
   "Sec-Fetch-User": "?1",
   "sec-ch-ua":
-    '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
 };
@@ -1705,7 +1695,7 @@ API_KEY = "YOUR_API_KEY" # 替换为您的 CapMonster Cloud API 密钥
 URL = "https://www.example.com" # 替换为目标 URL
 SITEKEY = "xxxxxx"
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+UA = "userAgentPlaceholder"
 
 # ================= 代理（替换为您的代理数据） =================
 
@@ -1737,7 +1727,7 @@ session.headers.update({
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
     "Sec-Fetch-User": "?1",
-    "sec-ch-ua": '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    "sec-ch-ua": '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"'
 })
@@ -1856,7 +1846,7 @@ API_KEY = "YOUR_API_KEY" # 替换为您的 CapMonster Cloud API 密钥
 URL = "https://www.example.com" # 替换为目标 URL
 SITEKEY = "xxxxxx"
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+UA = "userAgentPlaceholder"
 
 # ================= 代理（替换为您的代理数据） =================
 
@@ -1888,7 +1878,7 @@ session.headers.update({
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
     "Sec-Fetch-User": "?1",
-    "sec-ch-ua": '"Chromium";v="149", "Google Chrome";v="149", "Not:A-Brand";v="99"',
+    "sec-ch-ua": '"Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"'
 })
@@ -1910,7 +1900,7 @@ async def solve_turnstile(html_base64):
         balance = await cap_monster_client.get_balance()
         print(f"余额: {balance}")
     except Exception as e:
-        print(f"无法获取余额: {e}")
+        print(f"无法获取余额：{e}")
     
     # 为 CapMonster Cloud 设置代理
     proxy = ProxyInfo(
@@ -1999,7 +1989,7 @@ class Program
     const string SITEKEY = "xxxxxx";
 
     const string UA =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+        "userAgentPlaceholder";
 
 
     // ================= 代理（替换为您的代理数据） =================
@@ -2049,7 +2039,7 @@ class Program
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Site", "none");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-User", "?1");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua",
-            "\"Chromium\";v=\"149\", \"Google Chrome\";v=\"149\", \"Not:A-Brand\";v=\"99\"");
+            "\"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\", \"Not:A-Brand\";v=\"99\"");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-mobile", "?0");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-platform",
             "\"Windows\"");
@@ -2227,7 +2217,7 @@ class Program
     const string SITEKEY = "xxxxxx";
 
     const string UA =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
+        "userAgentPlaceholder";
 
     // ================= 代理（替换为您的代理数据） =================
 
@@ -2274,7 +2264,7 @@ class Program
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Site", "none");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-User", "?1");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua",
-            "\"Chromium\";v=\"149\", \"Google Chrome\";v=\"149\", \"Not:A-Brand\";v=\"99\"");
+            "\"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\", \"Not:A-Brand\";v=\"99\"");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-mobile", "?0");
         Client.DefaultRequestHeaders.TryAddWithoutValidation("sec-ch-ua-platform",
             "\"Windows\"");

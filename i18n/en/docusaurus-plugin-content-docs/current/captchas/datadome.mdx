@@ -145,29 +145,29 @@ Before solving, check which script is loaded (**DevTools → Network / HTML**).
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "CustomTask",
     "class": "DataDome",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-datadome",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
       "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-      "datadomeCookie": "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z",
+      "datadomeCookie": "datadome=cookie-value",
       "datadomeVersion": "new"
     },
-    "proxyType": "http",
-    "proxyAddress": "123.45.67.89",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyUsername",
-    "proxyPassword": "proxyPassword"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -190,14 +190,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the so
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 
 ```json
 {
@@ -1292,7 +1292,7 @@ if __name__ == "__main__":
             proxy,
             metadata: {
                 captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-                datadomeCookie: "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z"
+                datadomeCookie: "datadome=cookie-value"
             }
         });
 
@@ -1337,7 +1337,7 @@ async function solveDataDome() {
         proxy,
         metadata: {
             captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-            datadomeCookie: "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z"
+            datadomeCookie: "datadome=cookie-value"
         }
     });
 
@@ -1380,7 +1380,7 @@ solveDataDome().catch(console.error);
         datadome_request = DataDomeCustomTaskRequest(
             websiteUrl="https://example.com",  # URL of the captcha page
             metadata={
-                "datadomeCookie": "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z", 
+                "datadomeCookie": "datadome=cookie-value", 
                 "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm"
             },
             proxy=proxy,

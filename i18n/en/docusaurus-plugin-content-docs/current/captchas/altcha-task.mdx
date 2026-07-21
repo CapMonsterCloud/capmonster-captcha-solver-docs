@@ -73,13 +73,16 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   ---
 
   <ParamItem title="challenge (inside metadata)" required="required" type="string" />
-  Unique task identifier obtained from the website.
+  Unique task identifier obtained from the website.<br />
+  Example: `3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
 
   ---
 
   <ParamItem title="iterations (inside metadata)" required="required" type="string" />
   Number of iterations or the maximum number for calculations.
-  > **Important:** the `iterations` parameter corresponds to the `maxnumber` value!
+  > **Important:** the `iterations` parameter corresponds to the `maxnumber` value!<br />
+  
+  Example: `5000`
 
   ---
 
@@ -95,7 +98,8 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   ---
 
   <ParamItem title="signature (inside metadata)" required="required" type="string" />
-  Digital signature of the request.
+  Digital signature of the request.<br />
+  Example: `4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18`
 
   ---
 
@@ -149,7 +153,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
       ```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
@@ -160,15 +164,15 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
           "websiteKey": "",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt": "46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt":"your-salt",
+            "signature": "your-signature"
           }
         }
       }
       ```
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -185,31 +189,31 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
       ```
     </MethodItem>
     <MethodDescription>
-      **Request**
-      ```json
-      {
-        "clientKey": "API_KEY",
-        "task": {
-          "type": "CustomTask",
-          "class": "altcha",
-          "websiteURL": "https://example.com",
-          "websiteKey": "",
-          "userAgent": "userAgentPlaceholder",
-          "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt": "46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
-          },
-          "proxyType":"http",
-          "proxyAddress":"8.8.8.8",
-          "proxyPort":8080,
-          "proxyLogin":"proxyLoginHere",
-          "proxyPassword":"proxyPasswordHere"
-        }
-      }
-      ```
-      **Response**
+      **Request example**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "altcha",
+    "websiteURL": "https://example.com",
+    "websiteKey": "",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "challenge": "your-challenge",
+      "iterations": "your-iterations",
+      "salt":"your-salt",
+      "signature": "your-signature"
+    },
+    "proxyType":"your-proxy-type",
+    "proxyAddress":"your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin":"your-proxy-login",
+    "proxyPassword":"your-proxy-password"
+  }
+}
+```
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -232,14 +236,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the
     ```
   </MethodItem>
   <MethodDescription>
-    **Request**
+    **Request example**
     ```json
     {
       "clientKey": "API_KEY",
       "taskId": 407533072
     }
     ```
-    **Response**
+    **Response example**
 ```json
 {
   "errorId": 0,
@@ -365,7 +369,9 @@ For example:
 
 ![](./images/altcha/altcha_base64.png)
 
-Decoding this value produces a JSON object containing the data used for captcha validation:
+Decoding this value produces a JSON object containing the data used for captcha validation.
+
+Example:
 
 ```json
 {

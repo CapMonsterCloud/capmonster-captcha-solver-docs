@@ -1,7 +1,7 @@
 ---
 sidebar_label: bills_audio
-title: '识别和解决 bills_audio | API'
-description: '使用 ComplexImageTask 方法，通过 CapMonster Cloud API 自动识别和解决 bills_audio。'
+title: 'bills_audio 识别与解决 | API'
+description: '使用 ComplexImageTask 方法，通过 Capmonster Cloud API 自动识别并解决 bills_audio。'
 ---
 
 import Tabs from '@theme/Tabs';
@@ -44,27 +44,26 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
----
+    ---
 
-<ParamItem title="class" required type="string" />
-**recognition**
+    <ParamItem title="class" required type="string" />
+    **recognition**
 
----
+    ---
 
-<ParamItem title="imagesBase64" required type="array" />
-已进行 base64 编码的音频数据。  
-示例：`[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+    <ParamItem title="imagesBase64" required type="array" />
+    以 base64 编码并包装在数组中的音频。<br />
+    示例：`[ "UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"]`
 
----
+    ---
 
-<ParamItem title="Task（metadata 内）" required type="string" />
-任务名称：`"bills_audio"`<br />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
+    任务名称：`"bills_audio"`<br />
 
----
+    ---
 
-<ParamItem title="PayloadType（metadata 内）" required type="string" />
-发送到任务中的数据类型：`"Audio"`
-
+    <ParamItem title="PayloadType（位于 metadata 中）" required type="string" />
+    任务中传递的数据类型：`"Audio"`
 
 </TabItem>
 </Tabs>
@@ -79,7 +78,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
 ```json
 {
     "clientKey": "API_KEY",
@@ -97,17 +96,14 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 }
 ```
 
-**响应**
-
-```json
-{
-    "errorId": 0,
-    "taskId": 143998457
-}
-```
-
-</MethodDescription>
-
+    **响应示例**
+    ```json
+    {
+        "errorId": 0,
+        "taskId": 143998457
+    }
+    ```
+    </MethodDescription>
 </TabItem>
 </Tabs>
 
@@ -121,41 +117,39 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ```
     </MethodItem>
     <MethodDescription>
-    **请求**
+    **请求示例**
     ```json
     {
         "clientKey": "API_KEY",
         "taskId": 143998457
     }
     ```
-
-**响应：** 结果包含音频中的数字。
-```json
-{
-  "solution": {
-      "answer": [6, 8, 4, 1, 2, 3],
-      "metadata": {"AnswerType": "Text"}
-  },
-  "cost": 0.0008,
-  "status": "ready",
-  "errorId": 0,
-  "errorCode": null,
-  "errorDescription": null
-}
-```
-</MethodDescription>
-
+    **响应示例**  <br/>
+    响应中会返回音频中的数字：
+    ```json
+    {
+      "solution": {
+          "answer": [6, 8, 4, 1, 2, 3],
+          "metadata": {"AnswerType": "Text"}
+      },
+      "cost": 0.0008,
+      "status": "ready",
+      "errorId": 0,
+      "errorCode": null,
+      "errorDescription": null
+    }
+    ```
+    </MethodDescription>
 </TabItem>
 </Tabs>
 
-
 ## 获取音频并转换为 Base64
 
-1. 打开验证码页面并启动 **DevTools（开发者工具）**，然后进入 **Network（网络）** 标签。
-2. 通过点击相应按钮启用验证码的音频模式。
-3. 在请求列表中找到类似如下的地址：
+1. 打开包含验证码的页面并启动 **DevTools**，然后转到 **Network** 选项卡。
+2. 单击相应按钮启用验证码的音频模式。
+3. 在请求列表中找到以下格式的地址：
    `blob:https://example.com/3be79ac6-1b3d-43ef-9a8a-7ad8877b3606`
-4. 复制该 URL 并在浏览器地址栏中打开 —— 验证码音频文件将以 **.wav** 格式打开。
+4. 复制此 URL 并在浏览器地址栏中打开，即可打开 **.wav** 格式的验证码音频文件。
 
 ![](../images/ComplexImageTask-Recognition/bills_audio4.png)
 

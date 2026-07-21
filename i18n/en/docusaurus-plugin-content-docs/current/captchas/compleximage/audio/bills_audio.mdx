@@ -52,8 +52,8 @@ The `bills_audio` audio captcha is an audio version of the “receipt captcha”
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Audio encoded in base64.
-    Example: `[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+    Base64-encoded audio wrapped in an array.<br />
+    Example: `["UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"]`
 
     ---
 
@@ -78,7 +78,7 @@ The `bills_audio` audio captcha is an audio version of the “receipt captcha”
     ```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
 ```json
 {
     "clientKey": "API_KEY",
@@ -95,7 +95,7 @@ The `bills_audio` audio captcha is an audio version of the “receipt captcha”
     }
 }
 ```
-**Response**
+**Response example**
 ```json
 {
     "errorId": 0,
@@ -117,14 +117,15 @@ The `bills_audio` audio captcha is an audio version of the “receipt captcha”
     ```
     </MethodItem>
     <MethodDescription>
-    **Request**
+    **Request example**
     ```json
     {
         "clientKey": "API_KEY",
         "taskId": 143998457
     }
     ```
-    **Response:** the result contains digits from the audio.
+    **Response example:**<br/>
+    The result contains digits from the audio:
     ```json
     {
       "solution": {

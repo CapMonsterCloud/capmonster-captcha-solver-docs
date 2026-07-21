@@ -46,7 +46,8 @@ O método automático de resolução de CAPTCHA baseado em tokens Prosopo Procap
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    O valor do parâmetro `siteKey` encontrado na página.
+    Valor do parâmetro `siteKey` encontrado na página.<br />
+    Tem aproximadamente o seguinte formato: `5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV`
 
 	---
 
@@ -90,18 +91,18 @@ O método automático de resolução de CAPTCHA baseado em tokens Prosopo Procap
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+    "websiteKey": "your-website-key"
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -118,23 +119,23 @@ O método automático de resolução de CAPTCHA baseado em tokens Prosopo Procap
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -157,14 +158,14 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533077
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -213,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let prosopoRequest = new ProsopoRequest({
         websiteURL: "https://www.example.com",       // URL da página com ProCaptcha
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Sua sitekey do ProCaptcha (chave pública)
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Substitua pela sua própria sitekey do ProCaptcha
     });
 
     // Exemplo de uso do seu próprio proxy
@@ -263,7 +264,7 @@ async function solveProCaptcha() {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let prosopoRequest = new ProsopoRequest({
         websiteURL: "https://www.example.com",       // URL da página com ProCaptcha
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Sua sitekey do ProCaptcha (chave pública)
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Substitua pela sua própria sitekey do ProCaptcha
     });
 
     // Exemplo de uso do seu próprio proxy
@@ -319,8 +320,8 @@ async def solve_prosopo_captcha():
     # Exemplo básico sem proxy
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     prosopo_request = ProsopoTaskRequest(
-        websiteUrl="https://www.example.com",  
-        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+        websiteUrl="https://www.example.com",  # URL da página com ProCaptcha
+        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"  # Substitua pela sua própria sitekey do ProCaptcha
     )
 
     # Exemplo de uso do seu próprio proxy
@@ -379,7 +380,7 @@ class Program
         var prosopoRequest = new ProsopoTaskRequest
         {
             WebsiteUrl = "https://www.example.com",      // URL da página com ProCaptcha
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // Sua sitekey do ProCaptcha (chave pública)
+            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // Substitua pela sua própria sitekey do ProCaptcha
 
             UserAgent = "userAgentPlaceholder"
         };

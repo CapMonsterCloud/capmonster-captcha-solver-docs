@@ -53,18 +53,22 @@ CapMonster Cloud по умолчанию работает через встро�
 ---
 
 <ParamItem title="websitePublicKey" required type="string" />
-Ключ FunCaptcha (значение *public key* или *pk*).
+Ключ FunCaptcha (значение `public key` или `pk`).<br />
+
+Пример формата: `EX72CCFB-26EX-40E5-91E6-85EX70BE98ED`
 
 ---
 
 <ParamItem title="data" type="string" />
-Дополнительный параметр. Обязателен, если на сайте используется *data[blob]*. <br />
+Дополнительный параметр. Обязателен, если на сайте используется `data[blob]`. <br />
+
  **Важно:** Не загружайте фрейм с капчей для извлечения `blob`. После загрузки капчи значение параметра становится невалидным.
 
 ---
 
 <ParamItem title="funcaptchaApiJSSubdomain" type="string" />
-Поддомен Arkose Labs (значение *surl*). Указывайте в том случае, если он отличается от стандартного: `client-api.arkoselabs.com`
+Поддомен Arkose Labs (значение `surl`). Указывайте в том случае, если он отличается от стандартного: `client-api.arkoselabs.com`<br />
+
 **Важно:** Указывайте только домен без префикса `https://`
 
 ---
@@ -126,21 +130,21 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -157,26 +161,26 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -198,7 +202,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -206,7 +210,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -293,12 +297,11 @@ console.log("surl:", decodeURIComponent(p.surl));
 
 Примеры на JavaScript (Node.js), Python и C# показывают, как с помощью Playwright получить параметры `public_key` и `blob`, создать задачу в CapMonster Cloud и получить токен решения капчи. Вы можете реализовать аналогичную логику с другими инструментами автоматизации или тестирования.
 
----
 
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-    <details>
-      <summary>Node.js</summary>
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="Node.js" default className="method-panel">
+  <details>
+      <summary>Показать код</summary>
 ```javascript
 // npm install playwright
 
@@ -428,15 +431,12 @@ async function getTaskResult(taskId) {
 })();
 ```
 </details>
-  </TabItem>
-</Tabs>
 
----
+</TabItem>
 
-<Tabs>
-<TabItem value="python" label="Python" className="method-panel">
-    <details>
-      <summary>Python</summary>
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Показать код</summary>
 ```Python
 # pip install playwright
 # playwright install
@@ -576,14 +576,10 @@ asyncio.run(main())
 ```
 </details>
   </TabItem>
-</Tabs>
 
----
-
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-    <details>
-      <summary>C#</summary>
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Показать код</summary>
 ```csharp
 // dotnet add package Microsoft.Playwright
 

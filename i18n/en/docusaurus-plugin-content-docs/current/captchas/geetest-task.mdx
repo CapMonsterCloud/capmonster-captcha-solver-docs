@@ -116,7 +116,7 @@ You need to analyze the network requests and identify the request whose response
     ---
 
     <ParamItem title="geetestApiServerSubdomain" type="string" />
-    Geetest API subdomain server (must be different from api.geetest.com). <br />Optional parameter. May be required for some sites.
+    Geetest API subdomain server (must be different from `api.geetest.com`). <br />Optional parameter. May be required for some sites.
 
     ---
 
@@ -170,22 +170,22 @@ You need to analyze the network requests and identify the request whose response
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Request**
+			**Request example**
 ```json
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://www.geetest.com/en/demo",
-    "gt": "022397c99c9f646f6477822485f30404",
-    "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "gt-value",
+    "challenge": "challenge-value",
     "version": 3,
-    "geetestApiServerSubdomain": "api-na.geetest.com"
+    "geetestApiServerSubdomain": "example.api.geetest.com"
 
   }
 }
 ```
-    		**Response**
+    		**Response example**
     		```json
     		{
     		  "errorId":0,
@@ -202,27 +202,27 @@ You need to analyze the network requests and identify the request whose response
     		```
     	</MethodItem>
     	<MethodDescription>
-    		**Request**
+    		**Request example**
 ```json 
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://www.geetest.com/en/demo",
-    "gt": "022397c99c9f646f6477822485f30404",
-    "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "gt-value",
+    "challenge": "challenge-value",
     "version": 3,
-    "geetestApiServerSubdomain": "api-na.geetest.com",
+    "geetestApiServerSubdomain": "example.api.geetest.com",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-    		**Response**
+    		**Response example**
     		```json
     		{
     		  "errorId":0,
@@ -246,14 +246,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the re
     		```
     	</MethodItem>
     	<MethodDescription>
-    		**Request**
+    		**Request example**
     		```json
     		{
     		  "clientKey":"API_KEY",
     		  "taskId": 407533072
     		}
     		```
-    		**Response**
+    		**Response example**
 ```json
 {
   "errorId": 0,
@@ -521,8 +521,8 @@ The provided code snippets are basic examples for learning how to extract the re
         // CapMonster Cloud automatically uses its own proxies
         let geetestRequest = new GeeTestRequest({
             websiteURL: "https://example.com/geetest.php", // URL of the page with captcha
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",        // Replace with the correct value
-            challenge: "d93591bdf7860e1e4ee2fca799911215",  // Replace with the correct value
+            gt: "gt-value",        // Replace with the correct value
+            challenge: "challenge-value", // Replace with the correct value
             version: 3
         });
 
@@ -539,9 +539,9 @@ The provided code snippets are basic examples for learning how to extract the re
         };
 
         geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php",
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
-            challenge: "d93591bdf7860e1e4ee2fca799911215",
+            websiteURL: "https://example.com/geetest.php",  // URL of the page with captcha
+            gt: "gt-value",       // Replace with the correct value
+            challenge: "challenge-value", // Replace with the correct value
             version: 3,
             proxy,
             userAgent: "userAgentPlaceholder"
@@ -576,8 +576,8 @@ async function solveGeeTest() {
     // CapMonster Cloud automatically uses its own proxies
     let geetestRequest = new GeeTestRequest({
         websiteURL: "https://example.com/geetest.php", // URL of the page with captcha
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",       // Replace with the correct value
-        challenge: "d93591bdf7860e1e4ee2fca799911215", // Replace with the correct value
+        gt: "gt-value",       // Replace with the correct value
+        challenge: "challenge-value", // Replace with the correct value
         version: 3
     });
 
@@ -595,8 +595,8 @@ async function solveGeeTest() {
 
     geetestRequest = new GeeTestRequest({
         websiteURL: "https://example.com/geetest.php",
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
-        challenge: "d93591bdf7860e1e4ee2fca799911215",
+        gt: "gt-value",
+        challenge: "challenge-value",
         version: 3,
         proxy,
         userAgent: "userAgentPlaceholder"
@@ -633,8 +633,8 @@ solveGeeTest().catch(console.error);
         # CapMonster Cloud automatically uses its own proxies
         geetest_request = GeetestRequest(
             websiteUrl="https://example.com",
-            gt="81dc9bdb52d04dc20036dbd8313ed055",
-            challenge="d93591bdf7860e1e4ee2fca799911215",
+            gt="gt-value",
+            challenge="challenge-value",
             version=3
         )
 
@@ -651,8 +651,8 @@ solveGeeTest().catch(console.error);
 
         # geetest_request = GeetestRequest(
         #     websiteUrl="https://example.com",
-        #     gt="81dc9bdb52d04dc20036dbd8313ed055",
-        #     challenge="d93591bdf7860e1e4ee2fca799911215",
+        #     gt="gt-value",
+        #     challenge="challenge-value",
         #     version=3,
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
@@ -836,19 +836,19 @@ solveGeeTest().catch(console.error);
 			**Request**
 ```json
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://gt4.geetest.com/",
-    "gt": "54088bb07d2df3c46b79f80300b0abbe",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "captcha-id-value",
     "version": 4,
     "initParameters": {
-      "riskType": "slide"
+      "riskType": "risk-type-value"
     }
   }
 }
 ```
-    		**Response**
+    		**Response example**
     		```json
     		{
     		  "errorId":0,
@@ -865,29 +865,29 @@ solveGeeTest().catch(console.error);
     		```
     	</MethodItem>
     	<MethodDescription>
-    		**Request**
+    		**Request example**
   ```json
   {
-    "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+    "clientKey": "API_KEY",
     "task": {
       "type": "GeeTestTask",
-      "websiteURL": "https://gt4.geetest.com/",
-      "gt": "54088bb07d2df3c46b79f80300b0abbe",
+      "websiteURL": "https://yourwebsite.com/page-with-geetest",
+      "gt": "captcha-id-value",
       "version": 4,
       "initParameters": {
-        "riskType": "slide"
+        "riskType": "risk-type-value"
       },
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password",
       "userAgent": "userAgentPlaceholder"
     }
   }
   ```
 
-    		**Response**
+    		**Response example**
     		```json
     		{
     		  "errorId":0,
@@ -911,14 +911,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to get the result of
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -1237,7 +1237,7 @@ class Program
         // CapMonster Cloud automatically uses its own proxies
         let geetestRequest = new GeeTestRequest({
             websiteURL: "https://example.com/geetest.php", // URL of the page with the captcha
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
+            gt: "captcha-id-value",  // Replace with the correct value
             version: "4",
             initParameters: { riskType: "slide" }
         });
@@ -1255,8 +1255,8 @@ class Program
         };
 
         geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php",
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
+            websiteURL: "https://example.com/geetest.php",  // URL of the page with the captcha
+            gt: "captcha-id-value",  // Replace with the correct value
             version: "4",
             initParameters: { riskType: "slide" },
             proxy,
@@ -1294,7 +1294,7 @@ async function solveGeeTest() {
     // CapMonster Cloud automatically uses its own proxies
     let geetestRequest = new GeeTestRequest({
         websiteURL: "https://example.com/geetest.php", // URL of the page with the captcha
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
+        gt: "captcha-id-value",   // Replace with the correct value
         version: "4",                                 
         initParameters: { riskType: "slide" }
     });
@@ -1312,8 +1312,8 @@ async function solveGeeTest() {
     };
 
     geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php",
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
+        websiteURL: "https://example.com/geetest.php", // URL of the page with the captcha
+        gt: "captcha-id-value",  // Replace with the correct value
         version: "4",
         initParameters: { riskType: "slide" },
         proxy,
@@ -1350,8 +1350,8 @@ solveGeeTest().catch(console.error);
         # Basic example without proxy
         # CapMonster Cloud automatically uses its own proxies
         geetest_request = GeetestRequest(
-            websiteUrl="https://example.com/",
-            gt="54088bb07d2df3c46b79f80300b0abbe",
+            websiteUrl="https://example.com/",  # URL of the page with the captcha
+            gt="captcha-id-value",  # Replace with the correct value
             version=4,
             initParameters={
                 "riskType": "slide"
@@ -1370,8 +1370,8 @@ solveGeeTest().catch(console.error);
         # )
 
         # geetest_request = GeetestRequest(
-        #     websiteUrl="https://example.com/",
-        #     gt="54088bb07d2df3c46b79f80300b0abbe",
+        #     websiteUrl="https://example.com/", # URL of the page with the captcha
+        #     gt="captcha-id-value",  # Replace with the correct value
         #     version=4,
         #     initParameters={
         #         "riskType": "slide"
@@ -1425,7 +1425,7 @@ solveGeeTest().catch(console.error);
             var geetestRequest = new GeeTestRequest
             {
                 WebsiteUrl = "https://example.com/", // URL of the page with the captcha
-                Gt = "54088bb07d2df3c46b79f80300b0abbe",
+                Gt = "captcha-id-value",   // Replace with the correct value
                 Version = 4,                             
                 InitParameters = new Dictionary<string, string> { { "riskType", "slide" } } // Additional parameter for V4
             };
@@ -1435,8 +1435,8 @@ solveGeeTest().catch(console.error);
             /*
             var geetestRequest = new GeeTestRequest
             {
-                WebsiteUrl = "https://example.com/",
-                Gt = "54088bb07d2df3c46b79f80300b0abbe",
+                WebsiteUrl = "https://example.com/",  // URL of the page with the captcha
+                Gt = "captcha-id-value",  // Replace with the correct value
                 Version = 4,
                 InitParameters = new Dictionary<string, string> { { "riskType", "slide" } },
 

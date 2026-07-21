@@ -54,12 +54,16 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Um parâmetro exclusivo para a seção do seu site. O valor do parâmetro `bizId`, `bizType` ou `bizCode`. Ele pode ser obtido a partir do tráfego (veja a descrição abaixo).
+    Um parâmetro exclusivo para a seção do seu site. O valor do parâmetro `bizId`, `bizType` ou `bizCode`. Ele pode ser obtido a partir do tráfego (veja a descrição abaixo).<br />
+    
+    Exemplo de formato: `login`
 
     ---
 
     <ParamItem title="validateId" required type="string" />
-    Uma chave dinâmica. O valor do parâmetro `validateId`, `securityId` ou `securityCheckResponseValidateId`. Ele pode ser obtido a partir do tráfego (veja a descrição abaixo).
+    Uma chave dinâmica. O valor do parâmetro `validateId`, `securityId` ou `securityCheckResponseValidateId`. Ele pode ser obtido a partir do tráfego (veja a descrição abaixo).<br />
+
+    Exemplo de formato: `cb0bfefa598b4c3887661fde54ecd57b`
 
     ---
 
@@ -109,20 +113,20 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -139,25 +143,26 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
+    "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -180,14 +185,14 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId": 0,

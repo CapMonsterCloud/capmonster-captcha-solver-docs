@@ -1,6 +1,8 @@
 ---
 sidebar_position: 14
 sidebar_label: TenDI
+title: "TenDI 验证码自动识别与绕过 — Tencent captcha | API"
+description: "了解如何使用 CapMonster Cloud 自动验证码识别与解决服务的 API 绕过 TenDI（Tencent captcha）验证码！" 
 ---
 
 import Tabs from '@theme/Tabs';
@@ -32,7 +34,6 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 如果代理按 IP 授权，请将地址 **65.21.190.34** 加入白名单。
 :::
 
-
 ## 请求参数
 <Tabs>
 <TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
@@ -52,12 +53,12 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    captchaAppId。例如 `"websiteKey": "189123456"` - 是您网站的唯一参数。您可以从带有验证码的HTML页面或流量中获取它（参见下面的描述）。
+    **captchaAppId**，对应 `aid` 的值。例如，`"websiteKey": "189123456"` 是您网站的唯一参数。可从包含验证码的 HTML 页面或网络流量中获取（参见下文说明）。
 
     ---
 
-    <ParamItem title="captchaUrl（在 metadata 中）" type="string" />
-    验证码脚本的链接。 通常以 `TCaptcha.js` 或 `TCaptcha-global.js` 结尾。可以在请求列表中找到（见下方示例）。
+    <ParamItem title="captchaUrl（位于 metadata 中）" type="string" />
+    验证码脚本链接。通常以 `TCaptcha.js` 或 `TCaptcha-global.js` 结尾。可在请求列表中找到（参见下方示例）。
 	
     ---
 
@@ -101,22 +102,22 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="proxyless" label="CustomTask (无代理)" default className="method-panel">
+  <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "TenDI",
-          "websiteURL": "https://example.com",
-          "websiteKey": "189123456",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
             "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
@@ -125,7 +126,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
       }
       ```
 
-      **响应**
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -135,36 +136,36 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodDescription>
   </TabItem>
 
-  <TabItem value="proxy" label="CustomTask (带代理)" className="method-panel">
+  <TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "TenDI",
-          "websiteURL": "https://example.com",
-          "websiteKey": "189123456",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
             "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
           },
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **响应**
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -180,21 +181,21 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取TenDI的解决方案。
 
 <Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -219,7 +220,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ![](./images/tendi/tendi-devtools.png)
 
 ## 如何获取 captchaUrl
-打开 *开发者工具*，切换到 **Network** 选项卡，激活验证码并检查网络请求。在其中会出现 `TCaptcha.js` 或 `TCaptcha-global.js`，您可以在其中找到类似这样的链接：
+打开*开发者工具*，转到 **Network** 选项卡，触发验证码并检查网络请求。其中会出现 `TCaptcha.js` 或 `TCaptcha-global.js`，可在其中找到类似的链接： 
 
 ![](./images/tendi/tendi_captchaUrl.png)
 
@@ -244,7 +245,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
         const browser = await chromium.launch({ headless: false });
         const page = await browser.newPage();
 
-        // 拦截请求
+        // 捕获请求
         page.on("request", (request) => {
           const url = request.url();
           if (
@@ -252,7 +253,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
           ) {
             const parsedUrl = new URL(url);
             const aid = parsedUrl.searchParams.get("aid");
-            console.log("提取到的 aid:", aid);
+            console.log("Extracted aid:", aid);
           }
         });
 
@@ -317,7 +318,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
                  Headless = false });
               var page = await browser.NewPageAsync();
 
-              // 拦截请求
+              // 捕获请求
               page.Request += (_, request) =>
               {
                   var url = request.Url;
@@ -370,7 +371,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     // CapMonster Cloud 会自动使用它们的代理
     let tenDIRequest = new TenDIRequest({
       websiteURL: "https://example.com", // 包含 Tencent（TenDI）验证码的页面 URL
-      websiteKey: "183268248"            // TencentCaptcha appid（请替换为有效值）
+      websiteKey: "183268248"            // TencentCaptcha appid（替换为当前有效值）
     });
 
     // 使用您自己的代理的示例
@@ -481,8 +482,8 @@ async def solve_tendi_custom():
     # 基本示例，无需代理
     # CapMonster Cloud 会自动使用它们的代理
     tendi_request = TenDiCustomTaskRequest(
-        websiteUrl="https://example.com",  # 包含 Tencent（TenDI）验证码的页面 URL
-        websiteKey="189956587",            # TencentCaptcha appid
+        websiteUrl="https://example.com", # 包含 Tencent（TenDI）验证码的页面 URL
+        websiteKey="189956587", # 替换为正确的值
         userAgent="userAgentPlaceholder"
     )
 
@@ -519,7 +520,6 @@ asyncio.run(solve_tendi_custom())
   <TabItem value="csharp" label="C#" className="method-panel">
 <details>
       <summary>显示代码</summary>
-
 ```csharp
 // https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
@@ -549,7 +549,7 @@ class Program
         var tenDiRequest = new TenDiCustomTaskRequest
         {
             WebsiteUrl = "https://example.com",   // 包含验证码的页面 URL
-            WebsiteKey = "189956587",             // TencentCaptcha appid
+            WebsiteKey = "189956587",             // 替换为正确的值
             UserAgent = "userAgentPlaceholder"
         };
 

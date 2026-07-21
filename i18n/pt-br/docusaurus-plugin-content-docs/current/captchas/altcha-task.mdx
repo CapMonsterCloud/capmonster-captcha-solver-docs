@@ -75,13 +75,15 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
   <ParamItem title="challenge (dentro do metadata)" required="required" type="string" />
-  Identificador único da tarefa obtido no site.
+  Identificador único da tarefa obtido no site.<br />
+  Exemplo: `3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
 
   ---
 
   <ParamItem title="iterations (dentro do metadata)" required="required" type="string" />
   Número de iterações ou valor máximo para os cálculos.
-  > **Importante:** o parâmetro `iterations` corresponde ao valor de `maxnumber`!
+  > **Importante:** o parâmetro `iterations` corresponde ao valor de `maxnumber`!<br />
+  Exemplo: `5000`
 
   ---
 
@@ -97,7 +99,8 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
   <ParamItem title="signature (dentro do metadata)" required="required" type="string" />
-  Assinatura digital da requisição.
+  Assinatura digital da requisição.<br />
+  Exemplo: `4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18`
 
   ---
 
@@ -151,7 +154,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
@@ -162,15 +165,15 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
           "websiteKey": "",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt": "46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt":"your-salt",
+            "signature": "your-signature"
           }
         }
       }
       ```
-      **Resposta**
+      **Exemplo de resposta**
       ```json
       {
         "errorId": 0,
@@ -187,31 +190,31 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
-      ```json
-      {
-        "clientKey": "API_KEY",
-        "task": {
-          "type": "CustomTask",
-          "class": "altcha",
-          "websiteURL": "https://example.com",
-          "websiteKey": "",
-          "userAgent": "userAgentPlaceholder",
-          "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt": "46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
-          },
-          "proxyType":"http",
-          "proxyAddress":"8.8.8.8",
-          "proxyPort":8080,
-          "proxyLogin":"proxyLoginHere",
-          "proxyPassword":"proxyPasswordHere"
-        }
-      }
-      ```
-      **Resposta**
+      **Exemplo de requisição**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "altcha",
+    "websiteURL": "https://example.com",
+    "websiteKey": "",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "challenge": "your-challenge",
+      "iterations": "your-iterations",
+      "salt":"your-salt",
+      "signature": "your-signature"
+    },
+    "proxyType":"your-proxy-type",
+    "proxyAddress":"your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin":"your-proxy-login",
+    "proxyPassword":"your-proxy-password"
+  }
+}
+```
+      **Exemplo de resposta**
       ```json
       {
         "errorId": 0,
@@ -234,14 +237,14 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
     ```
   </MethodItem>
   <MethodDescription>
-    **Requisição**
+    **Exemplo de requisição**
     ```json
     {
       "clientKey": "API_KEY",
       "taskId": 407533072
     }
     ```
-    **Resposta**
+    **Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -293,7 +296,7 @@ metadata: {
 Você também pode usar os seguintes exemplos de código para extrair todos os parâmetros:
 
 <details>
-<summary>Exemplo de Requisição GET</summary>
+<summary>Exemplo de requisição GET</summary>
 
 Realiza uma requisição HTTP GET para o URL especificado e registra a resposta no console.
 
@@ -368,7 +371,9 @@ Por exemplo:
 
 ![](./images/altcha/altcha_base64.png)
 
-Decodificando esse valor, obtemos um objeto JSON contendo os dados usados para validação do captcha:
+Após a decodificação do valor, é formado um objeto JSON com os dados necessários para verificar o captcha.
+
+Exemplo:
 
 ```json
 {

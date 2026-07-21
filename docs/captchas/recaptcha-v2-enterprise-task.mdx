@@ -58,25 +58,38 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Ключ-идентификатор reCAPTCHA на целевой странице.
-	<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
-	<br/>или `<iframe title="reCAPTCHA" src="...;k=6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH&amp;...` , где `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` - `websiteKey`
+    Ключ-идентификатор reCAPTCHA на целевой странице.<br />
+	Например, значение `websiteKey` можно найти в HTML-коде страницы:
+
+`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+
+или в URL атрибута `src` элемента `iframe`:
+
+`<iframe title="reCAPTCHA" src="...;k=6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH&amp;...">`
+
+В данном примере `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` — это значение параметра `websiteKey`.
+
 
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>Значение параметра action, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
+    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
     
     ---
 
     <ParamItem title="enterprisePayload" type="string" />
-    Некоторые реализации виджета reCAPTCHA Enterprise могут содержать дополнительное поле s в структуре, которая передаётся в метод grecaptcha.enterprise.render вместе с sitekey. Например: `2JvUXHNTnZl1Jb6WEvbDyB...ugQA` из `<pre lang="js" ><code>grecaptcha.enterprise.render("some-div-id", {
-	sitekey: "6Lc_aCMTAAAAABx7u2N0D1XnVbI_v6ZdbM6rYf16" 
-	theme: "dark" 
-	s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA" 
-	});</code></pre>`
+    Некоторые реализации reCAPTCHA Enterprise могут содержать дополнительный параметр `s`, передаваемый в `grecaptcha.enterprise.render` вместе с `sitekey`. Например, значение `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`:
+
+```js
+grecaptcha.enterprise.render("some-div-id", {
+  sitekey: "6Lc_aCMTAAAAABx7u2N0D1XnVbI_v6ZdbM6rYf16",
+  theme: "dark",
+  s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA"
+});
+```
+
 
     ---
 
@@ -84,7 +97,6 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     <p>Адрес домена с которого загружать reCAPTCHA Enterprise. Например: 
 	<br/>- [www.google.com](http://www.google.com) 
 	<br />- [www.recaptcha.net](http://www.recaptcha.net)</p>
-	<p>Не используйте параметр, если не знаете зачем он нужен.</p>
 
     ---
 
@@ -189,21 +201,21 @@ Object.defineProperty(window, 'grecaptcha', {
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    "websiteKey": "your-website-key",
     "enterprisePayload": {
-      "s": "SOME_ADDITIONAL_TOKEN"
+      "s": "your-value"
     }
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 			```json
 			{
 			  "errorId":0,
@@ -220,27 +232,27 @@ Object.defineProperty(window, 'grecaptcha', {
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    "websiteKey": "your-website-key",
     "enterprisePayload": {
-      "s": "SOME_ADDITIONAL_TOKEN"
+      "s": "your-value"
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -263,14 +275,14 @@ Object.defineProperty(window, 'grecaptcha', {
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -610,9 +622,9 @@ Object.defineProperty(window, 'grecaptcha', {
       // CapMonster Cloud автоматически использует свои прокси
       let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
         websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",             // Замените на корректное значение
+        websiteKey: "your-website-key",             // Замените на корректное значение
         enterprisePayload: {
-          s: "SOME_ADDITIONAL_TOKEN",   // Опциональный enterprise параметр
+          s: "your-value",   // Опциональный enterprise параметр
         }
       });
 
@@ -630,8 +642,8 @@ Object.defineProperty(window, 'grecaptcha', {
 
       recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
         websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-        enterprisePayload: { s: "SOME_ADDITIONAL_TOKEN" },
+        websiteKey: "your-website-key",
+        enterprisePayload: { s: "your-value" },
         proxy,
         userAgent: "userAgentPlaceholder"
       });
@@ -665,9 +677,9 @@ Object.defineProperty(window, 'grecaptcha', {
           // CapMonster Cloud автоматически использует свои прокси
           let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
               websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd", // Замените на корректное значение
+              websiteKey: "your-website-key", // Замените на корректное значение
               enterprisePayload: {
-                  s: "SOME_ADDITIONAL_TOKEN", // Опциональный enterprise параметр
+                  s: "your-value", // Опциональный enterprise параметр
               }
           });
 
@@ -685,8 +697,8 @@ Object.defineProperty(window, 'grecaptcha', {
 
           recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
               websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-              enterprisePayload: { s: "SOME_ADDITIONAL_TOKEN" },
+              websiteKey: "your-website-key",
+              enterprisePayload: { s: "your-value" },
               proxy,
               userAgent: "userAgentPlaceholder"
           });
@@ -728,10 +740,10 @@ Object.defineProperty(window, 'grecaptcha', {
         # Базовый пример без прокси
         # CapMonster Cloud автоматически использует свои прокси
         recaptcha2request = RecaptchaV2EnterpriseRequest(
-            websiteUrl="https://example.com",
-            websiteKey="6Lf56sUnAAAAAIKLuONYgRsFUfmI-3Lex3xT5U-s",
+            websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
+            websiteKey="your-website-key",
             enterprisePayload={
-                "s": "SOME_ADDITIONAL_TOKEN"
+                "s": "your-value"
             }
         )
 
@@ -747,10 +759,10 @@ Object.defineProperty(window, 'grecaptcha', {
         # )
 
         # recaptcha2request = RecaptchaV2EnterpriseRequest(
-        #     websiteUrl="https://example.com",
-        #     websiteKey="6Lf56sUnAAAAAIKLuONYgRsFUfmI-3Lex3xT5U-s",
+        #     websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
+        #     websiteKey="your-website-key",
         #     enterprisePayload={
-                # "s": "SOME_ADDITIONAL_TOKEN"
+                # "s": "your-value"
         #     },
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
@@ -801,9 +813,9 @@ Object.defineProperty(window, 'grecaptcha', {
             // CapMonster Cloud автоматически использует свои прокси
             var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
             {
-                WebsiteUrl = "https://example.com", // URL страницы с капчей
-                WebsiteKey = "6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s", // Замените на корректное значение
-                EnterprisePayload = "{\"s\":\"SOME_ADDITIONAL_TOKEN\"}"
+                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
+                WebsiteKey = "your-website-key", // Замените на корректное значение
+                EnterprisePayload = "{\"s\":\"your-value\"}"
             };
 
             // Пример использования вашего собственного прокси
@@ -811,9 +823,9 @@ Object.defineProperty(window, 'grecaptcha', {
             /*
             var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
             {
-                WebsiteUrl = "https://example.com",
-                WebsiteKey = "6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s",
-                EnterprisePayload = "{\"s\":\"SOME_ADDITIONAL_TOKEN\"}",
+                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
+                WebsiteKey = "your-website-key",
+                EnterprisePayload = "{\"s\":\"your-value\"}",
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89",          

@@ -51,7 +51,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Изображение в кодировке base64.
+    Изображение в кодировке base64 (обёрнутое в массив, без префикса `data:image/png;base64,`).
 
     ---
 
@@ -71,7 +71,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
@@ -93,7 +93,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     	![](../images/ComplexImageTask-Recognition/shein1.png)
     	![](../images/ComplexImageTask-Recognition/shein2.png)
 
-    	**Ответ**
+    	**Пример ответа**
     	```json
     	{
     	  "errorId":0,
@@ -115,14 +115,15 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Ответ:** координаты, на которые необходимо кликнуть в определенном порядке.
+		**Пример ответа** <br/>
+    В ответе содержатся координаты, на которые необходимо кликнуть в определённом порядке.
       ```json
       {
         "solution": {

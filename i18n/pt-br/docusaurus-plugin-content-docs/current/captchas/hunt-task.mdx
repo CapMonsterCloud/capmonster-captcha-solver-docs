@@ -185,25 +185,25 @@ Utilizado para obter o token X-HD vinculado ao IP.
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "type": "CustomTask",
   "class": "HUNT",
-  "websiteURL": "https://example.com",
+  "websiteURL": "https://yourwebsite.com/page-with-hunt",
   "metadata": {
     "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-  **Resposta**
+  **Exemplo de resposta**
 
 ```json
 {
@@ -254,26 +254,26 @@ O valor de `meta.token` deve ser enviado no parâmetro `data`.
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "type": "CustomTask",
   "class": "HUNT",
-  "websiteUrl": "https://example.com",
+  "websiteUrl": "https://example.com",        
   "metadata": {
-    "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-    "data": "kufyHK/s/jTNU...AfwIW", // valor de META_TOKEN
+      "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
+      "data": "meta-token-value",
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-  **Resposta**
+  **Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -304,14 +304,14 @@ Valor de `solution.data.token`:
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -415,7 +415,7 @@ const htmlHeaders = {
   "cache-control": "no-cache",
   pragma: "no-cache",
   priority: "u=0, i",
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "document",
@@ -436,7 +436,7 @@ const apiHeaders = {
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
   referer: BASE_URL + "/", // Referer atual do site
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "empty",
@@ -662,7 +662,7 @@ html_headers = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "priority": "u=0, i",
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "document",
@@ -683,7 +683,7 @@ api_headers = {
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
     "referer": BASE_URL + "/en", # Substitua pelo referer atual do site
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",

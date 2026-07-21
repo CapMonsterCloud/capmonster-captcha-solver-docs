@@ -52,7 +52,7 @@ A solicitação deve conter duas imagens: fundo e círculo.
 ---
 
 <ParamItem title="imagesBase64" required type="array" />
-Imagem codificada em formato base64.
+Array de imagens codificadas em base64 (sem o prefixo `data:image/png;base64,`).
 
 ---
 
@@ -72,7 +72,7 @@ Nome da tarefa: `"oocl_rotate_new"`
 		```
 	</MethodItem>
 	<MethodDescription>
-  **Requisição**
+  **Exemplo de requisição**
   ```json
   {
     "clientKey": "API_KEY",
@@ -97,7 +97,7 @@ Círculo (exemplo *circle_base64*):
 
 ![](../images/ComplexImageTask-Recognition/ex2.png)
 
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -120,7 +120,7 @@ Círculo (exemplo *circle_base64*):
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -128,7 +128,8 @@ Círculo (exemplo *circle_base64*):
 		}
 		```
 
-**Resposta:** graus indicando quanto o círculo deve ser girado no sentido horário.
+**Exemplo de resposta:** <br/>
+Graus indicando quanto o círculo deve ser girado no sentido horário.
 
 ```json
 {

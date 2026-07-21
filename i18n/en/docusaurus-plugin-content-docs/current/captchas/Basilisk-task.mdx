@@ -53,7 +53,9 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   <ParamItem title="websiteKey" required type="string" />  
   Can be found in the HTML code in the attribute **data-sitekey** of the captcha container  
   or in the payload of a POST request to  
-  `https://basiliskcaptcha.com/challenge/check-site` in the field **site_key**.
+  `https://basiliskcaptcha.com/challenge/check-site` in the field **site_key**.<br />
+    
+  Example: `b7890hre6cf2544b2759c19fb2600897`
 
   ---
 
@@ -107,7 +109,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
     ```json
     {
@@ -116,13 +118,13 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
         "type": "CustomTask",
         "class": "Basilisk",
         "websiteURL": "https://domain.io/account/register",
-        "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
+        "websiteKey": "your-website-key",
         "userAgent": "userAgentPlaceholder"
       }
     }
     ```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -142,27 +144,27 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "Basilisk",
-        "websiteURL": "https://domain.io/account/register",
-        "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
-        "userAgent": "userAgentPlaceholder",
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
+  ```json
+  {
+    "clientKey": "API_KEY",
+    "task": {
+      "type": "CustomTask",
+      "class": "Basilisk",
+      "websiteURL": "https://domain.io/account/register",
+      "websiteKey": "your-website-key",
+      "userAgent": "userAgentPlaceholder",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
     }
-    ```
+  }
+  ```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -187,14 +189,14 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx), to get the B
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -381,7 +383,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // CapMonster Cloud automatically uses its own proxies
     let basiliskRequest = new BasiliskRequest({
         websiteURL: "https://example.com",       // URL of the page with Basilisk
-        websiteKey: "websiteKey"                 // Replace with the correct value
+        websiteKey: "b3760bfe5cf4254b2759c19fg2698og"   // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -396,8 +398,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     basiliskRequest = new BasiliskRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "b3760bfe5cf4254b2759c19fg2698og",
+        websiteURL: "https://example.com",  // URL of the page with Basilisk
+        websiteKey: "b3760bfe5cf4254b2759c19fg2698og", // Replace with the correct value
         proxy,
         userAgent: "userAgentPlaceholder"
     });

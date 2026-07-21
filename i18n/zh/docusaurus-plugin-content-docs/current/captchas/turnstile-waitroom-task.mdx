@@ -50,7 +50,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <br />
 
 <Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless（无需代理）" default className="bordered-panel">
+<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -62,7 +62,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Cloudflare 网站 key
+  Cloudflare 密钥。可以传递任意字符串，例如：`xxxxxx`。
 
 ---
 
@@ -72,8 +72,8 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ---
 
   <ParamItem title="htmlPageBase64" required type="string" />
-  包含 `<title>Waiting Room powered by Cloudflare</title>` 的 Base64 编码 HTML 页面<br/>
-  获取 `htmlPageBase64` 示例：
+  包含标题 `<title>Waiting Room powered by Cloudflare</title>` 的 HTML 页面，其内容采用 **base64 格式**。<br/> 
+  获取 htmlPageBase64 字符串的示例：<br/> 
 ```js
 var serializer = new XMLSerializer();
 var fullHtml = serializer.serializeToString(document);
@@ -126,33 +126,33 @@ console.log(htmlBase64);
 ## 创建任务方法
 
 <Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无需代理）" default className="method-panel">
+<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-waitroom",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "wait_room",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**响应**
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -168,14 +168,14 @@ console.log(htmlBase64);
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取等待室解决方案。根据系统负载，响应可能需要 5 到 20 秒。
 
 <Tabs>
-<TabItem value="proxyless" label="TurnstileTask（无需代理）" default className="method-panel-full">
+<TabItem value="proxyless" label="TurnstileTask（无代理）" default className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
-    **请求**
+    **请求示例**
     ```json
     {
       "clientKey": "API_KEY",
@@ -183,7 +183,7 @@ console.log(htmlBase64);
     }
     ```
 
-    **响应**
+    **响应示例**
     ```json
     {
       "errorId": 0,
@@ -199,5 +199,4 @@ console.log(htmlBase64);
 
 |**属性**|**类型**|**说明**|
 | :- | :- | :- |
-|cf_clearance|字符串|特殊的 Cloudflare cookies，可设置到浏览器中|
-
+|cf_clearance|String|可添加到浏览器中的 Cloudflare 专用 Cookie|

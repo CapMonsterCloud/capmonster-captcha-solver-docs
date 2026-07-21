@@ -48,7 +48,9 @@ O endereço da página principal onde o captcha é resolvido.
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-Pode ser encontrado no código HTML no atributo **data-sitekey** do contêiner do captcha ou no payload de uma solicitação POST para `https://basiliskcaptcha.com/challenge/check-site` no campo **site_key**
+Pode ser encontrado no código HTML no atributo **data-sitekey** do contêiner do captcha ou no payload de uma solicitação POST para `https://basiliskcaptcha.com/challenge/check-site` no campo **site_key**<br />
+    
+Exemplo: `b7890hre6cf2544b2759c19fb2600897`
 
 ---
 
@@ -99,24 +101,24 @@ Senha do servidor proxy.
 <MethodItem>
 ```http
 https://api.capmonster.cloud/createTask
-````
+```
 
 </MethodItem>
 <MethodDescription>
-**Solicitação**
-```json
-{
-   "clientKey": "API_KEY",
-   "task": {
-       "type": "CustomTask",
-       "class": "Basilisk",
-       "websiteURL": "https://domain.io/account/register",
-       "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
-       "userAgent": "userAgentPlaceholder"
-   }
-}
-```
-**Resposta**
+**Exemplo de requisição**
+    ```json
+    {
+      "clientKey": "API_KEY",
+      "task": {
+        "type": "CustomTask",
+        "class": "Basilisk",
+        "websiteURL": "https://domain.io/account/register",
+        "websiteKey": "your-website-key",
+        "userAgent": "userAgentPlaceholder"
+      }
+    }
+    ```
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -133,25 +135,25 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
-```json
-{
-   "clientKey": "API_KEY",
-   "task": {
-       "type": "CustomTask",
-       "class": "Basilisk",
-       "websiteURL": "https://domain.io/account/register",
-       "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
-       "userAgent": "userAgentPlaceholder",
-       "proxyType": "http",
-       "proxyAddress": "8.8.8.8",
-       "proxyPort": 8080,
-       "proxyLogin": "proxyLoginHere",
-       "proxyPassword": "proxyPasswordHere"
-   }
-}
-```
-**Resposta**
+**Exemplo de requisição**
+  ```json
+  {
+    "clientKey": "API_KEY",
+    "task": {
+      "type": "CustomTask",
+      "class": "Basilisk",
+      "websiteURL": "https://domain.io/account/register",
+      "websiteKey": "your-website-key",
+      "userAgent": "userAgentPlaceholder",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
+    }
+  }
+  ```
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -175,14 +177,14 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -410,10 +412,10 @@ import { CapMonsterCloudClientFactory, ClientOptions, BasiliskRequest } from '@z
 
 const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
 
-async function solveBasilisk() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+      async function solveBasilisk() {
+          const client = CapMonsterCloudClientFactory.Create(
+              new ClientOptions({ clientKey: API_KEY })
+          );
 
     // Exemplo básico sem proxy
     // O CapMonster Cloud usa automaticamente seus próprios proxies

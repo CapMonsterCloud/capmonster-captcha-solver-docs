@@ -120,26 +120,26 @@ User-Agent браузера. <br />
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "type": "CustomTask",
         "class": "tspd",
-        "websiteUrl": "https://example.com",        
+        "websiteUrl": "https://yourwebsite.com/page-with-tspd",        
         "metadata": {
             "tspdCookie": "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
             "htmlPageBase64": "PCFET0NU...k+PC9odG1sPg=="
         },
         "userAgent": "userAgentPlaceholder",
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
+        "proxyType": "your-proxy-type",
+        "proxyAddress": "your-proxy-address",
+        "proxyPort": 1234,
+        "proxyLogin": "your-proxy-login",
+        "proxyPassword": "your-proxy-password"
 }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -163,14 +163,14 @@ User-Agent браузера. <br />
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 		```json
      {
           "errorId":0,
@@ -206,7 +206,7 @@ User-Agent браузера. <br />
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -310,7 +310,7 @@ Upgrade-Insecure-Requests: 1
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -377,7 +377,7 @@ const url =
 // === Заголовки ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -487,7 +487,7 @@ const url =
 // === Задайте нужные заголовки ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -687,7 +687,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -756,7 +756,7 @@ async function main() {
 
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",

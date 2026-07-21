@@ -1,8 +1,8 @@
 ---
 sidebar_position: 11
 sidebar_label: DataDome
-title: "DataDome验证码自动识别与绕过 | API"
-description: "了解如何通过Capmonster Cloud API绕过DataDome验证码！本指南展示了如何配置DataDome验证码的自动识别与解决方案。"
+title: "DataDome 验证码自动识别与绕过 | API"
+description: "了解如何通过 Capmonster Cloud API 绕过 DataDome 验证码！DataDome 方法使用说明可帮助您配置 DataDome 验证码的自动识别与解决！"
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -44,41 +44,40 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-
 <Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<TabItem value="proxyless" label="CustomTask（无代理）" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
-    
----
 
-<ParamItem title="class" required type="string" />
-**DataDome**
+    ---
 
----
+    <ParamItem title="class" required type="string" />
+    **DataDome**
+
+    ---
 
 <ParamItem title="websiteURL" required type="string" />
 验证码所在的主页面URL。
 
----
+    ---
 
-<ParamItem title="captchaUrl（在metadata中）" required="required" type="string" />
-`"captchaUrl"` - 验证码链接。通常格式为: `"https://geo.captcha-delivery.com/captcha/?initialCid=..."`。
+    <ParamItem title="captchaUrl（位于 metadata 中）" required="required" type="string" />
+    `"captchaUrl"` - 验证码链接。通常采用以下格式：`"https://geo.captcha-delivery.com/captcha/?initialCid=..."`。
 
----
+    ---
 
-<ParamItem title="datadomeCookie（在metadata中）" required type="string" />
-您的DataDome Cookie。可以通过页面的 `document.cookie` 获取（如果Cookie没有 *HttpOnly* 标志），通过请求头 Set-Cookie: "datadome=..."，或直接从HTML代码中的 `initialCid` 获取 ([*查看如何找到datadomeCookie示例*](#如何找到datadomecookie))。
+    <ParamItem title="datadomeCookie（位于 metadata 中）" required type="string" />
+    您的 datadome Cookie。可在页面中通过 `document.cookie` 获取（如果 Cookie 没有 *HttpOnly* 标志），也可从请求头 Set-Cookie: "datadome=..." 中获取，或者直接从页面 HTML 代码中的 `initialCid` 获取（[*参阅如何查找 datadomeCookie 的示例*](#如何查找-datadomecookie)）
 
----
+    ---
    
-<ParamItem title="datadomeVersion (在metadata中)" type="string" />
-DataDome 解决方法版本。
-当参数设置为 "new" 时，将使用更新后的解决方案，支持 **i.js** 和 **c.js** 两种脚本（详见下文）。
-如果未指定该参数，则使用旧版解决方案，仅支持 **i.js**。
+   <ParamItem title="datadomeVersion（位于 metadata 中）" type="string" />
+    DataDome 解决方法的版本。 <br />
+当值为 "new" 时，将使用支持 **i.js** 和 **c.js** 两种脚本的更新方法（*详情见下文*）。
+如果未指定该参数，则使用仅支持 **i.js** 的旧解决方法。
 
----
-
+    ---
+    
 
 <ParamItem title="proxyType" required type="string" />
 **http** - 常规http/https代理；<br />
@@ -144,29 +143,29 @@ DataDome 解决方法版本。
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "CustomTask",
     "class": "DataDome",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-datadome",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
       "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-      "datadomeCookie": "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z",
+      "datadomeCookie": "datadome=cookie-value",
       "datadomeVersion": "new"
     },
-    "proxyType": "http",
-    "proxyAddress": "123.45.67.89",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyUsername",
-    "proxyPassword": "proxyPassword"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**响应**
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -189,14 +188,14 @@ DataDome 解决方法版本。
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**响应**
+		**响应示例**
 
 ```json
 {
@@ -218,7 +217,7 @@ DataDome 解决方法版本。
   }
 }
 ```
-</MethodDescription>
+	</MethodDescription>
 </TabItem>
 </Tabs>
 
@@ -391,7 +390,7 @@ async function waitResult(taskId) {
   const start = Date.now();
 
   while (true) {
-    if (Date.now() - start > MAX_WAIT) throw new Error("CapMonster 超时");
+    if (Date.now() - start > MAX_WAIT) throw new Error("CapMonster timeout");
 
     await new Promise((r) => setTimeout(r, 3000));
 
@@ -508,7 +507,6 @@ async function solveDataDome() {
 
 solveDataDome().catch(console.error);
 ```
-
   </details>
 
   <details>
@@ -645,7 +643,7 @@ async function waitResult(taskId) {
 // ======================================================
 
 async function solveDataDome() {
-  console.log("\nDataDome → CapMonster solver 已启动\n");
+  console.log("\nDataDome → CapMonster Cloud solver 已启动\n");
 
   let proxyConfig = null;
   let parsedProxy = null;
@@ -907,7 +905,7 @@ def wait_result(task_id):
 
     while True:
         if time.time() - start > MAX_WAIT:
-            raise TimeoutError("CapMonster 超时")
+            raise TimeoutError("CapMonster Cloud 超时")
 
         time.sleep(2)
 
@@ -1138,7 +1136,7 @@ def wait_result(task_id):
 
     while True:
         if time.time() - start > MAX_WAIT:
-            raise TimeoutError("CapMonster 超时")
+            raise TimeoutError("CapMonster Cloud timeout")
 
         time.sleep(2)
 
@@ -1166,7 +1164,7 @@ def wait_result(task_id):
 
 def solve_datadome():
 
-    print("\n DataDome → CapMonster solver (Playwright) 已启动\n")
+    print("\n DataDome → CapMonster Cloud solver (Playwright) 已启动\n")
 
     proxy = None
     if PROXY_URL:
@@ -1291,7 +1289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         proxy,
         metadata: {
             captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-            datadomeCookie: "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z"
+            datadomeCookie: "datadome=datadome-cookie-value"
         }
     });
 
@@ -1335,7 +1333,7 @@ async function solveDataDome() {
         proxy,
         metadata: {
             captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-            datadomeCookie: "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z"
+            datadomeCookie: "datadome=datadome-cookie-value"
         }
     });
 
@@ -1378,7 +1376,7 @@ solveDataDome().catch(console.error);
         datadome_request = DataDomeCustomTaskRequest(
             websiteUrl="https://example.com",  # 验证码页面的 URL
             metadata={
-                "datadomeCookie": "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z", 
+                "datadomeCookie": "datadome=cookie-value", 
                 "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm"
             },
             proxy=proxy,

@@ -53,18 +53,22 @@ A URL da página onde o captcha está localizado.
 ---
 
 <ParamItem title="websitePublicKey" required type="string" />
-Chave do FunCaptcha (valor *public key* ou *pk*).
+Chave do FunCaptcha (valor `public key` ou `pk`).<br />
+
+Exemplo de formato: `EX72CCFB-26EX-40E5-91E6-85EX70BE98ED`
 
 ---
 
 <ParamItem title="data" type="string" />
-Parâmetro adicional. Obrigatório se o site usar *data[blob]*. <br />
+Parâmetro adicional. Obrigatório se o site usar `data[blob]`. <br />
+
 **Importante:** Não carregue o iframe do captcha para extrair o `blob`. Depois que o captcha for carregado, o valor se torna inválido.
 
 ---
 
 <ParamItem title="funcaptchaApiJSSubdomain" type="string" />
-Subdomínio da Arkose Labs (valor *surl*). Especifique apenas se for diferente do padrão: `client-api.arkoselabs.com`.
+Subdomínio da Arkose Labs (valor `surl`). Especifique apenas se for diferente do padrão: `client-api.arkoselabs.com`.<br />
+
 **Importante:** Indique apenas o domínio, sem o prefixo `https://`.
 
 ---
@@ -129,21 +133,21 @@ https://api.capmonster.cloud/createTask
 
 </MethodItem>
 <MethodDescription>
-**Requisição**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -160,26 +164,26 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Requisição**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -201,7 +205,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Requisição**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
@@ -209,7 +213,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -298,10 +302,10 @@ Você pode implementar a mesma lógica usando outras ferramentas de automação 
 
 ---
 
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-<summary>Node.js</summary>
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="Node.js" default className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
 
 ```javascript
 // npm install playwright
@@ -432,15 +436,12 @@ async function getTaskResult(taskId) {
 ```
 
 </details>
+
 </TabItem>
-</Tabs>
 
----
-
-<Tabs>
-<TabItem value="python" label="Python" className="method-panel">
-<details>
-<summary>Python</summary>
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
 
 ```python
 # pip install playwright
@@ -574,15 +575,11 @@ asyncio.run(main())
 ```
 
 </details>
-</TabItem>
-</Tabs>
+  </TabItem>
 
----
-
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-<summary>C#</summary>
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
 
 ```csharp
 // dotnet add package Microsoft.Playwright
@@ -751,7 +748,6 @@ class Program
     }
 }
 ```
-
 </details>
-</TabItem>
+  </TabItem>
 </Tabs>

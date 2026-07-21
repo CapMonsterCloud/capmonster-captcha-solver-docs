@@ -53,29 +53,30 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
     <ParamItem title="capMonsterModule" type="string" />
     Имя модуля, например “yandex“. Альтернативный способ передачи имени модуля и список всех доступных модулей можно найти [здесь](../api/module-name.mdx). <br />
-    Пример: yandex, special и другие.
+    Пример: `yandex`, `special` и другие.
 
     ---
 
     <ParamItem title="recognizingThreshold" type="integer" />
-    Порог распознавания капчи с возможным значением от 0 до 100. Например, если в систему было отправлено значение 90, и задача решилась с уверенностью 80, то деньги за решение не спишутся. В этом случае пользователь получит ответ ERROR_CAPTCHA_UNSOLVABLE. Альтернативный способ установки порога списания денег описан в [статье](../api/threshold.mdx).
+    Порог распознавания капчи с возможным значением от **0** до **100**. Например, если в систему было отправлено значение **90**, и задача решилась с уверенностью **80**, то деньги за решение не спишутся. В этом случае пользователь получит ответ ERROR_CAPTCHA_UNSOLVABLE. Альтернативный способ установки порога списания денег описан в [статье](../api/threshold.mdx).
 
     ---
 
     <ParamItem title="case" type="boolean" />
-    Учитывать регистр при решении или нет. Возможные значения: true, false
+    Учитывать регистр при решении или нет. Возможные значения: `true`, `false`
 
     ---
 
     <ParamItem title="numeric" type="integer" />
-    1 - если капча состоит только из цифр. <br />
-    Возможные значения: 0, 1
+    `1` - если капча состоит только из цифр. <br />
+    Возможные значения: `0`, `1`
 
     ---
 
     <ParamItem title="math" type="boolean" />
 `false` — по умолчанию не задано; <br />
-`true` — капча требует выполнения математического действия (например, капча `2 + 6` вернёт значение `8`).  
+`true` — капча требует выполнения математического действия (например, капча `2 + 6` вернёт значение `8`).  <br />
+
 **Важно:** для модуля `captcha_math` **не используйте** параметр `math: true`. 
 </TabItem>
 </Tabs>
@@ -120,7 +121,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -130,7 +131,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -153,14 +154,14 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -337,11 +338,12 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 
         const imageToTextRequest = new ImageToTextRequest({
             body: 'some base64 body', // Замените на реальное значение
-            CapMonsterModule: CapMonsterModules.YandexWave,
-            Case: true,
-            numeric: 1,
-            recognizingThreshold: 65,
-            math: false
+            // Необязательные параметры
+            CapMonsterModule: CapMonsterModules.YandexWave, // Можно выбрать модуль, например, YandexWave
+            Case: true, 
+            numeric: 1,  
+            recognizingThreshold: 65, 
+            math: false   
         });
 
         const result = await cmcClient.Solve(imageToTextRequest);
@@ -370,11 +372,12 @@ async function solveImageToText() {
 
     const imageToTextRequest = new ImageToTextRequest({
         body: 'some base64 body', // Замените на реальное значение
-        CapMonsterModule: CapMonsterModules.YandexWave,
-        Case: true,
-        numeric: 1,
-        recognizingThreshold: 65,
-        math: false
+        // Необязательные параметры
+        CapMonsterModule: CapMonsterModules.YandexWave, // Можно выбрать модуль, например, YandexWave
+        Case: true,  
+        numeric: 1, 
+        recognizingThreshold: 65,  
+        math: false 
     });
 
     const result = await cmcClient.Solve(imageToTextRequest);
@@ -409,10 +412,11 @@ solveImageToText().catch(console.error);
     image_to_text_request = ImageToTextRequest(
         image_bytes=image_bytes,
         module_name=None,     # Можно выбрать модуль, например YandexWave
-        threshold=50,     
-        case=True,     
-        numeric=0,    
-        math=False         
+        # Необязательные параметры
+        threshold=50, 
+        case=True,    
+        numeric=0,   
+        math=False        
     )
 
     async def solve_captcha():
@@ -458,11 +462,12 @@ solveImageToText().catch(console.error);
             var imageToTextRequest = new ImageToTextRequest
             {
                 Body = "/9j/4AAQSkZJRgABAQAAAQABA...hMjIyMjIyMjIyMjIyMj", // Замените на реальное значение
-                CapMonsterModule = "None",  
-                RecognizingThreshold = 70, 
-                CaseSensitive = true,
-                Numeric = false, 
-                Math = false
+                // Необязательные параметры
+                CapMonsterModule = "None", // Можно выбрать модуль, например, YandexWave
+                RecognizingThreshold = 70,  
+                CaseSensitive = true, 
+                Numeric = false,  
+                Math = false     
             };
 
             var imageToTextResult = await cmCloudClient.SolveAsync(imageToTextRequest);

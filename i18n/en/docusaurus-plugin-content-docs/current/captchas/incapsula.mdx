@@ -130,31 +130,31 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "Imperva",
-        "websiteURL": "https://example.com",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-          "incapsulaCookies": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",
-          "reese84UrlEndpoint": "Built-with-the-For-hopence-Hurleysurfecting-the-"
-        },
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "Imperva",
+    "websiteURL": "https://yourwebsite.com/page-with-imperva",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "incapsulaScriptUrl": "_Incapsula_Resource?example-parameter=example-value",
+      "incapsulaCookies": "example-session-cookie=your-session-cookie; example-visitor-cookie=your-visitor-cookie;",
+      "reese84UrlEndpoint": "your-reese84-url-endpoint"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -178,14 +178,14 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -372,6 +372,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Setup Imperva (Incapsula) task
     const impervaRequest = new ImpervaRequest({
         websiteURL: "https://example.com/", // URL of your Imperva-protected page
+        // Replace with your values
         metadata: {
             incapsulaScriptUrl: "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
             incapsulaCookies: "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;"
@@ -412,6 +413,7 @@ async function main() {
     // Setup Imperva (Incapsula) task
     const impervaRequest = new ImpervaRequest({
         websiteURL: 'https://example.com/', // URL of your Imperva-protected page
+        // Replace with your values
         metadata: {
             incapsulaScriptUrl: '_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3',
             incapsulaCookies: 'incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;',
@@ -457,6 +459,7 @@ async def solve_imperva_captcha():
     # Setup Imperva (Incapsula) task
     imperva_request = ImpervaCustomTaskRequest(
         websiteUrl="https://example.com",
+        # Replace with your values
         metadata={
             "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
             "incapsulaCookie": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",

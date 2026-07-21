@@ -1,6 +1,8 @@
 ---
 sidebar_position: 16
 sidebar_label: Binance
+title: "Binance 验证码自动识别与绕过 | API"
+description: "了解如何使用 Capmonster Cloud 自动验证码识别与解决服务的 API 绕过 Binance 验证码！" 
 ---
 
 import Tabs from '@theme/Tabs';
@@ -42,7 +44,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <br />
 
   <Tabs>
-  <TabItem value="proxy" label="BinanceTask (使用代理)" default className="bordered-panel">
+  <TabItem value="proxy" label="BinanceTask（使用代理时）" className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **BinanceTask**
 
@@ -54,12 +56,14 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    您网站部分的唯一参数。参数 `bizId`、`bizType` 或 `bizCode` 的值。可以从流量中获取（请参见下面的描述）。
+    您网站相应部分的唯一参数。其值为 `bizId`、`bizType` 或 `bizCode` 参数的值。可从流量中获取（参见下方说明）。<br />
+    格式示例：`login`
 
     ---
 
     <ParamItem title="validateId" required type="string" />
-    动态密钥。参数 `validateId`、`securityId` 或 `securityCheckResponseValidateId` 的值。可以从流量中获取（请参见下面的描述）。
+    动态密钥。其值为 `validateId`、`securityId` 或 `securityCheckResponseValidateId` 参数的值。可从流量中获取（参见下方说明）。<br />
+    格式示例：`cb0bfefa598b4c3887661fde54ecd57b`
 
     ---
 
@@ -102,27 +106,27 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## 创建任务方法
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="BinanceTask (无代理)" default className="method-panel">
+  <TabItem value="proxyless" label="BinanceTask（无代理）" default className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId":0,
@@ -131,33 +135,34 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ```
 	</MethodDescription>
   </TabItem>
-
-  <TabItem value="proxy" label="BinanceTask (使用代理)" default className="method-panel">
+  
+  <TabItem value="proxy" label="BinanceTask（使用代理时）" default className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
+    "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId":0,
@@ -173,22 +178,21 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 获取币安解决方案。
 
 <Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -247,7 +251,7 @@ Object.defineProperty(window, 'BCaptcha', {
         return 1;
       };
       return BCaptcha;
-    }
+    };
   }
 });
 	```
@@ -318,10 +322,10 @@ import { CapMonsterCloudClientFactory, ClientOptions, BinanceRequest } from '@ze
 
 const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
 
-async function solveBinanceCaptcha() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+      async function solveBinanceCaptcha() {
+          const client = CapMonsterCloudClientFactory.Create(
+              new ClientOptions({ clientKey: API_KEY })
+          );
 
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
@@ -423,7 +427,6 @@ asyncio.run(solve_binance())
   <TabItem value="csharp" label="C#" className="method-panel">
 <details>
       <summary>显示代码</summary>
-
 ```csharp
 // https://github.com/ZennoLab/capmonstercloud-client-dotnet
 

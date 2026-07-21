@@ -62,7 +62,7 @@ Você também pode identificar este tipo de Cloudflare pelo cabeçalho da págin
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Chave do site Cloudflare
+  Chave do Cloudflare. É permitido transmitir qualquer string, por exemplo: `xxxxxx`.
 
 ---
 
@@ -134,26 +134,26 @@ console.log(htmlBase64);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-waitroom",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "wait_room",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 		```json
 		{
 		  "errorId":0,
@@ -177,7 +177,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
     ```
   </MethodItem>
   <MethodDescription>
-    **Solicitação**
+    **Exemplo de requisição**
     ```json
     {
       "clientKey": "API_KEY",
@@ -185,7 +185,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
     }
     ```
 
-    **Resposta**
+    **Exemplo de resposta**
     ```json
     {
       "errorId": 0,

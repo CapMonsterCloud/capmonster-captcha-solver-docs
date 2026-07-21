@@ -1,7 +1,8 @@
 ---
 sidebar_position: 3
-sidebar_label: reCAPTCHA v3 Enterprise
-title: "识别并解决 reCAPTCHA v3 Enterprise —— reCAPTCHA v3 Enterprise 任务 | API"
+sidebar_label: reCAPTCHA v3 Enterprise 
+title: "通过代理识别和解决 reCAPTCHA v3 — reCAPTCHA v3 Enterprise Task | API"
+description: "CapMonster Cloud Docs 文档中详细介绍了如何使用代理服务器，通过 reCAPTCHA v3 EnterpriseTask 自动识别并解决（绕过）reCAPTCHA v3 Enterprise。"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -31,7 +32,6 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 本节介绍了用于解决 Google reCAPTCHA v3 Enterprise 的任务说明。
 
-reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操作。系统会分析页面访问者的行为和技术信号，并为每个请求生成一个风险评分。网站会根据这些数据，使用信任评分来决定是否允许该操作，该评分通常位于 **0.1** 到 **0.9** 的范围内。
 
 ## 请求参数
 
@@ -52,26 +52,22 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    目标页面上的 ReCaptcha v3 标识密钥。  
-    <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+   目标页面上的 ReCaptcha v3 标识密钥。
+   <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
 
-    ---
+   大致格式如下：`6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
-    <ParamItem title="minScore" type="double" />
+   ---
+
+   <ParamItem title="minScore" type="double" />
     可取值范围为 **0.1** 到 **0.9**
 
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>
-      通过 ReCaptcha 小组件传递给 Google 的 `action` 参数值，
-      在服务器端进行后续验证时，该值对网站所有者可见。
-      默认值：*verify*
-    </p>
-    <p>
-      HTML 示例：
-      <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*
-    </p>
+    <p>ReCaptcha 小部件传递给 Google 的 `action` 参数值，网站所有者在服务器端后续验证时可以看到该值。如果该值不同于默认值 *verify*，请指定此参数。</p>
+	<p>html 示例：
+	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 </TabItem>
 </Tabs>
 
@@ -85,19 +81,19 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**响应**
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -108,11 +104,14 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 </TabItem>
 </Tabs>
 
-:::warning **警告！**
-在某些网站上，确保 UserAgent 与解决验证码时使用的 UserAgent 相匹配非常重要。因此，如果 CapMonster Cloud 在返回令牌的同时提供了 UserAgent，**请始终**在提交表单或在目标页面确认解决方案时使用该 UserAgent。
+
+## 获取任务结果的方法
+
+:::warning **注意！**
+在某些网站上，UserAgent 必须与解决验证码时使用的 UserAgent 一致。因此，如果 CapMonster Cloud 与令牌一起返回 UserAgent，则在提交表单或在目标页面确认解决结果时，**务必**使用该 UserAgent。
 :::
 
-使用 [getTaskResult](../api/methods/get-task-result.mdx) 请求获取 ReCaptcha3 的答案。根据服务负载情况，您将在 10 到 30 秒内收到响应。
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 ReCaptcha3 的解决结果。根据系统负载，您将在 10 秒到 30 秒内收到响应。
 
 <Tabs>
 <TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless（无代理）" default className="method-panel-full">
@@ -122,14 +121,14 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -140,8 +139,8 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 }
 ```
 
-    对于某些网站，响应可能如下所示。在确认解决方案时，必须使用响应中返回的 **UserAgent**，即使它与当前浏览器的 UserAgent 不一致：
-
+    对于某些网站，响应可能大致如下。确认解决结果时，必须使用响应中获得的 UserAgent，即使它与浏览器当前的 UserAgent 不同。
+ 
 ```json
 {
   "errorId": 0,
@@ -155,46 +154,45 @@ reCAPTCHA v3 Enterprise 完全在后台运行，不需要用户执行任何操�
 	</MethodDescription>
 </TabItem>
 </Tabs>
+
 <br />
 
-|**属性**|**类型**|**描述**|
+|**属性**|**类型**|**说明**|
 | :- | :- | :- |
-|gRecaptchaResponse|String|应插入到 Recaptcha3 提交表单中的哈希值 `<textarea id="g-recaptcha-response"></textarea>`。长度为 500 到 2190 字节。|
+|gRecaptchaResponse|String|需要填入 ReCaptcha3 表单中 `<textarea id="g-recaptcha-response" ></textarea>` 的哈希值。长度为 500 到 2190 字节。|
 
-## **reCAPTCHA v3 Enterprise** 与普通 **reCAPTCHA v3** 的区别
 
-| 特性         | reCAPTCHA v3                                              | reCAPTCHA v3 Enterprise                                                                      |
-| ---------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| **脚本 URL** | `https://www.google.com/recaptcha/api.js?render=site_key` | `https://www.google.com/recaptcha/enterprise.js?render=site_key`                             |
-| **网站识别方式** | iframe 和脚本使用标准的 v3 URL                                    | iframe 和脚本的 URL 中包含 `enterprise`（`/enterprise.js`、`/enterprise/anchor`、`/enterprise/reload`） |
+## reCAPTCHA v3 Enterprise 与普通 reCAPTCHA v3 的区别
 
-**实用的识别方法：**
+| 特征                 | reCAPTCHA v3                                              | reCAPTCHA v3 Enterprise                                                                                      |
+| ------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **脚本 URL**                | `https://www.google.com/recaptcha/api.js?render=site_key` |    `https://www.google.com/recaptcha/enterprise.js?render=site_key`                                             |
+| **网站上的识别方式**     | iframe 和脚本使用标准 v3 URL             | iframe 和脚本在 URL 中使用 `enterprise`（`/enterprise.js`、`/enterprise/anchor`、`/enterprise/reload`） |
 
-1. 打开包含验证码的页面，并进入 **DevTools > Network**。
-2. 查找 reCAPTCHA 相关脚本：
 
-   * 如果 URL 包含 `/enterprise.js` → 这是 **v3 Enterprise**
-   * 如果 URL 包含 `/api.js` → 这是普通 **v3**
-3. 也可以查看 reCAPTCHA 的 `iframe`：
-   在 Enterprise 版本中，iframe 的 URL 包含 `/enterprise/anchor`，而普通 v3 使用 `/anchor`。
+**实际判断方法：**
+
+1. 打开包含验证码的页面，并启用 **DevTools > Network**。
+2. 找到 reCAPTCHA 脚本：
+
+   * 如果 URL 包含 `/enterprise.js`，则为 **v3 Enterprise**。
+   * 如果 URL 包含 `/api.js`，则为普通 **v3**。
+3. 还可以查看 reCAPTCHA 的 `iframe`：Enterprise 的 iframe URL 包含 `/enterprise/anchor`，而普通 v3 包含 `/anchor`。
 
 
 ## 如何获取用于创建解题任务的 `websiteKey`
 
 ### 手动方式
 
-1. 打开显示验证码的目标页面。
-
-2. 在浏览器中打开 **开发者工具**，切换到 **Network（网络）** 选项卡。
-
-3. 刷新页面，关注以下类型的请求，例如：
+1. 打开您网站上显示验证码的页面。
+2. 在浏览器中打开**开发者工具**，并转到 **Network（网络）**选项卡。
+3. 重新加载页面，并注意以下请求，例如：
 
    * `https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=`
    * `https://www.google.com/recaptcha/enterprise.js?render=`
    * `https://www.google.com/recaptcha/enterprise/reload?k=`
    * `https://www.google.com/recaptcha/enterprise/clr?k=`
-
-4. 这些 URL 中的 **k** 参数即为所需的 **websiteKey**。
+4. 这些 URL 中的参数 **k** 对应 **websiteKey** 的值。
 
 ![](./images/recaptcha-v3-enterprise/sitekey.png)
 

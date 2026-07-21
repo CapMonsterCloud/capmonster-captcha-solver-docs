@@ -51,11 +51,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    base64 编码格式的图片。
+    采用 base64 编码的图像（包装在数组中，不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"baidu"`
 
 </TabItem>
@@ -75,7 +75,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
@@ -95,7 +95,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
     	![](../images/ComplexImageTask-Recognition/baidu.png)
 
-        **响应**
+        **响应示例**
         ```json
         {
           "errorId":0,
@@ -117,14 +117,15 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey":"API_KEY",
         "taskId": 143998457
       }
       ```
-		**响应：** 图像需要顺时针旋转的角度。
+		**响应示例** <br/>
+    图像需要顺时针旋转的角度。
       ```json
       {
         "solution":

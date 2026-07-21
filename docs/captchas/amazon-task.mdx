@@ -17,7 +17,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/amazon-task" />
 
-# Amazon | AWS WAF Captcha and Challenge
+# Amazon | AWS WAF Captcha и Challenge
 
 <PriceBlockWrap>
   <PriceBlock title="Amazon" captchaId="amazonwaf"/>
@@ -68,12 +68,14 @@ CapMonster Cloud по умолчанию работает через встро�
     ---
 	
 	  <ParamItem title="websiteKey" required type="string" />
-    Можно найти в поле `apiKey` при рендеринге капчи
+    Можно найти в поле `apiKey` при рендеринге капчи. <br />
+
+    Пример: `h15hX7brbaRTR...Za1_1`
 
     ---
 
     <ParamItem title="captchaScript" required type="string" />
-    Ссылка на jsapi.js на html странице, имеет вид \<Integration URL\>/jsapi.js
+    Ссылка на `jsapi.js` на html странице, имеет вид `\<Integration URL\>/jsapi.js`
 
     ---
 
@@ -137,27 +139,33 @@ CapMonster Cloud по умолчанию работает через встро�
     ---
 
     <ParamItem title="challengeScript" required type="string" />
-    Ссылка на challenge.js (см. описание ниже)
+    Ссылка на `challenge.js` (см. описание ниже)
 
     ---
 
     <ParamItem title="websiteKey" required type="string" />
     Строка, которую можно получить из html страницы с капчей или с помощью javascript, выполнив `window.gokuProps.key`
+    
+    Пример: `AQIDA...wZwdADFLWk7XOA==`
 
     ---
 
     <ParamItem title="context" required type="string" />
-    Строка, которую можно получить из html страницы с капчей или с помощью javascript, выполнив `window.gokuProps.context`
+    Строка, которую можно получить из html страницы с капчей или с помощью javascript, выполнив `window.gokuProps.context`.
+
+    Пример: `qoJYgnKsc...aormh/dYYK+Y=`
 
     ---
 
     <ParamItem title="iv" required type="string" />
-    Строка, которую можно получить из html страницы с капчей или с помощью javascript, выполнив `window.gokuProps.iv`
+    Строка, которую можно получить из html страницы с капчей или с помощью javascript, выполнив `window.gokuProps.iv`.
+
+    Пример: `CgAAXFFFFSAAABVk`
 
     ---
 
     <ParamItem title="captchaScript" type="string" />
-    Ссылка на captcha.js (может отсутствовать, если у вас просто челлендж)
+    Ссылка на `captcha.js` (может отсутствовать, если у вас просто челлендж)
 
     ---
 
@@ -206,7 +214,7 @@ CapMonster Cloud по умолчанию работает через встро�
 Если на сайте используется невидимая капча и загружается только `challenge.js`, используйте этот вариант. В этом случае передавать все параметры, как в варианте 2, не требуется — значения можно оставить пустыми. Передавайте только значение `challenge.js`.
 
 <Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless (без прокси)" default className="bordered-panel">
+<TabItem value="proxyless" label="AmazonTask" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -290,23 +298,23 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com/index.html",
-        "websiteKey": "h15hX7brbaRTR...Za1_1",
-        "userAgent": "userAgentPlaceholder",
-        "captchaScript": "https://234324vgvc23.yejk.captcha-sdk.awswaf.com/234324vgvc23/jsapi.js",
-        "cookieSolution": true
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "captchaScript": "https://example.captcha-sdk.awswaf.com/jsapi.js",
+    "cookieSolution": true
+  }
+}
+```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -326,28 +334,28 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com/index.html",
-        "websiteKey": "h15hX7brbaRTR...Za1_1",
-        "userAgent": "userAgentPlaceholder",
-        "captchaScript": "https://234324vgvc23.yejk.captcha-sdk.awswaf.com/234324vgvc23/jsapi.js",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "captchaScript": "https://example.captcha-sdk.awswaf.com/jsapi.js",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -370,25 +378,25 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        "websiteKey": "AQIDA...wZwdADFLWk7XOA==",
-        "context": "qoJYgnKsc...aormh/dYYK+Y=",
-        "iv": "CgAAXFFFFSAAABVk",
-        "cookieSolution": true
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "captchaScript": "https://example.captcha.awswaf.com/captcha.js",
+    "websiteKey": "your-website-key",
+    "context": "your-context",
+    "iv": "your-iv",
+    "cookieSolution": true
+  }
+}
+```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -408,30 +416,30 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        "websiteKey": "AQIDA...wZwdADFLWk7XOA==",
-        "context": "qoJYgnKsc...aormh/dYYK+Y=",
-        "iv": "CgAAXFFFFSAAABVk",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "captchaScript": "https://example.captcha.awswaf.com/captcha.js",
+    "websiteKey": "your-website-key",
+    "context": "your-context",
+    "iv": "your-iv",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -454,15 +462,15 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
     ```json
     {
       "clientKey": "API_KEY",
       "task": {
         "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
+        "websiteURL": "https://example.com/page-with-aws-waf",
+        "challengeScript": "https://example.token.awswaf.com/challenge.js",
         "context": "",
         "iv": "",
         "cookieSolution": true
@@ -470,7 +478,7 @@ CapMonster Cloud по умолчанию работает через встро�
     }
     ```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -490,28 +498,28 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "context": "",
-        "iv": "",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "context": "",
+    "iv": "",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -535,14 +543,14 @@ CapMonster Cloud по умолчанию работает через встро�
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -731,6 +739,7 @@ CapMonster Cloud по умолчанию работает через встро�
       let amazonRequest = new AmazonRequest({
           websiteURL: "https://example.com", // URL страницы под защитой AWS WAF
           websiteKey: "websiteKey",
+          // Замените на свои значения
           challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
           captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
           context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -752,6 +761,7 @@ CapMonster Cloud по умолчанию работает через встро�
       amazonRequest = new AmazonRequest({
           websiteURL: "https://example.com",
           websiteKey: "websiteKey",
+          // Замените на свои значения
           challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
           captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
           context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -791,6 +801,7 @@ async function solveAwsWaf() {
     let amazonRequest = new AmazonRequest({
         websiteURL: "https://example.com",               // URL страницы под защитой AWS WAF
         websiteKey: "websiteKey",
+        // Замените на свои значения
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -813,6 +824,7 @@ async function solveAwsWaf() {
     amazonRequest = new AmazonRequest({
         websiteURL: "https://example.com", // URL страницы под защитой AWS WAF
         websiteKey: "websiteKey",
+        // Замените на свои значения
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -858,7 +870,7 @@ async def solve_amazon_waf_captcha():
     # CapMonster Cloud автоматически использует свои прокси
     amazon_waf_request = AmazonWafRequest(
         websiteUrl="https://example.com",  # URL страницы под защитой AWS WAF
-        challengeScript="https://example.com/path/to/challenge.js",  # Замените на корректное значение
+        challengeScript="https://example.com/path/to/challenge.js",
         captchaScript="https://example.com/path/to/captcha.js",
         websiteKey="your_website_key",
         context="your_context_value",
@@ -877,8 +889,8 @@ async def solve_amazon_waf_captcha():
     # )
     #
     # amazon_waf_request = AmazonWafRequest(
-    #     websiteUrl="https://example.com", 
-    #     challengeScript="https://example.com/path/to/challenge.js",
+    #     websiteUrl="https://example.com",  # URL страницы под защитой AWS WAF
+    #     challengeScript="https://example.com/path/to/challenge.js", 
     #     captchaScript="https://example.com/path/to/captcha.js",
     #     websiteKey="your_website_key",
     #     context="your_context_value",
@@ -927,7 +939,7 @@ class Program
 
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com", 
+            WebsiteUrl = "https://example.com", // URL страницы под защитой AWS WAF
             WebsiteKey = "website_key", 
             ChallengeScript = "URL_of_challenge.js",       
             CaptchaScript = "URL_of_captcha.js",
@@ -942,7 +954,7 @@ class Program
         /*
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com",
+            WebsiteUrl = "https://example.com",  // URL страницы под защитой AWS WAF
             WebsiteKey = "website_key",
             ChallengeScript = "URL_of_challenge.js",
             CaptchaScript = "URL_of_captcha.js",

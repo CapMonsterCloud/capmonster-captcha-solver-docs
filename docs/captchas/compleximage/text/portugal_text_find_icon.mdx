@@ -52,7 +52,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Изображение в кодировке base64.
+    Изображение в кодировке base64 (обёрнутое в массив, без префикса `data:image/png;base64,`).
 
     ---
 
@@ -80,7 +80,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
@@ -98,7 +98,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
       }
       ```
 
-    	**Ответ**
+    	**Пример ответа**
     	```json
     	{
     	  "errorId":0,
@@ -130,15 +130,15 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Ответ:**
-		возвращаемый индекс — это номер иконки, по которой необходимо выполнить клик. Нумерация иконок начинается с 1 и заканчивается 5:
+		**Пример ответа**<br/>
+		Возвращаемый индекс — это номер иконки, по которой необходимо выполнить клик. Нумерация иконок начинается с 1 и заканчивается 5:
 ```json
 {
   "solution": {
@@ -159,7 +159,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
 ## Примеры автоматического распознавания и решения
 
-Примеры на Python с использованием `requests` и `Playwright`, демонстрирующие полный процесс работы с капчей: от получения задания и извлечения изображений до их обработки, подготовки и отправки в CapMonster Cloud для распознавания, а также получения итогового результата.
+Примеры на Python с использованием Requests и Playwright, демонстрирующие полный процесс работы с капчей: от получения задания и извлечения изображений до их обработки, подготовки и отправки в CapMonster Cloud для распознавания, а также получения итогового результата.
 
 :::warning Важно
 Примеры носят демонстрационный характер и показывают общую логику работы с вашим сайтом. В реальных проектах код может потребовать адаптации под конкретный сайт, его запросы и заголовки.
@@ -169,7 +169,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="python" label="С использованием requests" default className="method-panel">
+  <TabItem value="python" label="С использованием Requests" default className="method-panel">
 <details>
       <summary>Показать код</summary>
 ```python

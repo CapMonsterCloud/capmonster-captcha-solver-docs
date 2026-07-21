@@ -182,25 +182,25 @@ User-Agent браузера. <br />
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "type": "CustomTask",
   "class": "HUNT",
-  "websiteURL": "https://example.com",
+  "websiteURL": "https://yourwebsite.com/page-with-hunt",
   "metadata": {
     "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-      **Ответ**
+      **Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -248,7 +248,7 @@ User-Agent браузера. <br />
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "type": "CustomTask",
@@ -256,18 +256,18 @@ User-Agent браузера. <br />
   "websiteUrl": "https://example.com",        
   "metadata": {
       "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-      "data": "kufyHK/s/jTNU...AfwIW", // значение META_TOKEN
+      "data": "meta-token-value",
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -297,14 +297,14 @@ User-Agent браузера. <br />
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -410,7 +410,7 @@ const htmlHeaders = {
   "cache-control": "no-cache",
   pragma: "no-cache",
   priority: "u=0, i",
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "document",
@@ -431,7 +431,7 @@ const apiHeaders = {
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
   referer: BASE_URL + "/", // Актуальный referer с сайта
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "empty",
@@ -657,7 +657,7 @@ html_headers = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "priority": "u=0, i",
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "document",
@@ -678,7 +678,7 @@ api_headers = {
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
     "referer": BASE_URL + "/en", # Замените на актуальный referer с сайта
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",

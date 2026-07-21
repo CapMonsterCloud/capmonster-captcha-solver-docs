@@ -1,8 +1,8 @@
 ---
 sidebar_position: 21
 sidebar_label: MTCaptcha
-title: "自动识别与绕过 MTCaptcha | API"
-description: "了解如何使用 Capmonster Cloud 提供的自动识别与解决验证码服务 API 来绕过 MTCaptcha！"
+title: "MTCaptcha 自动识别与绕过 | API"
+description: "了解如何使用 CapMonster Cloud 自动验证码识别与解决服务的 API 绕过 MTCaptcha！" 
 ---
 
 import Tabs from '@theme/Tabs';
@@ -30,7 +30,6 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 如果代理按 IP 授权，请将地址 **65.21.190.34** 加入白名单。
 :::
 
-
 ## 请求参数
 
 <Tabs>
@@ -46,28 +45,27 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-MTCaptcha 的密钥，在请求中以参数 `sk` 传递（*请参见下方示例说明如何查找*）。
+MTCaptcha 密钥，在请求参数中以 `sk` 传递（*请参阅下方查找方法示例*）。 <br />
+大致格式如下：`MTPublic-abCDEFJAB`
 
 ---
 
 <ParamItem title="pageAction" type="string" />
-*action* 参数在请求中以 `act` 传递，并在 token 验证时显示。仅当值不同于默认值 **%24** 时才需要填写。  
-HTML 示例：
+参数 *action* 在请求中以 `act` 传递，并在令牌验证时显示。仅当其值不同于默认值 **%24** 时，才需要在请求中指定。  
+html 示例：
 ```
-
 <script>
 var mtcaptchaConfig = {
       "sitekey": "MTPublic-abCDEFJAB",
       "action": "login"
 };
 </script>
-
-````
+```
 
 ---
 
 <ParamItem title="isInvisible" type="bool" />
-如果验证码为不可见模式（即隐藏的验证字段），请设为 **true**。当系统怀疑为机器人时将触发额外验证。
+如果验证码为隐形验证码，即具有隐藏的确认字段，则为 **true**。检测到疑似机器人时会触发额外验证。
 
 ---
 
@@ -116,25 +114,24 @@ var mtcaptchaConfig = {
 <MethodItem>
 ```http
 https://api.capmonster.cloud/createTask
-````
-
+```
 </MethodItem>
 <MethodDescription>
-**请求**
+**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login"
+    "pageAction": "your-page-action"
   }
 }
 ```
-**响应**
+**响应示例**
 ```json
 {
   "errorId":0,
@@ -144,33 +141,33 @@ https://api.capmonster.cloud/createTask
 </MethodDescription>
 </TabItem>
 
-<TabItem value="proxy" label="MTCaptchaTask（使用代理）" default className="method-panel">
+<TabItem value="proxy" label="MTCaptchaTask（使用代理时）" default className="method-panel">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**请求**
+**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "pageAction": "your-page-action",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**响应**
+**响应示例**
 ```json
 {
   "errorId":0,
@@ -182,8 +179,7 @@ https://api.capmonster.cloud/createTask
 </Tabs>
 
 ## 获取任务结果的方法
-
-使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 获取 MTCaptcha 的解决方案。
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 MTCaptcha 验证码的解决结果。
 
 <Tabs>
 <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
@@ -193,7 +189,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**请求**
+**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -201,8 +197,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**响应**
-
+**响应示例**
 ```json
 {
   "errorId": 0,
@@ -214,7 +209,6 @@ https://api.capmonster.cloud/getTaskResult
   "status": "ready"
 }
 ```
-
 </MethodDescription>
 </TabItem>
 </Tabs>
@@ -257,10 +251,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",       // 含有 MTCaptcha 的页面 URL
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,    // true -- 如果使用 Invisible MTCaptcha
-        pageAction: "login"
+        websiteURL: "https://www.example.com",       // 包含 MTCaptcha 的页面 URL
+        websiteKey: "MTPublic-abCDEFJAB",   // 替换为正确的值
+        isInvisible: false,   // 如果使用 Invisible MTCaptcha，则为 true
+        pageAction: "login"  // 替换为正确的值
     });
 
     // 使用您自己的代理的示例
@@ -276,9 +270,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     mtcaptchaRequest = new MTCaptchaRequest({
         websiteURL: "https://www.example.com",
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,
-        pageAction: "login",
+        websiteKey: "MTPublic-abCDEFJAB",  // 替换为正确的值
+        isInvisible: false,  // 如果使用 Invisible MTCaptcha，则为 true
+        pageAction: "login", // 替换为正确的值
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -311,10 +305,10 @@ async function solveMTCaptcha() {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",       // 含有 MTCaptcha 的页面 URL
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,       // true -- 如果使用 Invisible MTCaptcha
-        pageAction: "login"
+        websiteURL: "https://www.example.com",      // 包含 MTCaptcha 的页面 URL
+        websiteKey: "MTPublic-abCDEFJAB",    // 替换为正确的值
+        isInvisible: false,     // 如果使用 Invisible MTCaptcha，则为 true
+        pageAction: "login"  // 替换为正确的值
     });
 
     // 使用您自己的代理的示例
@@ -331,9 +325,9 @@ async function solveMTCaptcha() {
 
     mtcaptchaRequest = new MTCaptchaRequest({
         websiteURL: "https://www.example.com",
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,
-        pageAction: "login",
+        websiteKey: "MTPublic-abCDEFJAB", // 替换为正确的值
+        isInvisible: false,   // 如果使用 Invisible MTCaptcha，则为 true
+        pageAction: "login",  // 替换为正确的值
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -350,7 +344,6 @@ async function solveMTCaptcha() {
 solveMTCaptcha().catch(console.error);
 ```
 </details>
-
   </TabItem>
 
   <TabItem value="python" label="Python" default className="method-panel">
@@ -373,10 +366,10 @@ async def solve_mt_captcha():
     # 基本示例，无需代理
     # CapMonster Cloud 会自动使用它们的代理
     mtcaptcha_request = MTCaptchaRequest(
-        websiteUrl="https://www.example.com",  # 含有 MTCaptcha 的页面 URL
-        websiteKey="MTPublic-abCDEFJAB",
-        isInvisible=False,       # True，如果使用 Invisible MTCaptcha
-        pageAction="login"
+        websiteUrl="https://www.example.com",  # 包含验证码的页面 URL
+        websiteKey="MTPublic-abCDEFJAB",  # 替换为正确的值
+        isInvisible=False,       # 如果验证码为隐形验证码，则为 True
+        pageAction="login"    # 替换为正确的值
     )
 
     # 使用您自己的代理的示例
@@ -391,10 +384,10 @@ async def solve_mt_captcha():
     # )
     #
     # mtcaptcha_request = MTCaptchaRequest(
-    #     websiteUrl="https://www.example.com",
-    #     websiteKey="MTPublic-abCDEFJAB",
-    #     isInvisible=False,
-    #     pageAction="login",
+    #     websiteUrl="https://www.example.com",  # 包含验证码的页面 URL
+    #     websiteKey="MTPublic-abCDEFJAB",  # 替换为正确的值
+    #     isInvisible=False,    # 如果验证码为隐形验证码，则为 True
+    #     pageAction="login", # 替换为正确的值
     #     proxy=proxy
     # )
 
@@ -437,10 +430,10 @@ class Program
         // CapMonster Cloud 会自动使用它们的代理
         var mtcaptchaRequest = new MTCaptchaTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",     // 含有 MTCaptcha 的页面 URL
-            WebsiteKey = "MTPublic-tqNCRE0GS",
-            Invisible = false,   // true -- 如果使用 Invisible MTCaptcha
-            PageAction = "login",
+            WebsiteUrl = "https://www.example.com",  // 包含验证码的页面 URL
+            WebsiteKey = "MTPublic-tqNCRE0GS",  // 替换为正确的值
+            Invisible = false,   // 如果验证码为隐形验证码，则为 true
+            PageAction = "login", // 替换为正确的值
             UserAgent = "userAgentPlaceholder"
         };
 
@@ -450,10 +443,10 @@ class Program
         /*
         mtcaptchaRequest = new MTCaptchaTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",
-            WebsiteKey = "MTPublic-tqNCRE0GS",
-            Invisible = false,
-            PageAction = "login",
+            WebsiteUrl = "https://www.example.com", // 包含验证码的页面 URL
+            WebsiteKey = "MTPublic-tqNCRE0GS",   // 替换为正确的值
+            Invisible = false,   // 如果验证码为隐形验证码，则为 true
+            PageAction = "login", // 替换为正确的值
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(

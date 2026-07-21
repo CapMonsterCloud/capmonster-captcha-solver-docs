@@ -1,6 +1,8 @@
 ---
 sidebar_position: 12
 sidebar_label: ImageToText
+title: "简单文本验证码的自动识别与绕过 — Image-to-Text | API"
+description: "通过 CapMonster Cloud API 使用 Image-to-Text 方法，自动识别并绕过简单文本验证码。Capmonster Cloud Docs 文档中提供了自动解决简单验证码（包含文本的图像）的详细指南和示例！"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -37,43 +39,45 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-
 <Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<TabItem value="proxyless" label="ImageToTextTask（无代理）" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ImageToTextTask**
 
     ---
 
     <ParamItem title="body" required type="string" />
-    以base64编码的文件主体。确保发送时没有换行符。
+    以 base64* 编码的验证码文件内容。请确保该值以单行形式发送，不包含换行。
 
     ---
 
     <ParamItem title="capMonsterModule" type="string" />
-    识别模块的名称，例如“yandex”。可以通过[这里](../api/module-name.mdx)找到模块名称及所有可用模块的列表。 <br />
-    示例: yandex, special 及其他
+    模块名称，例如 “yandex”。传递模块名称的替代方式以及所有可用模块的列表可在[此处](../api/module-name.mdx)查看。 <br />
+    示例：`yandex`、`special` 等。
 
     ---
 
     <ParamItem title="recognizingThreshold" type="integer" />
-    验证码识别阈值，可取值范围为0到100。例如，如果将 recognizingThreshold 设置为90，并且任务以80的置信度解决，则不会收费。在这种情况下，用户会收到 ERROR_CAPTCHA_UNSOLVABLE 的响应。 种设置扣款阈值的替代方法在 [该文章](../api/threshold.mdx) 中有描述。
+    验证码识别阈值，可取 **0** 到 **100**。例如，如果向系统发送的值为 **90**，而任务解决置信度为 **80**，则不会扣除解决费用。在这种情况下，用户将收到 ERROR_CAPTCHA_UNSOLVABLE 响应。设置扣费阈值的另一种方法请参阅[文章](../api/threshold.mdx)。
 
     ---
 
     <ParamItem title="case" type="boolean" />
-    true - 如果验证码区分大小写。
+    解决时是否区分大小写。可选值：`true`、`false`
 
     ---
 
     <ParamItem title="numeric" type="integer" />
-    1 - 如果验证码仅包含数字。 <br />
-    可能的值: 0, 1
+    `1` - 如果验证码仅由数字组成。 <br />
+    可选值：`0`、`1`
 
     ---
 
     <ParamItem title="math" type="boolean" />
-    false — 未定义；<br />true — 如果验证码需要数学操作（例如：验证码 2 + 6 = 将返回值 8）。**重要提示：** 请勿在 `captcha_math` 模块中使用 `math: true` 参数。
+`false` — 默认未设置； <br />
+`true` — 验证码要求执行数学运算（例如验证码 `2 + 6` 将返回值 `8`）。  <br />
+
+**重要：** 对于 `captcha_math` 模块，**请勿使用**参数 `math: true`。 
 </TabItem>
 </Tabs>
 
@@ -110,14 +114,14 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ## 创建任务方法 
 
 <Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
+<TabItem value="proxyless" label="ImageToTextTask（无代理）" default className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -127,7 +131,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
   }
 }
 ```
-		**回应**
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -143,21 +147,21 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取验证码的解决方案。根据系统负载，您将在300毫秒到6秒的时间范围内收到答案。
 
 <Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<TabItem value="proxyless" label="ImageToTextTask（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -333,12 +337,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("Balance:", balance);
 
     const imageToTextRequest = new ImageToTextRequest({
-        body: 'some base64 body', // 替换为真实值
-        CapMonsterModule: CapMonsterModules.YandexWave,
-        Case: true,
-        numeric: 1,
-        recognizingThreshold: 65,
-        math: false
+        body: 'some base64 body', // 替换为实际值
+        // 可选参数
+        CapMonsterModule: CapMonsterModules.YandexWave, // 可以选择模块，例如 YandexWave
+        Case: true, 
+        numeric: 1,  
+        recognizingThreshold: 65, 
+        math: false   
     });
 
     const result = await cmcClient.Solve(imageToTextRequest);
@@ -366,12 +371,13 @@ async function solveImageToText() {
     console.log("Balance:", balance);
 
     const imageToTextRequest = new ImageToTextRequest({
-        body: 'some base64 body', // 替换为真实值
-        CapMonsterModule: CapMonsterModules.YandexWave,
-        Case: true,
-        numeric: 1,
-        recognizingThreshold: 65,
-        math: false
+        body: 'some base64 body', // 替换为实际值
+        // 可选参数
+        CapMonsterModule: CapMonsterModules.YandexWave, // 可以选择模块，例如 YandexWave
+        Case: true,  
+        numeric: 1, 
+        recognizingThreshold: 65,  
+        math: false 
     });
 
     const result = await cmcClient.Solve(imageToTextRequest);
@@ -406,10 +412,11 @@ solveImageToText().catch(console.error);
     image_to_text_request = ImageToTextRequest(
         image_bytes=image_bytes,
         module_name=None,     # 可以选择模块，例如 YandexWave
-        threshold=50,     
-        case=True,            # 是否区分大小写
-        numeric=0,            # 是否只识别数字
-        math=False            # 是否是数学验证码
+        # 可选参数
+        threshold=50, 
+        case=True,    
+        numeric=0,   
+        math=False        
     )
 
     async def solve_captcha():
@@ -454,12 +461,13 @@ solveImageToText().catch(console.error);
 
             var imageToTextRequest = new ImageToTextRequest
             {
-                Body = "/9j/4AAQSkZJRgABAQAAAQABA...hMjIyMjIyMjIyMjIyMj", // 替换为真实值
-                CapMonsterModule = "None",  
-                RecognizingThreshold = 70, 
-                CaseSensitive = true,   // 是否区分大小写
-                Numeric = false,        // 是否只识别数字
-                Math = false            // 是否数学验证码
+                Body = "/9j/4AAQSkZJRgABAQAAAQABA...hMjIyMjIyMjIyMjIyMj", // 替换为实际值
+                // 可选参数
+                CapMonsterModule = "None", // 可以选择模块，例如 YandexWave
+                RecognizingThreshold = 70,  
+                CaseSensitive = true, 
+                Numeric = false,  
+                Math = false     
             };
 
             var imageToTextResult = await cmCloudClient.SolveAsync(imageToTextRequest);

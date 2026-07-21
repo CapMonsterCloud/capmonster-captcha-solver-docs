@@ -51,7 +51,7 @@ The request must contain a single image (together with text) in base64 format.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    Base64-encoded image (wrapped in an array, without the `data:image/png;base64,` prefix).
 
     ---
 
@@ -71,7 +71,7 @@ The request must contain a single image (together with text) in base64 format.
 		```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
@@ -93,7 +93,7 @@ The request must contain a single image (together with text) in base64 format.
     	![](../images/ComplexImageTask-Recognition/dli_1.png)
     	![](../images/ComplexImageTask-Recognition/dli_2.png)
 
-    	**Response**
+    	**Response example**
     	```json
     	{
     	  "errorId":0,
@@ -115,7 +115,7 @@ The request must contain a single image (together with text) in base64 format.
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -123,8 +123,8 @@ The request must contain a single image (together with text) in base64 format.
 		}
 		```
 
-		**Response:**
-		computed result (numeric value) returned as a string:
+		**Response example:**<br/>
+		The calculation result (a numeric value) passed as a string:
       ```json
       {
           "solution":

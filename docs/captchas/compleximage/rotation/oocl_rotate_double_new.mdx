@@ -51,7 +51,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Массив изображений в кодировке base64.
+    Массив изображений в кодировке base64 (без префикса `data:image/png;base64,`).
 
     ---
 
@@ -71,7 +71,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-  **Запрос**
+  **Пример запроса**
   ```json
   { 
     "clientKey": "API_KEY",
@@ -102,7 +102,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
     	![](../images/ComplexImageTask-Recognition/ex5.png)
 
-    	**Ответ**
+    	**Пример ответа**
     	```json
     	{
     	  "errorId":0,
@@ -124,14 +124,15 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ:** градусы, на которые необходимо повернуть кольцо против часовой и круг по часовой.
+		**Пример ответа** <br/>
+    Градусы, на которые необходимо повернуть кольцо против часовой и круг по часовой.
       ```json
       {
         "errorId":0,

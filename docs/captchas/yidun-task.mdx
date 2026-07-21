@@ -82,7 +82,7 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Значение параметра siteKey, найденное на странице (*см. пример ниже, как его найти*).
+  Значение параметра `siteKey`, найденное на странице (*см. пример ниже, как его найти*).
 
   ---
 
@@ -170,20 +170,20 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "YidunTask",
-          "websiteURL": "https://www.example.com",
-          "websiteKey": "6cw0f0485d5d46auacf9b735d20218a5",
+          "websiteURL": "https://yourwebsite.com/page-with-yidun",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -201,25 +201,25 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "YidunTask",
-          "websiteURL": "https://www.example.com",
-          "websiteKey": "6cw0f0485d5d46auacf9b735d20218a5",
+          "websiteURL": "https://yourwebsite.com/page-with-yidun",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -242,7 +242,7 @@ CapMonster Cloud по умолчанию работает через встро�
   </MethodItem>
   <MethodDescription>
 
-  **Запрос**
+  **Пример запроса**
   ```json
   {
     "clientKey": "API_KEY",
@@ -250,7 +250,7 @@ CapMonster Cloud по умолчанию работает через встро�
   }
   ```
 
-  **Ответ**
+  **Пример ответа**
   ```json
   {
     "errorId": 0,
@@ -271,6 +271,8 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <details>
   <summary>Пример задачи</summary>
+
+**Важно**: указанные значения параметров приведены исключительно в качестве примера. Перед использованием замените их на актуальные данные для вашего проекта.
 
 ```json
 {
@@ -349,7 +351,7 @@ CapMonster Cloud по умолчанию работает через встро�
       // CapMonster Cloud автоматически использует свои прокси
       let yidunRequest = new YidunRequest({
           websiteURL: "https://www.example.com",  // URL страницы с капчей
-          websiteKey: "6cw0f0485d5d46auacf9b735d20218a5",
+          websiteKey: "6cw0f0485d5d46auacf9b735d20218a5", // Замените на корректное значение
           userAgent: "userAgentPlaceholder"
       });
 
@@ -400,7 +402,7 @@ CapMonster Cloud по умолчанию работает через встро�
           // CapMonster Cloud автоматически использует свои прокси
           let yidunRequest = new YidunRequest({
               websiteURL: "https://www.example.com", // URL страницы с капчей
-              websiteKey: "6cw0f0485d5d46auacf9b735d20218a5",
+              websiteKey: "6cw0f0485d5d46auacf9b735d20218a5", // Замените на корректное значение
               userAgent: "userAgentPlaceholder"
           });
 
@@ -459,8 +461,8 @@ async def solve_yidun_captcha():
     # CapMonster Cloud автоматически использует свои прокси
     yidun_request = YidunRequest(
         websiteUrl="https://www.example.com",  # URL страницы с капчей
-        websiteKey="6cw0f0485d5d46auacf9b735d20218a5",
-        userAgent="userAgentPlaceholder"  # Используйте актуальный UserAgent
+        websiteKey="6cw0f0485d5d46auacf9b735d20218a5", # Замените на корректное значение
+        userAgent="userAgentPlaceholder" 
     )
 
     # Пример использования вашего собственного прокси
@@ -523,7 +525,7 @@ class Program
         var yidunRequest = new YidunTaskRequest
         {
             WebsiteUrl = "https://example.com",  // URL страницы с капчей
-            WebsiteKey = "7ce0f0475b5d46acacf9b732a29218d9",
+            WebsiteKey = "7ce0f0475b5d46acacf9b732a29218d9",  // Замените на корректное значение
             UserAgent = "userAgentPlaceholder"
         };
 

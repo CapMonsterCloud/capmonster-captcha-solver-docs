@@ -64,7 +64,8 @@ All Turnstile subtypes are automatically supported: **manual**, **non-interactiv
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Turnstile site key
+  Turnstile site key<br />
+  It should have the following format: `0x4AAAAAAABUYP0XeMJF0xoy`
 
   ---
 
@@ -129,19 +130,19 @@ All Turnstile subtypes are automatically supported: **manual**, **non-interactiv
       ```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "http://tsmanaged.zlsupport.com",
-          "websiteKey": "0x4AAAAAAABUYP0XeMJF0xoy"
+          "websiteURL": "https://yourwebsite.com/page-with-turnstile",
+          "websiteKey": "your-website-key"
         }
       }
       ```
 
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -158,24 +159,24 @@ All Turnstile subtypes are automatically supported: **manual**, **non-interactiv
       ```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "http://tsmanaged.zlsupport.com",
-          "websiteKey": "0x4AAAAAAABUYP0XeMJF0xoy",
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "websiteURL": "https://yourwebsite.com/page-with-turnstile",
+          "websiteKey": "your-website-key",
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -200,7 +201,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     ```
   </MethodItem>
   <MethodDescription>
-    **Request**
+    **Request example**
     ```json
     {
       "clientKey": "API_KEY",
@@ -208,7 +209,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
 
-    **Response**
+    **Response example**
     ```json
     {
       "errorId": 0,
@@ -510,8 +511,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Basic example without proxy
     // CapMonster Cloud automatically uses its own proxies
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com", // URL of the page with the captcha
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy"        // Replace with the correct value
+        websiteURL: "https://yourwebsite.com/page-with-turnstile", // URL of the page with the captcha
+        websiteKey: "your-website-key"        // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -527,8 +528,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL: "https://yourwebsite.com/page-with-turnstile",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -562,8 +563,8 @@ async function solveTurnstile() {
     // Basic example without proxy
     // CapMonster Cloud automatically uses its own proxies
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com", // URL of the page with the captcha
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy"        // Replace with the correct value
+        websiteURL: "https://yourwebsite.com/page-with-turnstile", // URL of the page with the captcha
+        websiteKey: "your-website-key"        // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -579,8 +580,8 @@ async function solveTurnstile() {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL: "https://yourwebsite.com/page-with-turnstile",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -622,8 +623,8 @@ async def solve_turnstile_token():
     # Basic example without proxy
     # CapMonster Cloud automatically uses its own proxies
     turnstile_request = TurnstileRequest(
-        websiteURL="http://tsmanaged.zlsupport.com",
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL="https://yourwebsite.com/page-with-turnstile",
+        websiteKey="your-website-key",
     )
 
     # Example of using your own proxy
@@ -638,8 +639,8 @@ async def solve_turnstile_token():
     # )
     #
     # turnstile_request = TurnstileRequest(
-    #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+    #     websiteURL="https://yourwebsite.com/page-with-turnstile",
+    #     websiteKey="your-website-key",
     #     proxy=proxy
     # )
 
@@ -685,8 +686,8 @@ class Program
         // CapMonster Cloud automatically uses its own proxies
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "http://tsmanaged.zlsupport.com", // URL of the page with the captcha
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy"       // Replace with the correct value
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile", // URL of the page with the captcha
+            WebsiteKey = "your-website-key"       // Replace with the correct value
         };
 
         // Example of using your own proxy
@@ -695,8 +696,8 @@ class Program
         /*
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "http://tsmanaged.zlsupport.com",
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile",
+            WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89", 

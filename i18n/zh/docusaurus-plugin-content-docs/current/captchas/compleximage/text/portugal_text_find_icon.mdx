@@ -28,7 +28,8 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 :::
 <br />
 
-请求必须包含一张 base64 格式的图片，该图片由 5 张横向拼接的图像组成（不包含文本），并按照其显示顺序排列。下方展示了拼接过程的详细示例。此外，`TaskArgument` 参数用于指定任务文本——即需要查找的目标图标。
+请求中必须传递一张 base64 格式的图像，该图像由 5 张按显示顺序水平拼接的图像组成（不包含文本）。
+ 下面提供了详细的拼接示例。此外，还需要在 `TaskArgument` 参数中指定任务文本，即要选择的图标。
 
 ## 请求参数
 
@@ -51,21 +52,20 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    base64 编码格式的图片。
+    采用 base64 编码的图像（包装在数组中，不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"portugal_text_find_icon"`
 
      ---
 
-    <ParamItem title="TaskArgument（在 metadata 中）" required type="string" />
-    用于指定需要查找哪个图标的任务文本。例如：`"Clique no(a) quadrado."`<br />
+    <ParamItem title="TaskArgument（位于 metadata 中）" required type="string" />
+    用于指明需要查找哪个图标的任务文本。例如：`"Clique no(a) quadrado."`<br />
 
-    **重要说明**：任务文本中的某些字符必须正确转义，以避免处理或识别错误。
-    例如，对于文本 `"Por favor, clique no(a) avião."`，必须传递 `"Por favor, clique no(a) avi\\u00E3o."`
-    （*详见章节 [自动识别与解决示例](#自动识别与解决示例)*）。
+    **重要**：任务文本中的某些字符必须经过序列化转义，以避免在处理和解决任务时出现错误。
+ 例如，对于文本 `"Por favor, clique no(a) avião."`，必须传递字符串 `"Por favor, clique no(a) avi\\u00E3o."`（*参见[自动识别与解决示例](#自动识别与解决示例)章节中的示例*）。
 
 </TabItem>
 </Tabs>
@@ -80,7 +80,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 		```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
@@ -98,7 +98,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
       ```
 
-    	**响应**
+    	**响应示例**
     	```json
     	{
     	  "errorId":0,
@@ -130,16 +130,15 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-
-		**响应：**
-		返回的索引表示需要点击的图标编号。图标编号从 1 到 5：
+		**响应示例**<br/>
+		返回的索引是需要单击的图标编号。图标编号从 1 开始，到 5 结束：
 ```json
 {
   "solution": {
@@ -172,7 +171,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 <Tabs classNameName="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="python" label="使用 requests" default className="method-panel">
+  <TabItem value="python" label="使用 Requests" default className="method-panel">
 <details>
       <summary>显示代码</summary>
 ```python
@@ -402,8 +401,8 @@ if __name__ == "__main__":
   </TabItem>
 
   <TabItem value="python1" label="使用 Playwright" className="method-panel">
-  <details>
-    <summary>显示代码</summary>
+<details>
+      <summary>显示代码</summary>
 ```python
 import os
 import io

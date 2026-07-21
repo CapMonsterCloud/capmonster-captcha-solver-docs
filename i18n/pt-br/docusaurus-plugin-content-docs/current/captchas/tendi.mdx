@@ -52,7 +52,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    captchaAppId. Por exemplo, `"websiteKey": "189123456"` é um parâmetro único para seu site. Você pode obtê-lo de uma página HTML com captcha ou a partir do tráfego (veja a descrição abaixo).
+    **captchaAppId** corresponde ao valor de `aid`. Por exemplo, `"websiteKey": "189123456"` é um parâmetro exclusivo do seu site. Ele pode ser obtido na página HTML que contém o captcha ou no tráfego de rede (veja a descrição abaixo).
 
     ---
 
@@ -108,24 +108,24 @@ Senha do servidor proxy.
     ```
   </MethodItem>
   <MethodDescription>
-    **Solicitação**
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "TenDI",
-        "websiteURL": "https://example.com",
-        "websiteKey": "189123456",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+    **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "TenDI",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+          }
         }
       }
-    }
-    ```
+      ```
 
-    **Resposta**
+    **Exemplo de resposta**
     ```json
     {
       "errorId": 0,
@@ -142,29 +142,29 @@ Senha do servidor proxy.
     ```
   </MethodItem>
   <MethodDescription>
-    **Solicitação**
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "TenDI",
-        "websiteURL": "https://example.com",
-        "websiteKey": "189123456",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
-        },
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
+    **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "TenDI",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+          },
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
+        }
       }
-    }
-    ```
+      ```
 
-    **Resposta**
+    **Exemplo de resposta**
     ```json
     {
       "errorId": 0,
@@ -187,14 +187,14 @@ https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -370,7 +370,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let tenDIRequest = new TenDIRequest({
       websiteURL: "https://example.com", // URL da página com o captcha Tencent (TenDI)
-      websiteKey: "183268248"            // TencentCaptcha appid (substitua por um valor válido)
+      websiteKey: "183268248"            // Substitua pelo valor correto
     });
 
     // Exemplo de uso do seu próprio proxy
@@ -424,7 +424,7 @@ async function solveTenDI() {
   // O CapMonster Cloud usa automaticamente seus próprios proxies
   let tenDIRequest = new TenDIRequest({
     websiteURL: "https://example.com", // URL da página com o captcha
-    websiteKey: "183268248"            // Substitua por um valor válido
+    websiteKey: "183268248"            // Substitua pelo valor correto
   });
 
   // Exemplo de uso do seu próprio proxy
@@ -482,7 +482,7 @@ async def solve_tendi_custom():
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     tendi_request = TenDiCustomTaskRequest(
         websiteUrl="https://example.com",  # URL da página com o captcha Tencent (TenDI)
-        websiteKey="189956587",            # TencentCaptcha appid
+        websiteKey="189956587",            # Substitua pelo valor correto
         userAgent="userAgentPlaceholder"
     )
 
@@ -548,7 +548,7 @@ class Program
         var tenDiRequest = new TenDiCustomTaskRequest
         {
             WebsiteUrl = "https://example.com",   // URL da página com o captcha
-            WebsiteKey = "189956587",             // TencentCaptcha appid
+            WebsiteKey = "189956587",             // Substitua pelo valor correto
             UserAgent = "userAgentPlaceholder"
         };
 

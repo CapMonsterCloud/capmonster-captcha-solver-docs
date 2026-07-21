@@ -50,11 +50,11 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    base64 编码格式的图片。
+    base64 编码的图像数组（不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"oocl_rotate_new"`
 
 </TabItem>
@@ -70,7 +70,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-  **请求**
+  **请求示例**
   ```json
   {
     "clientKey": "API_KEY",
@@ -86,25 +86,24 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
     }
   }
-```
+  ```
 
-背景示例（*background_base64*）：
+    	背景示例（*background_base64*）：
 
-![](../images/ComplexImageTask-Recognition/ex1.png)
+    	![](../images/ComplexImageTask-Recognition/ex1.png)
 
-圆形示例（*circle_base64*）：
+    	圆形示例（*circle_base64*）：
 
-![](../images/ComplexImageTask-Recognition/ex2.png)
+    	![](../images/ComplexImageTask-Recognition/ex2.png)
 
-**响应**
-```json
-{
-  "errorId":0,
-  "taskId":407533072
-}
-```
-
-</MethodDescription>
+    	**响应示例**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":407533072
+    	}
+    	```
+    </MethodDescription>
 
 </TabItem>
 </Tabs>
@@ -119,32 +118,29 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-
-**响应：** 表示圆形需要顺时针旋转的角度。
-
-```json
-{
-  "errorId":0,
-  "status":"ready",
-  "errorCode":null,
-  "errorDescription":null,
-  "solution": 
-  {
-    "answer":[130.90909],
-    "metadata":{"AnswerType":"NumericArray"}
-  }		   
-}
-```
-
-</MethodDescription>
-
+		**响应示例** <br/>
+    圆形需要顺时针旋转的角度。
+      ```json
+      {
+        "errorId":0,
+        "status":"ready",
+        "errorCode":null,
+        "errorDescription":null,
+        "solution": 
+        {
+          "answer":[130.90909],
+          "metadata":{"AnswerType":"NumericArray"}
+        }		   
+      }
+      ```
+	</MethodDescription>
 </TabItem>
 </Tabs>
 

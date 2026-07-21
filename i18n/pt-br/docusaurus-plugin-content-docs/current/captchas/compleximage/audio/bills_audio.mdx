@@ -52,8 +52,8 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Áudio codificado em base64.
-    Exemplo: `[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+    Áudio codificado em base64, envolvido em um array.<br />
+    Exemplo: `[ "UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"]`
 
     ---
 
@@ -78,7 +78,7 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
     ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
     "clientKey": "API_KEY",
@@ -96,7 +96,7 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
 }
 ```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -120,14 +120,15 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
     ```
     </MethodItem>
     <MethodDescription>
-    **Requisição**
+    **Exemplo de requisição**
     ```json
     {
         "clientKey": "API_KEY",
         "taskId": 143998457
     }
     ```
-    **Resposta:** o resultado contém os dígitos do áudio.
+    **Exemplo de resposta**  <br/>
+    A resposta retorna os números do áudio:
     ```json
     {
       "solution": {

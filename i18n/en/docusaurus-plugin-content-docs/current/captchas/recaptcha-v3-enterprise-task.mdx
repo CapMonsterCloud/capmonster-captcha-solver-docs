@@ -52,8 +52,9 @@ You can also solve reCAPTCHA v3 Enterprise using the reCAPTCHA v3 task type by s
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    The ReCaptcha v3 site key on the target page.
-    <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+    The ReCaptcha3 site key on the target page. <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+    
+    It typically has the following format: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`.
 
     ---
 
@@ -63,9 +64,10 @@ You can also solve reCAPTCHA v3 Enterprise using the reCAPTCHA v3 task type by s
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>The `action` parameter value passed by the ReCaptcha widget to Google, which is visible to the site owner during server-side verification. Default value: *verify*</p>
-    <p>Example in HTML:
-    <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+    <p>The value of the `action` parameter that is sent to Google by the ReCaptcha widget and is visible to the website owner during subsequent server-side verification. Specify this parameter if its value differs from the default value: *verify*</p>
+	<p>HTML example:
+	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+
 </TabItem>
 </Tabs>
 
@@ -79,19 +81,19 @@ You can also solve reCAPTCHA v3 Enterprise using the reCAPTCHA v3 task type by s
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -116,14 +118,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer fo
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -155,7 +157,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) to request answer fo
 | :- | :- | :- |
 |gRecaptchaResponse|String|Hash which should be inserted into Recaptcha3 submit form in `<textarea id="g-recaptcha-response" ></textarea>`. It has a length of 500 to 2190 bytes.|
 
-## Differences between **reCAPTCHA v3 Enterprise** and standard **reCAPTCHA v3**
+## Differences between reCAPTCHA v3 Enterprise and standard reCAPTCHA v3
 
 | Feature                        | reCAPTCHA v3                                              | reCAPTCHA v3 Enterprise                                                                                          |
 | ------------------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |

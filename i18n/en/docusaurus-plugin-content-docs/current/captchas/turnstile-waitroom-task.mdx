@@ -62,7 +62,7 @@ You can also identify this Cloudflare type via the page header:
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Cloudflare site key
+  Cloudflare key. Any string may be provided, for example: `xxxxxx`.
 
 ---
 
@@ -134,26 +134,26 @@ console.log(htmlBase64);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-waitroom",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "wait_room",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -175,7 +175,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     ```
   </MethodItem>
   <MethodDescription>
-    **Request**
+    **Request example**
     ```json
     {
       "clientKey": "API_KEY",
@@ -183,7 +183,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
 
-    **Response**
+    **Response example**
     ```json
     {
       "errorId": 0,

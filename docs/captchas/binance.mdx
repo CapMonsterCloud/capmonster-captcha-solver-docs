@@ -55,12 +55,14 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Уникальный параметр для раздела вашего сайта. Значение параметра `bizId`, `bizType` или `bizCode`. Его можно взять из трафика (см. описание ниже).
+    Уникальный параметр для раздела вашего сайта. Значение параметра `bizId`, `bizType` или `bizCode`. Его можно взять из трафика (см. описание ниже).<br />
+    Пример формата: `login`
 
     ---
 
     <ParamItem title="validateId" required type="string" />
-    Динамический ключ. Значение параметра `validateId`, `securityId` или `securityCheckResponseValidateId`. Его можно взять из трафика (см. описание ниже).
+    Динамический ключ. Значение параметра `validateId`, `securityId` или `securityCheckResponseValidateId`. Его можно взять из трафика (см. описание ниже).<br />
+    Пример формата: `cb0bfefa598b4c3887661fde54ecd57b`
 
     ---
 
@@ -113,20 +115,20 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -143,25 +145,26 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
+    "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -184,14 +187,14 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -283,8 +286,8 @@ Object.defineProperty(window, 'BCaptcha', {
       // CapMonster Cloud автоматически использует свои прокси
       let binanceRequest = new BinanceRequest({
           websiteURL: 'https://example.com', // URL страницы с Binance капчей
-          websiteKey: 'login',           // Замените на корректное значение
-          validateId: 'cb0bfefa598b4c3887661fde54ecd57b'
+          websiteKey: 'login',  // Замените на корректное значение
+          validateId: 'cb0bfefa598b4c3887661fde54ecd57b' // Замените на корректное значение
       });
 
       // Пример использования вашего собственного прокси
@@ -335,7 +338,7 @@ Object.defineProperty(window, 'BCaptcha', {
           let binanceRequest = new BinanceRequest({
               websiteURL: 'https://example.com', // URL страницы с Binance капчей
               websiteKey: 'login',           // Замените на корректное значение
-              validateId: 'cb0bfefa598b4c3887661fde54ecd57b'
+              validateId: 'cb0bfefa598b4c3887661fde54ecd57b' // Замените на корректное значение
           });
 
           // Пример использования вашего собственного прокси
@@ -393,8 +396,7 @@ async def solve_binance():
         websiteUrl="https://example.com",                  # URL страницы с Binance капчей
         websiteKey="login",                                # Замените на корректное значение
         validateId="cb0bfefa598b4c3887661fde54ecd57b",    # Замените на актуальный validateId
-        userAgent="userAgentPlaceholder"                   # Используйте актуальный UserAgent
-    )
+        userAgent="userAgentPlaceholder"
 
     # Пример использования вашего собственного прокси
     # Раскомментируйте данный блок, если хотите использовать прокси
@@ -456,8 +458,8 @@ class Program
         {
             WebsiteUrl = "https://example.com",               // URL страницы с Binance капчей
             WebsiteKey = "login",                             // Замените на корректное значение
-            ValidateId = "cb0bfefa598b4c3887661fde54ecd57b",
-            UserAgent = "userAgentPlaceholder"                // Используйте актуальный UserAgent
+            ValidateId = "cb0bfefa598b4c3887661fde54ecd57b",  // Замените на корректное значение
+            UserAgent = "userAgentPlaceholder"                
         };
 
         // Пример использования вашего собственного прокси

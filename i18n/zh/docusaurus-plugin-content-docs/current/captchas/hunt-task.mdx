@@ -55,7 +55,6 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 
 <Tabs>
 <TabItem value="proxy" label="HuntTask" className="bordered-panel">
-
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -81,13 +80,13 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 请按以下格式传递：
 `"apiGetLib":"https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"`
 
-您可以在包含 Hunt 验证码的页面中，通过 DevTools（**Network** 或 **Elements** 标签）找到该链接。
-使用关键字搜索：`hd-api` 或 `api.js`。
+可在包含 Hunt 验证码的页面中通过 DevTools（**Network** 或 **Elements** 选项卡）查找该链接。  
+请使用关键字 `hd-api` 或 `api.js` 进行搜索。
 
 ---
 
-<ParamItem title="data (在 metadata 内)" type="string" />
-当选择验证码求解模式时，需要传递 `data`（详见下文说明）。
+<ParamItem title="data（位于 metadata 中）" type="string" />
+选择验证码解决模式时必须指定 `data`（详情见下文）
 
 ---
 
@@ -147,12 +146,12 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 
 ### 何时使用每种模式
 
-| 场景                 | 是否需要传递 `data`？ |
-| ------------------ | -------------- |
-| 初始初始化              | 否              |
-| 需要获取 X-HD          | 否              |
-| 网站返回 Captcha error | 是              |
-| 已获得 `meta.token`   | 是              |
+| 情况                  | 是否需要传递 `data`？ |
+| ------------------------- | ------------- |
+| 初始初始化   | 否            |
+| 需要获取 X-HD            | 否             |
+| 网站返回 Captcha error | 是             |
+| 已获取 `meta.token`      | 是             |
 
 ---
 
@@ -184,35 +183,33 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
 ```json
 {
-    "type": "CustomTask",
-    "class": "HUNT",
-    "websiteURL": "https://example.com",
-    "metadata": {
-      "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
-    },
-    "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
-  }
+  "type": "CustomTask",
+  "class": "HUNT",
+  "websiteURL": "https://yourwebsite.com/page-with-hunt",
+  "metadata": {
+    "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
+  },
+  "userAgent": "userAgentPlaceholder",
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-**响应**
-
+      **响应示例**
 ```json
 {
   "errorId": 0,
   "taskId": 407533072
 }
 ```
-</MethodDescription>
-</TabItem>
+    </MethodDescription>
+  </TabItem>
 </Tabs>
 
 ---
@@ -254,7 +251,7 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
 ```json
 {
   "type": "CustomTask",
@@ -262,27 +259,26 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
   "websiteUrl": "https://example.com",        
   "metadata": {
       "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-      "data": "kufyHK/s/jTNU...AfwIW", // META_TOKEN 的值
+      "data": "meta-token-value",
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-**响应**
-
-```json
-{
-  "errorId": 0,
-  "taskId": 407533072
-}
-```
-</MethodDescription>
-</TabItem>
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533072
+    }
+      ```
+    </MethodDescription>
+  </TabItem>
 </Tabs>
 
 ## 获取任务结果的方法
@@ -305,14 +301,14 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**响应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -352,9 +348,11 @@ v3fr=1; lng=en; flaglng=en; SESSION=12a3aea8cdcfdbb9e7df8ee99b526a84; auid=ab0dW
 
 4. 在向网站 API 发送后续请求时，需要在 `Cookie` 请求头中将 cookies 发送回服务器，以便服务器确认该请求属于同一会话。
 
-5. 所有请求应在同一会话中完成，并使用相同的 **IP 地址（或代理）** 和 **User-Agent**。否则服务器可能会将请求视为可疑并要求重新验证。
+4. 向 API 发送后续请求时，必须在 `Cookie` 请求头中将 Cookie 传回服务器，以便服务器确认请求属于同一会话。
 
-6. 有时部分 cookies 是在客户端创建的（例如页面上的 JavaScript）。在自动化或测试过程中，可能需要直接从浏览器提取 cookies，或以类似方式生成这些 cookies。
+5. 所有请求都必须在同一会话中使用相同的 IP（或代理）和 User-Agent。否则，服务器可能会将请求视为可疑并要求重新验证。
+
+6. 某些 Cookie 有时会在客户端生成（例如页面中的 JavaScript）。在自动化或测试过程中，有时需要从浏览器中提取 Cookie，或以类似方式生成它们。
 
 
 ## Hunt CAPTCHA 解决示例
@@ -416,7 +414,7 @@ const htmlHeaders = {
   "cache-control": "no-cache",
   pragma: "no-cache",
   priority: "u=0, i",
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "document",
@@ -436,8 +434,8 @@ const apiHeaders = {
   priority: "u=1, i",
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
-  referer: BASE_URL + "/", // 网站当前使用的 referer
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  referer: BASE_URL + "/", // 网站当前有效的 referer
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "empty",
@@ -663,7 +661,7 @@ html_headers = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "priority": "u=0, i",
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "document",
@@ -683,8 +681,8 @@ api_headers = {
     "priority": "u=1, i",
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
-    "referer": BASE_URL + "/en", # 替换为网站中实际使用的 referer
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "referer": BASE_URL + "/en", # 替换为网站当前有效的 referer
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",
@@ -707,7 +705,7 @@ def random_string(length=20):
     return ''.join(random.choice(chars) for _ in range(length))
 
 # ================= CAPMONSTER CLOUD =================
-# 与 CapMonster Cloud 交互的函数（创建任务并等待验证码解决）
+# 用于操作 CapMonster Cloud 的函数（创建任务并等待验证码解决结果）
 
 def create_task(task):
     """在 CapMonster Cloud 创建任务"""

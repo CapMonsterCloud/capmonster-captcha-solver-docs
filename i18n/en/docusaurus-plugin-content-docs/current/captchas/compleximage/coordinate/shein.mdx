@@ -51,7 +51,7 @@ The request must contain a single image in base64 format.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    Base64-encoded image (wrapped in an array, without the `data:image/png;base64,` prefix).
 
     ---
 
@@ -71,7 +71,7 @@ The request must contain a single image in base64 format.
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
@@ -93,7 +93,7 @@ The request must contain a single image in base64 format.
     	![](../images/ComplexImageTask-Recognition/shein1.png)
     	![](../images/ComplexImageTask-Recognition/shein2.png)
 
-    	**Response**
+    	**Response example**
     	```json
     	{
     	  "errorId":0,
@@ -115,14 +115,15 @@ The request must contain a single image in base64 format.
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Response:** coordinates that must be clicked in a specific order.
+		**Response example:**<br/>
+    The response contains the coordinates that must be clicked in a specific order.
       ```json
       {
         "solution": {

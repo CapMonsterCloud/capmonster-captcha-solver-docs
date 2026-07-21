@@ -56,7 +56,7 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Array de imagens codificadas em base64.
+    Array de imagens codificadas em base64 (sem o prefixo `data:image/png;base64,`).
 
     ---
 
@@ -81,10 +81,10 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Solicitação**
+      **Exemplo de requisição**
       ```json
       {
-        "clientKey":{{API_key}},
+        "clientKey": "API_KEY",
         "task": 
         {
           "type": "ComplexImageTask",
@@ -126,7 +126,7 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
 
     	Para este exemplo: `"TaskArgument": "546"`
 
-    	**Resposta**
+    	**Exemplo de resposta**
     	```json
     	{
     	  "errorId":0,
@@ -148,15 +148,15 @@ Além disso, o valor `TaskArgument` deve ser passado dentro de `metadata`.
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Resposta:**
-		um array de valores booleanos (`true` ou `false`) dependendo se o número em cada imagem corresponde ao argumento alvo.
+		**Exemplo de resposta:**<br/>
+    Um array de valores com elementos `true` ou `false`, dependendo de o número na imagem ser ou não o argumento procurado.
 ```json
 {
   "errorId": 0,
@@ -200,7 +200,7 @@ Este método é implementado por meio da tarefa `ImageToTextTask` com o módulo 
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Solicitação**
+      **Exemplo de requisição**
 
 ```json
 {

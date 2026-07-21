@@ -169,20 +169,20 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
         "task": 
         {
           "type": "YidunTask",
-          "websiteURL": "https://www.example.com",
-          "websiteKey": "6cw0f0485d5d46auacf9b735d20218a5",
+          "websiteURL": "https://yourwebsite.com/page-with-yidun",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder"
         }
       }
       ```
-      **Resposta**
+      **Exemplo de resposta**
       ```json
       {
         "errorId":0,
@@ -199,25 +199,25 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
         "task": 
         {
           "type": "YidunTask",
-          "websiteURL": "https://www.example.com",
-          "websiteKey": "6cw0f0485d5d46auacf9b735d20218a5",
+          "websiteURL": "https://yourwebsite.com/page-with-yidun",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
-          "proxyType":"http",
-          "proxyAddress":"8.8.8.8",
-          "proxyPort":8080,
-          "proxyLogin":"proxyLoginHere",
-          "proxyPassword":"proxyPasswordHere"
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
-      **Resposta**
+      **Exemplo de resposta**
       ```json
       {
         "errorId":0,
@@ -241,15 +241,15 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
   </MethodItem>
   <MethodDescription>
 
-  **Requisição**
+  **Exemplo de requisição**
   ```json
   {
     "clientKey": "API_KEY",
     "taskId": 407533077
   }
-````
+```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -273,6 +273,8 @@ Se na aba **Network** dos desenvolvedores você encontrar os parâmetros `challe
 
 <details>
   <summary>Exemplo de tarefa</summary>
+
+  **Importante**: os valores dos parâmetros indicados são fornecidos exclusivamente a título de exemplo. Antes de utilizá-los, substitua-os pelos dados atuais do seu projeto.
 
 ```json
 {
@@ -354,7 +356,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let yidunRequest = new YidunRequest({
         websiteURL: "https://www.example.com",                 // URL da página com a captcha
-        websiteKey: "6cw0f0485d5d46auacf9b735d20218a5",
+        websiteKey: "6cw0f0485d5d46auacf9b735d20218a5", // Substitua pelo valor necessário
         userAgent: "userAgentPlaceholder"
     });
 
@@ -405,7 +407,7 @@ async function solveYidun() {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let yidunRequest = new YidunRequest({
         websiteURL: "https://www.example.com",                 // URL da página com a captcha
-        websiteKey: "6cw0f0485d5d46auacf9b735d20218a5",
+        websiteKey: "6cw0f0485d5d46auacf9b735d20218a5",  // Substitua pelo valor necessário
         userAgent: "userAgentPlaceholder"
     });
 
@@ -422,7 +424,7 @@ async function solveYidun() {
     };
 
     yidunRequest = new YidunRequest({
-        websiteURL: "https://www.example.com",                 // URL da página com a captcha
+        websiteURL: "https://www.example.com",
         websiteKey: "6cw0f0485d5d46auacf9b735d20218a5",
         userAgent: "userAgentPlaceholder",
         proxy
@@ -464,8 +466,8 @@ async def solve_yidun_captcha():
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     yidun_request = YidunRequest(
         websiteUrl="https://www.example.com",  # URL da página com a captcha
-        websiteKey="6cw0f0485d5d46auacf9b735d20218a5",
-        userAgent="userAgentPlaceholder"  # Use um UserAgent atual
+        websiteKey="6cw0f0485d5d46auacf9b735d20218a5", # Substitua pelo valor necessário
+        userAgent="userAgentPlaceholder"  
     )
 
     # Exemplo de uso do seu próprio proxy
@@ -526,7 +528,7 @@ class Program
         var yidunRequest = new YidunTaskRequest
         {
             WebsiteUrl = "https://example.com",                  // URL da página com a captcha
-            WebsiteKey = "7ce0f0475b5d46acacf9b732a29218d9",
+            WebsiteKey = "7ce0f0475b5d46acacf9b732a29218d9",  // Substitua pelo valor necessário
             UserAgent = "userAgentPlaceholder"
         };
 

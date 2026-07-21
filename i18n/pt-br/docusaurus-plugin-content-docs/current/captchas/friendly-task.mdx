@@ -54,6 +54,8 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
   <ParamItem title="websiteKey" required type="string" />
   Chave do Friendly Captcha (*veja a seção [Como encontrar o valor do sitekey](#como-encontrar-o-valor-do-sitekey)*).
+  <br />
+  Geralmente tem o seguinte formato: `FFMGEMAD2K3JJ35P`
   
   ---
 
@@ -118,14 +120,14 @@ Use o valor do parâmetro `apiGetLib` em `metadata`, correspondente à versão d
 **Exemplo:**
 
 Para **V1**
-  ```json
+```json
   "apiGetLib": "https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
 ```
 
 Para **V2**
 
 ```json
-"apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
+  "apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 
 <br />
@@ -138,23 +140,23 @@ Para **V2**
     </MethodItem>
     <MethodDescription>
 
-  **Requisição**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "task": {
-      "type": "CustomTask",
-      "class": "friendly",
-      "websiteKey": "FFMGEMAD2K3JJ35P",
-      "websiteURL": "https://example.com",
-      "userAgent": "userAgentPlaceholder",
-      "metadata": {
-		"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
+  **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "friendly",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
+		}
 	}
-}
-  ```
+      ```
 
-  **Resposta**
+  **Exemplo de resposta**
   ```json
   {
     "errorId": 0,
@@ -173,29 +175,29 @@ Para **V2**
 </MethodItem>
 <MethodDescription>
   
-  **Requisição**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "task": {
-      "type": "CustomTask",
-      "class": "friendly",
-      "websiteKey": "FFMGEMAD2K3JJ35P",
-      "websiteURL": "https://example.com",
-      "userAgent": "userAgentPlaceholder",
-      "metadata": {
-		"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
-	},
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
-    }
-  }
-  ```
+  **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "friendly",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
+		},
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
+        }
+      }
+      ```
 
-  **Resposta**
+  **Exemplo de resposta**
   ```json
   {
     "errorId": 0,
@@ -225,15 +227,15 @@ O formato do token na resposta depende da versão do captcha usada no site:
   </MethodItem>
   <MethodDescription>
 
-  **Requisição**
+  **Exemplo de requisição**
   ```json
   {
     "clientKey": "API_KEY",
     "taskId": 407533077
   }
-````
+```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {

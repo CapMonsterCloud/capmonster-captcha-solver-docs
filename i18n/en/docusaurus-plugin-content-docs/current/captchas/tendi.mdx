@@ -52,9 +52,10 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    captchaAppId. For example `"websiteKey": "189123456"` - is a unique parameter for your site. You can take it from an html page with a captcha or from traffic (see description below).
+    **captchaAppId** corresponds to the `aid` value. For example, `"websiteKey": "189123456"` is a unique parameter for your website. It can be obtained from the HTML of the page containing the captcha or from the network traffic (see the description below).
 
     ---
+
     <ParamItem title="captchaUrl (inside metadata)" type="string" />
     Link to the captcha script. It usually ends with `TCaptcha.js` or `TCaptcha-global.js`. You can find it in the list of requests (see example below).
 
@@ -106,15 +107,15 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
       ```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "TenDI",
-          "websiteURL": "https://example.com",
-          "websiteKey": "189123456",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
             "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
@@ -123,7 +124,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
       }
       ```
 
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -140,29 +141,29 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
       ```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "TenDI",
-          "websiteURL": "https://example.com",
-          "websiteKey": "189123456",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
             "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
           },
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -185,14 +186,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Te
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -421,7 +422,7 @@ async function solveTenDI() {
   // CapMonster Cloud automatically uses its own proxies
   let tenDIRequest = new TenDIRequest({
     websiteURL: "https://example.com", // URL of the page with the captcha
-    websiteKey: "183268248"            // Replace with a valid value
+    websiteKey: "183268248"            // TencentCaptcha appid (replace with a valid value)
   });
 
   // Example of using your own proxy
@@ -479,7 +480,7 @@ async def solve_tendi_custom():
     # CapMonster Cloud automatically uses its own proxies
     tendi_request = TenDiCustomTaskRequest(
         websiteUrl="https://example.com",  # URL of the page with Tencent (TenDI) captcha
-        websiteKey="189956587",            # TencentCaptcha appid
+        websiteKey="189956587",            # TencentCaptcha appid (replace with a valid value)
         userAgent="userAgentPlaceholder"
     )
 
@@ -545,7 +546,7 @@ class Program
         var tenDiRequest = new TenDiCustomTaskRequest
         {
             WebsiteUrl = "https://example.com",   // URL of the page with the captcha
-            WebsiteKey = "189956587",             // TencentCaptcha appid
+            WebsiteKey = "189956587",             // TencentCaptcha appid (replace with a valid value)
             UserAgent = "userAgentPlaceholder"
         };
 

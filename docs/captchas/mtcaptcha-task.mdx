@@ -45,7 +45,8 @@ CapMonster Cloud по умолчанию работает через встро�
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-Ключ MTcaptcha, передаётся в запросе в параметрах, как `sk` (*см. пример ниже, как его найти*).
+Ключ MTcaptcha, передаётся в запросе в параметрах, как `sk` (*см. пример ниже, как его найти*). <br />
+Имеет следующий примерный формат: `MTPublic-abCDEFJAB`
 
 ---
 
@@ -116,21 +117,21 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login"
+    "pageAction": "your-page-action"
   }
 }
 ```
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -147,26 +148,26 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "pageAction": "your-page-action",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -188,7 +189,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -196,7 +197,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -249,9 +250,9 @@ https://api.capmonster.cloud/getTaskResult
       // CapMonster Cloud автоматически использует свои прокси
       let mtcaptchaRequest = new MTCaptchaRequest({
           websiteURL: "https://www.example.com",       // URL страницы с MTCaptcha
-          websiteKey: "MTPublic-abCDEFJAB",
-          isInvisible: false,       // true -- если используется Invisible MTCaptcha
-          pageAction: "login"
+          websiteKey: "MTPublic-abCDEFJAB",   // Замените на корректное значение
+          isInvisible: false,   // true, если используется Invisible MTCaptcha
+          pageAction: "login"  // Замените на корректное значение
       });
 
       // Пример использования вашего собственного прокси
@@ -267,9 +268,9 @@ https://api.capmonster.cloud/getTaskResult
 
       mtcaptchaRequest = new MTCaptchaRequest({
           websiteURL: "https://www.example.com",
-          websiteKey: "MTPublic-abCDEFJAB",
-          isInvisible: false,
-          pageAction: "login",
+          websiteKey: "MTPublic-abCDEFJAB",  // Замените на корректное значение
+          isInvisible: false,  // true, если используется Invisible MTCaptcha
+          pageAction: "login", // Замените на корректное значение
           proxy,
           userAgent: "userAgentPlaceholder"
       });
@@ -303,9 +304,9 @@ https://api.capmonster.cloud/getTaskResult
           // CapMonster Cloud автоматически использует свои прокси
           let mtcaptchaRequest = new MTCaptchaRequest({
               websiteURL: "https://www.example.com",      // URL страницы с MTCaptcha
-              websiteKey: "MTPublic-abCDEFJAB",
-              isInvisible: false,     // true -- если используется Invisible MTCaptcha
-              pageAction: "login"
+              websiteKey: "MTPublic-abCDEFJAB",    // Замените на корректное значение
+              isInvisible: false,     // true, если используется Invisible MTCaptcha
+              pageAction: "login"  // Замените на корректное значение
           });
 
           // Пример использования вашего собственного прокси
@@ -322,9 +323,9 @@ https://api.capmonster.cloud/getTaskResult
 
           mtcaptchaRequest = new MTCaptchaRequest({
               websiteURL: "https://www.example.com",
-              websiteKey: "MTPublic-abCDEFJAB",
-              isInvisible: false,
-              pageAction: "login",
+              websiteKey: "MTPublic-abCDEFJAB", // Замените на корректное значение
+              isInvisible: false,   // true, если используется Invisible MTCaptcha
+              pageAction: "login",  // Замените на корректное значение
               proxy,
               userAgent: "userAgentPlaceholder"
           });
@@ -365,9 +366,9 @@ async def solve_mt_captcha():
     # CapMonster Cloud автоматически использует свои прокси
     mtcaptcha_request = MTCaptchaRequest(
         websiteUrl="https://www.example.com",  # URL страницы с капчей
-        websiteKey="MTPublic-abCDEFJAB",
+        websiteKey="MTPublic-abCDEFJAB",  # Замените на корректное значение
         isInvisible=False,       # True, если капча невидимая
-        pageAction="login"
+        pageAction="login"    # Замените на корректное значение
     )
 
     # Пример использования вашего собственного прокси
@@ -382,10 +383,10 @@ async def solve_mt_captcha():
     # )
     #
     # mtcaptcha_request = MTCaptchaRequest(
-    #     websiteUrl="https://www.example.com",
-    #     websiteKey="MTPublic-abCDEFJAB",
-    #     isInvisible=False,
-    #     pageAction="login",
+    #     websiteUrl="https://www.example.com",  # URL страницы с капчей
+    #     websiteKey="MTPublic-abCDEFJAB",  # Замените на корректное значение
+    #     isInvisible=False,    # True, если капча невидимая
+    #     pageAction="login", # Замените на корректное значение
     #     proxy=proxy
     # )
 
@@ -429,10 +430,10 @@ class Program
         // CapMonster Cloud автоматически использует свои прокси
         var mtcaptchaRequest = new MTCaptchaTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",     // URL страницы с капчей
-            WebsiteKey = "MTPublic-tqNCRE0GS",
-            Invisible = false,   // true -- если используется невидимая капча
-            PageAction = "login",
+            WebsiteUrl = "https://www.example.com",  // URL страницы с капчей
+            WebsiteKey = "MTPublic-tqNCRE0GS",  // Замените на корректное значение
+            Invisible = false,   // true, если капча невидимая
+            PageAction = "login", // Замените на корректное значение
             UserAgent = "userAgentPlaceholder"
         };
 
@@ -442,10 +443,10 @@ class Program
         /*
         mtcaptchaRequest = new MTCaptchaTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",
-            WebsiteKey = "MTPublic-tqNCRE0GS",
-            Invisible = false,
-            PageAction = "login",
+            WebsiteUrl = "https://www.example.com", // URL страницы с капчей
+            WebsiteKey = "MTPublic-tqNCRE0GS",   // Замените на корректное значение
+            Invisible = false,   // true, если капча невидимая
+            PageAction = "login", // Замените на корректное значение
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(

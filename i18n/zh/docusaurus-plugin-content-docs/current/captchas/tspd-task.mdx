@@ -2,7 +2,7 @@
 sidebar_position: 25
 sidebar_label: TSPD
 title: "TSPD 自动识别与绕过 | API"
-description: "了解如何使用 CapMonster Cloud 自动识别与验证码解决服务的 API 来识别 TSPD！" 
+description: "了解如何使用 CapMonster Cloud 自动验证码识别与解决服务的 API 识别 TSPD！" 
 ---
 
 import Tabs from '@theme/Tabs';
@@ -60,14 +60,14 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 
 ---
 
-<ParamItem title="tspdCookie (внутри metadata)" required type="string" />
-在 TSPD-challenge 页面上获取的 cookies：`"tspdCookie": "TS386a400d029=082670627aab2800722d179e73a60b575d00c96728a9f8dedd8be27a40f6a1aa5df467cebf7da7315a4e16675f010245; ....; ....;"`
+<ParamItem title="tspdCookie（位于 metadata 中）" required type="string" />
+在包含 TSPD challenge 的页面上获得的 Cookie： `"tspdCookie": "TS386a400d029=082670627aab2800722d179e73a60b575d00c96728a9f8dedd8be27a40f6a1aa5df467cebf7da7315a4e16675f010245; ....; ....;"`
 
 ---
 
-<ParamItem title="htmlPageBase64 (внутри metadata)" required type="string" />
-完整的 TSPD 页面内容（**base64** 格式），例如：`"htmlPageBase64": "PCFET0NUWVBFIGh0bWw+DQo8aHRtbD48aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IlByYWdtYSIgY29udGVudD0ibm8tY2FjaGUiLz4NCjxtZXRhIGh0dHAtZXF1aXY9IkV4cGlyZXMiIGNvbnRlbnQ9Ii0xIi8+DQo8bWV0YSBodHRwLWVxdWl2PSJDYWNoZUNvbnRyb2.....L2JvZHk+PC9odG1sPg=="`
- 
+<ParamItem title="htmlPageBase64（位于 metadata 中）" required type="string" />
+包含 TSPD 的整个页面，以 **base64** 格式表示，例如：  `"htmlPageBase64": "PCFET0NUWVBFIGh0bWw+DQo8aHRtbD48aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IlByYWdtYSIgY29udGVudD0ibm8tY2FjaGUiLz4NCjxtZXRhIGh0dHAtZXF1aXY9IkV4cGlyZXMiIGNvbnRlbnQ9Ii0xIi8+DQo8bWV0YSBodHRwLWVxdWl2PSJDYWNoZUNvbnRyb2.....L2JvZHk+PC9odG1sPg=="` 
+
 ---
 
 <ParamItem title="userAgent" type="string" />
@@ -121,26 +121,26 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "type": "CustomTask",
         "class": "tspd",
-        "websiteUrl": "https://example.com",        
+        "websiteUrl": "https://yourwebsite.com/page-with-tspd",        
         "metadata": {
             "tspdCookie": "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
             "htmlPageBase64": "PCFET0NU...k+PC9odG1sPg=="
         },
         "userAgent": "userAgentPlaceholder",
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
+        "proxyType": "your-proxy-type",
+        "proxyAddress": "your-proxy-address",
+        "proxyPort": 1234,
+        "proxyLogin": "your-proxy-login",
+        "proxyPassword": "your-proxy-password"
 }
       ```
 
-      **响应**
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -165,14 +165,14 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**响应**
+		**响应示例**
 		```json
      {
           "errorId":0,
@@ -209,7 +209,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -224,7 +224,6 @@ accept-language: en-US
 priority: u=0,i
 Upgrade-Insecure-Requests: 1
 ```
-
 </details>
 
 <details>
@@ -304,7 +303,6 @@ Upgrade-Insecure-Requests: 1
 </body>
 </html>
 ```
-
 </details>
 
 ### 成功接受 Cookie 示例（再次请求时不再出现 TSPD）
@@ -313,11 +311,10 @@ Upgrade-Insecure-Requests: 1
 
 <details>
       <summary>向页面发送 GET 请求</summary>
-
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -339,7 +336,6 @@ cookie: TS386a400d029=08267...01a06e; TS386a400d078=0826...dbb3b0c; TSd215368402
 priority: u=0,i
 Upgrade-Insecure-Requests: 1
 ```
-
 </details>
 
 <details>
@@ -352,12 +348,12 @@ Upgrade-Insecure-Requests: 1
     <link rel="icon" type="image/png" href="/sandbox.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>示例门户</title>
+    <title>Sample Portal</title>
 
-    <!-- 演示字体 -->
+    <!-- Demo Font -->
     <link rel="stylesheet" href="https://demo-cdn.com/fonts/demo-font.css" />
 
-    <!-- 图标 -->
+    <!-- Icons -->
     <link rel="stylesheet" href="https://assets-sandbox.com/icons/demo-icons.css"/>
 
     <link rel="stylesheet" href="/static/sandbox.css">
@@ -365,12 +361,11 @@ Upgrade-Insecure-Requests: 1
     <link rel="stylesheet" crossorigin href="/styles/sample-theme.css">
   </head>
   <body>
-    <noscript>请启用脚本以继续。</noscript> 
+    <noscript>Please enable scripts to continue.</noscript> 
     <div id="sandbox-root"></div>
   </body>
 </html>
 ```
-
 </details>
 
 ## 如何获取 cookies
@@ -386,7 +381,7 @@ const url =
 // === 请求头 ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -450,39 +445,30 @@ async function main() {
 
 main().catch(console.error);
 ```
-
 </details>
-
 
 **重要：**
 
-如果服务器返回以下格式的 cookies（三行或四行）：
+如果服务器返回以下格式的 Cookie（三行或四行）：
 
 ```
-
 TS386a400d029=082670...87599c;
 TS386a400d029=082670...40a8ea3;
 TS386a400d078=082670...b4cbe2c;
 TSd2153684027=082670...4415a6
-
 ```
-
 ```
-
 TS386a400d029=08777...83ff9,
 TS386a400d029=08777...fb459e,
 TSd2153684027=08777...f0ad368
-
 ```
 
 或：
 
 ```
-
 TS014d0691=01fef...1244b,
 TS01fe94e8=01fef...9ed38,
 TSafd868f7027=082670...a7ea7c
-
 ```
 
 并且缺少 `TSPD_101_DID` cookie，**这表明请求已被保护机制处理，并返回了阻止页面（TSPD challenge）**。在这种情况下，需要：
@@ -505,7 +491,7 @@ const url =
 // === 设置所需的请求头 ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -702,7 +688,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -771,7 +757,7 @@ async function main() {
 
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",

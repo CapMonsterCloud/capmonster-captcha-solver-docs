@@ -51,8 +51,9 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    A chave identificadora do ReCaptcha v3 na página de destino.
-    <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+    Chave de identificação do ReCaptcha3 na página de destino. <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+    
+    Tem aproximadamente o seguinte formato: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
     ---
 
@@ -62,9 +63,10 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>O valor do parâmetro `action` que é enviado pelo widget ReCaptcha para o Google e que, durante a verificação no servidor, é visível para o proprietário do site. Valor padrão: *verify*</p>
-    <p>Exemplo em HTML:
-    <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+    <p>Valor do parâmetro `action`, que é enviado pelo widget ReCaptcha ao Google e que fica visível para o proprietário do site durante a verificação posterior no servidor. Especifique este parâmetro caso o valor seja diferente do valor padrão: *verify*</p>
+	<p>Exemplo em HTML:
+	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+
 </TabItem>
 </Tabs>
 
@@ -78,19 +80,19 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 		```json
 		{
 		  "errorId":0,
@@ -117,14 +119,14 @@ https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,

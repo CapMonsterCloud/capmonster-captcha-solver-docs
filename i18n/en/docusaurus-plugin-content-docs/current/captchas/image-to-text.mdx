@@ -54,29 +54,32 @@ Using proxy servers is not required for this task.
     ---
 
     <ParamItem title="capMonsterModule" type="string" />
-    The name of recognizing module, for example, “yandex“. Alternative way to pass module name and list of all available modules you can find [here](../api/module-name.mdx). <br />
-    Example: yandex, special and others
+    The name of recognizing module, for example, `yandex`. Alternative way to pass module name and list of all available modules you can find [here](../api/module-name.mdx). <br />
+    Example: `yandex`, `special` and others
 
     ---
 
     <ParamItem title="recognizingThreshold" type="integer" />
-    Captcha recognition threshold with a possible value from 0 to 100. For example, if recognizingThreshold was set to 90 and the task was solved with a confidence of 80, you won't be charged. In this case the user will get a response ERROR_CAPTCHA_UNSOLVABLE. An alternative method for setting the threshold for deducting money is described in the [article](../api/threshold.mdx).
+    Captcha recognition threshold with a possible value from **0** to **100**. For example, if recognizingThreshold was set to **90** and the task was solved with a confidence of **80**, you won't be charged. In this case the user will get a response ERROR_CAPTCHA_UNSOLVABLE. An alternative method for setting the threshold for deducting money is described in the [article](../api/threshold.mdx).
 
     ---
 
     <ParamItem title="case" type="boolean" />
-    true - if captcha is case sensitive.
+    Whether the solution should be case-sensitive. Possible values: `true`, `false`.
 
     ---
 
     <ParamItem title="numeric" type="integer" />
-    1 - if captcha contains numbers only. <br />
-    Possible values: 0, 1
+    `1` - if captcha contains numbers only. <br />
+    Possible values: `0`, `1`
 
     ---
 
     <ParamItem title="math" type="boolean" />
-    false — undefined;<br />true — if captcha requires a mathematical operation (for example: captcha 2 + 6 = will return a value of 8). **Important:** Do not use the `math: true` parameter for the `captcha_math` module.
+    `false` — undefined;<br />
+    `true` — if captcha requires a mathematical operation (for example: captcha 2 + 6 = will return a value of 8).<br />
+    
+     **Important:** Do not use the `math: true` parameter for the `captcha_math` module.
 </TabItem>
 </Tabs>
 
@@ -120,7 +123,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -130,7 +133,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -152,14 +155,14 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the ca
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -336,6 +339,7 @@ The provided code snippets are basic examples for learning how to extract the re
 
         const imageToTextRequest = new ImageToTextRequest({
             body: 'some base64 body', // Replace with actual value
+            // Optional parameters
             CapMonsterModule: CapMonsterModules.YandexWave,
             Case: true,
             numeric: 1,
@@ -369,6 +373,7 @@ async function solveImageToText() {
 
     const imageToTextRequest = new ImageToTextRequest({
         body: 'some base64 body', // Replace with actual value
+        // Optional parameters
         CapMonsterModule: CapMonsterModules.YandexWave,
         Case: true,
         numeric: 1,
@@ -408,6 +413,7 @@ solveImageToText().catch(console.error);
     image_to_text_request = ImageToTextRequest(
         image_bytes=image_bytes,
         module_name=None,     # You can select a module, e.g., YandexWave
+        # Optional parameters
         threshold=50,     
         case=True,     
         numeric=0,    
@@ -457,6 +463,7 @@ solveImageToText().catch(console.error);
             var imageToTextRequest = new ImageToTextRequest
             {
                 Body = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgc...wwzqR4U/yZ//Z", // Replace with actual value
+                // Optional parameters
                 CapMonsterModule = "None",  
                 RecognizingThreshold = 70, 
                 CaseSensitive = true,

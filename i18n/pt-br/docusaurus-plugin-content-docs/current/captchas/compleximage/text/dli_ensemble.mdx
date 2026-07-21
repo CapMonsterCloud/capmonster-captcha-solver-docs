@@ -51,7 +51,7 @@ A solicitação deve conter uma única imagem (junto com texto) em formato base6
 ---
 
 <ParamItem title="imagesBase64" required type="array" />
-Imagem codificada em formato base64.
+Imagem codificada em base64 (envolvida em um array, sem o prefixo `data:image/png;base64,`).
 
 ---
 
@@ -71,7 +71,7 @@ Nome da tarefa: `"dli"`
 		```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
@@ -92,7 +92,7 @@ Nome da tarefa: `"dli"`
 	![](../images/ComplexImageTask-Recognition/dli_1.png)
 	![](../images/ComplexImageTask-Recognition/dli_2.png)
 
-	**Resposta**
+	**Exemplo de resposta**
 	```json
 	{
 	  "errorId":0,
@@ -114,7 +114,7 @@ Nome da tarefa: `"dli"`
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -122,8 +122,8 @@ Nome da tarefa: `"dli"`
 		}
 		```
 
-	**Resposta:**
-	resultado calculado (valor numérico) retornado como string:
+	**Exemplo de resposta**<br/>
+O resultado do cálculo (valor numérico), transmitido como uma string:
   ```json
   {
       "solution":

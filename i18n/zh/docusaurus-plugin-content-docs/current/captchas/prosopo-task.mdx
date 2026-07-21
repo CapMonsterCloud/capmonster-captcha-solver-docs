@@ -1,6 +1,8 @@
 ---
 sidebar_position: 18
 sidebar_label: Prosopo
+title: "Prosopo 验证码自动识别与绕过 | API"
+description: "了解如何使用 CapMonster Cloud 自动验证码识别与解决服务的 API 绕过 Prosopo 验证码！" 
 ---
 
 import Tabs from '@theme/Tabs';
@@ -44,9 +46,10 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    在页面上找到的 `siteKey` 参数的值。
-
-    ---    
+    在页面中找到的 `siteKey` 参数值。<br />
+    大致格式如下：`5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV`
+	
+    ---
 
     <ParamItem title="proxyType" type="string" />
     **http** - 普通的 http/https 代理；<br />**https** - 仅在 "http" 不起作用时尝试（某些自定义代理服务器要求）；<br />**socks4** - socks4 代理；<br />**socks5** - socks5 代理。
@@ -81,25 +84,25 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ## 创建任务方法
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="ProsopoTask (无代理)" default className="method-panel">
+  <TabItem value="proxyless" label="ProsopoTask（无代理）" default className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+    "websiteKey": "your-website-key"
   }
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId":0,
@@ -108,31 +111,31 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ```
 	</MethodDescription>
   </TabItem>
-
-  <TabItem value="proxy" label="ProsopoTask (使用代理)" default className="method-panel">
+  
+  <TabItem value="proxy" label="ProsopoTask（使用代理时）" default className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId":0,
@@ -148,21 +151,21 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 来获取 Prosopo 的解决方案。
 
 <Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533077
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId":0,
@@ -181,12 +184,11 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 1. 打开触发 Prosopo 验证码的网站。
 
-2. 进入 **开发者工具（DevTools）** → **Network**，刷新页面，找到加载验证码 `image` 的请求（例如 API 请求：`https://example.prosopo.io/v1/prosopo/provider/client/captcha/image`）。
+2. 转到**开发者工具**（**DevTools**）→ **Network**，重新加载页面，并找到加载 `image` 的请求（例如 API 请求 `https://example.prosopo.io/v1/prosopo/provider/client/captcha/image`）。
 
-3. 在 **Request Headers** 中找到参数 `Prosopo-Site-Key`，复制其值，并在创建请求时使用。
+3. 在 **Request Headers** 中找到 `Prosopo-Site-Key` 参数，复制其值并在创建请求时使用。
 
 ![](./images/prosopo/sitekey-prosopo.png)
-
 
 ## 使用 SDK 库
 
@@ -208,10 +210,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
 
     // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
+    // CapMonster Cloud 会自动使用其代理
     let prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",       // 使用 ProCaptcha 的页面 URL
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // 您的 ProCaptcha sitekey（公钥）
+        websiteURL: "https://www.example.com",       // 包含 ProCaptcha 的页面 URL
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // 替换为您自己的 ProCaptcha sitekey
     });
 
     // 使用您自己的代理的示例
@@ -226,8 +228,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",      
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+        websiteURL: "https://www.example.com",  // 包含 ProCaptcha 的页面 URL     
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", // 替换为您自己的 ProCaptcha sitekey
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -260,8 +262,8 @@ async function solveProCaptcha() {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",       // 使用 ProCaptcha 的页面 URL
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // 您的 ProCaptcha sitekey（公钥）
+        websiteURL: "https://www.example.com",       // 包含 ProCaptcha 的页面 URL
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // 替换为您自己的 ProCaptcha sitekey
     });
 
     // 使用您自己的代理的示例
@@ -276,8 +278,8 @@ async function solveProCaptcha() {
     };
 
     prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",      
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+        websiteURL: "https://www.example.com", // 包含 ProCaptcha 的页面 URL      
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", // 替换为您自己的 ProCaptcha sitekey
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -294,7 +296,6 @@ async function solveProCaptcha() {
 solveProCaptcha().catch(console.error);
 ```
 </details>
-
   </TabItem>
 
   <TabItem value="python" label="Python" default className="method-panel">
@@ -316,9 +317,9 @@ async def solve_prosopo_captcha():
 
     # 基本示例，无需代理
     # CapMonster Cloud 会自动使用它们的代理
-    prosopo_request = ProsopoTaskRequest(
-        websiteUrl="https://www.example.com",  
-        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+    prosopo_request = ProsopoTaskRequest( 
+        websiteUrl="https://www.example.com",  # 包含 ProCaptcha 的页面 URL
+        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" # 替换为您自己的 ProCaptcha sitekey
     )
 
     # 使用您自己的代理的示例
@@ -332,8 +333,8 @@ async def solve_prosopo_captcha():
     # )
     #
     # prosopo_request = ProsopoTaskRequest(
-    #     websiteUrl="https://www.example.com",
-    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+    #     websiteUrl="https://www.example.com", # 包含 ProCaptcha 的页面 URL
+    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", # 替换为您自己的 ProCaptcha sitekey
     #     proxy=proxy
     # )
 
@@ -376,8 +377,8 @@ class Program
         // CapMonster Cloud 会自动使用它们的代理
         var prosopoRequest = new ProsopoTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",      // ProCaptcha 页面 URL
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // 您的 ProCaptcha sitekey（公钥）
+            WebsiteUrl = "https://www.example.com",      // 包含 ProCaptcha 的页面 URL
+            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // 替换为您自己的 ProCaptcha sitekey
 
             UserAgent = "userAgentPlaceholder"
         };
@@ -387,8 +388,8 @@ class Program
         /*
         prosopoRequest = new ProsopoTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib",
+            WebsiteUrl = "https://www.example.com", // 包含 ProCaptcha 的页面 URL
+            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // 替换为您自己的 ProCaptcha sitekey
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(
