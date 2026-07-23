@@ -16,7 +16,6 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/compleximage/bls" />
 
-
 # bls
 
 ![](../images/ComplexImageTask-Recognition/bls_img.png)
@@ -28,7 +27,6 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 :::warning **注意！**
 此任务不需要使用代理服务器。
 :::
-<br />
 
 在请求中，必须提供 9 张 base64 格式的图片。<br />
 此外，必须在 `metadata` 中传递 `TaskArgument` 参数值。
@@ -43,8 +41,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -56,35 +53,33 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    由 base64 编码的图片数组。
+    base64 编码的图像数组（不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"bls_3x3"`
 
     ---
 
-    <ParamItem title="TaskArgument（在 metadata 中）" required type="string" />
-    需要在图片中找到的数字值。例如：`"123"`
+    <ParamItem title="TaskArgument（位于 metadata 中）" required type="string" />
+    需要在图像中查找的数字值。例如：`"123"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
-        "clientKey":{{API_key}},
+        "clientKey": "API_KEY",
         "task": 
         {
           "type": "ComplexImageTask",
@@ -126,7 +121,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
     	对于此示例：`"TaskArgument": "546"`
 
-    	**响应**
+    	**响应示例**
     	```json
     	{
     	  "errorId":0,
@@ -135,28 +130,26 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取任务结果方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**响应：**
-		一个布尔值数组（`true` 或 `false`），表示每张图片中的数字是否与目标参数匹配。
+		**响应示例：**<br/>
+		由 `true` 或 `false` 元素组成的值数组，具体取决于图像中的数字是否与目标参数匹配。  
 ```json
 {
   "errorId": 0,
@@ -173,8 +166,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 ```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 替代解决方法（bls_text）
 
@@ -191,15 +183,14 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 ### 请求示例
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
 
 ```json
 {
@@ -212,7 +203,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 }
 ```
 
-**响应示例**
+**响应示例**    
 
 ```json
 {
@@ -225,11 +216,8 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
   }
 }
 ```
-
-</MethodDescription>
-
-</TabItem>
-</Tabs>
+    </MethodDescription>
+</div>
 
 ### 自动化 bls_text 解决示例
 

@@ -49,9 +49,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 </span>
 <br />
 
-
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
   
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -64,7 +62,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   ---
 
   <ParamItem title="websiteURL" required type="string" />
-  Altcha 所在的主页面 URL。
+  包含 altcha 的主页面地址。
 
   ---
 
@@ -73,36 +71,41 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
   ---
 
-  <ParamItem title="challenge (metadata 内)" required="required" type="string" />
-  从网站获取的任务唯一标识符。
+  <ParamItem title="challenge（位于 metadata 中）" required="required" type="string" />
+  从网页获取的唯一任务标识符。<br />
+  示例：`3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
 
   ---
 
-  <ParamItem title="iterations (metadata 内)" required="required" type="string" />
-  计算迭代次数或最大值。
-  > **重要提示：** 参数 `iterations` 对应 `maxnumber` 的值！
+  <ParamItem title="iterations（位于 metadata 中）" required="required" type="string" />
+  迭代次数或用于计算的最大数值。
+> **重要：** 参数 `iterations` 对应于 `maxnumber` 的值！<br />
+
+示例：`5000`
+
 
   ---
 
-  <ParamItem title="salt (metadata 内)" required="required" type="string" />
-  从网站获取的 salt，用于生成哈希。
-  > **重要提示：** 请务必完整发送 `salt` 字段的值！
-> 如果网站返回如下内容：
+  <ParamItem title="salt（位于 metadata 中）" required="required" type="string" />
+  从网站获取并用于生成哈希的 salt。
+  > **重要：** 请完整发送 `salt` 字段的值！
+例如，如果网站发送以下值：
 
 `"salt":"46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664"`
 
-— 请原样复制并在请求中完整发送，包含所有字符和参数（如 *edk*、*codeChallenge* 等）。
+— 请按原样复制并在请求中传递，包括所有字符和参数（*edk*、*codeChallenge* 等）。
 
   ---
 
-  <ParamItem title="signature (metadata 内)" required="required" type="string" />
-  请求的数字签名。
+  <ParamItem title="signature（位于 metadata 中）" required="required" type="string" />
+  请求的数字签名。<br />
+  示例：`4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18`
 
   ---
 
   <ParamItem title="userAgent" type="string" />
-  浏览器 User-Agent。<br />
-  **请只传递 Windows 的有效 UA，目前为**: `userAgentPlaceholder`
+  浏览器的 User-Agent。 <br />
+  **仅传递当前有效的 Windows 操作系统 UA。目前为**：`userAgentPlaceholder`
 
   ---
 
@@ -137,10 +140,9 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   代理服务器密码。
 
   ---
-</TabItem>
-</Tabs>
+</div>
 
-## 创建任务方法
+## 创建任务的方法
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="Altcha CustomTask（无代理）" default className="method-panel">
     <MethodItem>
@@ -149,7 +151,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
@@ -160,15 +162,15 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
           "websiteKey": "",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt": "46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt":"your-salt",
+            "signature": "your-signature"
           }
         }
       }
       ```
-      **响应**
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -185,31 +187,31 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
       ```
     </MethodItem>
     <MethodDescription>
-      **请求**
-      ```json
-      {
-        "clientKey": "API_KEY",
-        "task": {
-          "type": "CustomTask",
-          "class": "altcha",
-          "websiteURL": "https://example.com",
-          "websiteKey": "",
-          "userAgent": "userAgentPlaceholder",
-          "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt": "46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
-          },
-          "proxyType":"http",
-          "proxyAddress":"8.8.8.8",
-          "proxyPort":8080,
-          "proxyLogin":"proxyLoginHere",
-          "proxyPassword":"proxyPasswordHere"
-        }
-      }
-      ```
-      **响应**
+      **请求示例**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "altcha",
+    "websiteURL": "https://example.com",
+    "websiteKey": "",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "challenge": "your-challenge",
+      "iterations": "your-iterations",
+      "salt":"your-salt",
+      "signature": "your-signature"
+    },
+    "proxyType":"your-proxy-type",
+    "proxyAddress":"your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin":"your-proxy-login",
+    "proxyPassword":"your-proxy-password"
+  }
+}
+```
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -220,26 +222,25 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   </TabItem>
 </Tabs>
 
-## 获取任务结果方法
+## 获取任务结果的方法
 
-使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Altcha 解决方案。
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Altcha 的解决结果。
 
-<Tabs>
-<TabItem value="proxyless" label="Altcha CustomTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
-    **请求**
+    **请求示例**
     ```json
     {
       "clientKey": "API_KEY",
       "taskId": 407533072
     }
     ```
-    **响应**
+    **响应示例**
 ```json
 {
   "errorId": 0,
@@ -252,47 +253,47 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   }
 }
 ```
-  </MethodDescription>
-</TabItem>
-</Tabs>
+	</MethodDescription>
+</div>
 
-## 如何获取创建任务所需的所有参数
+## 如何查找创建任务所需的全部参数
 
-以下示例展示了如何提取 Altcha 参数，以便在 CapMonster Cloud 中创建任务。请注意，不同网站的 captcha 实现可能不同，因此获取参数的方法也可能有所变化。
+以下是提取 Altcha 参数的示例，这些参数是将任务发送到 CapMonster Cloud 进行解决所必需的。请注意，不同网站上的验证码实现可能有所不同，因此获取参数的方法也可能有所差异。
 
-1. 在浏览器中打开 Altcha 页面，启动 **开发者工具**（**F12** 或 **Ctrl+Shift+I**），并切换到 **Network** 标签。
 
-2. 点击验证码复选框并手动完成验证。在 **Network 搜索栏** 输入任意参数名称（例如 *"algorithm"*）。
+1. 在浏览器中打开包含 Altcha 的页面，启动 **DevTools**（**F12** 或 **Ctrl+Shift+I**），然后转到 **Network** 选项卡。
 
-3. 找到包含 JSON 参数的请求。
+2. 单击验证码复选框并手动完成验证。在 **Network** 的**搜索框**中输入任意参数名称（例如 *"algorithm"*）。
 
-4. 点击请求，如有需要切换到 **Response** 查看服务器返回的数据。
+3. 在找到的项目中，查找包含参数 JSON 的请求。 
 
-5. 复制参数 — 这些值将用于创建 CapMonster Cloud 任务。
+4. 单击该请求，并在需要时转到 **Response** 选项卡，以查看服务器返回的数据。
+
+5. 复制这些参数——创建 CapMonster Cloud 任务时需要使用这些值。
 
 ![](./images/altcha/altcha_parameters.png)
 
-> 一般来说，在页面激活 captcha 后，需要分析网络请求并识别所有相关交互。这些步骤有助于确定参数并理解验证过程。例如，下图显示了名为 `altcha` 的请求，其中包含所有关键参数：
+> 总体而言，在页面上激活验证码后，需要分析网络请求，并识别与其运行相关的所有交互。这些操作对于确定参数和理解验证流程是必要的。例如，下面的截图展示了一个名为 `altcha` 的请求，其中包含所有关键参数：
 
 ![](./images/altcha/altcha_parameters1.png)
 
-在获取所需参数后，需要将它们传入 `metadata` 对象中，以便在 CapMonster Cloud 创建任务时使用。示例结构：
+获取所需参数后，在 CapMonster Cloud 中创建任务时，需要将它们传递到 `metadata` 对象中。结构示例：
 
 ```javascript
 metadata: {
-  challenge: "<challenge 值>", 
-  iterations: "<maxnumber 值>", // 必须用引号括起来，与其他参数一致
-  salt: "<salt 值>",             
-  signature: "<signature 值>",  
+  challenge: "<challenge 的值>", 
+  iterations: "<maxnumber 的值>", // 与其他参数一样，必须使用引号
+  salt: "<salt 的值>",             
+  signature: "<signature 的值>",  
 }
 ```
 
-您还可以使用以下代码示例提取所有参数：
+也可以使用以下代码示例来获取所有参数：
 
 <details>
 <summary>GET 请求示例</summary>
 
-对指定 URL 执行 HTTP GET 请求，并将响应输出到控制台。
+向指定 URL 发出 HTTP GET 请求，并将收到的响应输出到控制台。
 
 ```javascript
 const url = 'https://example-portal.mysite.rs.gov.br/Altcha/Example'; // 用于提取验证码参数的 API 端点
@@ -301,14 +302,14 @@ fetch(url, { method: 'GET' })
   .then(res => res.text())
   .then(data => console.log('Response:', data))
   .catch(err => console.error(err));
-````
+```
 
 </details>
 
 <details>
-<summary>参数拦截器</summary>
+<summary>拦截参数</summary>
 
-浏览器脚本，重写 `fetch` 和 `XMLHttpRequest`，以自动监控网络请求并提取关键 Altcha 验证码参数。将此脚本粘贴到验证码页面的浏览器控制台中并激活验证码 — 所需参数将自动输出到控制台。
+该浏览器脚本会重写 fetch 和 XMLHttpRequest，以自动跟踪网络请求并提取 Altcha 验证码的关键参数。在包含验证码的页面上，将此脚本粘贴到浏览器控制台并激活验证码——所需参数将自动输出到控制台。
 
 ```javascript
 (function() {
@@ -364,9 +365,11 @@ fetch(url, { method: 'GET' })
 
 ![](./images/altcha/altcha_base64.png)
 
-解码该值后，我们得到一个 JSON 对象，其中包含用于验证验证码的数据：
+解码该值后，会生成一个包含验证码验证所需数据的 JSON 对象。
 
-```json
+示例：
+
+```JSON
 {
   "algorithm": "SHA-256",
   "challenge": "86d178e154a5d04665710897b7bfc269d86407830d3a49dad3a3e027f6a824a6",
@@ -377,7 +380,7 @@ fetch(url, { method: 'GET' })
 }
 ```
 
-在 CapMonster Cloud 的响应中，会单独返回 `number`，以及包含 `number` 的完整参数集合，已编码为 `base64`。
+CapMonster Cloud 的响应会分别返回 `number`，以及已经编码为 `base64` 的完整参数集（包括 `number`）。
 
 在下面的示例中，通过 **token** 确认解决方案，该 token 包含完整的参数集。
 如果您只需要发送 `number`，则需要相应地调整确认逻辑。
@@ -388,9 +391,9 @@ fetch(url, { method: 'GET' })
 ```javascript
 const { chromium } = require("playwright");
 
-// 替换为你的值：
-// - API_KEY → 你的 CapMonster Cloud 密钥
-// - ALTCHA_PAGE → Altcha 页面地址
+// 替换为您自己的值：
+// - API_KEY → 您的 CapMonster Cloud 密钥
+// - ALTCHA_PAGE → 包含 Altcha 的页面地址
 const API_KEY = "your_capmonster_cloud_api_key";
 const ALTCHA_PAGE = "https://url_with_altcha";
 
@@ -405,27 +408,27 @@ const ALTCHA_PAGE = "https://url_with_altcha";
     return route.continue();
   });
 
-  let challengeResp = null; // 存储 Altcha challenge 的变量
+  let challengeResp = null; // 用于存储 Altcha challenge 的变量
   page.on("response", async (response) => {
     try {
       if (response.url().includes("/Altcha/GerarDesafio")) {
-        challengeResp = await response.json(); // 获取 challenge JSON 参数
+        challengeResp = await response.json(); // 获取包含 challenge 参数的 JSON
         console.log("Captured /Altcha/GerarDesafio:", challengeResp);
       }
     } catch {}
   });
 
-  await page.goto(ALTCHA_PAGE, { waitUntil: "networkidle" });
+  await page.goto(ALTCHA_PAGE, { waitUntil: "networkidle" }); // 转到包含 Altcha 的页面
 
   try {
     await page.waitForSelector("altcha-widget input[type='checkbox']", { timeout: 10000 });
     await page.click("altcha-widget input[type='checkbox']");
   } catch {
     const widgetHandle = await page.$("altcha-widget");
-    if (widgetHandle) await widgetHandle.click(); // 如果标准选择器未找到
+    if (widgetHandle) await widgetHandle.click(); // 如果未找到标准选择器
   }
 
-  // 等待 challenge
+  // 等待获取 challenge
   const start = Date.now();
   while (!challengeResp && Date.now() - start < 30000) {
     await new Promise((r) => setTimeout(r, 300));
@@ -438,7 +441,7 @@ const ALTCHA_PAGE = "https://url_with_altcha";
 
   const { challenge, salt, signature, maxnumbers } = challengeResp;
 
-  // 构建 CapMonster Cloud 创建任务请求体
+  // 构建用于创建 CapMonster Cloud 任务的请求体
   const createTaskBody = {
     clientKey: API_KEY,
     task: {
@@ -457,7 +460,7 @@ const ALTCHA_PAGE = "https://url_with_altcha";
     },
   };
 
-  // 创建任务
+  // 在 CapMonster Cloud 上创建任务
   const taskResp = await fetch("https://api.capmonster.cloud/createTask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -486,7 +489,7 @@ const ALTCHA_PAGE = "https://url_with_altcha";
 
     if (res.status === "ready") {
       fullSolution = res.solution;
-      console.log("CapMonster 完整解决方案:", fullSolution);
+      console.log("CapMonster Cloud 完整解决方案:", fullSolution);
       break;
     }
     await new Promise((r) => setTimeout(r, 3000));

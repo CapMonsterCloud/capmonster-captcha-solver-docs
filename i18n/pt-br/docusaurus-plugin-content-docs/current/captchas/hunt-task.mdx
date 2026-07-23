@@ -53,8 +53,7 @@ Hunt CAPTCHA é um sistema anti-bot utilizado em plataformas de apostas para det
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="HuntTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -126,8 +125,7 @@ Login do proxy.
 <ParamItem title="proxyPassword" required type="string" />
 Senha do proxy.
 
-</TabItem>
-</Tabs>
+</div>
 
 
 **A solução suporta dois modos de operação:**
@@ -177,33 +175,32 @@ Utilizado para obter o token X-HD vinculado ao IP.
 
 ### Método de criação de tarefa para geração de X-HD
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (com proxy)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "type": "CustomTask",
   "class": "HUNT",
-  "websiteURL": "https://example.com",
+  "websiteURL": "https://yourwebsite.com/page-with-hunt",
   "metadata": {
     "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-  **Resposta**
+  **Exemplo de resposta**
 
 ```json
 {
@@ -212,8 +209,7 @@ Utilizado para obter o token X-HD vinculado ao IP.
 }
 ```
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Modo 2. Resolução de CAPTCHA
 
@@ -246,34 +242,33 @@ Utilizado após o site retornar um erro de captcha e fornecer `meta.token`.
 
 O valor de `meta.token` deve ser enviado no parâmetro `data`.
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (com proxy)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
   "type": "CustomTask",
   "class": "HUNT",
-  "websiteUrl": "https://example.com",
+  "websiteUrl": "https://example.com",        
   "metadata": {
-    "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-    "data": "kufyHK/s/jTNU...AfwIW", // valor de META_TOKEN
+      "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
+      "data": "meta-token-value",
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-  **Resposta**
+  **Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -281,8 +276,7 @@ O valor de `meta.token` deve ser enviado no parâmetro `data`.
 }
 ```
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
@@ -296,22 +290,21 @@ Valor de `solution.data.token`:
 * No modo de resolução da CAPTCHA — `solution.data.token` é o token de solução que deve ser enviado de volta ao site para confirmar a ação.
   :::
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Resposta**
+		**Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -324,8 +317,7 @@ Valor de `solution.data.token`:
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Trabalhando com cookies
@@ -415,7 +407,7 @@ const htmlHeaders = {
   "cache-control": "no-cache",
   pragma: "no-cache",
   priority: "u=0, i",
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "document",
@@ -436,7 +428,7 @@ const apiHeaders = {
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
   referer: BASE_URL + "/", // Referer atual do site
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "empty",
@@ -662,7 +654,7 @@ html_headers = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "priority": "u=0, i",
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "document",
@@ -683,7 +675,7 @@ api_headers = {
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
     "referer": BASE_URL + "/en", # Substitua pelo referer atual do site
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",

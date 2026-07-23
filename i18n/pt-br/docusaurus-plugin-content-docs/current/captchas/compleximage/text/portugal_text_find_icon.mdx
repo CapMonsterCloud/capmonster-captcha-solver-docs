@@ -38,8 +38,7 @@ A solicitação deve conter uma única imagem em formato base64, composta por 5 
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,7 +50,7 @@ A solicitação deve conter uma única imagem em formato base64, composta por 5 
 ---
 
 <ParamItem title="imagesBase64" required type="array" />
-Imagem codificada em formato base64.
+Imagem codificada em base64 (envolvida em um array, sem o prefixo `data:image/png;base64,`).
 
 ---
 
@@ -67,20 +66,18 @@ Texto da tarefa que define qual ícone deve ser encontrado. Exemplo: `"Clique no
 Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar `"Por favor, clique no(a) avi\\u00E3o."`
 (*veja o exemplo na seção [Exemplos automáticos de reconhecimento e resolução](#exemplos-automatizados-de-reconhecimento-e-resolução)*).
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
@@ -98,7 +95,7 @@ Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar 
       }
       ```
 
-	**Resposta**
+	**Exemplo de resposta**
 	```json
 	{
 	  "errorId":0,
@@ -107,8 +104,7 @@ Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar 
 	```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 Exemplo de tarefa:
 
@@ -122,15 +118,14 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -138,8 +133,8 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 		}
 		```
 
-	**Resposta:**
-	o índice retornado é o número do ícone que deve ser clicado. A indexação dos ícones começa em 1 e termina em 5:
+	**Exemplo de resposta**<br/>
+    O índice retornado é o número do ícone no qual é necessário clicar. A numeração dos ícones começa em 1 e termina em 5:
 
 ```json
 {
@@ -158,12 +153,11 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Exemplos automatizados de reconhecimento e resolução
 
-Exemplos em Python usando `requests` e `Playwright`, demonstrando o fluxo completo de captcha: desde a obtenção da tarefa e extração das imagens até o processamento, preparação e envio para o CapMonster Cloud para reconhecimento, bem como a obtenção do resultado final.
+Exemplos em Python usando Requests e Playwright, demonstrando o fluxo completo de captcha: desde a obtenção da tarefa e extração das imagens até o processamento, preparação e envio para o CapMonster Cloud para reconhecimento, bem como a obtenção do resultado final.
 
 :::warning Importante
 Estes exemplos são apenas para demonstração e ilustram a lógica geral de funcionamento com o seu site. Em projetos reais, o código pode precisar de adaptação para um site específico, suas requisições e cabeçalhos.
@@ -173,7 +167,7 @@ Dados sensíveis (chaves de API, configurações de proxy, etc.) devem ser armaz
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="python" label="Usando requests" default className="method-panel">
+  <TabItem value="python" label="Usando Requests" default className="method-panel">
 <details>
       <summary>Mostrar código</summary>
 ```python
@@ -402,7 +396,7 @@ if __name__ == "__main__":
 </details>
   </TabItem>
 
-  <TabItem value="python1" label="Using Playwright" className="method-panel">
+  <TabItem value="python1" label="Usando Playwright" className="method-panel">
   <details>
     <summary>Mostrar código</summary>
 ```python

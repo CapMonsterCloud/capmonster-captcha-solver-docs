@@ -38,8 +38,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,15 +50,14 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Изображение в кодировке base64.
+    Изображение в кодировке base64 (обёрнутое в массив, без префикса `data:image/png;base64,`).
 
     ---
 
     <ParamItem title="Task (внутри metadata)" required type="string" />
     Название задания: `"baidu"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Создание задачи
 
@@ -67,15 +65,14 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 В начале процесса решения возможны временные *unsolvable*-ответы. Это **не является ошибкой** - капча продолжит успешно решаться после инициализации.  
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
@@ -95,7 +92,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
     	![](../images/ComplexImageTask-Recognition/baidu.png)
 
-        **Ответ**
+        **Пример ответа**
         ```json
         {
           "errorId":0,
@@ -104,27 +101,26 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
         ```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Получение результата задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey":"API_KEY",
         "taskId": 143998457
       }
       ```
-		**Ответ:** градусы, на которые необходимо повернуть картинку по часовой стрелке.
+		**Пример ответа** <br/>
+    Градусы, на которые необходимо повернуть картинку по часовой стрелке.
       ```json
       {
         "solution":
@@ -140,8 +136,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
       }
       ```
 	</MethodDescription>
-    </TabItem>
-</Tabs>
+    </div>
 
 ## Как получить Base64
 

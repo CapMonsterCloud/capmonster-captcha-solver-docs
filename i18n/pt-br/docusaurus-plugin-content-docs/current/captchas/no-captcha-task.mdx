@@ -43,8 +43,7 @@ No entanto, se o token não for aceito pelo site alvo, tente novamente usando [s
 
 ## Parâmetros da solicitação
 
-<Tabs>
-<TabItem value="proxy" label="RecaptchaV2Task (com proxy)" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **RecaptchaV2Task**
 
@@ -56,7 +55,9 @@ Endereço da página da web com captcha.
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-Chave do site do Recaptcha.<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+Chave de identificação do ReCaptcha2 na página de destino: `<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`<br />
+
+Tem aproximadamente o seguinte formato: `6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd`
 
 ---
 
@@ -107,8 +108,7 @@ Login do servidor proxy.
 <ParamItem title="proxyPassword" type="string" />
 Senha do servidor proxy.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
@@ -120,18 +120,18 @@ Senha do servidor proxy.
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -148,24 +148,24 @@ Senha do servidor proxy.
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
-    "type":"RecaptchaV2Task",
-    "websiteURL":"https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey":"6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere",
-    "userAgent":"userAgentPlaceholder"
+    "type": "RecaptchaV2Task",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
+    "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -185,22 +185,21 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta para o ReCaptcha2. Você receberá uma resposta em 100 ms, dependendo da carga do serviço.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2Task (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -228,8 +227,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -455,8 +453,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Exemplo básico sem proxy
   // O CapMonster Cloud usa automaticamente seus próprios proxies
   let recaptchaV2Request = new RecaptchaV2Request({
-    websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key"
   });
 
   // Exemplo de uso do seu próprio proxy
@@ -466,14 +464,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const proxy = {
       proxyType: "http",
       proxyAddress: "123.45.67.89",
-      proxyPort: 8080,
+      proxyPort: 1234,
       proxyLogin: "username",
       proxyPassword: "password"
   };
 
   recaptchaV2Request = new RecaptchaV2Request({
-      websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-      websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+      websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+      websiteKey: "your-website-key",
       proxy,
       userAgent: "userAgentPlaceholder"
   });
@@ -502,8 +500,8 @@ async function solveRecaptchaV2() {
     // Exemplo básico sem proxy
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let recaptcha2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key"
     });
 
     // Exemplo de uso do seu próprio proxy
@@ -513,14 +511,14 @@ async function solveRecaptchaV2() {
     const proxy = {
         proxyType: "http",
         proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
+        proxyPort: 1234,
         proxyLogin: "username",
         proxyPassword: "password"
     };
 
     recaptcha2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -561,8 +559,8 @@ async def solve_recaptcha_v2():
     # Exemplo básico sem proxy
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     recaptcha2_request = RecaptchaV2Request(
-        websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key"
     )
 
     # Exemplo de uso do seu próprio proxy
@@ -571,14 +569,14 @@ async def solve_recaptcha_v2():
     # proxy = ProxyInfo(
     #     proxyType="http",
     #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
+    #     proxyPort=1234,
     #     proxyLogin="username",
     #     proxyPassword="password"
     # )
 
     # recaptcha2_request = RecaptchaV2Request(
-    #     websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    #     websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    #     websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+    #     websiteKey="your-website-key",
     #     proxy=proxy,
     #     userAgent="userAgentPlaceholder"
     # )
@@ -626,8 +624,8 @@ class Program
 
         var recaptchaV2Request = new RecaptchaV2Request
         {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high", // URL da página com a captcha
-            WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"  // Substitua por um valor válido
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha", // URL da página com a captcha
+            WebsiteKey = "your-website-key"  // Substitua por um valor válido
         };
 
         // Exemplo de uso do seu próprio proxy
@@ -636,12 +634,12 @@ class Program
         /*
         var recaptchaV2Request = new RecaptchaV2Request
         {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-            WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89",        
-                8080,              
+                1234,              
                 ProxyType.Http,   
                 "username", 
                 "password"

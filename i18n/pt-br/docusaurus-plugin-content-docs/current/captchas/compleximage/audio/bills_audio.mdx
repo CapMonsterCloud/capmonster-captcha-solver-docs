@@ -39,8 +39,7 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -52,8 +51,8 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Áudio codificado em base64.
-    Exemplo: `[ “UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA”]`
+    Áudio codificado em base64, envolvido em um array.<br />
+    Exemplo: `[ "UklGRnjuAwBXQVZFZm10...f/2f/9/6z/vf8MAAAA"]`
 
     ---
 
@@ -65,20 +64,18 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
     <ParamItem title="PayloadType (dentro de metadata)" required type="string" />
     Tipo de dados enviados na tarefa: `"Audio"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
     <MethodItem>
     ```http
     https://api.capmonster.cloud/createTask
     ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
 ```json
 {
     "clientKey": "API_KEY",
@@ -96,7 +93,7 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
 }
 ```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -107,27 +104,26 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
     </MethodItem>
     <MethodDescription>
-    **Requisição**
+    **Exemplo de requisição**
     ```json
     {
         "clientKey": "API_KEY",
         "taskId": 143998457
     }
     ```
-    **Resposta:** o resultado contém os dígitos do áudio.
+    **Exemplo de resposta**  <br/>
+    A resposta retorna os números do áudio:
     ```json
     {
       "solution": {
@@ -142,8 +138,7 @@ O captcha de áudio `bills_audio` é uma versão sonora do “captcha de recibos
     }
     ```
     </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Obtenção de áudio e conversão para Base64
 

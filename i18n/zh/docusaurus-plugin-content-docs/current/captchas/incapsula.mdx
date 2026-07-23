@@ -1,6 +1,8 @@
 ---
 sidebar_position: 17
 sidebar_label: Imperva (Incapsula)
+title: "Imperva（Incapsula）自动识别与绕过 | API"
+description: "了解如何仅在您自己的资源上，使用 CapMonster Cloud 自动验证码识别与解决服务的 API 绕过 Imperva（Incapsula）验证码！"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -45,33 +47,32 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
-    ---
+    --- 
 
     <ParamItem title="class" required type="string" />
     **Imperva**
 
-    ---
+    --- 
 
     <ParamItem title="websiteURL" required type="string" />
-    Incapsula 所在的主页面地址。 
+    包含 Incapsula 的主页面地址。
 
     ---
     <ParamItem title="incapsulaScriptUrl（在 metadata 中）" required="required" type="string" />
     `"incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3"` - Incapsula JS 文件的名称。
 
-    ---
+    --- 
 
     <ParamItem title="incapsulaCookies（在 metadata 中）" required type="string" />
     你从 Incapsula 获取的 cookies。可以通过在页面中使用 document.cookie 获取，或者在请求头中通过 Set-Cookie: "incap_sess_*=...; visid_incap_*=..." 获取（参见 /createTask 请求示例）。
 	
 	![](./images/incapsula/incapsula2.png)
 
-  ---
+    --- 
 
   <ParamItem title="proxyType" required type="string" />
     **http** - 普通的 http/https 代理；<br />**https** - 仅在 "http" 不起作用时尝试（某些自定义代理服务器要求）；<br />**socks4** - socks4 代理；<br />**socks5** - socks5 代理。
@@ -95,64 +96,60 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="proxyLogin" required type="string" />
     代理登录。
 
-     ---
+    --- 
 
     <ParamItem title="proxyPassword" required type="string" />
     代理密码。
 
-    ---
+    --- 
 
     <ParamItem title="reese84UrlEndpoint（在 metadata 中）" type="string" />
 	reese84 指纹发送的端点名称可以在请求中找到，并以 ?d=site.com 结尾。
 
-    ![](./images/incapsula/incapsula3.png)	
+    ![](./images/incapsula/incapsula3.png)
 
-    ---
+    --- 
 
     <ParamItem title="userAgent" type="string" />
 	浏览器的 User-Agent。<br />
 **请仅传递当前 Windows 系统下的有效 UA。当前推荐值为**：`userAgentPlaceholder`
 
-</TabItem>
-</Tabs>
+</div>
 
+## 创建任务的方法
 
-## 创建任务方法
-
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
-    <MethodDescription>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
 
-    **请求**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "Imperva",
+    "websiteURL": "https://yourwebsite.com/page-with-imperva",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "incapsulaScriptUrl": "_Incapsula_Resource?example-parameter=example-value",
+      "incapsulaCookies": "example-session-cookie=your-session-cookie; example-visitor-cookie=your-visitor-cookie;",
+      "reese84UrlEndpoint": "your-reese84-url-endpoint"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "Imperva",
-        "websiteURL": "https://example.com",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-          "incapsulaCookies": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",
-          "reese84UrlEndpoint": "Built-with-the-For-hopence-Hurleysurfecting-the-"
-        },
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
-
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -162,29 +159,27 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ```
 
     </MethodDescription>
-  </TabItem>
-</Tabs>
+</div>
 
 
 ## 获取任务结果方法
 使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 来获取 Imperva 解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId":0,
@@ -201,8 +196,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Access denied
 
@@ -368,9 +362,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         proxyPassword: "password"
     };
 
-    // Imperva（Incapsula）任务配置
+    // 配置 Imperva（Incapsula）任务
     const impervaRequest = new ImpervaRequest({
         websiteURL: "https://example.com/", // 受 Imperva 保护的页面 URL
+        // 替换为您自己的值
         metadata: {
             incapsulaScriptUrl: "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
             incapsulaCookies: "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;"
@@ -411,6 +406,7 @@ async function main() {
     // Imperva（Incapsula）任务配置
     const impervaRequest = new ImpervaRequest({
         websiteURL: 'https://example.com/', // 受 Imperva 保护的页面 URL
+        // 替换为您自己的值
         metadata: {
             incapsulaScriptUrl: '_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3',
             incapsulaCookies: 'incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;',
@@ -456,7 +452,8 @@ async def solve_imperva_captcha():
 
     # Imperva（Incapsula）任务配置
     imperva_request = ImpervaCustomTaskRequest(
-        websiteUrl="https://example.com",
+        websiteUrl="https://example.com", # 包含 Imperva 的页面 URL
+        # 替换为您自己的值
         metadata={
             "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
             "incapsulaCookie": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",

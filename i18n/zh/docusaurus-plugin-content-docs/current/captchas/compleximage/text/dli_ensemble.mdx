@@ -38,8 +38,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,27 +50,25 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    base64 编码格式的图片。
+    采用 base64 编码的图像（包装在数组中，不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"dli"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
     </MethodItem>
     <MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
         "clientKey": "API_KEY",
@@ -93,7 +90,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	![](../images/ComplexImageTask-Recognition/dli_1.png)
     	![](../images/ComplexImageTask-Recognition/dli_2.png)
 
-    	**响应**
+    	**响应示例**
     	```json
     	{
     	  "errorId":0,
@@ -102,29 +99,26 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取任务结果方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-
-		**响应：**
-		返回计算结果（数值），以字符串形式返回：
+		**响应示例**<br/>
+		以字符串形式返回的计算结果（数值）：
       ```json
       {
           "solution":
@@ -142,8 +136,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 如何获取 Base64
 

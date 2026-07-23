@@ -34,8 +34,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 ## Параметры запроса
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (при использовании прокси)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -53,7 +52,8 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Ключ Friendly Captcha (*см. раздел [Как найти значение sitekey](#как-найти-значение-sitekey)*).
+  Ключ Friendly Captcha (*см. раздел [Как найти значение sitekey](#как-найти-значение-sitekey)*).<br />
+  Имеет следующий примерный формат: `FFMGEMAD2K3JJ35P`
   
   ---
 
@@ -109,8 +109,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
   ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 
@@ -119,13 +118,13 @@ CapMonster Cloud по умолчанию работает через встро�
 **Например:**
 
 Для **V1**
-  ```json
+```json
   "apiGetLib": "https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
 ```
 
 Для **V2**
 
-  ```json
+```json
   "apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 <br />
@@ -138,23 +137,23 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "friendly",
-          "websiteKey": "FFMGEMAD2K3JJ35P",
-          "websiteURL": "https://example.com",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-			"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
 		}
 	}
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -172,29 +171,29 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "friendly",
-          "websiteKey": "FFMGEMAD2K3JJ35P",
-          "websiteURL": "https://example.com",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-			"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
 		},
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -213,8 +212,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 **V2**: `"AQQA.8Q2TbgK_..._pknXDweJjKT2qwmroOhHcZsU4dHyu-jaGIPx9k7432p_num13buuTu6n4lVA=="`
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
       ```http
     https://api.capmonster.cloud/getTaskResult
@@ -222,7 +220,7 @@ CapMonster Cloud по умолчанию работает через встро�
   </MethodItem>
   <MethodDescription>
 
-  **Запрос**
+  **Пример запроса**
   ```json
   {
     "clientKey": "API_KEY",
@@ -230,7 +228,7 @@ CapMonster Cloud по умолчанию работает через встро�
   }
   ```
 
-  **Ответ**
+  **Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -245,8 +243,8 @@ CapMonster Cloud по умолчанию работает через встро�
 }
   ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
+
 <br />
 Значение полученного токена подставляется в соответствующее поле:
 

@@ -43,8 +43,7 @@ TSPD é uma proteção WAF (Web Application Firewall) projetada para prevenir at
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="CastleTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -108,39 +107,37 @@ Login do proxy. <br />
 <ParamItem title="proxyPassword" required type="string" />
 Senha do proxy.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (com proxy)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "type": "CustomTask",
         "class": "tspd",
-        "websiteUrl": "https://example.com",        
+        "websiteUrl": "https://yourwebsite.com/page-with-tspd",        
         "metadata": {
             "tspdCookie": "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
             "htmlPageBase64": "PCFET0NU...k+PC9odG1sPg=="
         },
         "userAgent": "userAgentPlaceholder",
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
+        "proxyType": "your-proxy-type",
+        "proxyAddress": "your-proxy-address",
+        "proxyPort": 1234,
+        "proxyLogin": "your-proxy-login",
+        "proxyPassword": "your-proxy-password"
 }
       ```
 
-      **Resposta**
+      **Exemplo de resposta**
       ```json
       {
         "errorId": 0,
@@ -148,8 +145,7 @@ Senha do proxy.
     }
       ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Método para obter o resultado da tarefa
 
@@ -157,22 +153,21 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 
 > **Importante**: após a conclusão bem-sucedida, nas versões mais recentes do TSPD pode ser retornado o cookie `TSPD_101_DID`, enquanto nas versões mais antigas ele pode não estar presente.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Resposta**
+		**Exemplo de resposta**
 		```json
      {
           "errorId":0,
@@ -194,8 +189,7 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
       }
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Trabalhando com uma página com TSPD
 
@@ -209,7 +203,7 @@ Ao enviar uma requisição GET para uma página com **TSPD-challenge**, você re
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -316,7 +310,7 @@ Ao fazer uma nova requisição à página de destino com os cookies do CapMonste
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -387,7 +381,7 @@ const url =
 // === Cabeçalhos ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -505,7 +499,7 @@ const url =
 // === Defina os cabeçalhos necessários ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -705,7 +699,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -774,7 +768,7 @@ async function main() {
 
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",

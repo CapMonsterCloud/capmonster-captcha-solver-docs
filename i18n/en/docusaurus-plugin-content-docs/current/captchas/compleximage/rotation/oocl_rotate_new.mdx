@@ -37,8 +37,7 @@ The request must contain two images: background and circle.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -50,27 +49,25 @@ The request must contain two images: background and circle.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    An array of Base64-encoded images (without the `data:image/png;base64,` prefix).
 
     ---
 
     <ParamItem title="Task (inside metadata)" required type="string" />
     Task name: `"oocl_rotate_new"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-  **Request**
+  **Request example**
   ```json
   {
     "clientKey": "API_KEY",
@@ -96,7 +93,7 @@ The request must contain two images: background and circle.
 
 	![](../images/ComplexImageTask-Recognition/ex2.png)
 
-	**Response**
+	**Response example**
 	```json
 	{
 	  "errorId":0,
@@ -105,20 +102,18 @@ The request must contain two images: background and circle.
 	```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Get task result method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -126,7 +121,8 @@ The request must contain two images: background and circle.
 		}
 		```
 
-	**Response:** degrees indicating how much the circle must be rotated clockwise.
+	**Response example:** <br/>
+  The number of degrees by which the circle must be rotated clockwise.
   ```json
   {
     "errorId":0,
@@ -142,8 +138,7 @@ The request must contain two images: background and circle.
   ```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get Base64
 

@@ -41,8 +41,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -54,27 +53,25 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Массив изображений в кодировке base64.
+    Массив изображений в кодировке base64 (без префикса `data:image/png;base64,`).
 
     ---
 
     <ParamItem title="Task (внутри metadata)" required type="string" />
     Название задания: `betpunch_3x3_rotate`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Создание задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       { 
         "clientKey": "API_KEY",
@@ -82,15 +79,15 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
           "type": "ComplexImageTask",
           "class": "recognition",
           "imagesBase64": [
-            "{image_1_Base64}",
-            "{image_2_Base64}",
-            "{image_3_Base64}",
-            "{image_4_Base64}",
-            "{image_5_Base64}",
-            "{image_6_Base64}",
-            "{image_7_Base64}",
-            "{image_8_Base64}",
-            "{image_9_Base64}",
+            "image_1_Base64",
+            "image_2_Base64",
+            "image_3_Base64",
+            "image_4_Base64",
+            "image_5_Base64",
+            "image_6_Base64",
+            "image_7_Base64",
+            "image_8_Base64",
+            "image_9_Base64",
           ],
           "metadata": {
             "Task": "betpunch_3x3_rotate"
@@ -99,7 +96,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
       }
       ```
 
-    	**Ответ**
+    	**Пример ответа**
     	```json
     	{
     	  "errorId":0,
@@ -108,27 +105,25 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Получение результата задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-      **Ответ**
+      **Пример ответа**<br/>
       "answer":[X,X,X,X,X,X,X,X,X], где X - целочисленное значение от 1 до 4 для каждого изображения. 4 - означает, что картинку не нужно поворачивать; 1-3 - количество поворотов картинки против часовой стрелки.
       ```json
       {
@@ -144,8 +139,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как получить Base64
 

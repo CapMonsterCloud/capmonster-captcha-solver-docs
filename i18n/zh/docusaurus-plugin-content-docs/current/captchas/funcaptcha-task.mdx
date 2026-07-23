@@ -40,8 +40,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
 
@@ -53,19 +52,23 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ---
 
 <ParamItem title="websitePublicKey" required type="string" />
-FunCaptcha 密钥（值为 *public key* 或 *pk*）。
+FunCaptcha 密钥（`public key` 或 `pk` 的值）。<br />
+
+格式示例：`EX72CCFB-26EX-40E5-91E6-85EX70BE98ED`
 
 ---
 
 <ParamItem title="data" type="string" />
-附加参数。如果网站使用 *data[blob]* 则必填。<br />
-**重要提示：** 不要加载 captcha iframe 来提取 `blob`。一旦加载验证码，该值即失效。
+附加参数。如果网站使用 `data[blob]`，则此参数为必填。 <br />
+
+ **重要：** 请勿加载验证码框架来提取 `blob`。验证码加载后，该参数值将失效。
 
 ---
 
 <ParamItem title="funcaptchaApiJSSubdomain" type="string" />
-Arkose Labs 子域名（值为 *surl*）。只有在不同于默认值时才需要指定：`client-api.arkoselabs.com`。
-**重要：** 仅输入域名，不要包含 `https://` 前缀。
+Arkose Labs 子域名（`surl` 的值）。仅当它与默认值 `client-api.arkoselabs.com` 不同时才指定。<br />
+
+**重要：** 仅指定域名，不要包含 `https://` 前缀
 
 ---
 
@@ -76,13 +79,11 @@ Arkose Labs 子域名（值为 *surl*）。只有在不同于默认值时才需�
 ---
 
 <ParamItem title="cookies" type="string" />
-以如下格式传递额外 Cookie：
+请按以下格式传递附加 Cookie：
 
 ```
-
 cookieName1=value1; cookieName2=value2
-
-````
+```
 
 ---
 
@@ -116,11 +117,9 @@ cookieName1=value1; cookieName2=value2
 <ParamItem title="proxyPassword" type="string" />
 代理服务器登录密码。
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务的方法
-
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 <TabItem value="proxyless" label="FunCaptchaTask（无代理）" default className="method-panel">
 <MethodItem>
@@ -130,21 +129,21 @@ https://api.capmonster.cloud/createTask
 
 </MethodItem>
 <MethodDescription>
-**请求**
+**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-**响应**
+**响应示例**
 ```json
 {
   "errorId":0,
@@ -154,33 +153,33 @@ https://api.capmonster.cloud/createTask
 </MethodDescription>
 </TabItem>
 
-<TabItem value="proxy" label="FunCaptchaTask（使用代理）" default className="method-panel">
+<TabItem value="proxy" label="FunCaptchaTask（使用代理时）" default className="method-panel">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**请求**
+**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**响应**
+**响应示例**
 ```json
 {
   "errorId":0,
@@ -195,15 +194,14 @@ https://api.capmonster.cloud/createTask
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 获取 FunCaptcha 解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="FunCaptchaTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**请求**
+**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -211,8 +209,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**响应**
-
+**响应示例**
 ```json
 {
   "errorId": 0,
@@ -225,10 +222,8 @@ https://api.capmonster.cloud/getTaskResult
   "status": "ready"
 }
 ```
-
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取 FunCaptcha 参数
 
@@ -298,13 +293,11 @@ console.log("surl:", decodeURIComponent(p.surl));
 下面的 JavaScript（Node.js）、Python 和 C# 示例演示了如何使用 Playwright 提取 `public_key` 和 `blob` 参数，在 CapMonster Cloud 创建任务，并获取验证码解决方案的 token。
 你也可以使用其他自动化或测试工具实现相同的逻辑。
 
----
 
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-<summary>Node.js</summary>
-
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="Node.js" default className="method-panel">
+  <details>
+      <summary>显示代码</summary>
 ```javascript
 // npm install playwright
 
@@ -434,17 +427,13 @@ async function getTaskResult(taskId) {
 ```
 
 </details>
+
 </TabItem>
-</Tabs>
 
----
-
-<Tabs>
-<TabItem value="python" label="Python" className="method-panel">
-<details>
-<summary>Python</summary>
-
-```python
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```Python
 # pip install playwright
 # playwright install
 
@@ -574,18 +563,12 @@ async def main():
 # 运行
 asyncio.run(main())
 ```
-
 </details>
-</TabItem>
-</Tabs>
+  </TabItem>
 
----
-
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-<summary>C#</summary>
-
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
 ```csharp
 // dotnet add package Microsoft.Playwright
 
@@ -753,7 +736,6 @@ class Program
     }
 }
 ```
-
 </details>
-</TabItem>
+  </TabItem>
 </Tabs>

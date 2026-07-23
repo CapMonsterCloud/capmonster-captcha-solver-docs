@@ -55,8 +55,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 <br />
 
 ### Option 1
-<Tabs>
-<TabItem value="proxyless" label="AmazonTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -68,12 +67,14 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     ---
 	
     <ParamItem title="websiteKey" required type="string" />
-    Can be found in the `apiKey` field when rendering captcha.
+    Can be found in the `apiKey` field when rendering captcha. <br />
+
+    Example: `h15hX7brbaRTR...Za1_1`
 
     ---
 
     <ParamItem title="captchaScript" required type="string" />
-    Link to jsapi.js on the HTML page, looks like \<Integration URL\>/jsapi.js.
+    Link to `jsapi.js` on the HTML page, looks like `\<Integration URL\>/jsapi.js`.
 
     ---
 
@@ -120,12 +121,10 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   Proxy server password.
 
   ---
-</TabItem>
-</Tabs>
+</div>
 
 ### Option 2 
-<Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -144,15 +143,21 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     <ParamItem title="websiteKey" required type="string" />
     A string that can be obtained from the HTML captcha page or using JavaScript: `window.gokuProps.key`.
 
+    Example: `AQIDA...wZwdADFLWk7XOA==`
+
     ---
 
     <ParamItem title="context" required type="string" />
     A string that can be obtained from the HTML captcha page or using JavaScript: `window.gokuProps.context`.
-
+    
+    Example: `qoJYgnKsc...aormh/dYYK+Y=`
+    
     ---
 
     <ParamItem title="iv" required type="string" />
     A string that can be obtained from the HTML captcha page or using JavaScript: `window.gokuProps.iv`.
+
+    Example: `CgAAXFFFFSAAABVk`
 
     ---
 
@@ -199,16 +204,14 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ### Option 3
 
 If the site uses an invisible captcha and only `challenge.js` is loaded, use this option.  
 In this case, you don’t need to pass all parameters from option 2 — they can remain empty. Pass only the `challenge.js` value.
 
-<Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -271,8 +274,7 @@ In this case, you don’t need to pass all parameters from option 2 — they can
 
 ---
 
-</TabItem>
-</Tabs>
+</div>
 
 
 ### How to obtain `websiteKey`, `context`, `iv`, and `challengeScript` parameters
@@ -292,23 +294,23 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com/index.html",
-        "websiteKey": "h15hX7brbaRTR...Za1_1",
-        "userAgent": "userAgentPlaceholder",
-        "captchaScript": "https://234324vgvc23.yejk.captcha-sdk.awswaf.com/234324vgvc23/jsapi.js",
-        "cookieSolution": true
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "captchaScript": "https://example.captcha-sdk.awswaf.com/jsapi.js",
+    "cookieSolution": true
+  }
+}
+```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -328,28 +330,28 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com/index.html",
-        "websiteKey": "h15hX7brbaRTR...Za1_1",
-        "userAgent": "userAgentPlaceholder",
-        "captchaScript": "https://234324vgvc23.yejk.captcha-sdk.awswaf.com/234324vgvc23/jsapi.js",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "captchaScript": "https://example.captcha-sdk.awswaf.com/jsapi.js",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -372,25 +374,25 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        "websiteKey": "AQIDA...wZwdADFLWk7XOA==",
-        "context": "qoJYgnKsc...aormh/dYYK+Y=",
-        "iv": "CgAAXFFFFSAAABVk",
-        "cookieSolution": true
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "captchaScript": "https://example.captcha.awswaf.com/captcha.js",
+    "websiteKey": "your-website-key",
+    "context": "your-context",
+    "iv": "your-iv",
+    "cookieSolution": true
+  }
+}
+```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -410,30 +412,30 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        "websiteKey": "AQIDA...wZwdADFLWk7XOA==",
-        "context": "qoJYgnKsc...aormh/dYYK+Y=",
-        "iv": "CgAAXFFFFSAAABVk",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "captchaScript": "https://example.captcha.awswaf.com/captcha.js",
+    "websiteKey": "your-website-key",
+    "context": "your-context",
+    "iv": "your-iv",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -456,15 +458,15 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
     ```json
     {
       "clientKey": "API_KEY",
       "task": {
         "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
+        "websiteURL": "https://example.com/page-with-aws-waf",
+        "challengeScript": "https://example.token.awswaf.com/challenge.js",
         "context": "",
         "iv": "",
         "cookieSolution": true
@@ -472,7 +474,7 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     }
     ```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -492,28 +494,28 @@ When navigating to the site, you get a **405** response and an HTML page with ca
     </MethodItem>
     <MethodDescription>
 
-    **Request**
+    **Request example**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "context": "",
-        "iv": "",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "context": "",
+    "iv": "",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Response**
+    **Response example**
 
     ```json
     {
@@ -531,22 +533,21 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Am
 
 
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -560,8 +561,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Am
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to find all required parameters for task creation
 
@@ -735,6 +735,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let amazonRequest = new AmazonRequest({
         websiteURL: "https://example.com", // URL of the page protected by AWS WAF
         websiteKey: "websiteKey",
+        // Replace with your values
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -748,23 +749,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     const proxy = {
         proxyType: "http",
         proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
+        proxyPort: 1234,
         proxyLogin: "username",
         proxyPassword: "password"
     };
 
-    amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "websiteKey",
-        challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        context: "qoJYgnKsc...aormh/dYYK+Y=",
-        iv: "CgAAXFFFFSAAABVk",
-        proxy,
-        userAgent: "userAgentPlaceholder",
-        cookieSolution: false
-    });
-    */
+      amazonRequest = new AmazonRequest({
+          websiteURL: "https://example.com",
+          websiteKey: "websiteKey",
+          // Replace with your values
+          challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
+          captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
+          context: "qoJYgnKsc...aormh/dYYK+Y=",
+          iv: "CgAAXFFFFSAAABVk",
+          proxy,
+          userAgent: "userAgentPlaceholder",
+          cookieSolution: false
+      });
+      */
 
     // Optionally, you can check the balance
     const balance = await client.getBalance();
@@ -793,8 +795,9 @@ async function solveAwsWaf() {
     // Basic example without proxy
     // CapMonster Cloud automatically uses its own proxies
     let amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com",               // URL of the page protected by AWS WAF
+        websiteURL: "https://example.com",    // URL of the page protected by AWS WAF
         websiteKey: "websiteKey",
+        // Replace with your values
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -817,6 +820,7 @@ async function solveAwsWaf() {
     amazonRequest = new AmazonRequest({
         websiteURL: "https://example.com", // URL of the page protected by AWS WAF
         websiteKey: "websiteKey",
+        // Replace with your values
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -880,8 +884,8 @@ async def solve_amazon_waf_captcha():
     # )
     #
     # amazon_waf_request = AmazonWafRequest(
-    #     websiteUrl="https://example.com", 
-    #     challengeScript="https://example.com/path/to/challenge.js",
+    #     websiteUrl="https://example.com",  # URL of the page protected by AWS WAF
+    #     challengeScript="https://example.com/path/to/challenge.js", 
     #     captchaScript="https://example.com/path/to/captcha.js",
     #     websiteKey="your_website_key",
     #     context="your_context_value",
@@ -930,7 +934,7 @@ class Program
 
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com", 
+            WebsiteUrl = "https://example.com", // URL of the page protected by AWS WAF
             WebsiteKey = "website_key", 
             ChallengeScript = "URL_of_challenge.js",       
             CaptchaScript = "URL_of_captcha.js",
@@ -945,7 +949,7 @@ class Program
         /*
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com",
+            WebsiteUrl = "https://example.com",  // URL of the page protected by AWS WAF
             WebsiteKey = "website_key",
             ChallengeScript = "URL_of_challenge.js",
             CaptchaScript = "URL_of_captcha.js",

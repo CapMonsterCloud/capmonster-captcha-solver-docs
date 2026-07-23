@@ -41,8 +41,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-  <Tabs>
-  <TabItem value="proxy" label="BinanceTask (with proxy)" default className="bordered-panel">
+  <div className="bordered-panel">
 
     <ParamItem title="type" required type="string" />
     **BinanceTask**
@@ -55,12 +54,15 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    A unique parameter for your website's section. The value of the parameter `bizId`, `bizType`, or `bizCode`. It can be taken from the traffic (see the description below).
+    A unique parameter for your website's section. The value of the parameter `bizId`, `bizType`, or `bizCode`. It can be taken from the traffic (see the description below).<br />
+    Format example: `login`
+
 
     ---
 
     <ParamItem title="validateId" required type="string" />
-    A dynamic key. The value of the parameter `validateId`, `securityId`, or `securityCheckResponseValidateId`. It can be taken from the traffic (see the description below).
+    A dynamic key. The value of the parameter `validateId`, `securityId`, or `securityCheckResponseValidateId`. It can be taken from the traffic (see the description below).<br />
+    Format example: `cb0bfefa598b4c3887661fde54ecd57b`
 
     ---
 
@@ -95,8 +97,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ## Create task method
@@ -109,20 +110,20 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -139,25 +140,26 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "BinanceTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "login",
-    "validateId": "cb0bfefa598b4c3887661fde54ecd57b",
+    "websiteURL": "https://yourwebsite.com/page-with-binance",
+    "websiteKey": "your-website-key",
+    "validateId": "your-validate-id",
     "userAgent": "userAgentPlaceholder",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
+    "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -172,22 +174,21 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ## Get task result method
 Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the Binance solution.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -199,8 +200,7 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get `websiteKey` and `validateId`
 Enable Developer Tools, go to the Network tab, activate the CAPTCHA, and look at the requests. Some of them will contain the required parameter values.
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let binanceRequest = new BinanceRequest({
         websiteURL: 'https://example.com', // URL of the page with Binance captcha
         websiteKey: 'login',           // Replace with the correct value
-        validateId: 'cb0bfefa598b4c3887661fde54ecd57b'
+        validateId: 'cb0bfefa598b4c3887661fde54ecd57b'  // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -330,8 +330,8 @@ async function solveBinanceCaptcha() {
     // CapMonster Cloud automatically uses its own proxies
     let binanceRequest = new BinanceRequest({
         websiteURL: 'https://example.com', // URL of the page with Binance captcha
-        websiteKey: 'login',           // Replace with the correct value
-        validateId: 'cb0bfefa598b4c3887661fde54ecd57b'
+        websiteKey: 'login',        // Replace with the correct value
+        validateId: 'cb0bfefa598b4c3887661fde54ecd57b'   // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -389,7 +389,7 @@ async def solve_binance():
         websiteUrl="https://example.com",                  # URL of the page with Binance captcha
         websiteKey="login",                                # Replace with the correct value
         validateId="cb0bfefa598b4c3887661fde54ecd57b",    # Replace with the current validateId
-        userAgent="userAgentPlaceholder"                   # Use a valid UserAgent
+        userAgent="userAgentPlaceholder"
     )
 
     # Example of using your own proxy
@@ -453,8 +453,8 @@ class Program
         {
             WebsiteUrl = "https://example.com",               // URL of the page with Binance captcha
             WebsiteKey = "login",                             // Replace with the correct value
-            ValidateId = "cb0bfefa598b4c3887661fde54ecd57b",
-            UserAgent = "userAgentPlaceholder"                // Use a valid UserAgent
+            ValidateId = "cb0bfefa598b4c3887661fde54ecd57b",  // Replace with the correct value
+            UserAgent = "userAgentPlaceholder"  
         };
 
         // Example of using your own proxy

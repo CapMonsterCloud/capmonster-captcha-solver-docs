@@ -49,8 +49,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
   
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -73,13 +72,17 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
   <ParamItem title="challenge (внутри metadata)" required="required" type="string" />
-  Уникальный идентификатор задачи, полученный с веб-страницы.
+  Уникальный идентификатор задачи, полученный с веб-страницы.<br />
+  Пример: `3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
 
   ---
 
   <ParamItem title="iterations (внутри metadata)" required="required" type="string" />
   Количество итераций или максимальное число для вычислений.
-> **Важно:** параметр `iterations` соответствует значению `maxnumber`!
+> **Важно:** параметр `iterations` соответствует значению `maxnumber`!<br />
+
+Пример: `5000`
+
 
   ---
 
@@ -95,7 +98,8 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
   <ParamItem title="signature (внутри metadata)" required="required" type="string" />
-  Цифровая подпись запроса.
+  Цифровая подпись запроса.<br />
+  Пример: `4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18`
 
   ---
 
@@ -136,8 +140,7 @@ CapMonster Cloud по умолчанию работает через встро�
   Пароль прокси-сервера.
 
   ---
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -148,7 +151,7 @@ CapMonster Cloud по умолчанию работает через встро�
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
@@ -159,15 +162,15 @@ CapMonster Cloud по умолчанию работает через встро�
           "websiteKey": "",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt":"46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt":"your-salt",
+            "signature": "your-signature"
           }
         }
       }
       ```
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -184,31 +187,31 @@ CapMonster Cloud по умолчанию работает через встро�
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
-      ```json
-      {
-        "clientKey": "API_KEY",
-        "task": {
-          "type": "CustomTask",
-          "class": "altcha",
-          "websiteURL": "https://example.com",
-          "websiteKey": "",
-          "userAgent": "userAgentPlaceholder",
-          "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt":"46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
-          },
-          "proxyType":"http",
-          "proxyAddress":"8.8.8.8",
-          "proxyPort":8080,
-          "proxyLogin":"proxyLoginHere",
-          "proxyPassword":"proxyPasswordHere"
-        }
-      }
-      ```
-      **Ответ**
+      **Пример запроса**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "altcha",
+    "websiteURL": "https://example.com",
+    "websiteKey": "",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "challenge": "your-challenge",
+      "iterations": "your-iterations",
+      "salt":"your-salt",
+      "signature": "your-signature"
+    },
+    "proxyType":"your-proxy-type",
+    "proxyAddress":"your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin":"your-proxy-login",
+    "proxyPassword":"your-proxy-password"
+  }
+}
+```
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -223,22 +226,21 @@ CapMonster Cloud по умолчанию работает через встро�
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Altcha.
 
-<Tabs>
-<TabItem value="proxyless" label="Altcha CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
       "clientKey": "API_KEY",
       "taskId": 407533072
     }
     ```
-    **Ответ**
+    **Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -252,8 +254,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти все нужные параметры для создания задачи
 
@@ -365,7 +366,9 @@ fetch(url, { method: 'GET' })
 
 ![](./images/altcha/altcha_base64.png)
 
-Если декодировать это значение, на выходе мы получим JSON-объект, содержащий данные, используемые для валидации капчи:
+После декодирования значения формируется JSON-объект с данными, необходимыми для проверки капчи.
+
+Пример:
 
 ```JSON
 {
@@ -487,7 +490,7 @@ const ALTCHA_PAGE = "https://url_with_altcha";
 
     if (res.status === "ready") {
       fullSolution = res.solution;
-      console.log("Full solution from CapMonster:", fullSolution);
+      console.log("Full solution from CapMonster Cloud:", fullSolution);
       break;
     }
     await new Promise((r) => setTimeout(r, 3000));

@@ -42,8 +42,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ## 请求参数
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask（使用代理）" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -56,71 +55,79 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
    --- 
 
   <ParamItem title="websiteURL" required type="string" />
-  包含 CAPTCHA 的页面完整 URL。
+  包含验证码的页面完整 URL。
 
   ---
 
-  <ParamItem title="sceneId（在 metadata 中）" required type="string" />
-  CAPTCHA 场景标识符，以如下格式传递：`"sceneId":"1ww7426c4"`（如何获取该参数值，请参见[对应章节](#sceneid)）
+  <ParamItem title="sceneId（位于 metadata 中）" required type="string" />
+
+  验证码场景标识符，按以下格式传递：`"sceneId":"1ww7426c4"`— **该值仅作为示例**。 <br />
+  请使用您自己的值——获取该值的说明请参阅[相应章节](#sceneid)
 
   ---
-  <ParamItem title="prefix（在 metadata 中）" required type="string" />
-  CAPTCHA 初始化参数，通过用于加载页面任务文本的请求 URL 传递。<br />
-  例如，如果 URL 为：`https://dlw3kug.captcha-open.example.aliyuncs.com/`，则 `prefix` 参数的值对应子域名 —— `dlw3kug`。
+  <ParamItem title="prefix（位于 metadata 中）" required type="string" />
 
-  ---
+  验证码初始化参数，通过用于在页面上加载任务文本的请求 URL 传递。<br />
+  例如，如果 URL 为：`https://dlw3kug.captcha-open.example.aliyuncs.com/`，则 `prefix` 参数的值对应子域名——`dlw3kug`。
 
-  <div style={{
+---
+
+<div style={{
   border: "1px solid #b1b1b1ff",
   borderRadius: "8px",
   padding: "12px",
   margin: "12px 0"
 }}>
 
-**对于某些网站，需要传递额外参数：** 
+**某些网站需要传递额外参数：** 
 
-仅在网站存在这些参数时才填写（详见章节 [使用包含扩展参数的网站](#使用包含扩展参数的网站)*）。
+仅当网站中存在这些参数时才指定它们（*详情请参阅[使用包含扩展参数的网站](#使用包含扩展参数的网站)章节*）。
 
-
-<ParamItem title="userId (metadata中的)" type="string" />
-网站端用户或会话的唯一标识符。 <br />
-
----
-
-<ParamItem title="userUserId (metadata中的)" type="string" />
-用户的附加（次级）标识符。 <br />
+<ParamItem title="userId（位于 metadata 中）" type="string" />
+网站端的唯一用户或会话标识符。 <br />
+示例：`HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=`
 
 ---
 
-<ParamItem title="verifyType (metadata中的)" type="string" />
+<ParamItem title="userUserId（位于 metadata 中）" type="string" />
+额外的（次级）用户标识符。 <br />
+示例：`/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=`
+
+---
+
+<ParamItem title="verifyType（位于 metadata 中）" type="string" />
 验证码验证机制的版本或类型。 <br />
+示例：`1.0`
 
 ---
 
-<ParamItem title="region (metadata中的)" type="string" />
-用于处理验证码的服务器或数据中心区域。 <br />
+<ParamItem title="region（位于 metadata 中）" type="string" />
+处理验证码所使用的服务器或数据中心区域。 <br />
+示例：`sgp`
 
 ---
 
-<ParamItem title="UserCertifyId (metadata中的)" type="string" />
-与当前验证码会话相关的唯一验证ID。 <br />
+<ParamItem title="UserCertifyId（位于 metadata 中）" type="string" />
+与当前验证码会话关联的唯一验证 ID。 <br />
+示例：`0a03e59417757735511105780e2a5e`
 
 ---
 
-<ParamItem title="apiGetLib (metadata中的)" type="string" />
-指向网站所使用的验证码 JS 库链接。该值在客户端生成，并可能在每次页面渲染时动态变化。 <br />
+<ParamItem title="apiGetLib（位于 metadata 中）" type="string" />
+网站使用的验证码 JS 库链接。该值在客户端生成，并可能在每次页面渲染时动态生成。 <br />
+示例：`https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
 </div>
 
   <ParamItem title="userAgent" type="string" />
-  浏览器的 User-Agent。<br />
-  **请仅传递最新的 Windows 系统 UA，目前推荐使用**：`userAgentPlaceholder`
+  浏览器的 User-Agent。 <br />
+  **仅传递当前有效的 Windows 操作系统 UA。目前为**：`userAgentPlaceholder`
 
   ---
 
-    <ParamItem title="proxyType" type="string" />
+  <ParamItem title="proxyType" type="string" />
   **http** - 普通 http/https 代理；<br />
-  **https** - 如果 http 不工作，可以尝试此选项（部分自定义代理要求）；<br />
+  **https** - 仅当“http”不起作用时尝试此选项（某些自定义代理需要）；<br />
   **socks4** - socks4 代理；<br />
   **socks5** - socks5 代理。
 
@@ -128,9 +135,9 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
   <ParamItem title="proxyAddress" type="string" />
   <p>
-    代理的 IPv4 或 IPv6 地址。禁止以下情况：
-    - 使用透明代理（即暴露真实客户端 IP）；
-    - 使用本地代理地址。
+    IPv4/IPv6 代理 IP 地址。不允许：
+    - 使用透明代理（可看到客户端 IP 的代理）；
+    - 使用本地计算机上的代理。
   </p>
 
   ---
@@ -141,16 +148,16 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   ---
 
   <ParamItem title="proxyLogin" type="string" />
-  代理用户名。
+  代理服务器登录名。
 
   ---
 
   <ParamItem title="proxyPassword" type="string" />
-  代理密码。
+  代理服务器密码。
 
   ---
-</TabItem>
-</Tabs>
+
+</div>
 
 ## 创建任务的方法
 
@@ -165,7 +172,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
       
-      **请求**
+      **请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -175,14 +182,14 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix"
     }
   }
 }     
 ```
 
-      **响应**
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -200,7 +207,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
       
-      **请求**
+      **请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -210,19 +217,19 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
     }
   }
 }
 ```
 
-      **响应**
+      **响应示例**
       ```json
       {
         "errorId": 0,
@@ -233,7 +240,9 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   </TabItem>
 </Tabs>
 
-### 带扩展参数的版本（`userId`、`userUserId`、`verifyType` 等）：
+---
+
+### 使用扩展参数的方案（`userId`、`userUserId`、`verifyType` 等）：
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
@@ -244,7 +253,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
       
-      **请求**
+      **请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -254,41 +263,38 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }
   }
 }     
 ```
 
-  **响应**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533077
-  }
-  ```
-</MethodDescription>
-
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533077
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 
-  <TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
+    <TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-
-  **请求**
-
-
+      
+      **请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -298,60 +304,55 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
 
-  **响应**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533077
-  }
-  ```
-</MethodDescription>
-
+      **响应示例**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533077
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 </Tabs>
 
+## 获取任务结果的方法
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Alibaba 验证码的解决结果。
 
-## 获取结果的方法
-
-使用方法 [getTaskResult](../api/methods/get-task-result.mdx) 获取 Alibaba CAPTCHA 的解决结果。
-
-<Tabs>
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
-    ```http
+      ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
 
-  **请求**
+  **请求示例**
   ```json
   {
     "clientKey": "API_KEY",
     "taskId": 407533077
   }
-```
+  ```
 
-**响应**
-
+  **响应示例**
 ```json
 {
   "errorId": 0,
@@ -364,55 +365,51 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     }
   }
 }
-```
-
+  ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
-## 如何获取创建任务所需的所有参数
+## 如何查找创建任务所需的全部参数
 
 ### `sceneId`
 
-`sceneId` 可以在成功完成一次 CAPTCHA 后获取：
+可在成功完成一次验证码后获取：
 
-1. 在网站上手动完成 CAPTCHA。
-2. 打开 **DevTools** → **Network** 标签。
-3. 找到验证成功后发送的请求（例如：verify、check、validate）。
-4. 在 **Payload** 或 **Response** 中找到参数 `sceneId`（`CaptchaSceneId` 或 `sId`）。
+1. 在网站上手动完成验证码。
+2. 打开 **DevTools** → **Network** 选项卡。
+3. 查找成功解决后发送的请求（例如：verify、check、validate）。
+4. 在 **Payload** 或 **Response** 中查找 `sceneId` 参数（`CaptchaSceneId` 或 `sId`）。
 
 ![](./images/alibaba-task/sceneId.png)
 
-该参数也可以通过在网络请求中搜索获取：
+也可以通过搜索网络请求来查找此参数：
 
-1. 打开包含 CAPTCHA 的页面，然后进入 **DevTools** → **Network** 标签。
-3. 使用搜索（Ctrl + F）查找关键字 `sceneId` 或 `CaptchaSceneId`。
+1. 打开包含验证码的页面，进入 **DevTools** → **Network** 选项卡。
+3. 使用关键字 `sceneId` 或 `CaptchaSceneId` 进行搜索（Ctrl + F）。
 
 ![](./images/alibaba-task/sceneId1.png)
 
 
 ### `prefix`
 
-`prefix` 可以从用于加载 CAPTCHA 任务文本的请求 URL 中获取：
+可从网站用于传递验证码任务文本的请求 URL 中获取：
 
-1. 打开包含 CAPTCHA 的页面。
-2. 找到与加载任务相关的请求（通常通过 **DevTools** → **Network**）。
+1. 打开包含验证码的页面。
+2. 查找与加载任务相关的请求（通常通过 **DevTools** → **Network**）。
 
 ![](./images/alibaba-task/prefix.png)<br /> 
 
+## 使用包含扩展参数的网站
 
-## 处理包含扩展参数的网站
+### 提取和准备验证码参数
 
-### 验证码参数的提取与准备
+本节说明提取所需参数、解决验证码以及在目标网站上重新执行授权的通用流程。
 
-本章节描述了在目标网站上提取必要参数、解决验证码以及重新执行登录授权的完整流程。
-
-1. 初始登录请求：
+1. 初始授权请求：
 
 ```http
 POST https://example.com/api/v2/auths/signin
-````
-
+```
 发送用户数据：
 
 ```json
@@ -421,12 +418,11 @@ POST https://example.com/api/v2/auths/signin
   "password": "hashed_password"
 }
 ```
+*请求头示例请参阅[验证码自动解决示例](#验证码自动解决示例)章节*。
 
-*请求头示例请参见章节 [自动验证码解决示例](#примеры-автоматического-решения-капчи)*。
+2. 判断服务器响应。服务器可能返回两种类型的响应：
 
-2. 服务器响应类型。服务器可能返回两种结果：
-
-* 2.1 普通 JSON（无验证码）：
+  - 2.1 普通 JSON（无验证码）：
 
 ```json
 {
@@ -437,10 +433,9 @@ POST https://example.com/api/v2/auths/signin
   }
 }
 ```
+这表示不需要验证码，请求已按标准方式处理。
 
-表示无需验证码，请求已正常处理。
-
-* 2.2 带验证码的响应（服务器返回 HTML 页面而非 JSON）：
+  - 2.2 带验证码的响应（服务器返回 HTML 页面而不是 JSON）：
 
 ```html
 <!doctype html>
@@ -449,8 +444,7 @@ POST https://example.com/api/v2/auths/signin
 <meta name="aliyun_waf_bb" content="...">
 ...
 ```
-
-3. 页面中包含如下对象数据：
+3. 页面内包含一个具有以下数据的对象：
 
 ```javascript
 var requestInfo = {
@@ -465,21 +459,17 @@ var requestInfo = {
 }
 ```
 
-需要从该对象中提取以下用于验证码处理的参数：
+需要从该对象中提取以下用于解决验证码的参数：
 
 * `userId`
 * `userUserId`
 * `verifyType`（对应 `type`）
 * `region`
 * `UserCertifyId`（对应 `traceid`）
-
-<br />
-
-> **注意：** 还需要保存授权参数 `token` 和 `traceid`，它们将在后续请求中作为 `u_atoken` 和 `u_asig` 使用。
-
-<br />
-
-4. JS 验证码脚本地址生成示例：
+<br /> 
+>**重要：** 还必须保存授权参数 `token` 和 `traceid` 的值。它们将在后续授权请求中分别作为 `u_atoken` 和 `u_asig` 使用。
+<br /> 
+4. 生成验证码 JS 链接的示例：
 
 ```javascript
 this.currentDate = new Date()
@@ -493,39 +483,43 @@ this.AliyunGeneratedDynamicJS =
   }`
 ```
 
-5. 构建 `metadata` 并提交验证码请求：
+5. 构建用于解决验证码的 `metadata` 和请求。
 
-这些数据将被发送到我们的验证码服务：
+这些数据会传递给我们的服务以解决验证码： 
+
+>**重要：** 所有指定值仅作为示例。使用前请将其替换为您项目的实际数据。
 
 ```json
 {
-  "metadata": {
-    "sceneId": "1ww7426c4",
-    "prefix": "dlw3kug",
-    "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-    "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-    "verifyType": "1.0",
-    "region": "sgp",
-    "UserCertifyId": "0a03e59417757735511105780e2a5e",
-    "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
+    "metadata": {
+      "sceneId": "1ww7426c4",
+      "prefix": "dlw3kug",
+      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
+      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
+    }
   }
-}
+}     
 ```
 
-6. 获取验证码结果，并使用之前保存的 `u_atoken` 和 `u_asig` 重新发送登录请求：
+6. 获取验证码解决结果，并使用之前保存的 `u_atoken` 和 `u_asig` 参数重新发送授权请求：
 
 ```http
 POST https://example.com/api/v2/auths/signin?u_atoken=...&u_asig=...&u_aref=undefined
 ```
+验证码成功完成后，服务器将返回授权结果（*参见第 2.1 项*）。 
 
-如果验证码通过，服务器将返回登录成功结果（见第 2.1 步）。
+---
 
-### 自动验证码解决示例
+### 验证码自动解决示例 
 
 :::warning 重要
-以下示例仅用于演示，展示在使用 Alibaba Cloud Captcha 防护的网站中的通用工作流程。在实际项目中，代码可能需要根据具体网站的请求结构和请求头进行调整。
+这些示例仅用于演示，展示与使用 Alibaba Cloud Captcha 保护的网站交互的一般逻辑。在实际项目中，代码可能需要根据具体网站、其请求和请求头进行调整。
 
-建议将重要数据（API 密钥、代理配置等）存储在 `.env` 文件或环境变量中。
+建议将重要数据（API 密钥、代理设置等）存储在 `.env` 或环境变量中。
 :::
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -558,8 +552,8 @@ function parse(text, start, end, isJson = true) {
   try {
     return isJson ? JSON.parse(jsonStr) : jsonStr;
   } catch (err) {
-    console.error("无法解析 JSON:", err.message);
-    console.error("尝试解析内容:", jsonStr);
+    console.error("无法解析 JSON：", err.message);
+    console.error("尝试解析：", jsonStr);
     return null;
   }
 }
@@ -569,13 +563,13 @@ function buildProxyLine(proxyUrl) {
 
   const parts = proxyUrl.split(":");
 
-  // 处理格式 protocol:ip:port（3 部分）
+  // 处理 protocol:ip:port 格式（3 个部分）
   if (parts.length === 3) {
     const [protocol, ip, port] = parts;
     return { proxyLine: `${protocol}://${ip}:${port}`, protocol, ip, port };
   }
 
-  // 处理格式 protocol:username:password:ip:port（5 部分）
+  // 处理 protocol:username:password:ip:port 格式（5 个部分）
   if (parts.length === 5) {
     const [protocol, username, password, ip, port] = parts;
     return {
@@ -588,43 +582,43 @@ function buildProxyLine(proxyUrl) {
     };
   }
 
-  // 无效格式
+  // 格式不正确
   return undefined;
 }
 
 const proxyUrl =
-  process.env.proxyUrl || "http:username:password:127.0.0.1:9029"; // 请替换为你的代理参数或在 .env 中配置
+  process.env.proxyUrl || "http:username:password:127.0.0.1:9029"; // 替换为您的代理参数，或在 .env 文件中设置
 const proxyLine = buildProxyLine(proxyUrl);
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 class Worker {
   constructor() {
     this.providerVendorSolverUrl = "https://api.capmonster.cloud";
-    this.API_KEY = process.env.apiKey || "YOUR_API_KEY"; // 请替换为你的 CapMonster Cloud API Key
+    this.API_KEY = process.env.apiKey || "YOUR_API_KEY"; // 替换为您的 CapMonster Cloud API 密钥
 
     this.currentDate = new Date();
-    // 在这里生成验证码 JS 动态链接
+    // 此处生成验证码 JS 的动态链接
     this.AliyunGeneratedDynamicJS = `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=${this.currentDate.getFullYear() + (this.currentDate.getMonth() + 1) + this.currentDate.getDate() + this.currentDate.getHours()}`;
 
-    this.websiteUrl = "https://example.com/auth"; // 请替换为触发验证码的页面 URL
+    this.websiteUrl = "https://example.com/auth"; // 替换为包含验证码的页面 URL
     this.userAgent =
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
+      "userAgentPlaceholder";
   }
 
   async executor() {
     console.log(`正在获取验证码参数....`);
     const RequireAuthorizationResponses =
       await this.getAuthorizationResponses();
-    console.log("成功获取验证码页面");
+    console.log("已成功获取包含验证码的页面");
     const requireParamsCaptchas = await this.requireParamsCaptchasData(
       RequireAuthorizationResponses,
     );
-    console.log(`验证码参数: `, requireParamsCaptchas);
+    console.log(`验证码参数：`, requireParamsCaptchas);
     const AlibabaSolvedResult = await this.requireAlibabaSolverResponse(
       requireParamsCaptchas,
     );
     console.log(
-      `验证码结果: `,
+      `验证码解决结果：`,
       AlibabaSolvedResult?.solution?.data?.tokens,
     );
     const RequireAuthorizationResponsesAfterCaptchaBypass =
@@ -651,12 +645,12 @@ class Worker {
           Referer: "https://example.com/auth",
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -669,7 +663,7 @@ class Worker {
 
   async getAuthorizationResponses() {
     const response = await gotScraping.post(
-      `https://example.com/api/v2/auths/signin`, // 请替换为触发验证码的实际登录 URL
+      `https://example.com/api/v2/auths/signin`, // 替换为触发验证码的网站当前有效授权 URL
       {
         body: JSON.stringify({
           email: "example@gmail.com",
@@ -681,17 +675,17 @@ class Worker {
           "Accept-Encoding": "gzip, deflate, br, zstd",
           "Accept-Language": "en-US,en;q=0.9",
           "Content-Type": "application/json",
-          Origin: "https://example.com",  // 请替换为实际 Origin
+          Origin: "https://example.com",  // 替换为网站当前有效的 Origin
           Pragma: "no-cache",
-          Referer: "https://example.com/auth", // 请替换为实际 Referer
+          Referer: "https://example.com/auth", // 替换为网站当前有效的 Referer
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -700,7 +694,7 @@ class Worker {
     );
 
     if (response.body.includes("requestInfo")) {
-      console.log("成功获取验证码响应:");
+      console.log("已成功获取带验证码的响应：");
       fs.writeFileSync("./baseResponse.txt", response.body);
       console.log(response.body.substring(0, 150));
       return response.body;
@@ -762,7 +756,7 @@ class Worker {
       ";",
       true,
     );
-    // 保存授权参数，用于后续重新发送登录请求
+    // 保存授权参数，以便之后重新发送授权请求时使用
     this.AuthorizationParams = {
       u_atoken: JsonData.token,
       u_asig: JsonData.traceid,
@@ -816,8 +810,8 @@ def parse(text, start, end, is_json=True):
     try:
         return json.loads(json_str) if is_json else json_str
     except Exception as e:
-        print("无法解析 JSON:", str(e))
-        print("尝试解析:", json_str)
+        print("无法解析 JSON：", str(e))
+        print("尝试解析：", json_str)
         return None
 
 
@@ -855,35 +849,35 @@ def build_proxy(proxy_url: str):
 class Worker:
     def __init__(self):
         self.provider_vendor_solver_url = "https://api.capmonster.cloud"
-        self.api_key = os.getenv("API_KEY", "YOUR_API_KEY")  # 请替换为你的 CapMonster Cloud API key
+        self.api_key = os.getenv("API_KEY", "YOUR_API_KEY")  # 替换为您的 CapMonster Cloud API 密钥
 
         now = datetime.now()
         self.aliyun_generated_dynamic_js = (
-          # 这里生成验证码 JS 动态链接
+          # 此处生成验证码 JS 的动态链接
             "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?"
             f"t={now.year}{now.month}{now.day}{now.hour}"
         )
 
-        self.website_url = "https://example.com/auth"  # 请替换为验证码所在页面 URL
+        self.website_url = "https://example.com/auth"  # 替换为包含验证码的页面 URL
         self.user_agent = (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/146.0.0.0 Safari/537.36"
+            "Chrome/150.0.0.0 Safari/537.36"
         )
 
         self.authorization_params = {}
 
-        # ===================== 代理 =====================
+        # ===================== PROXY =====================
         proxy_url = os.getenv(
             "proxyUrl",
-            "http:username:password:127.0.0.1:9029"  # 请替换为你的代理配置或在 .env 中设置
+            "http:username:password:127.0.0.1:9029" # 替换为您的代理参数，或在 .env 文件中设置
         )
 
         self.proxies = build_proxy(proxy_url)
 
         self.session = requests.Session()
 
-        # 将代理绑定到 session（重要）
+        # 将代理连接到 session（重要）
         if self.proxies:
             self.session.proxies.update(self.proxies)
 
@@ -892,15 +886,15 @@ class Worker:
             "Accept-Encoding": "gzip, deflate, br, zstd",
             "Accept-Language": "en-US,en;q=0.9",
             "Content-Type": "application/json",
-            "Origin": "https://example.com",  # 请替换为实际 Origin
+            "Origin": "https://example.com",  # 替换为网站当前有效的 Origin
             "Pragma": "no-cache",
-            "Referer": "https://example.com/auth",  # 请替换为实际 Referer
+            "Referer": "https://example.com/auth",  # 替换为网站当前有效的 Referer
             "Timezone": "Thu Apr 09 2026 23:29:23 GMT+0300",
             "User-Agent": self.user_agent,
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            "sec-ch-ua": '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",
@@ -911,22 +905,22 @@ class Worker:
 
         captcha_page = self.get_authorization_responses()
 
-        print("成功获取包含验证码的页面")
+        print("已成功获取包含验证码的页面")
 
         captcha_params = self.require_params_captchas_data(captcha_page)
 
-        print("验证码参数:", captcha_params)
+        print("验证码参数：", captcha_params)
 
         solved = self.require_alibaba_solver_response(captcha_params)
 
-        print("验证码结果:", solved)
+        print("验证码解决结果：", solved)
 
         final_response = self.send_authorization_request()
 
         print(final_response)
 
     def get_authorization_responses(self):
-        url = "https://example.com/api/v2/auths/signin"  # 请替换为触发验证码的实际登录接口
+        url = "https://example.com/api/v2/auths/signin" # 替换为触发验证码的网站当前有效授权 URL
 
         payload = {
             "email": "example@gmail.com",
@@ -943,19 +937,19 @@ class Worker:
             text = response.text
 
             if "requestInfo" in text:
-                print("成功获取验证码响应")
+                print("已成功获取带验证码的响应")
                 with open("baseResponse.txt", "w", encoding="utf-8") as f:
                     f.write(text)
 
                 print(text[:150])
                 return text
 
-            print("无验证码 -> 重试")
+            print("no captcha -> retry")
 
     def require_params_captchas_data(self, html):
         json_data = parse(html, ':none">var requestInfo = ', ";", True)
 
-        # 保存登录参数，用于后续重新请求登录接口
+        # 保存授权参数，以便之后重新发送授权请求时使用
         self.authorization_params = {
             "u_atoken": json_data["token"],
             "u_asig": json_data["traceid"],
@@ -993,7 +987,7 @@ class Worker:
         data = response.json()
 
         if data.get("errorId"):
-            raise Exception("任务创建失败")
+            raise Exception("创建任务时出错")
 
         task_id = data["taskId"]
 
@@ -1012,7 +1006,7 @@ class Worker:
         url = (
             "https://example.com/api/v2/auths/signin"
             f"?u_atoken={self.authorization_params['u_atoken']}"
-            f"?u_asig={self.authorization_params['u_asig']}"
+            f"&u_asig={self.authorization_params['u_asig']}"
             "&u_aref=undefined"
         )
 

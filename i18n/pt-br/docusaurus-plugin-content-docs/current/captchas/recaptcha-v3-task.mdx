@@ -36,8 +36,7 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 ## Parâmetros da solicitação
 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -49,7 +48,10 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-   Chave do site Recaptcha.<br/>https://www.google.com/recaptcha/api.js?render=ESTA_AQUI
+   Chave de identificação do ReCaptcha3 na página de destino.
+  `https://www.google.com/recaptcha/api.js?render=THIS_ONE`<br/>
+
+  Tem aproximadamente o seguinte formato: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob`
 
    ---
 
@@ -67,36 +69,34 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 
     <ParamItem title="pageAction" type="string" />
     <p>Valor de ação do widget. O proprietário do site define o que o usuário está fazendo na página através deste parâmetro. Valor padrão: *verify*</p><p>Exemplo:<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Método de criar tarefa
 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 <MethodItem>
   ```http
   https://api.capmonster.cloud/createTask
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
-    "type":"RecaptchaV3TaskProxyless",
-    "websiteURL":"https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-    "websiteKey":"6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
+    "type": "RecaptchaV3TaskProxyless",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
     "isEnterprise": false,
     "minScore": 0.7,
-    "pageAction": "myverify"
+    "pageAction": "your-verify"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -105,8 +105,7 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Método de obter resultado da tarefa
 
@@ -116,22 +115,21 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta do ReCaptcha3. Você receberá a resposta dentro de um período de 10 a 30 segundos, dependendo da carga de trabalho do serviço.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -157,8 +155,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
   </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 <br />
 
@@ -260,7 +257,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
           } catch (e) {}
         });
 
-        const targetUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta";
+        const targetUrl = "https://yourwebsite.com/page-with-recaptcha";
         await page.goto(targetUrl, { timeout: 60000 });
         await page.waitForTimeout(3000);
 
@@ -352,7 +349,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
                   "action": found_action
               })
 
-      asyncio.run(extract_recaptcha_v3_execute("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta"))
+      asyncio.run(extract_recaptcha_v3_execute("https://yourwebsite.com/page-with-recaptcha"))
       ```
     </details>
   </TabItem>
@@ -373,7 +370,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
           public static async Task Main(string[] args)
           {
               await ExtractRecaptchaV3Execute
-              ("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta");
+              ("https://yourwebsite.com/page-with-recaptcha");
           }
 
           public static async Task ExtractRecaptchaV3Execute(string url)
@@ -467,10 +464,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Balance:', balance);
 
   const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-    websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // URL da sua página com a captcha
-    websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-    minScore: 0.6,  
-    pageAction: 'myverify',
+    websiteURL: 'https://yourwebsite.com/page-with-recaptcha', // URL da sua página com a captcha
+    websiteKey: 'your-website-key',
+    minScore: 0.7,  
+    pageAction: 'your-verify',
   });
 
   const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -499,10 +496,10 @@ async function solveRecaptchaV3() {
     console.log("Balance:", balance);
 
     const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta", // URL da sua página com a captcha
-        websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-        minScore: 0.6,
-        pageAction: "myverify",
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key",
+        minScore: 0.7,
+        pageAction: "your-verify",
     });
 
     const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -535,10 +532,10 @@ balance = asyncio.run(cap_monster_client.get_balance())
 print("Balance:", balance)
 
 recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-    websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # URL da sua página com captcha
-    websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-    minScore=0.6,
-    pageAction="myverify"
+    websiteUrl="https://yourwebsite.com/page-with-recaptcha",  # URL da sua página com captcha
+    websiteKey="your-website-key",
+    minScore=0.7,
+    pageAction="your-verify"
 )
 
 async def solve_captcha():
@@ -580,9 +577,9 @@ class Program
         var recaptchaV3Request = new RecaptchaV3ProxylessRequest
         {
             WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // URL da sua página com captcha
-            WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-            MinScore = 0.6,
-            PageAction = "myverify"
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
         };
 
         var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);

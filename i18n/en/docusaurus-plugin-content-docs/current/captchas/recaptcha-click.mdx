@@ -43,8 +43,7 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -56,14 +55,17 @@ The object contains data about the task for solving ReCaptcha2 from Google.
     ---
 
     <ParamItem title="imageUrls" required="required (if imagesBase64 is not filled)" type="array" />
-    Single image 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) or a new 1x1 captcha part (in an array).
-    Example: [“[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)”]\
+    The full 4x4 or [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) image, or a new 1x1 captcha tile, passed as an array.
+    Example: `["https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"]`
+
 
     ---
 
     <ParamItem title="imagesBase64" required="required (if imageUrls is not filled)" type="array" />
-    Single image 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) or a new 1x1 captcha part in base64 format (in an array).
-    Example: [ “/9j/4AAQSkZJRgABAQEAAAAAAAD…”]
+    The full 4x4 or [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) image, or a new 1x1 captcha tile, in Base64 format (passed as an array).<br />
+    
+    The format must be as follows: `["/9j/4AAQSkZJRgABAQEAAAAAAAD…"]` (*without the `data:image/jpeg;base64,` prefix*).
+
 
     ---
 
@@ -91,8 +93,7 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 
     <ParamItem title="websiteURL" type="string" />
     URL of the page where the captcha is solved.
-</TabItem>
-</Tabs>
+</div>
 
 ### Description of parameters
 
@@ -108,21 +109,21 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 
 **Task (inside metadata)**: additional metadata related to the task.
 
-**userAgent**: information about the user agent. Current userAgent: userAgentPlaceholder
+**userAgent**: User agent information. The current user agent supported by our service is `userAgentPlaceholder`.
+
 
 **websiteURL**: address of the web page with the captcha.
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -138,11 +139,11 @@ The object contains data about the task for solving ReCaptcha2 from Google.
       "TaskDefinition": "/m/015qff"
     },
     "userAgent": "userAgentPlaceholder",
-    "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"
+    "websiteUrl": "https://mydomain.com/page-with-recaptcha"
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -150,29 +151,27 @@ The object contains data about the task for solving ReCaptcha2 from Google.
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the captcha solution. Depending on the system load, you will receive a response after a time ranging from 300ms to 6s.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId": 0,
@@ -183,8 +182,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the ca
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -546,7 +544,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             Task: 'Please click each image containing a mountain',
             TaskDefinition: '/m/015qff'
         },
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL of the page with the captcha
+        websiteURL: 'https://mydomain.com/page-with-recaptcha' // URL of the page with the captcha
     });
 
     const result = await cmcClient.Solve(complexImageRecaptchaRequest);
@@ -581,7 +579,7 @@ async function solveComplexImageRecaptcha() {
             Task: 'Please click each image containing a mountain',
             TaskDefinition: '/m/015qff'
         },
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL of the page with the captcha
+        websiteURL: 'https://mydomain.com/page-with-recaptcha' // URL of the page with the captcha
     });
 
     const result = await cmcClient.Solve(complexImageRecaptchaRequest);
@@ -613,7 +611,7 @@ complex_image_recaptcha_request = RecaptchaComplexImageTaskRequest(
         "Task": "Click on traffic lights",
         "Grid": "3x3",
         "TaskDefinition": "/m/015qff",
-        "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"  # URL of the page with the captcha
+        "websiteUrl": "https://mydomain.com/page-with-recaptcha"  # URL of the page with the captcha
     }
 )
 

@@ -38,8 +38,7 @@ A reCAPTCHA v3 Enterprise funciona totalmente em segundo plano e não exige que 
 Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa reCAPTCHA v3, especificando o parâmetro `isEnterprise` [(*consulte a seção reCAPTCHA v3*)](../recaptcha-v3-task/).
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
 
@@ -51,8 +50,9 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    A chave identificadora do ReCaptcha v3 na página de destino.
-    <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+    Chave de identificação do ReCaptcha3 na página de destino. <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+    
+    Tem aproximadamente o seguinte formato: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
     ---
 
@@ -62,35 +62,34 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>O valor do parâmetro `action` que é enviado pelo widget ReCaptcha para o Google e que, durante a verificação no servidor, é visível para o proprietário do site. Valor padrão: *verify*</p>
-    <p>Exemplo em HTML:
-    <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+    <p>Valor do parâmetro `action`, que é enviado pelo widget ReCaptcha ao Google e que fica visível para o proprietário do site durante a verificação posterior no servidor. Especifique este parâmetro caso o valor seja diferente do valor padrão: *verify*</p>
+	<p>Exemplo em HTML:
+	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+
+</div>
 
 ## Método de criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 		```json
 		{
 		  "errorId":0,
@@ -98,8 +97,7 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Método de obter resultado da tarefa
 
@@ -109,22 +107,21 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta do ReCaptcha3. Você receberá a resposta dentro de um período de 10 a 30 segundos, dependendo da carga de trabalho do serviço.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -147,8 +144,7 @@ Para alguns sites, a resposta pode ser semelhante ao exemplo a seguir. Ao confir
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 

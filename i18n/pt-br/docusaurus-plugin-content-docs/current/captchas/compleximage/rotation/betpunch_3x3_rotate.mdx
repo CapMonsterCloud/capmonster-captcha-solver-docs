@@ -41,8 +41,7 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -54,27 +53,25 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Array de imagens codificadas em formato base64.
+    Array de imagens codificadas em base64 (sem o prefixo `data:image/png;base64,`).
 
     ---
 
     <ParamItem title="Task (dentro de metadata)" required type="string" />
     Nome da tarefa: `betpunch_3x3_rotate`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Solicitação**
+      **Exemplo de requisição**
       ```json
       { 
         "clientKey": "API_KEY",
@@ -82,15 +79,15 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
           "type": "ComplexImageTask",
           "class": "recognition",
           "imagesBase64": [
-            "{image_1_Base64}",
-            "{image_2_Base64}",
-            "{image_3_Base64}",
-            "{image_4_Base64}",
-            "{image_5_Base64}",
-            "{image_6_Base64}",
-            "{image_7_Base64}",
-            "{image_8_Base64}",
-            "{image_9_Base64}"
+            "image_1_Base64",
+            "image_2_Base64",
+            "image_3_Base64",
+            "image_4_Base64",
+            "image_5_Base64",
+            "image_6_Base64",
+            "image_7_Base64",
+            "image_8_Base64",
+            "image_9_Base64",
           ],
           "metadata": {
             "Task": "betpunch_3x3_rotate"
@@ -99,7 +96,7 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
       }
       ```
 
-    	**Resposta**
+    	**Exemplo de resposta**
     	```json
     	{
     	  "errorId":0,
@@ -108,20 +105,18 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -129,7 +124,7 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
 		}
 		```
 
-      **Resposta**
+      **Exemplo de resposta**<br/>
       `"answer":[X,X,X,X,X,X,X,X,X]`, onde X é um valor inteiro de 1 a 4 para cada imagem.  
       4 significa que a imagem não precisa de rotação; 1–3 indicam quantas rotações no sentido anti-horário são necessárias.
 
@@ -147,8 +142,7 @@ O pedido deve conter nove imagens. As imagens devem ser fornecidas na seguinte o
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Como obter Base64
 

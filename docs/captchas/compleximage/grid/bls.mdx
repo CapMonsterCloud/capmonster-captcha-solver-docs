@@ -43,8 +43,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -56,7 +55,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Массив изображений в кодировке base64.
+    Массив изображений в кодировке base64 (без префикса `data:image/png;base64,`).
 
     ---
 
@@ -68,25 +67,23 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     <ParamItem title="TaskArgument (внутри metadata)" required type="string" />
     Значение числа, которое нужно найти на изображениях. Например: `"123"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ---
 
 ## Создание задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
-        "clientKey":{{API_key}},
+        "clientKey": "API_KEY",
         "task": 
         {
           "type": "ComplexImageTask",
@@ -128,7 +125,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
     	Для данного примера: "TaskArgument": "546"
 
-    	**Ответ**
+    	**Пример ответа**
     	```json
     	{
     	  "errorId":0,
@@ -137,30 +134,28 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ---
 
 ## Получение результата задачи
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Ответ:**
-		массив значений с элементами `true` или `false`, в зависимости от того, является ли число на картинке искомым аргументом или нет.  
+		**Пример ответа:**<br/>
+		Массив значений с элементами `true` или `false`, в зависимости от того, является ли число на картинке искомым аргументом или нет.  
 ```json
 {
   "errorId": 0,
@@ -178,8 +173,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 </MethodDescription>
 
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Альтернативный способ решения (bls_text)
 
@@ -196,15 +190,14 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 
 ### Пример запроса
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Запрос**
+      **Пример запроса**
 
 ```json
 {
@@ -231,8 +224,7 @@ import { ArticleHead } from '../../../../src/theme/ArticleHead';
 }
 ```
     </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ### Пример автоматического решения bls_text
 
@@ -350,4 +342,3 @@ solveBlsText();
 2. Правой кнопкой кликните по элементу капчи и выберите **Inspect**.
 
 ![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)
-

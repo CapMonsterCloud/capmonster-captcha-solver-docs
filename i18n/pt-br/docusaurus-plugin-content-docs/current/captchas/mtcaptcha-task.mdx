@@ -32,8 +32,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da solicitação
 
-<Tabs>
-<TabItem value="proxy" label="MTCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **MTCaptchaTask**
 
@@ -45,7 +44,8 @@ Endereço da página onde o captcha é resolvido.
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-Chave do MTcaptcha, enviada na solicitação nos parâmetros como `sk` (*veja exemplo abaixo de como encontrá-la*).
+A chave MTcaptcha é transmitida nos parâmetros da requisição como `sk` (*veja no exemplo abaixo como encontrá-la*). <br />
+Tem aproximadamente o seguinte formato: `MTPublic-abCDEFJAB`
 
 ---
 
@@ -106,8 +106,7 @@ Login do servidor proxy.
 <ParamItem title="proxyPassword" type="string" />
 Senha do servidor proxy.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -119,21 +118,21 @@ https://api.capmonster.cloud/createTask
 
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login"
+    "pageAction": "your-page-action"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -150,26 +149,26 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "pageAction": "your-page-action",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -184,15 +183,14 @@ https://api.capmonster.cloud/createTask
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha MTCaptcha.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
@@ -200,7 +198,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -215,8 +213,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Como encontrar os parâmetros do captcha
 
@@ -257,8 +254,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let mtcaptchaRequest = new MTCaptchaRequest({
         websiteURL: "https://www.example.com",       // URL da página com MTCaptcha
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,                          // true -- se for usado o MTCaptcha Invisível
+        websiteKey: "MTPublic-abCDEFJAB",   // Substitua pelos seus próprios valores
+        isInvisible: false,                          // true, se for usado o MTCaptcha Invisível
         pageAction: "login"
     });
 
@@ -311,8 +308,8 @@ async function solveMTCaptcha() {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let mtcaptchaRequest = new MTCaptchaRequest({
         websiteURL: "https://www.example.com",       // URL da página com MTCaptcha
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,                          // true -- se for usado o MTCaptcha Invisível
+        websiteKey: "MTPublic-abCDEFJAB",  // Substitua pelos seus próprios valores
+        isInvisible: false,                          // true, se for usado o MTCaptcha Invisível
         pageAction: "login"
     });
 
@@ -372,7 +369,7 @@ async def solve_mt_captcha():
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     mtcaptcha_request = MTCaptchaRequest(
         websiteUrl="https://www.example.com",  # URL da página com MTCaptcha
-        websiteKey="MTPublic-abCDEFJAB",
+        websiteKey="MTPublic-abCDEFJAB",       # Substitua pelos seus próprios valores
         isInvisible=False,                      # True, se for MTCaptcha invisível
         pageAction="login"
     )
@@ -436,8 +433,8 @@ class Program
         var mtcaptchaRequest = new MTCaptchaTaskRequest
         {
             WebsiteUrl = "https://www.example.com",     // URL da página com MTCaptcha
-            WebsiteKey = "MTPublic-tqNCRE0GS",
-            Invisible = false,                          // true -- se for MTCaptcha invisível
+            WebsiteKey = "MTPublic-tqNCRE0GS", // Substitua pelos seus próprios valores
+            Invisible = false,                          // true, se for MTCaptcha invisível
             PageAction = "login",
             UserAgent = "userAgentPlaceholder"
         };
@@ -449,7 +446,7 @@ class Program
         mtcaptchaRequest = new MTCaptchaTaskRequest
         {
             WebsiteUrl = "https://www.example.com",
-            WebsiteKey = "MTPublic-tqNCRE0GS",
+            WebsiteKey = "MTPublic-tqNCRE0GS",  // Substitua pelos seus próprios valores
             Invisible = false,
             PageAction = "login",
             UserAgent = "userAgentPlaceholder,
@@ -478,4 +475,3 @@ class Program
   </TabItem>
 
 </Tabs>
-

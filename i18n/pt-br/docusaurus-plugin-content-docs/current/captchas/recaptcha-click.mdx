@@ -40,8 +40,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -53,14 +52,16 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
     ---
 
     <ParamItem title="imageUrls" required="required (se imagesBase64 não estiver preenchido)" type="array" />
-    Imagem única 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte de captcha 1x1 (em um array).
-    Exemplo: [“[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)”]\
+    Imagem completa 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte do captcha 1x1 (em um array).
+Exemplo: ["[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)"]
 
     ---
 
     <ParamItem title="imagesBase64" required="required (se imageUrls não estiver preenchido)" type="array" />
-    Imagem única 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte de captcha 1x1 no formato base64 (em um array).
-    Exemplo: [ “/9j/4AAQSkZJRgABAQEAAAAAAAD…”]
+    Imagem completa 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte do captcha 1x1 no formato base64 (em um array).<br />
+
+O formato deve ser o seguinte: [ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"] (*sem o prefixo data:image/jpeg;base64,*).
+
 
     ---
 
@@ -88,8 +89,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 
     <ParamItem title="websiteURL" type="string" />
     URL da página onde o captcha está sendo resolvido.
-  </TabItem>
-</Tabs>
+  </div>
 
 ### Descrição dos parâmetros
 
@@ -105,40 +105,41 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 
 **Task (dentro da metadata)**: metadata adicionais relacionados à tarefa.
 
-**userAgent**: informações sobre o agente do usuário. Atual userAgent: userAgentPlaceholder
+**userAgent**: informações sobre o agente do usuário. O userAgent atual compatível com o nosso serviço: `userAgentPlaceholder`
 
 **websiteURL**: endereço da página da web com o captcha.
 
 ## Criar tarefa
 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 <MethodItem>
   ```http
   https://api.capmonster.cloud/createTask
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "ComplexImageTask",
     "class": "recaptcha",
-    "imageUrls":[ "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg" ],
+    "imageUrls": [
+      "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"
+    ],
     "metadata": {
       "Task": "Click on traffic lights",
       "Grid": "3x3",
       "TaskDefinition": "/m/015qff"
     },
     "userAgent": "userAgentPlaceholder",
-    "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"
+    "websiteUrl": "https://mydomain.com/page-with-recaptcha"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -147,30 +148,28 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha. Dependendo da carga do sistema, você receberá uma resposta em um intervalo de tempo de 300ms a 6s.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -181,8 +180,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
   </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 <br />
 
@@ -199,7 +197,7 @@ https://api.capmonster.cloud/getTaskResult
 
 #### websitekey:
 
-O processo é semelhante a encontrar o websitekey para [ReCaptchaV2Task](https://docs.capmonster.cloud/pt-br/docs/captchas/no-captcha-task#como-encontrar-todos-os-parâmetros-necessários-para-a-criação-da-tarefa) e [ReCaptchaV2Enterprise](https://docs.capmonster.cloud/pt-br/docs/captchas/recaptcha-v2-enterprise-task#como-encontrar-todos-os-parâmetros-necessários-para-a-criação-da-tarefa).
+O processo é semelhante a encontrar o websitekey para [reCAPTCHA V2](https://docs.capmonster.cloud/pt-br/docs/captchas/no-captcha-task#como-encontrar-todos-os-parâmetros-necessários-para-a-criação-da-tarefa) e [reCAPTCHA V2 Enterprise]](https://docs.capmonster.cloud/pt-br/docs/captchas/recaptcha-v2-enterprise-task#como-encontrar-todos-os-parâmetros-necessários-para-a-criação-da-tarefa).
 
 #### imageUrls:
 
@@ -544,7 +542,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
                 Task: 'Please click each image containing a mountain',
                 TaskDefinition: '/m/015qff'
             },
-            websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL da página com o captcha
+            websiteURL: 'https://mydomain.com/page-with-recaptcha' // URL da página com o captcha
         });
 
         const result = await cmcClient.Solve(complexImageRecaptchaRequest);
@@ -578,7 +576,7 @@ async function solveComplexImageRecaptcha() {
             Task: 'Please click each image containing a mountain',
             TaskDefinition: '/m/015qff'
         },
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL da página com o captcha
+        websiteURL: 'https://mydomain.com/page-with-recaptcha' // URL da página com o captcha
     });
 
     const result = await cmcClient.Solve(complexImageRecaptchaRequest);
@@ -608,10 +606,10 @@ solveComplexImageRecaptcha().catch(console.error);
     complex_image_recaptcha_request = RecaptchaComplexImageTaskRequest(
         imagesUrls=["https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"],  # Substitua pelos valores reais
         metadata={
-            "Task": "Click on traffic lights",
+            "Task": "Click on traffic lights", 
             "Grid": "3x3",
             "TaskDefinition": "/m/015qff",
-            "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"  # URL da página com o captcha
+            "websiteUrl": "https://mydomain.com/page-with-recaptcha"  # URL da página com o captcha
         }
     )
 

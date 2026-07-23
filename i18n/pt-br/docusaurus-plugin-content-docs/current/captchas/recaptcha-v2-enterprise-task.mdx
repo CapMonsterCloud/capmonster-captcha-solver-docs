@@ -43,8 +43,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da solicitação
 
-  <Tabs>
-  <TabItem value="proxy" label="RecaptchaV2EnterpriseTask (usando proxy)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
 
@@ -56,12 +55,21 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Chave do site do Recaptcha.<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`<br/>ou `<iframe title="reCAPTCHA" src="...;k=6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH&amp;...` , onde `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` é a `websiteKey`.
+    Chave de identificação do reCAPTCHA na página de destino.<br />
+Por exemplo, o valor de `websiteKey` pode ser encontrado no código HTML da página:
+
+`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+
+ou no URL do atributo `src` do elemento `iframe`:
+
+`<iframe title="reCAPTCHA" src="...;k=6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH&amp;...">`
+
+Neste exemplo, `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` é o valor do parâmetro `websiteKey`.
 
     ---
 
     <ParamItem title="pageAction" type="string" />
-<p>O valor do parâmetro action enviado pelo widget ReCaptcha ao Google, que posteriormente é visível ao proprietário do site durante a verificação. Especifique este parâmetro se seu valor for diferente do padrão: *verify*</p>
+<p>O valor do parâmetro `action` enviado pelo widget ReCaptcha ao Google, que posteriormente é visível ao proprietário do site durante a verificação. Especifique este parâmetro se seu valor for diferente do padrão: *verify*</p>
 <p>Exemplo em HTML:
 <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
 
@@ -69,7 +77,15 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 
     <ParamItem title="enterprisePayload" type="string" />
-    Algumas implementações do widget reCAPTCHA Enterprise podem conter parâmetros adicionais que são passados ao método “grecaptcha.enterprise.render” junto com o sitekey. Por exemplo: `<pre lang="js" ><code>grecaptcha.enterprise.render("some-div-id", {<br /> sitekey: "6Lc_aCMTAAAAABx7u2N0D1XnVbI_v6ZdbM6rYf16"<br/> theme: "dark"<br/> s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA"<br/>});</code></pre>`
+    Algumas implementações do reCAPTCHA Enterprise podem conter um parâmetro adicional `s`, transmitido para `grecaptcha.enterprise.render` juntamente com `sitekey`. Por exemplo, o valor `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`:
+
+```js
+grecaptcha.enterprise.render("some-div-id", {
+  sitekey: "6Lc_aCMTAAAAABx7u2N0D1XnVbI_v6ZdbM6rYf16",
+  theme: "dark",
+  s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA"
+});
+```
 
     ---
 
@@ -115,8 +131,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
     <ParamItem title="proxyPassword" type="string" />
     Senha do servidor proxy.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 <br />
 Para `enterprisePayload` - antes de chamá-lo, você precisa substituir a função `grecaptcha.enterprise.render` pela sua própria e capturar o valor de seus parâmetros. A função existe após o carregamento do script, e o captcha geralmente é renderizado imediatamente ou com base em um evento da página. Se o captcha for renderizado com o campo `s` atual no cliente, o token provavelmente não será aceito. 
@@ -177,21 +192,21 @@ Object.defineProperty(window, 'grecaptcha', {
       ```
     </MethodItem>
 <MethodDescription>
-**Request**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
-    "type":"RecaptchaV2EnterpriseTask",
-    "websiteURL":"https://mydomain.com/page-with-recaptcha-enterprise",
-    "websiteKey":"6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    "type": "RecaptchaV2EnterpriseTask",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "enterprisePayload": {
-      "s": "SOME_ADDITIONAL_TOKEN"
+      "s": "your-value"
     }
   }
 }
 ```
-**Response:**
+**Exemplo de resposta:**
 ```json
 {
   "errorId": 0,
@@ -208,27 +223,27 @@ Object.defineProperty(window, 'grecaptcha', {
   ```
 </MethodItem>
 <MethodDescription>
-**Request**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
-    "type":"RecaptchaV2EnterpriseTask",
-    "websiteURL":"https://mydomain.com/page-with-recaptcha-enterprise",
-    "websiteKey":"6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    "type": "RecaptchaV2EnterpriseTask",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "enterprisePayload": {
-      "s": "SOME_ADDITIONAL_TOKEN"
+      "s": "your-value"
     },
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere",
-    "userAgent":"userAgentPlaceholder"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
+    "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-**Response:**
+**Exemplo de resposta:**
 ```json
 {
   "errorId":0,
@@ -244,22 +259,21 @@ Object.defineProperty(window, 'grecaptcha', {
 ## Método Get task result
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta para o ReCaptcha2. Você receberá a resposta em um período de 10 a 80 segundos, dependendo da carga de trabalho do serviço.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -270,8 +284,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 <br />
 
@@ -599,9 +612,9 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
       // O CapMonster Cloud usa automaticamente seus próprios proxies
       let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
         websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a captcha
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",             // Substitua por um valor válido
+        websiteKey: "your-website-key",             // Substitua por um valor válido
         enterprisePayload: {
-          s: "SOME_ADDITIONAL_TOKEN",   // Parâmetro opcional do Enterprise
+          s: "your-value",   // Parâmetro opcional do Enterprise
         }
       });
 
@@ -619,8 +632,8 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
       recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
         websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-        enterprisePayload: { s: "SOME_ADDITIONAL_TOKEN" },
+        websiteKey: "your-website-key",
+        enterprisePayload: { s: "your-value" },
         proxy,
         userAgent: "userAgentPlaceholder"
       });
@@ -654,9 +667,9 @@ async function solveRecaptchaV2Enterprise() {
     // O CapMonster Cloud usa automaticamente seus próprios proxies
     let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
         websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a captcha
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd", // Substitua pelo valor correto
+        websiteKey: "your-website-key", // Substitua pelo valor correto
         enterprisePayload: {
-            s: "SOME_ADDITIONAL_TOKEN", // Parâmetro enterprise opcional
+            s: "your-value", // Parâmetro enterprise opcional
         }
     });
 
@@ -674,8 +687,8 @@ async function solveRecaptchaV2Enterprise() {
 
     recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
         websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-        enterprisePayload: { s: "SOME_ADDITIONAL_TOKEN" },
+        websiteKey: "your-website-key",
+        enterprisePayload: { s: "your-value" },
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -716,10 +729,10 @@ solveRecaptchaV2Enterprise().catch(console.error);
         # Exemplo básico sem proxy
         # O CapMonster Cloud usa automaticamente seus próprios proxies
         recaptcha2request = RecaptchaV2EnterpriseRequest(
-            websiteUrl="https://example.com",
-            websiteKey="6Lf56sUnAAAAAIKLuONYgRsFUfmI-3Lex3xT5U-s",
+            websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
+            websiteKey="your-website-key",
             enterprisePayload={
-                "s": "SOME_ADDITIONAL_TOKEN"
+                "s": "your-value"
             }
         )
 
@@ -735,10 +748,10 @@ solveRecaptchaV2Enterprise().catch(console.error);
         # )
 
         # recaptcha2request = RecaptchaV2EnterpriseRequest(
-        #     websiteUrl="https://example.com",
-        #     websiteKey="6Lf56sUnAAAAAIKLuONYgRsFUfmI-3Lex3xT5U-s",
+        #     websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
+        #     websiteKey="your-website-key",
         #     enterprisePayload={
-        #         "s": "SOME_ADDITIONAL_TOKEN"
+        #         "s": "your-value"
         #     },
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
@@ -789,9 +802,9 @@ solveRecaptchaV2Enterprise().catch(console.error);
             // O CapMonster Cloud usa automaticamente seus próprios proxies
             var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
             {
-                WebsiteUrl = "https://example.com", // URL da página com a captcha
-                WebsiteKey = "6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s", // Substitua pelo valor correto
-                EnterprisePayload = "{\"s\":\"SOME_ADDITIONAL_TOKEN\"}"
+                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a captcha
+                WebsiteKey = "your-website-key", // Substitua pelo valor correto
+                EnterprisePayload = "{\"s\":\"your-value\"}"
             };
 
             // Exemplo de uso do seu próprio proxy
@@ -799,9 +812,9 @@ solveRecaptchaV2Enterprise().catch(console.error);
             /*
             var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
             {
-                WebsiteUrl = "https://example.com",
-                WebsiteKey = "6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s",
-                EnterprisePayload = "{\"s\":\"SOME_ADDITIONAL_TOKEN\"}",
+                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
+                WebsiteKey = "your-website-key",
+                EnterprisePayload = "{\"s\":\"your-value\"}",
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89",          

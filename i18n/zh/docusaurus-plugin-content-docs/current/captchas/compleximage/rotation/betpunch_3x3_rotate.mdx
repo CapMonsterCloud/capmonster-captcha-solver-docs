@@ -41,8 +41,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -54,27 +53,25 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    base64 编码格式的图片数组。
+    base64 编码的图像数组（不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`betpunch_3x3_rotate`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 创建任务方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       { 
         "clientKey": "API_KEY",
@@ -82,15 +79,15 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
           "type": "ComplexImageTask",
           "class": "recognition",
           "imagesBase64": [
-            "{image_1_Base64}",
-            "{image_2_Base64}",
-            "{image_3_Base64}",
-            "{image_4_Base64}",
-            "{image_5_Base64}",
-            "{image_6_Base64}",
-            "{image_7_Base64}",
-            "{image_8_Base64}",
-            "{image_9_Base64}"
+            "image_1_Base64",
+            "image_2_Base64",
+            "image_3_Base64",
+            "image_4_Base64",
+            "image_5_Base64",
+            "image_6_Base64",
+            "image_7_Base64",
+            "image_8_Base64",
+            "image_9_Base64",
           ],
           "metadata": {
             "Task": "betpunch_3x3_rotate"
@@ -99,7 +96,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
       ```
 
-    	**响应**
+    	**响应示例**
     	```json
     	{
     	  "errorId":0,
@@ -108,31 +105,26 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## 获取任务结果方法
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-
-      **响应**
-      `"answer":[X,X,X,X,X,X,X,X,X]`，其中 X 为每张图片对应的整数值（1 到 4）。  
-      4 表示该图片无需旋转；1–3 表示需要逆时针旋转的次数。
-
+      **响应示例**<br/>
+      `"answer":[X,X,X,X,X,X,X,X,X]`，其中 X 是每张图像对应的 1 到 4 之间的整数值。4 表示无需旋转图像；1–3 表示图像需要逆时针旋转的次数。
       ```json
       {
         "errorId":0,
@@ -147,8 +139,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 如何获取 Base64
 

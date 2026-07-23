@@ -40,8 +40,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
 
@@ -53,18 +52,22 @@ The URL of the page where the captcha is located.
 ---
 
 <ParamItem title="websitePublicKey" required type="string" />
-FunCaptcha key (value *public key* or *pk*).
+FunCaptcha key (value *public key* or *pk*).<br />
+
+Format example: `EX72CCFB-26EX-40E5-91E6-85EX70BE98ED`
 
 ---
 
 <ParamItem title="data" type="string" />
 Additional parameter. Required if the site uses *data[blob]*. <br />
+
 **Important:** Do not load the captcha iframe to extract `blob`. Once the captcha is loaded, the value becomes invalid.
 
 ---
 
 <ParamItem title="funcaptchaApiJSSubdomain" type="string" />
-Arkose Labs subdomain (value *surl*). Specify only if it differs from the default: `client-api.arkoselabs.com`.
+Arkose Labs subdomain (value `surl`). Specify only if it differs from the default: `client-api.arkoselabs.com`.<br />
+
 **Important:** Specify only the domain, without the `https://` prefix.
 
 ---
@@ -79,10 +82,8 @@ Browser User-Agent. <br />
 Pass additional cookies in the format:
 
 ```
-
 cookieName1=value1; cookieName2=value2
-
-````
+```
 
 ---
 
@@ -113,8 +114,7 @@ cookieName1=value1; cookieName2=value2
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Create task method
 
@@ -127,21 +127,22 @@ https://api.capmonster.cloud/createTask
 
 </MethodItem>
 <MethodDescription>
-**Request**
+
+**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-**Response**
+**Response example**
 ```json
 {
   "errorId":0,
@@ -158,26 +159,26 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Request**
+**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Response**
+**Response example**
 ```json
 {
   "errorId":0,
@@ -192,15 +193,14 @@ https://api.capmonster.cloud/createTask
 
 Use [getTaskResult](../api/methods/get-task-result.mdx) to get the FunCaptcha solution.
 
-<Tabs>
-<TabItem value="proxyless" label="FunCaptchaTask (proxyless)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Request**
+**Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -208,7 +208,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Response**
+**Response example**
 
 ```json
 {
@@ -224,8 +224,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Finding FunCaptcha parameters
 
@@ -299,10 +298,10 @@ You can implement the same logic using other automation or testing tools.
 
 ---
 
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-<summary>Node.js</summary>
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="Node.js" default className="method-panel">
+  <details>
+      <summary>Show code</summary>
 
 ```javascript
 // npm install playwright
@@ -431,18 +430,13 @@ async function getTaskResult(taskId) {
     await browser.close();
 })();
 ```
-
 </details>
+
 </TabItem>
-</Tabs>
 
----
-
-<Tabs>
-<TabItem value="python" label="Python" className="method-panel">
-<details>
-<summary>Python</summary>
-
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Show code</summary>
 ```python
 # pip install playwright
 # playwright install
@@ -575,16 +569,11 @@ asyncio.run(main())
 ```
 
 </details>
-</TabItem>
-</Tabs>
+  </TabItem>
 
----
-
-<Tabs>
-<TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-<summary>C#</summary>
-
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Show code</summary>
 ```csharp
 // dotnet add package Microsoft.Playwright
 
@@ -753,7 +742,5 @@ class Program
 }
 ```
 </details>
-</TabItem>
+  </TabItem>
 </Tabs>
-
-

@@ -45,8 +45,7 @@ CapMonster Cloud по умолчанию использует встроенны
 ## Параметры запроса
 
   
-  <Tabs>
-  <TabItem value="proxy" label="RecaptchaV2Task" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2Task**
 
@@ -58,14 +57,15 @@ CapMonster Cloud по умолчанию использует встроенны
      ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Ключ-идентификатор ReCaptcha2 на целевой странице.
-	<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+    Ключ-идентификатор ReCaptcha2 на целевой странице: `<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`<br />
+    
+  Имеет следующий примерный формат: `6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd`
 
      ---
 
     <ParamItem title="recaptchaDataSValue" type="string" />
     Некоторые реализации виджета ReCaptcha2 могут содержать дополнительный параметр "data-s" в div'е ReCaptcha2, который является одноразовым токеном и должен собираться каждый раз при решении ReCaptcha2.
-	<br />`<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_ONE"></div>`
+	<br />`<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_ONE"></div>`
 
      ---
 
@@ -115,8 +115,7 @@ CapMonster Cloud по умолчанию использует встроенны
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-  </TabItem>  
-  </Tabs>
+  </div>
 
 ## Метод создания задачи
 
@@ -128,18 +127,18 @@ CapMonster Cloud по умолчанию использует встроенны
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key"
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -156,24 +155,24 @@ CapMonster Cloud по умолчанию использует встроенны
 			```
 		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -192,22 +191,21 @@ CapMonster Cloud по умолчанию использует встроенны
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение ReCaptcha2. В зависимости от загрузки системы вы получите ответ через время от 100 мс.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2Task (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -234,8 +232,7 @@ CapMonster Cloud по умолчанию использует встроенны
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -461,8 +458,8 @@ CapMonster Cloud по умолчанию использует встроенны
       // Базовый пример без прокси
       // CapMonster Cloud автоматически использует свои прокси
       let recaptchaV2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key"
       });
 
       // Пример использования вашего собственного прокси
@@ -472,14 +469,14 @@ CapMonster Cloud по умолчанию использует встроенны
       const proxy = {
           proxyType: "http",
           proxyAddress: "123.45.67.89",
-          proxyPort: 8080,
+          proxyPort: 1234,
           proxyLogin: "username",
           proxyPassword: "password"
       };
 
       recaptchaV2Request = new RecaptchaV2Request({
-          websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-          websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+          websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+          websiteKey: "your-website-key",
           proxy,
           userAgent: "userAgentPlaceholder"
       });
@@ -508,8 +505,8 @@ CapMonster Cloud по умолчанию использует встроенны
           // Базовый пример без прокси
           // CapMonster Cloud автоматически использует свои прокси
           let recaptcha2Request = new RecaptchaV2Request({
-              websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+              websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+              websiteKey: "your-website-key"
           });
 
           // Пример использования вашего собственного прокси
@@ -519,14 +516,14 @@ CapMonster Cloud по умолчанию использует встроенны
           const proxy = {
               proxyType: "http",
               proxyAddress: "123.45.67.89",
-              proxyPort: 8080,
+              proxyPort: 1234,
               proxyLogin: "username",
               proxyPassword: "password"
           };
 
           recaptcha2Request = new RecaptchaV2Request({
-              websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+              websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+              websiteKey: "your-website-key",
               proxy,
               userAgent: "userAgentPlaceholder"
           });
@@ -567,8 +564,8 @@ CapMonster Cloud по умолчанию использует встроенны
         # Базовый пример без прокси
         # CapMonster Cloud автоматически использует свои прокси
         recaptcha2_request = RecaptchaV2Request(
-            websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-            websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+            websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+            websiteKey="your-website-key"
         )
 
         # Пример использования вашего собственного прокси
@@ -577,14 +574,14 @@ CapMonster Cloud по умолчанию использует встроенны
         # proxy = ProxyInfo(
         #     proxyType="http",
         #     proxyAddress="123.45.67.89",
-        #     proxyPort=8080,
+        #     proxyPort=1234,
         #     proxyLogin="username",
         #     proxyPassword="password"
         # )
 
         # recaptcha2_request = RecaptchaV2Request(
-        #     websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        #     websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+        #     websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        #     websiteKey="your-website-key",
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
@@ -630,8 +627,8 @@ CapMonster Cloud по умолчанию использует встроенны
 
             var recaptchaV2Request = new RecaptchaV2Request
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high", // URL страницы с капчей
-                WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"  // Замените на корректное значение
+                WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha", // URL страницы с капчей
+                WebsiteKey = "your-website-key"  // Замените на корректное значение
             };
 
             // Пример использования вашего собственного прокси
@@ -640,12 +637,12 @@ CapMonster Cloud по умолчанию использует встроенны
             /*
             var recaptchaV2Request = new RecaptchaV2Request
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-                WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+                WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+                WebsiteKey = "your-website-key",
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89",        
-                    8080,              
+                    1234,              
                     ProxyType.Http,   
                     "username", 
                     "password"

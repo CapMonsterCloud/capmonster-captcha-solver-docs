@@ -1,6 +1,8 @@
 ---
 sidebar_position: 0
 sidebar_label: reCAPTCHA v2
+title: "使用 CapMonster Cloud API 识别和解决 reCAPTCHA v2 — reCAPTCHAV2Task"
+description: "了解如何通过 API 配置自动识别，并使用 Capmonster Cloud 中的 NoCaptchaTask 方法解决（绕过）reCAPTCHA v2。"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -14,7 +16,6 @@ import BlogLink from '@theme/BlogLink';
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/no-captcha-task" />
-
 
 # reCAPTCHA v2
 
@@ -44,9 +45,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## 对象结构
 
-<Tabs>
-
-  <TabItem value="proxy" label="RecaptchaV2Task (使用代理)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2Task**
 
@@ -58,12 +57,15 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
      ---
 
     <ParamItem title="websiteKey" required type="string" />
-    ReCaptcha 网站密钥。<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+    目标页面上的 ReCaptcha2 标识密钥：`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`<br />
+    
+  大致格式如下：`6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd`
 
      ---
 
     <ParamItem title="recaptchaDataSValue" type="string" />
-    某些自定义实现可能包含 ReCaptcha2 div 中的额外 "data-s" 参数，实际上是一次性令牌，每次解决 ReCaptcha2 都必须获取。<br />`<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_ONE"></div>`
+    某些 ReCaptcha2 小部件实现可能会在 ReCaptcha2 的 div 中包含额外的 "data-s" 参数。该参数是一次性令牌，每次解决 ReCaptcha2 时都必须重新获取。
+	<br />`<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_ONE"></div>`
 
      ---
 
@@ -73,12 +75,13 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
      ---
 
     <ParamItem title="cookies" type="string" />
-    <p>额外的 Cookie，我们在与目标页面或谷歌的交互过程中必须使用</p><p>**格式**：cookiename1=cookievalue1; cookiename2=cookievalue2</p>
+    <p>与目标页面交互时需要使用的附加 Cookie。</p>
+	<p>**格式**：cookiename1=cookievalue1; cookiename2=cookievalue2</p>
 
      ---
 
     <ParamItem title="isInvisible" type="bool" />
-    "true" 如果验证码是隐形的，即没有确认复选框，而是有一个隐藏字段。如果怀疑是机器人，则进行额外检查。
+    如果验证码为隐形验证码，即具有隐藏的确认字段且没有复选框，则为 true。检测到疑似机器人时会触发额外验证。
 
      ---
 
@@ -109,72 +112,72 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     <ParamItem title="proxyPassword" type="string" />
     代理密码。
 
-  </TabItem>  
-</Tabs>
+  </div>
 
 ## 创建任务方法
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="RecaptchaV2Task (无代理)" default className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
-	<MethodDescription>
-		**要求**
+	<TabItem value="proxyless" label="RecaptchaV2Task（无代理）" default className="method-panel">
+		<MethodItem>
+			```http
+			https://api.capmonster.cloud/createTask
+			```
+		</MethodItem>
+		<MethodDescription>
+			**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key"
   }
 }
 ```
-		**回应**
+			**响应示例**
 ```json
 {
   "errorId":0,
   "taskId":407533072
 }
 ```
-	</MethodDescription>
-  </TabItem>
-  <TabItem value="proxy" label="RecaptchaV2Task (使用代理)" className="method-panel">
-	<MethodItem>
-	  ```http
-	  https://api.capmonster.cloud/createTask
-	  ```
-	</MethodItem>
-	<MethodDescription>
-		**要求**
+		</MethodDescription>
+	</TabItem>
+
+	<TabItem value="proxy" label="RecaptchaV2Task（使用代理时）" className="method-panel">
+		<MethodItem>
+			```http
+			https://api.capmonster.cloud/createTask
+			```
+		</MethodItem>
+		<MethodDescription>
+			**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2Task",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-		**回应**
+			**响应示例**
 ```json
 {
   "errorId":0,
   "taskId":407533072
 }
 ```
-	</MethodDescription>
-  </TabItem>
+		</MethodDescription>
+	</TabItem>  
 </Tabs>
 
 ## 获取任务结果方法
@@ -185,22 +188,21 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法请求 ReCaptcha2 的答案。根据服务工作负载，您将在 100 毫秒内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2Task (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
-    </MethodItem>
-    <MethodDescription>
-		**要求**
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -226,8 +228,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -244,25 +245,25 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 #### websiteKey（data-sitekey）
 
-在 **Elements（元素）** 标签页中：查找页面上的 `<div class="g-recaptcha">` 元素。复制其 *data-sitekey* 属性的值，例如：
+**Elements** 选项卡：页面上的 `<div class="g-recaptcha">` 元素。复制 *data-sitekey* 属性值，例如：
 
 ![sitekey](images/no-captcha/sitekey.png)
 
-在 **Network（网络）** 标签页：
+**Networks** 选项卡：
 
-打开 **Network** 标签页并重新加载包含验证码的页面。查找如下请求（**k** 值即为 *data-sitekey*）：
+打开 **Networks** 选项卡并重新加载包含验证码的页面。找到类似的请求（**k** 的值就是 *data-sitekey*）：
 
 ![sitekey1](images/no-captcha/sitekey1.png)
 
 #### recaptchaDataSValue（如果使用）
 
-如果页面包含 *data-s* 属性，在 HTML 中查找它：
+如果页面中存在 *data-s* 属性，请在 HTML 中找到它：
 
 ![datas](images/no-captcha/data-s.png)
 
-#### isInvisible（是否为隐形验证码）
+#### isInvisible
 
-在 **Network** 标签页中：如果是隐形验证码，元素将包含 *size="invisible"* 属性，例如：
+**Networks** 选项卡：如果验证码是隐形验证码，元素中会包含 *size="invisible"* 属性，例如：
 
 ![isinvisible](images/no-captcha/isinvisible.png)
 
@@ -273,7 +274,6 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 :::warning **重要**
 所提供的代码片段仅作为获取必要参数的基础示例。具体实现方式取决于包含验证码的网站、本身的页面结构，以及所使用的 HTML 元素和选择器。
 :::
-
 
 <Tabs className="full-width-tabs filled-tabs request-tabs">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -454,8 +454,8 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
       // 基本示例，无需代理
       // CapMonster Cloud 会自动使用它们的代理
       let recaptchaV2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key"
       });
 
       // 使用您自己的代理的示例
@@ -465,14 +465,14 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
       const proxy = {
           proxyType: "http",
           proxyAddress: "123.45.67.89",
-          proxyPort: 8080,
+          proxyPort: 1234,
           proxyLogin: "username",
           proxyPassword: "password"
       };
 
       recaptchaV2Request = new RecaptchaV2Request({
-          websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-          websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+          websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+          websiteKey: "your-website-key",
           proxy,
           userAgent: "userAgentPlaceholder"
       });
@@ -501,8 +501,8 @@ async function solveRecaptchaV2() {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let recaptcha2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key"
     });
 
     // 使用您自己的代理的示例
@@ -512,14 +512,14 @@ async function solveRecaptchaV2() {
     const proxy = {
         proxyType: "http",
         proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
+        proxyPort: 1234,
         proxyLogin: "username",
         proxyPassword: "password"
     };
 
     recaptcha2Request = new RecaptchaV2Request({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -550,7 +550,7 @@ solveRecaptchaV2().catch(console.error);
     from capmonstercloudclient.requests import RecaptchaV2Request
     # from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # 如果计划使用代理，请取消注释
 
-    API_KEY = "YOUR_API_KEY"  # 输入您的 CapMonster Cloud API 密钥
+    API_KEY = "YOUR_API_KEY"  # 指定您的 CapMonster Cloud API 密钥
 
     async def solve_recaptcha_v2():
         client_options = ClientOptions(api_key=API_KEY)
@@ -559,8 +559,8 @@ solveRecaptchaV2().catch(console.error);
         # 基本示例，无需代理
         # CapMonster Cloud 会自动使用它们的代理
         recaptcha2_request = RecaptchaV2Request(
-            websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-            websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
+            websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+            websiteKey="your-website-key"
         )
 
         # 使用您自己的代理的示例
@@ -569,14 +569,14 @@ solveRecaptchaV2().catch(console.error);
         # proxy = ProxyInfo(
         #     proxyType="http",
         #     proxyAddress="123.45.67.89",
-        #     proxyPort=8080,
+        #     proxyPort=1234,
         #     proxyLogin="username",
         #     proxyPassword="password"
         # )
 
         # recaptcha2_request = RecaptchaV2Request(
-        #     websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-        #     websiteKey="6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+        #     websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        #     websiteKey="your-website-key",
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
@@ -622,8 +622,8 @@ solveRecaptchaV2().catch(console.error);
 
             var recaptchaV2Request = new RecaptchaV2Request
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high", // 带有验证码页面的 URL
-                WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"  // 替换为正确的值
+                WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha", // 包含验证码的页面 URL
+                WebsiteKey = "your-website-key"  // 替换为正确的值
             };
 
             // 使用您自己的代理的示例
@@ -632,12 +632,12 @@ solveRecaptchaV2().catch(console.error);
             /*
             var recaptchaV2Request = new RecaptchaV2Request
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high",
-                WebsiteKey = "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+                WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+                WebsiteKey = "your-website-key",
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89",        
-                    8080,              
+                    1234,              
                     ProxyType.Http,   
                     "username", 
                     "password"

@@ -50,8 +50,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -63,7 +62,8 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Ключ Turnstile
+  Ключ Turnstile 	<br />
+  Должен иметь следующий примерный формат: `0x4AAAAAAABUYP0XeMJF0xoy`
 
   ---
 
@@ -113,8 +113,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-</TabItem>
-</Tabs>
+</div>
 
 ---
 
@@ -129,19 +128,19 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "http://tsmanaged.zlsupport.com",
-          "websiteKey": "0x4AAAAAAABUYP0XeMJF0xoy"
+          "websiteURL": "https://yourwebsite.com/page-with-turnstile",
+          "websiteKey": "your-website-key"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -158,24 +157,24 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "TurnstileTask",
-          "websiteURL": "http://tsmanaged.zlsupport.com",
-          "websiteKey": "0x4AAAAAAABUYP0XeMJF0xoy",
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "websiteURL": "https://yourwebsite.com/page-with-turnstile",
+          "websiteKey": "your-website-key",
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -191,15 +190,14 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Turnstile. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 5 до 20 с.
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
       "clientKey": "API_KEY",
@@ -207,7 +205,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     }
     ```
 
-    **Ответ**
+    **Пример ответа**
     ```json
     {
       "errorId": 0,
@@ -219,8 +217,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Свойство**|**Тип**|**Описание**|
 | :- | :- | :- |
@@ -502,8 +499,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Базовый пример без прокси
     // CapMonster Cloud автоматически использует свои прокси
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com", // URL страницы с капчей
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy"        // Замените на корректное значение
+        websiteURL: "https://yourwebsite.com/page-with-turnstile", // URL страницы с капчей
+        websiteKey: "your-website-key"        // Замените на корректное значение
     });
 
     // Пример использования вашего собственного прокси
@@ -519,8 +516,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL: "https://yourwebsite.com/page-with-turnstile",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -555,8 +552,8 @@ async function solveTurnstile() {
     // Базовый пример без прокси
     // CapMonster Cloud автоматически использует свои прокси
     let turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com", // URL страницы с капчей
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy"        // Замените на корректное значение
+        websiteURL: "https://yourwebsite.com/page-with-turnstile", // URL страницы с капчей
+        websiteKey: "your-website-key"        // Замените на корректное значение
     });
 
     // Пример использования вашего собственного прокси
@@ -572,8 +569,8 @@ async function solveTurnstile() {
     };
 
     turnstileRequest = new TurnstileRequest({
-        websiteURL: "http://tsmanaged.zlsupport.com",
-        websiteKey: "0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL: "https://yourwebsite.com/page-with-turnstile",
+        websiteKey: "your-website-key",
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -616,8 +613,8 @@ async def solve_turnstile_token():
     # Базовый пример без прокси
     # CapMonster Cloud автоматически использует свои прокси
     turnstile_request = TurnstileRequest(
-        websiteURL="http://tsmanaged.zlsupport.com",
-        websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+        websiteURL="https://yourwebsite.com/page-with-turnstile",
+        websiteKey="your-website-key",
     )
 
     # Пример использования вашего собственного прокси
@@ -632,8 +629,8 @@ async def solve_turnstile_token():
     # )
     #
     # turnstile_request = TurnstileRequest(
-    #     websiteURL="http://tsmanaged.zlsupport.com",
-    #     websiteKey="0x4AAAAAAABUYP0XeMJF0xoy",
+    #     websiteURL="https://yourwebsite.com/page-with-turnstile",
+    #     websiteKey="your-website-key",
     #     proxy=proxy
     # )
 
@@ -680,8 +677,8 @@ class Program
         // CapMonster Cloud автоматически использует свои прокси
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "http://tsmanaged.zlsupport.com", // URL страницы с капчей
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy"       // Замените на корректное значение
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile", // URL страницы с капчей
+            WebsiteKey = "your-website-key"       // Замените на корректное значение
         };
 
         // Пример использования вашего собственного прокси
@@ -690,8 +687,8 @@ class Program
         /*
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "http://tsmanaged.zlsupport.com",
-            WebsiteKey = "0x4AAAAAAABUYP0XeMJF0xoy",
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile",
+            WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89", 

@@ -34,8 +34,7 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
 
 ## Request parameters
 
-  <Tabs>
-  <TabItem value="proxy" label="ProsopoTask (with proxy)" default className="bordered-panel">
+  <div className="bordered-panel">
 
     <ParamItem title="type" required type="string" />
     **ProsopoTask**
@@ -48,7 +47,9 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    The value of the `siteKey` parameter found on the page.
+    The value of the `siteKey` parameter found on the page.<br />
+    It typically has the following format: `5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV`.
+
 	
 	---
 
@@ -79,8 +80,7 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
     <ParamItem title="proxyPassword" type="string" />
     Proxy-server password.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ## Create task method
@@ -93,18 +93,18 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+    "websiteKey": "your-website-key"
   }
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -121,23 +121,23 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -152,22 +152,21 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
 ## Get task result method
 Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the Prosopo solution.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533077
 }
 ```
-		**Response**
+		**Response example**
 ```json
 {
   "errorId":0,
@@ -179,8 +178,7 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to find the websiteKey
 
@@ -231,8 +229,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",      
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+        websiteURL: "https://www.example.com",   // URL of the page with ProCaptcha   
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", // Your ProCaptcha sitekey (public key)
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -281,8 +279,8 @@ async function solveProCaptcha() {
     };
 
     prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",      
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+        websiteURL: "https://www.example.com",    // URL of the page with ProCaptcha  
+        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",  // Your ProCaptcha sitekey (public key)
         proxy,
         userAgent: "userAgentPlaceholder"
     });
@@ -322,8 +320,8 @@ async def solve_prosopo_captcha():
     # Basic example without proxy
     # CapMonster Cloud automatically uses its own proxies
     prosopo_request = ProsopoTaskRequest(
-        websiteUrl="https://www.example.com",  
-        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+        websiteUrl="https://www.example.com",  # URL of the page with ProCaptcha
+        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"  # Your ProCaptcha sitekey (public key)
     )
 
     # Example of using your own proxy
@@ -337,8 +335,8 @@ async def solve_prosopo_captcha():
     # )
     #
     # prosopo_request = ProsopoTaskRequest(
-    #     websiteUrl="https://www.example.com",
-    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+    #     websiteUrl="https://www.example.com",  # URL of the page with ProCaptcha
+    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",  # Your ProCaptcha sitekey (public key)
     #     proxy=proxy
     # )
 
@@ -393,8 +391,8 @@ class Program
         /*
         prosopoRequest = new ProsopoTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib",
+            WebsiteUrl = "https://www.example.com",  // URL of the page with ProCaptcha
+            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib",  // Your ProCaptcha sitekey (public key)
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(

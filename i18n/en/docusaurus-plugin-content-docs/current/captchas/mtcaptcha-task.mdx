@@ -32,8 +32,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 ## Request parameters
 
-<Tabs>
-<TabItem value="proxy" label="MTCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **MTCaptchaTask**
 
@@ -45,7 +44,8 @@ The URL of the page where the captcha is solved.
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-The MTcaptcha key, passed in the request parameters as `sk` (*see example below on how to find it*).
+The MTCaptcha key, passed in the request parameters as `sk` (*see the example below for instructions on how to find it*). <br />
+It typically has the following format: `MTPublic-abCDEFJAB`.
 
 ---
 
@@ -107,8 +107,7 @@ Proxy server login.
 <ParamItem title="proxyPassword" type="string" />
 Proxy server password.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
@@ -121,21 +120,21 @@ https://api.capmonster.cloud/createTask
 
 </MethodItem>
 <MethodDescription>
-**Request**
+**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login"
+    "pageAction": "your-page-action"
   }
 }
 ```
-**Response**
+**Response example**
 ```json
 {
   "errorId":0,
@@ -152,26 +151,26 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Request**
+**Request example**
 ```json
 {
   "clientKey": "API_KEY",
   "task": 
   {
     "type": "MTCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websiteKey": "MTPublic-abCDEFJAB",
+    "websiteURL": "https://yourwebsite.com/page-with-mtcaptcha",
+    "websiteKey": "your-website-key",
     "isInvisible": false,
-    "pageAction": "login",
-    "proxyType":"http",
-    "proxyAddress":"8.8.8.8",
-    "proxyPort":8080,
-    "proxyLogin":"proxyLoginHere",
-    "proxyPassword":"proxyPasswordHere"
+    "pageAction": "your-page-action",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Response**
+**Response example**
 ```json
 {
   "errorId":0,
@@ -186,15 +185,14 @@ https://api.capmonster.cloud/createTask
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the solution for the MTCaptcha captcha.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Request**
+**Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -202,7 +200,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Response**
+**Response example**
 
 ```json
 {
@@ -217,8 +215,7 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to find CAPTCHA parameters
 
@@ -258,10 +255,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Basic example without proxy
     // CapMonster Cloud automatically uses its own proxies
     let mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",       // URL of the page with MTCaptcha
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,                          // true -- if Invisible MTCaptcha is used
-        pageAction: "login"
+        websiteURL: "https://www.example.com",   // URL of the page with MTCaptcha
+        websiteKey: "MTPublic-abCDEFJAB",     // Replace with the correct value
+        isInvisible: false,     // true - if Invisible MTCaptcha is used
+        pageAction: "login"   // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -314,9 +311,9 @@ async function solveMTCaptcha() {
     // CapMonster Cloud automatically uses its own proxies
     let mtcaptchaRequest = new MTCaptchaRequest({
         websiteURL: "https://www.example.com",       // URL of the page with MTCaptcha
-        websiteKey: "MTPublic-abCDEFJAB",
-        isInvisible: false,                          // true -- if Invisible MTCaptcha is used
-        pageAction: "login"
+        websiteKey: "MTPublic-abCDEFJAB",       // Replace with the correct value
+        isInvisible: false,          // true - if Invisible MTCaptcha is used
+        pageAction: "login"      // Replace with the correct value
     });
 
     // Example of using your own proxy
@@ -378,9 +375,9 @@ async def solve_mt_captcha():
     # CapMonster Cloud automatically uses its own proxies
     mtcaptcha_request = MTCaptchaRequest(
         websiteUrl="https://www.example.com",  # URL of the page with the captcha
-        websiteKey="MTPublic-abCDEFJAB",
-        isInvisible=False,                      # True if the captcha is invisible
-        pageAction="login"
+        websiteKey="MTPublic-abCDEFJAB",      # Replace with the correct value
+        isInvisible=False,               # True if the captcha is invisible
+        pageAction="login"       # Replace with the correct value
     )
 
     # Example of using your own proxy
@@ -443,9 +440,9 @@ class Program
         var mtcaptchaRequest = new MTCaptchaTaskRequest
         {
             WebsiteUrl = "https://www.example.com",     // URL of the page with the captcha
-            WebsiteKey = "MTPublic-tqNCRE0GS",
-            Invisible = false,                          // true if using invisible captcha
-            PageAction = "login",
+            WebsiteKey = "MTPublic-tqNCRE0GS",   // Replace with the correct value
+            Invisible = false,     // true if using invisible captcha
+            PageAction = "login",  // Replace with the correct value
             UserAgent = "userAgentPlaceholder"
         };
 

@@ -37,8 +37,7 @@ O uso de servidores proxy para esta tarefa não é necessário.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **ImageToTextTask**
 
@@ -51,32 +50,36 @@ Corpo do arquivo codificado em base64*. Certifique-se de enviá-lo sem quebras d
 
 <ParamItem title="capMonsterModule" type="string" />
 Nome do módulo de reconhecimento, por exemplo, “yandex“. Forma alternativa de passar o nome do módulo e a lista de todos os módulos disponíveis que você pode encontrar [aqui](../api/module-name.mdx). <br />
-Exemplo: yandex, special e outros.
+Exemplo: `yandex`, `special` e outros.
 
 ---
 
 <ParamItem title="recognizingThreshold" type="integer" />
-Limite de reconhecimento de captcha com valor possível de 0 a 100. Por exemplo, se o recognizingThreshold foi definido como 90 e a tarefa foi resolvida com uma confiança de 80, você não será cobrado. Nesse caso, o usuário receberá uma resposta ERROR_CAPTCHA_UNSOLVABLE. Um método alternativo para definir o limite de dedução de dinheiro é descrito no [artigo](../api/threshold.mdx).
+Limite de reconhecimento de captcha com valor possível de **0** a **100**. Por exemplo, se o recognizingThreshold foi definido como **90** e a tarefa foi resolvida com uma confiança de **80**, você não será cobrado. Nesse caso, o usuário receberá uma resposta ERROR_CAPTCHA_UNSOLVABLE. Um método alternativo para definir o limite de dedução de dinheiro é descrito no [artigo](../api/threshold.mdx).
 
 ---
 
 <ParamItem title="case" type="boolean" />
-true - se o captcha for sensível a maiúsculas e minúsculas.
+Considerar ou não a diferenciação entre maiúsculas e minúsculas durante a resolução. Valores possíveis: `true`, `false`
 
 ---
 
 <ParamItem title="numeric" type="integer" />
-1 - se o captcha contiver apenas números. <br />
-Valores possíveis: 0, 1
+`1` - se o captcha for composto apenas por números. <br />
+Valores possíveis: `0`, `1`
 
 ---
 
 <ParamItem title="math" type="boolean" />
-false — indefinido;<br />true — se o captcha exigir uma operação matemática (por exemplo: captcha 2 + 6 = retornará o valor 8). **Importante:** Não use o parâmetro `math: true` para o módulo `captcha_math`.
-</TabItem>
-</Tabs>
+`false` — não definido por padrão; <br />
+`true` — o captcha exige a realização de uma operação matemática (por exemplo, o captcha `2 + 6` retornará o valor `8`).  <br />
+
+**Importante:** para o módulo `captcha_math`, **não utilize** o parâmetro `math: true`.
+ 
+</div>
 
 <br />
+
 
 *Base64 é um método de codificação de dados que permite representar dados binários como texto. Aqui está um exemplo de obtenção de uma imagem captcha em formato base64 usando o console nas *Ferramentas de Desenvolvedor*:
 
@@ -109,15 +112,14 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ## Criar tarefa
 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 <MethodItem>
   ```http
   https://api.capmonster.cloud/createTask
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
@@ -127,7 +129,7 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -136,28 +138,26 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ```
 
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha. Dependendo da carga do sistema, você receberá uma resposta em um intervalo de 300ms a 6s.
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -168,8 +168,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -334,17 +333,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const imageToTextRequest = new ImageToTextRequest({
         body: 'some base64 body', // Substitua pelo valor real
-        CapMonsterModule: CapMonsterModules.YandexWave,
+        // Parâmetros opcionais
+        CapMonsterModule: CapMonsterModules.YandexWave, // É possível escolher um módulo, por exemplo, YandexWave
         Case: true,
         numeric: 1,
         recognizingThreshold: 65,
         math: false
     });
 
-    const result = await cmcClient.Solve(imageToTextRequest);
-    console.log("Solution:", result);
-});
-```
+        const result = await cmcClient.Solve(imageToTextRequest);
+        console.log("Solution:", result);
+    });
+    ```
 </details>
 
 <details>
@@ -367,7 +367,8 @@ async function solveImageToText() {
 
     const imageToTextRequest = new ImageToTextRequest({
         body: 'some base64 body', // Substitua pelo valor real
-        CapMonsterModule: CapMonsterModules.YandexWave,
+        // Parâmetros opcionais
+        CapMonsterModule: CapMonsterModules.YandexWave, // É possível escolher um módulo, por exemplo, YandexWave
         Case: true,
         numeric: 1,
         recognizingThreshold: 65,
@@ -405,6 +406,7 @@ image_bytes = base64.b64decode(image_base64)
 image_to_text_request = ImageToTextRequest(
     image_bytes=image_bytes,
     module_name=None,     # Você pode escolher um módulo, por exemplo YandexWave
+    # Parâmetros opcionais
     threshold=50,     
     case=True,     
     numeric=0,    
@@ -454,7 +456,8 @@ print("Solution:", responses)
             var imageToTextRequest = new ImageToTextRequest
             {
                 Body = "/9j/4AAQSkZJRgABAQAAAQABA...wwzqR4U/yZ//Z", // Substitua pelo valor real
-                CapMonsterModule = "None",  
+                // Parâmetros opcionais
+                CapMonsterModule = "None",  // É possível escolher um módulo, por exemplo, YandexWave
                 RecognizingThreshold = 70, 
                 CaseSensitive = true,
                 Numeric = false, 

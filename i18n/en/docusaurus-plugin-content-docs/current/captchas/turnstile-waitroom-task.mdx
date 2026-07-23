@@ -49,8 +49,7 @@ You can also identify this Cloudflare type via the page header:
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -62,7 +61,7 @@ You can also identify this Cloudflare type via the page header:
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Cloudflare site key
+  Cloudflare key. Any string may be provided, for example: `xxxxxx`.
 
 ---
 
@@ -120,40 +119,38 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   Proxy password.
 
-</TabItem>
-</Tabs>
+</div>
 ---
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-waitroom",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "wait_room",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -161,21 +158,19 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 ---
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve the Waiting Room solution. Depending on system load, the response can take between 5 and 20 seconds.
 
-<Tabs>
-<TabItem value="proxyless" label="TurnstileTask (proxyless)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
-    **Request**
+    **Request example**
     ```json
     {
       "clientKey": "API_KEY",
@@ -183,7 +178,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
 
-    **Response**
+    **Response example**
     ```json
     {
       "errorId": 0,
@@ -194,8 +189,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |

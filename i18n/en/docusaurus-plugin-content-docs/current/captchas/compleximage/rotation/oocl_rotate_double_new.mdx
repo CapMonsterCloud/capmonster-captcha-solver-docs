@@ -38,8 +38,7 @@ The request must contain three images: background, ring, and circle.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,20 +50,18 @@ The request must contain three images: background, ring, and circle.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Array of images encoded in base64 format.
+    An array of Base64-encoded images (without the `data:image/png;base64,` prefix).
 
     ---
 
     <ParamItem title="Task (inside metadata)" required type="string" />
     Task name: `"oocl_rotate_double_new"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
@@ -111,13 +108,11 @@ The request must contain three images: background, ring, and circle.
 	```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Get task result method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -132,7 +127,8 @@ The request must contain three images: background, ring, and circle.
 		}
 		```
 
-	**Response:** degrees indicating how much the ring must be rotated counterclockwise and the circle clockwise.
+	**Response:** <br/>
+  The number of degrees by which the ring must be rotated counterclockwise and the circle clockwise.
   ```json
   {
     "errorId":0,
@@ -148,8 +144,7 @@ The request must contain three images: background, ring, and circle.
   ```
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get Base64
 

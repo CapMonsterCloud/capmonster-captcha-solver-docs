@@ -45,8 +45,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -63,7 +62,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="captchaUrl (внутри metadata)" required="required" type="string" />
-    `"captchaUrl"` - ссылка на капчу. Обычно имеет следующий вид: `"https://geo.captcha-delivery.com/captcha/?initialCid=..."`.
+    `"captchaUrl"` - ссылка на капчу. Обычно имеет следующий формат: `"https://geo.captcha-delivery.com/captcha/?initialCid=..."`.
 
     ---
 
@@ -117,8 +116,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
 	
      ---
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод создания задачи
@@ -134,37 +132,36 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 ![](./images/datadome/datadome_ijs.png)
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "CustomTask",
     "class": "DataDome",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-datadome",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
       "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-      "datadomeCookie": "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z",
+      "datadomeCookie": "datadome=cookie-value",
       "datadomeVersion": "new"
     },
-    "proxyType": "http",
-    "proxyAddress": "123.45.67.89",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyUsername",
-    "proxyPassword": "proxyPassword"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -172,29 +169,27 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение DataDome.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 
 ```json
 {
@@ -217,8 +212,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти `datadomeCookie`
 
@@ -1287,7 +1281,7 @@ if __name__ == "__main__":
             proxy,
             metadata: {
                 captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-                datadomeCookie: "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z"
+                datadomeCookie: "datadome=cookie-value"
             }
         });
 
@@ -1331,7 +1325,7 @@ if __name__ == "__main__":
               proxy,
               metadata: {
                   captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-                  datadomeCookie: "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z"
+                  datadomeCookie: "datadome=cookie-value"
               }
           });
 
@@ -1376,7 +1370,7 @@ if __name__ == "__main__":
         datadome_request = DataDomeCustomTaskRequest(
             websiteUrl="https://example.com",  # URL страницы с капчей
             metadata={
-                "datadomeCookie": "datadome=VYUWrgJ9ap4zmXq8Mgbp...64emvUPeON45z", 
+                "datadomeCookie": "datadome=cookie-value", 
                 "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm"
             },
             proxy=proxy,

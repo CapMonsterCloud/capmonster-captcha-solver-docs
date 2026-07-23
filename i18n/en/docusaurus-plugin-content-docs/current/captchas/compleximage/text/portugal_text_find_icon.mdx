@@ -38,8 +38,7 @@ The request must contain a single image in base64 format, consisting of 5 horizo
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,7 +50,7 @@ The request must contain a single image in base64 format, consisting of 5 horizo
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    Base64-encoded image (wrapped in an array, without the `data:image/png;base64,` prefix).
 
     ---
 
@@ -67,20 +66,18 @@ The request must contain a single image in base64 format, consisting of 5 horizo
     For example, for the text `"Por favor, clique no(a) avião."` you must pass `"Por favor, clique no(a) avi\\u00E3o."`
     (*see example in section [Automated recognition and solving examples](#automated-recognition-and-solving-examples)*).
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
     </MethodItem>
     <MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
@@ -98,7 +95,7 @@ The request must contain a single image in base64 format, consisting of 5 horizo
       }
       ```
 
-    	**Response**
+    	**Response example**
     	```json
     	{
     	  "errorId":0,
@@ -107,8 +104,7 @@ The request must contain a single image in base64 format, consisting of 5 horizo
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 Example task:
 
@@ -122,15 +118,14 @@ You must send an image in base64 format that represents 5 horizontally merged ic
 
 ## Get task result method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -138,8 +133,8 @@ You must send an image in base64 format that represents 5 horizontally merged ic
 		}
 		```
 
-		**Response:**
-		the returned index is the number of the icon that must be clicked. Icon indexing starts from 1 and ends at 5:
+		**Response example:**<br/>
+		The returned index is the number of the icon that must be clicked. Icon indexing starts from 1 and ends at 5:
 ```json
 {
   "solution": {
@@ -157,12 +152,11 @@ You must send an image in base64 format that represents 5 horizontally merged ic
 
 </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Automated recognition and solving examples
 
-Examples in Python using `requests` and `Playwright`, demonstrating the full captcha workflow: from retrieving the task and extracting images to processing, preparing, and sending them to CapMonster Cloud for recognition, as well as obtaining the final result.
+Examples in Python using Requests and Playwright, demonstrating the full captcha workflow: from retrieving the task and extracting images to processing, preparing, and sending them to CapMonster Cloud for recognition, as well as obtaining the final result.
 
 :::warning Important
 These examples are for demonstration purposes and illustrate the general logic of working with your website. In real projects, the code may require adaptation to a specific site, its requests, and headers.

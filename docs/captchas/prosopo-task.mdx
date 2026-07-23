@@ -34,8 +34,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 ## Параметры запроса
 
-  <Tabs>
-  <TabItem value="proxy" label="ProsopoTask (при использовании прокси)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ProsopoTask**
 
@@ -47,7 +46,8 @@ CapMonster Cloud по умолчанию работает через встро�
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Значение параметра siteKey, найденное на странице.
+    Значение параметра `siteKey`, найденное на странице.<br />
+    Имеет следующий примерный формат: `5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV`
 	
     ---
 
@@ -81,8 +81,7 @@ CapMonster Cloud по умолчанию работает через встро�
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ## Метод создания задачи
@@ -94,18 +93,18 @@ CapMonster Cloud по умолчанию работает через встро�
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+    "websiteKey": "your-website-key"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -122,23 +121,23 @@ CapMonster Cloud по умолчанию работает через встро�
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "ProsopoTask",
     "websiteURL": "https://www.example.com",
-    "websiteKey": "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "websiteKey": "your-website-key",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -153,22 +152,21 @@ CapMonster Cloud по умолчанию работает через встро�
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Prosopo капчи.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533077
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -180,8 +178,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти websiteKey
 
@@ -216,7 +213,7 @@ CapMonster Cloud по умолчанию работает через встро�
       // CapMonster Cloud автоматически использует свои прокси
       let prosopoRequest = new ProsopoRequest({
           websiteURL: "https://www.example.com",       // URL страницы с ProCaptcha
-          websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Ваш ProCaptcha sitekey
+          websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Замените на свой ProCaptcha sitekey
       });
 
       // Пример использования вашего собственного прокси
@@ -231,8 +228,8 @@ CapMonster Cloud по умолчанию работает через встро�
       };
 
       prosopoRequest = new ProsopoRequest({
-          websiteURL: "https://www.example.com",      
-          websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+          websiteURL: "https://www.example.com",  // URL страницы с ProCaptcha     
+          websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", // Замените на свой ProCaptcha sitekey
           proxy,
           userAgent: "userAgentPlaceholder"
       });
@@ -266,7 +263,7 @@ CapMonster Cloud по умолчанию работает через встро�
           // CapMonster Cloud автоматически использует свои прокси
           let prosopoRequest = new ProsopoRequest({
               websiteURL: "https://www.example.com",       // URL страницы с ProCaptcha
-              websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Ваш ProCaptcha sitekey
+              websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Замените на свой ProCaptcha sitekey
           });
 
           // Пример использования вашего собственного прокси
@@ -281,8 +278,8 @@ CapMonster Cloud по умолчанию работает через встро�
           };
 
           prosopoRequest = new ProsopoRequest({
-              websiteURL: "https://www.example.com",      
-              websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+              websiteURL: "https://www.example.com", // URL страницы с ProCaptcha      
+              websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", // Замените на свой ProCaptcha sitekey
               proxy,
               userAgent: "userAgentPlaceholder"
           });
@@ -321,9 +318,9 @@ async def solve_prosopo_captcha():
 
     # Базовый пример без прокси
     # CapMonster Cloud автоматически использует свои прокси
-    prosopo_request = ProsopoTaskRequest(
-        websiteUrl="https://www.example.com",  
-        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"
+    prosopo_request = ProsopoTaskRequest( 
+        websiteUrl="https://www.example.com",  # URL страницы с ProCaptcha
+        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" # Замените на свой ProCaptcha sitekey
     )
 
     # Пример использования вашего собственного прокси
@@ -337,8 +334,8 @@ async def solve_prosopo_captcha():
     # )
     #
     # prosopo_request = ProsopoTaskRequest(
-    #     websiteUrl="https://www.example.com",
-    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",
+    #     websiteUrl="https://www.example.com", # URL страницы с ProCaptcha
+    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", # Замените на свой ProCaptcha sitekey
     #     proxy=proxy
     # )
 
@@ -383,7 +380,7 @@ class Program
         var prosopoRequest = new ProsopoTaskRequest
         {
             WebsiteUrl = "https://www.example.com",      // URL страницы с ProCaptcha
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // Ваш ProCaptcha sitekey
+            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // Замените на свой ProCaptcha sitekey
 
             UserAgent = "userAgentPlaceholder"
         };
@@ -393,8 +390,8 @@ class Program
         /*
         prosopoRequest = new ProsopoTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib",
+            WebsiteUrl = "https://www.example.com", // URL страницы с ProCaptcha
+            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // Замените на свой ProCaptcha sitekey
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(

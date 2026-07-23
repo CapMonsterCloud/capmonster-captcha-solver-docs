@@ -41,8 +41,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 Вы также можете решать reCAPTCHA v3 Enterprise, используя задачу типа reCAPTCHA v3, указав параметр `isEnterprise` [(*см. в разделе reCAPTCHA v3*)](../recaptcha-v3-task/).
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
 
@@ -55,7 +54,9 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 
     <ParamItem title="websiteKey" required type="string" />
    Ключ-идентификатор ReCaptcha3 на целевой странице.
-   <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+   <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+
+   Имеет следующий примерный формат: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
    ---
 
@@ -65,35 +66,33 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Значение по умолчанию: *verify*</p>
+    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод создания задачи
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -101,8 +100,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод получения результата задачи
@@ -113,22 +111,21 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение ReCaptcha3. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 30 с.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -152,8 +149,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -162,7 +158,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 |gRecaptchaResponse|String|Хеш, который необходимо подставить в форму с ReCaptcha3 в `<textarea id="g-recaptcha-response" ></textarea>`. Имеет длину от 500 до 2190 байт.|
 
 
-## Отличия **reCAPTCHA v3 Enterprise** от обычной **reCAPTCHA v3**
+## Отличия reCAPTCHA v3 Enterprise от обычной reCAPTCHA v3
 
 | Характеристика                 | reCAPTCHA v3                                              | reCAPTCHA v3 Enterprise                                                                                      |
 | ------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |

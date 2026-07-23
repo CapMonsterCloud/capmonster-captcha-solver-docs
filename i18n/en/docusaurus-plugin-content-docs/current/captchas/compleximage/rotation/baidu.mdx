@@ -38,8 +38,7 @@ The request must contain a single image in base64 format.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,15 +50,14 @@ The request must contain a single image in base64 format.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    Base64-encoded image (wrapped in an array, without the `data:image/png;base64,` prefix).
 
     ---
 
     <ParamItem title="Task (inside metadata)" required type="string" />
     Task name: `"baidu"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
@@ -67,15 +65,14 @@ The request must contain a single image in base64 format.
 At the beginning of the solving process, temporary *unsolvable* responses may occur. This is **not an error** — the captcha will continue to be solved successfully after initialization.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey": "API_KEY",
@@ -95,7 +92,7 @@ At the beginning of the solving process, temporary *unsolvable* responses may oc
 
     	![](../images/ComplexImageTask-Recognition/baidu.png)
 
-        **Response**
+        **Response example**
         ```json
         {
           "errorId":0,
@@ -104,27 +101,26 @@ At the beginning of the solving process, temporary *unsolvable* responses may oc
         ```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Get task result method
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Request**
+      **Request example**
       ```json
       {
         "clientKey":"API_KEY",
         "taskId": 143998457
       }
       ```
-		**Response:** degrees by which the image must be rotated clockwise.
+		**Response example:** <br/>
+    The number of degrees by which the image must be rotated clockwise.
       ```json
       {
         "solution":
@@ -140,8 +136,7 @@ At the beginning of the solving process, temporary *unsolvable* responses may oc
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to get Base64
 

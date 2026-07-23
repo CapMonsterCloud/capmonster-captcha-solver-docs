@@ -34,8 +34,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 ## Request parameters
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (when using a proxy)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -108,8 +107,7 @@ Browser User-Agent.<br />
   <ParamItem title="proxyPassword" type="string" />
   Proxy password.
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
@@ -119,13 +117,14 @@ Use the `apiGetLib` parameter value in `metadata` according to the Friendly Capt
 **Example:**
 
 For **V1**
-  ```json
+
+```json
   "apiGetLib": "https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
 ```
 
 For **V2**
 
-  ```json
+```json
   "apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 
@@ -139,23 +138,23 @@ For **V2**
     </MethodItem>
     <MethodDescription>
 
-  **Request**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "task": {
-      "type": "CustomTask",
-      "class": "friendly",
-      "websiteKey": "FFMGEMAD2K3JJ35P",
-      "websiteURL": "https://example.com",
-      "userAgent": "userAgentPlaceholder",
-      "metadata": {
-		"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
+  **Request example**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "friendly",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
+		}
 	}
-}
-  ```
+      ```
 
-  **Response**
+  **Response example**
   ```json
   {
     "errorId": 0,
@@ -173,29 +172,29 @@ For **V2**
 </MethodItem>
 <MethodDescription>
   
-  **Request**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "task": {
-      "type": "CustomTask",
-      "class": "friendly",
-      "websiteKey": "FFMGEMAD2K3JJ35P",
-      "websiteURL": "https://example.com",
-      "userAgent": "userAgentPlaceholder",
-      "metadata": {
-		"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
-	},
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
-    }
-  }
-  ```
+  **Request example**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "friendly",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
+		},
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
+        }
+      }
+      ```
 
-  **Response**
+  **Response example**
   ```json
   {
     "errorId": 0,
@@ -215,8 +214,7 @@ The token format in the response depends on the captcha version used on the webs
 
 **V2**: `"AQQA.8Q2TbgK_..._pknXDweJjKT2qwmroOhHcZsU4dHyu-jaGIPx9k7432p_num13buuTu6n4lVA=="`
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
       ```http
     https://api.capmonster.cloud/getTaskResult
@@ -224,7 +222,7 @@ The token format in the response depends on the captcha version used on the webs
   </MethodItem>
   <MethodDescription>
 
-  **Request**
+  **Request example**
   ```json
   {
     "clientKey": "API_KEY",
@@ -232,7 +230,7 @@ The token format in the response depends on the captcha version used on the webs
   }
 ```
 
-**Response**
+**Response example**
 
 ```json
 {
@@ -249,8 +247,7 @@ The token format in the response depends on the captcha version used on the webs
 ```
 
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 <br />
 The obtained token value should be inserted into the corresponding field:
 

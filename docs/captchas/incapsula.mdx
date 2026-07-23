@@ -46,8 +46,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -118,44 +117,42 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     User-Agent браузера. <br />
   **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
   
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "Imperva",
-        "websiteURL": "https://example.com",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-          "incapsulaCookies": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",
-          "reese84UrlEndpoint": "Built-with-the-For-hopence-Hurleysurfecting-the-"
-        },
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "Imperva",
+    "websiteURL": "https://yourwebsite.com/page-with-imperva",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "incapsulaScriptUrl": "_Incapsula_Resource?example-parameter=example-value",
+      "incapsulaCookies": "example-session-cookie=your-session-cookie; example-visitor-cookie=your-visitor-cookie;",
+      "reese84UrlEndpoint": "your-reese84-url-endpoint"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -165,28 +162,26 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     ```
 
     </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Imperva.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -203,8 +198,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Access denied
 
@@ -373,6 +367,7 @@ Error 16 - данная ошибка связана с применением п
       // Настройка задачи Imperva (Incapsula)
       const impervaRequest = new ImpervaRequest({
           websiteURL: "https://example.com/", // URL вашей страницы, защищённой Imperva
+          // Замените на свои значения
           metadata: {
               incapsulaScriptUrl: "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
               incapsulaCookies: "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;"
@@ -413,6 +408,7 @@ async function main() {
     // Настройка задачи Imperva (Incapsula)
     const impervaRequest = new ImpervaRequest({
         websiteURL: 'https://example.com/', // URL вашей страницы, защищённой Imperva
+        // Замените на свои значения
         metadata: {
             incapsulaScriptUrl: '_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3',
             incapsulaCookies: 'incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;',
@@ -458,7 +454,8 @@ async def solve_imperva_captcha():
 
     # Настройка задачи Imperva (Incapsula)
     imperva_request = ImpervaCustomTaskRequest(
-        websiteUrl="https://example.com",
+        websiteUrl="https://example.com", # URL страницы с Imperva
+        # Замените на свои значения
         metadata={
             "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
             "incapsulaCookie": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",
@@ -480,4 +477,3 @@ asyncio.run(solve_imperva_captcha())
   </TabItem>
 
 </Tabs>
-

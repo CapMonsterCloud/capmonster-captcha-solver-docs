@@ -1,6 +1,8 @@
 ---
 sidebar_position: 6
 sidebar_label: GeeTest
+title: "GeeTest 识别与解决 — GeeTest Task | API"
+description: "请参阅 CapMonster Cloud Docs 文档，了解如何使用您自己的代理，通过 GeeTest Task 任务类型配置自动识别并解决（绕过）GeeTest 验证码。"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -22,11 +24,6 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ![](./images/geetest-task/geetest_1.png) ![](./images/geetest-task/geetest_2.png)
 
-这种类型的任务是通过您的代理解决 GeeTest 验证码的问题。
-您的应用程序应发送站点地址、公共域键 (`gt`)、键 (`challenge`) 和代理。
-
-解决问题的结果是用于提交表单的三个或五个令牌。
-
 :::warning **注意！**
 * CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费用内。仅当网站不接受令牌或对内置服务的访问受限时，才需要指定您自己的代理。
 
@@ -46,7 +43,6 @@ V3
 V4 (captcha_id = gt)
 
 ![](./images/geetest-task/Aspose.Words.09e28b99-ec8b-4638-848b-cdd6fefc7ac8.002.png)
-
 :::
 
 <br />
@@ -80,8 +76,7 @@ V4 (captcha_id = gt)
 </span>
 <br />
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask (using proxy)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -93,15 +88,16 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="gt" required type="string" />
-    该域名的 GeeTest 标识符键 gt。静态值，更新频率较低。
+    域名的 GeeTest 标识密钥 `gt`。这是一个静态值，很少更新。
 
     ---
 
     <ParamItem title="challenge" required="required only for V3" type="string" />
-    <p> 一个动态密钥。<br />
-    对于每一次 API 请求，都需要获取新的 `challenge` 值。如果验证码已经在页面上加载过，当前的 `challenge` 值将失效，API 会返回 [错误](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`。<br />
-以 `ERROR_TOKEN_EXPIRED` 结束的任务将按成功完成的任务计费。<br />
-需要分析网络请求，并确定哪个请求的响应中返回了最新的 `challenge` 值。在每次创建验证码识别任务之前，都应重新执行该请求，并从响应中提取新的 `challenge` 值。</p>
+    <p>动态密钥。<br />
+    每次调用 API 都必须获取新的 `challenge` 值。如果验证码已经在页面上加载，当前 `challenge` 值将失效，API 会返回[错误](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`。<br />
+以 `ERROR_TOKEN_EXPIRED` 错误结束的任务将按成功解决计费。<br />
+需要分析网络请求，并确定哪个请求的响应会返回当前有效的 `challenge` 值。 <br />
+每次创建验证码识别任务前，都应重新执行此请求，并从响应中提取新的 `challenge` 值。</p>
 
     ---
 
@@ -111,12 +107,15 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="geetestApiServerSubdomain" type="string" />
-    Geetest API 子域服务器（必须与 api.geetest.com 不同）。<br />可选参数。某些站点可能需要。
+    Geetest API 服务器的子域名（必须不同于 `api.geetest.com`）。 
+	<br />可选参数。某些网站可能需要。
 
     ---
 
     <ParamItem title="geetestGetLib" type="string" />
-    展示验证码脚本的路径。 <br /> 可选参数。某些站点可能需要。<br />以字符串形式发送 JSON。
+    用于在页面上显示验证码的脚本路径。 
+	<br />可选参数。某些网站可能需要。 
+	<br />请以字符串形式发送 JSON。
 
     ---
 
@@ -154,37 +153,35 @@ V4 (captcha_id = gt)
 
     <ParamItem title="proxyPassword" type="string" />
     代理服务器密码。
-
-  </TabItem>
-  </Tabs>
+  </div>
 
 
 ### <span style={{fontSize: '1.5rem'}}>创建任务</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-	<TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel">
+	<TabItem value="proxyless" label="GeeTestTask（无代理）" default className="method-panel">
 		<MethodItem>
 			```http
 			https://api.capmonster.cloud/createTask
 			```
 		</MethodItem>
 		<MethodDescription>
-			**要求**
+			**请求示例**
 ```json
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://www.geetest.com/en/demo",
-    "gt": "022397c99c9f646f6477822485f30404",
-    "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "gt-value",
+    "challenge": "challenge-value",
     "version": 3,
-    "geetestApiServerSubdomain": "api-na.geetest.com"
+    "geetestApiServerSubdomain": "example.api.geetest.com"
 
   }
 }
 ```
-			**回应**
+			**响应示例**
 			```json
 			{
 			  "errorId":0,
@@ -193,35 +190,35 @@ V4 (captcha_id = gt)
 			```
 		</MethodDescription>
 	</TabItem>
-
-	<TabItem value="proxy" label="GeeTestTask (using proxy)" className="method-panel">
+	
+	<TabItem value="proxy" label="GeeTestTask（使用代理时）" className="method-panel">
 		<MethodItem>
 			```http
 			https://api.capmonster.cloud/createTask
 			```
 		</MethodItem>
 		<MethodDescription>
-			**要求**
+			**请求示例**
 ```json 
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://www.geetest.com/en/demo",
-    "gt": "022397c99c9f646f6477822485f30404",
-    "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "gt-value",
+    "challenge": "challenge-value",
     "version": 3,
-    "geetestApiServerSubdomain": "api-na.geetest.com",
+    "geetestApiServerSubdomain": "example.api.geetest.com",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-			**回应**
+			**响应示例**
 			```json
 			{
 			  "errorId":0,
@@ -229,8 +226,7 @@ V4 (captcha_id = gt)
 			}
 			```
 		</MethodDescription>
-	</TabItem>
-  
+	</TabItem>  
 </Tabs>
 
 
@@ -238,22 +234,21 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Get task result</span>
 
-	<Tabs>
-	<TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel-full">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/getTaskResult
-			```
-		</MethodItem>
-		<MethodDescription>
-			**要求**
-			```json
-			{
-			  "clientKey":"API_KEY",
-			  "taskId": 407533072
-			}
-			```
-			**回应**
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -265,17 +260,15 @@ V4 (captcha_id = gt)
   }
 }
 ```
-		</MethodDescription>
-	</TabItem>
-	</Tabs>
+	</MethodDescription>
+</div>
 
 <br />
-
 
 <table><tr>
 <th><b>属性</b></th><th><b>类型</b></th><th><b>描述</b></th>
 </tr>
-<tr><td>challenge</td><td>String</td><td rowspan="3">在目标网站提交表单时，这三个参数都是必需的。</td></tr>
+<tr><td>challenge</td><td>String</td><td rowspan="3">在目标网站上提交表单时需要全部三个参数。</td></tr>
 <tr><td>validate</td><td>String</td></tr>
 <tr><td>seccode</td><td>String</td></tr>
 </table>
@@ -499,9 +492,9 @@ V4 (captcha_id = gt)
         // 基本示例，无需代理
         // CapMonster Cloud 会自动使用它们的代理
         let geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php", // 验证码页面的 URL
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",        // 替换为正确的值
-            challenge: "d93591bdf7860e1e4ee2fca799911215",  // 替换为正确的值
+            websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+            gt: "gt-value",        // 替换为正确的值
+            challenge: "challenge-value", // 替换为正确的值
             version: 3
         });
 
@@ -518,9 +511,9 @@ V4 (captcha_id = gt)
         };
 
         geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php",
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
-            challenge: "d93591bdf7860e1e4ee2fca799911215",
+            websiteURL: "https://example.com/geetest.php", // 替换为正确的值
+            gt: "gt-value",       // 替换为正确的值
+            challenge: "challenge-value", // 替换为正确的值
             version: 3,
             proxy,
             userAgent: "userAgentPlaceholder"
@@ -551,12 +544,12 @@ async function solveGeeTest() {
     const balance = await client.getBalance();
     console.log("Balance:", balance);
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
+    // 不使用代理的基础示例
+    // CapMonster Cloud 会自动使用其代理
     let geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php", // 验证码页面的 URL
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",       // 替换为正确的值
-        challenge: "d93591bdf7860e1e4ee2fca799911215", // 替换为正确的值
+        websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+        gt: "gt-value",       // 替换为正确的值
+        challenge: "challenge-value", // 替换为正确的值
         version: 3
     });
 
@@ -573,9 +566,9 @@ async function solveGeeTest() {
     };
 
     geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php",
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
-        challenge: "d93591bdf7860e1e4ee2fca799911215",
+        websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+        gt: "gt-value",                               // 替换为正确的值
+        challenge: "challenge_challenge",             // 替换为正确的值
         version: 3,
         proxy,
         userAgent: "userAgentPlaceholder"
@@ -611,9 +604,9 @@ solveGeeTest().catch(console.error);
         # 基本示例，无需代理
         # CapMonster Cloud 会自动使用它们的代理
         geetest_request = GeetestRequest(
-            websiteUrl="https://example.com",
-            gt="81dc9bdb52d04dc20036dbd8313ed055",
-            challenge="d93591bdf7860e1e4ee2fca799911215",
+            websiteUrl="https://example.com", # 替换为正确的值
+            gt="gt-value", # 替换为正确的值
+            challenge="challenge-value", # 替换为正确的值
             version=3
         )
 
@@ -629,9 +622,9 @@ solveGeeTest().catch(console.error);
         # )
 
         # geetest_request = GeetestRequest(
-        #     websiteUrl="https://example.com",
-        #     gt="81dc9bdb52d04dc20036dbd8313ed055",
-        #     challenge="d93591bdf7860e1e4ee2fca799911215",
+        #     websiteUrl="https://example.com", # 替换为正确的值
+        #     gt="gt-value", # 替换为正确的值
+        #     challenge="challenge-value", # 替换为正确的值
         #     version=3,
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
@@ -677,23 +670,23 @@ class Program
         Console.WriteLine("Balance: " + balance);
 
         // 基本示例，无需代理
-        // CapMonster Cloud 会自动使用它们的代理
+        // CapMonster Cloud 会自动使用其代理
         var geetestRequest = new GeeTestRequest
         {
-            WebsiteUrl = "https://example.com/demo/geetest", // 页面中验证码的 URL
-            Gt = "your_gt_value",                             // 替换为正确的值
-            Challenge = "your_challenge_value",               // 替换为正确的值
-            Version = 3                                        // 替换为正确的值
+            WebsiteUrl = "https://example.com/demo/geetest", // 包含验证码的页面 URL
+            Gt = "gt-value",                             // 替换为正确的值
+            Challenge = "challenge-value",               // 替换为正确的值
+            Version = 3                                       // 验证码版本
         };
 
         // 使用您自己的代理的示例
-        // 如果想使用自己的代理，请取消注释以下代码块
+        // 如果要使用自己的代理，请取消注释此代码块
         /*
         var geetestRequest = new GeeTestRequest
         {
-            WebsiteUrl = "https://example.com/demo/geetest", // 页面中验证码的 URL
-            Gt = "your_gt_value",  
-            Challenge = "your_challenge_value",
+            WebsiteUrl = "https://example.com/demo/geetest", // 包含验证码的页面 URL
+            Gt = "gt-value",                           // 替换为正确的值
+            Challenge = "challenge-value",           // 替换为正确的值
             Version = 3,
             UserAgent = "userAgentPlaceholder",
 
@@ -731,8 +724,7 @@ class Program
 
 ### <span style={{fontSize: '1.5rem'}}>请求参数</span>
 
-  <Tabs>
-  <TabItem value="proxy" label="GeeTestTask (using proxy)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -744,7 +736,7 @@ class Program
     ---
 
     <ParamItem title="gt" required type="string" />
-    该域名的 GeeTest 标识符键 - `captcha_id` 参数。
+    域名的 GeeTest 标识密钥——参数 `captcha_id`。
 
     ---
 
@@ -754,17 +746,20 @@ class Program
     ---
 
     <ParamItem title="geetestApiServerSubdomain" type="string" />
-    Geetest API 子域名服务器（必须不同于 api.geetest.com）。<br />可选参数。某些网站可能需要此参数。
+    Geetest API 服务器的子域名（必须不同于 `api.geetest.com`）。 <br />
+	可选参数。某些网站可能需要。
 
     ---
 
     <ParamItem title="geetestGetLib" type="string" />
-    用于在页面上显示验证码的脚本路径。<br />可选参数。某些网站可能需要此参数。<br />将 JSON 作为字符串发送。
-
+    用于在页面上显示验证码的脚本路径。 <br /> 
+	可选参数。某些网站可能需要。	<br />
+	请以字符串形式发送 JSON。
+	
     ---
 
     <ParamItem title="initParameters" type="object" />
-    版本 4 的附加参数，与“riskType”（验证码类型/验证特征）一起使用。
+    版本 4 的附加参数，与 "riskType" 一起使用（例如 `slide`）。
 
     ---
 
@@ -797,42 +792,41 @@ class Program
     <ParamItem title="proxyPassword" type="string" />
     代理服务器密码。
 
-  </TabItem>
-  </Tabs>
+  </div>
 
 ### <span style={{fontSize: '1.5rem'}}>Create task method</span>
 
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-	<TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel">
+	<TabItem value="proxyless" label="GeeTestTask（无代理）" default className="method-panel">
 		<MethodItem>
 			```http
 			https://api.capmonster.cloud/createTask
 			```
 		</MethodItem>
 		<MethodDescription>
-			**要求**
+			**请求示例**
 ```json
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://gt4.geetest.com/",
-    "gt": "54088bb07d2df3c46b79f80300b0abbe",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "captcha-id-value",
     "version": 4,
     "initParameters": {
-      "riskType": "slide"
+      "riskType": "risk-type-value"
     }
   }
 }
 ```
-			**回应**
-```json
-{
-  "errorId":0,
-  "taskId":407533072
-}
-```
+			**响应示例**
+			```json
+			{
+			  "errorId":0,
+			  "taskId":407533072
+			}
+			```
 		</MethodDescription>
 	</TabItem>
 
@@ -843,29 +837,28 @@ class Program
 			```
 		</MethodItem>
 		<MethodDescription>
-			**要求**
+			**请求示例**
   ```json
   {
-    "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+    "clientKey": "API_KEY",
     "task": {
       "type": "GeeTestTask",
-      "websiteURL": "https://gt4.geetest.com/",
-      "gt": "54088bb07d2df3c46b79f80300b0abbe",
+      "websiteURL": "https://yourwebsite.com/page-with-geetest",
+      "gt": "captcha-id-value",
       "version": 4,
       "initParameters": {
-        "riskType": "slide"
+        "riskType": "risk-type-value"
       },
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password",
       "userAgent": "userAgentPlaceholder"
     }
   }
   ```
-
-			**回应**
+			**响应示例**
 			```json
 			{
 			  "errorId":0,
@@ -882,22 +875,21 @@ class Program
 
 ### <span style={{fontSize: '1.5rem'}}>获取任务结果方法</span>
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -912,8 +904,7 @@ class Program
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -1176,20 +1167,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("Balance:", balance);
 
     // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
+    // CapMonster Cloud 会自动使用其代理
     let geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php", // 页面中验证码的 URL
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
+        websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+        gt: "captcha-id-value",                               // 替换为正确的值
         version: "4",
         initParameters: { riskType: "slide" }
     });
 
     // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
+    // 如果要使用自己的代理，请取消注释此代码块
 
     /*
     const proxy = {
-        proxyType: "https",
+        proxy-type: "your-proxy-type",
         proxyAddress: "123.45.67.89",
         proxyPort: 8080,
         proxyLogin: "username",
@@ -1197,8 +1188,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php",
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
+        websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+        gt: "captcha-id-value",                               // 替换为正确的值
         version: "4",
         initParameters: { riskType: "slide" },
         proxy,
@@ -1229,21 +1220,21 @@ async function solveGeeTest() {
     const balance = await client.getBalance();
     console.log("Balance:", balance);
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
+    // 不使用代理的基础示例
+    // CapMonster Cloud 会自动使用其代理
     let geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php", // 页面中验证码的 URL
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
+        websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+        gt: "captcha-id-value",                              // 替换为正确的值
         version: "4",                                 
         initParameters: { riskType: "slide" }
     });
 
     // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
+    // 如果要使用自己的代理，请取消注释此代码块
 
     /*
     const proxy = {
-        proxyType: "https",
+        proxyType: "your-proxy-type",
         proxyAddress: "123.45.67.89",
         proxyPort: 8080,
         proxyLogin: "username",
@@ -1251,8 +1242,8 @@ async function solveGeeTest() {
     };
 
     geetestRequest = new GeeTestRequest({
-        websiteURL: "https://example.com/geetest.php",
-        gt: "81dc9bdb52d04dc20036dbd8313ed055",
+        websiteURL: "https://example.com/geetest.php", // 包含验证码的页面 URL
+        gt: "captcha-id-value",                               // 替换为正确的值
         version: "4",
         initParameters: { riskType: "slide" },
         proxy,
@@ -1290,8 +1281,8 @@ solveGeeTest().catch(console.error);
         # 基本示例，无需代理
         # CapMonster Cloud 会自动使用它们的代理
         geetest_request = GeetestRequest(
-            websiteUrl="https://example.com/",
-            gt="54088bb07d2df3c46b79f80300b0abbe",
+            websiteUrl="https://example.com/", # 包含验证码的页面 URL
+            gt="captcha-id-value",                    # 替换为正确的值
             version=4,
             initParameters={
                 "riskType": "slide"
@@ -1310,8 +1301,8 @@ solveGeeTest().catch(console.error);
         # )
 
         # geetest_request = GeetestRequest(
-        #     websiteUrl="https://example.com/",
-        #     gt="54088bb07d2df3c46b79f80300b0abbe",
+        #     websiteUrl="https://example.com/", # 包含验证码的页面 URL
+        #     gt="captcha-id-value",                    # 替换为正确的值
         #     version=4,
         #     initParameters={
         #         "riskType": "slide"
@@ -1361,23 +1352,23 @@ class Program
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
-        // 基本示例，无需代理
-        // CapMonster Cloud 会自动使用它们的代理
+        // 不使用代理的基础示例
+        // CapMonster Cloud 会自动使用其代理
         var geetestRequest = new GeeTestRequest
         {
-            WebsiteUrl = "https://example.com/", // CAPTCHA 页面 URL
-            Gt = "54088bb07d2df3c46b79f80300b0abbe",
+            WebsiteUrl = "https://example.com/", // 包含验证码的页面 URL
+            Gt = "captcha-id-value",                    // 替换为正确的值
             Version = 4,                             
             InitParameters = new Dictionary<string, string> { { "riskType", "slide" } } // V4 的附加参数
         };
 
         // 使用您自己的代理的示例
-        // 如果想使用自己的代理，请取消注释以下代码块
+        // 如果要使用自己的代理，请取消注释此代码块
         /*
         var geetestRequest = new GeeTestRequest
         {
-            WebsiteUrl = "https://example.com/",
-            Gt = "54088bb07d2df3c46b79f80300b0abbe",
+            WebsiteUrl = "https://example.com/",     // 包含验证码的页面 URL
+            Gt = "captcha-id-value", // 替换为正确的值
             Version = 4,
             InitParameters = new Dictionary<string, string> { { "riskType", "slide" } },
 
@@ -1479,4 +1470,3 @@ class Program
 `encryptedData` 字段在网站端通常为空，因为客户端逻辑会忽略它。虽然该值通过 WebAssembly 返回，但在实际中并未使用。
 
 </details>
-

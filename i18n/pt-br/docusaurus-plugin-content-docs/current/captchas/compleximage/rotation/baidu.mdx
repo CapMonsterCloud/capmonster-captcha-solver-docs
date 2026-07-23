@@ -38,8 +38,7 @@ O pedido deve conter uma única imagem no formato base64.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,15 +50,14 @@ O pedido deve conter uma única imagem no formato base64.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Imagem codificada em formato base64.
+    Imagem codificada em base64 (envolvida em um array, sem o prefixo `data:image/png;base64,`).
 
     ---
 
     <ParamItem title="Task (dentro de metadata)" required type="string" />
     Nome da tarefa: `"baidu"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
@@ -67,15 +65,14 @@ O pedido deve conter uma única imagem no formato base64.
 No início do processo de resolução, podem ocorrer respostas temporariamente *unsolvable*. Isso **não é um erro** — a captcha continuará sendo resolvida corretamente após a inicialização.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Solicitação**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
@@ -95,7 +92,7 @@ No início do processo de resolução, podem ocorrer respostas temporariamente *
 
     	![](../images/ComplexImageTask-Recognition/baidu.png)
 
-        **Resposta**
+        **Exemplo de resposta**
         ```json
         {
           "errorId":0,
@@ -104,27 +101,26 @@ No início do processo de resolução, podem ocorrer respostas temporariamente *
         ```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Solicitação**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey":"API_KEY",
         "taskId": 143998457
       }
       ```
-		**Resposta:** graus pelos quais a imagem deve ser girada no sentido horário.
+		**Exemplo de resposta** <br/>
+    Graus em que é necessário girar a imagem no sentido horário.
       ```json
       {
         "solution":
@@ -140,8 +136,7 @@ No início do processo de resolução, podem ocorrer respostas temporariamente *
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Como obter Base64
 

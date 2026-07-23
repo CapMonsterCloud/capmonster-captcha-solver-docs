@@ -32,8 +32,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 
 ## Параметры запроса
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -50,7 +49,9 @@ CapMonster Cloud по умолчанию работает через встро�
     --- 
 
     <ParamItem title="websiteKey" required type="string" />
-    Можно найти в html коде в атрибуте **data-sitekey** контейнера с капчей или в payload POST-запроса на `https://basiliskcaptcha.com/challenge/check-site` в поле **site_key**
+    Можно найти в html коде в атрибуте **data-sitekey** контейнера с капчей или в payload POST-запроса на `https://basiliskcaptcha.com/challenge/check-site` в поле **site_key**<br />
+    
+    Пример: `b7890hre6cf2544b2759c19fb2600897`
 
     --- 
 
@@ -91,8 +92,7 @@ CapMonster Cloud по умолчанию работает через встро�
     Пароль прокси-сервера.
 
     --- 
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
@@ -104,7 +104,7 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
     ```json
     {
@@ -113,13 +113,13 @@ CapMonster Cloud по умолчанию работает через встро�
         "type": "CustomTask",
         "class": "Basilisk",
         "websiteURL": "https://domain.io/account/register",
-        "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
+        "websiteKey": "your-website-key",
         "userAgent": "userAgentPlaceholder"
       }
     }
     ```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -139,7 +139,7 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
 
-    **Запрос**
+    **Пример запроса**
 
   ```json
   {
@@ -148,18 +148,18 @@ CapMonster Cloud по умолчанию работает через встро�
       "type": "CustomTask",
       "class": "Basilisk",
       "websiteURL": "https://domain.io/account/register",
-      "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
+      "websiteKey": "your-website-key",
       "userAgent": "userAgentPlaceholder",
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
     }
   }
   ```
 
-    **Ответ**
+    **Пример ответа**
 
     ```json
     {
@@ -175,22 +175,21 @@ CapMonster Cloud по умолчанию работает через встро�
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Basilisk.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -206,8 +205,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти все нужные параметры для создания задачи на решение
 
@@ -378,7 +376,7 @@ CapMonster Cloud по умолчанию работает через встро�
       // CapMonster Cloud автоматически использует свои прокси
       let basiliskRequest = new BasiliskRequest({
           websiteURL: "https://example.com",       // URL страницы с Basilisk
-          websiteKey: "b3760bfe5cf4254b2759c19fg2698og""                 // Замените на корректное значение
+          websiteKey: "b3760bfe5cf4254b2759c19fg2698og"  // Замените на корректное значение
       });
 
       // Пример использования вашего собственного прокси
@@ -445,7 +443,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
           basiliskRequest = new BasiliskRequest({
               websiteURL: "https://example.com",
-              websiteKey: ""b3760bfe5cf4254b2759c19fg2698og",
+              websiteKey: "b3760bfe5cf4254b2759c19fg2698og",
               proxy,
               userAgent: "userAgentPlaceholder"
           });

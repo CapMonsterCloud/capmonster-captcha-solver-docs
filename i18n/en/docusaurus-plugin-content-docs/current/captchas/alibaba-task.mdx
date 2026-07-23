@@ -42,8 +42,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 ## Request parameters
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (with proxy)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -61,10 +60,11 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   ---
 
   <ParamItem title="sceneId (inside metadata)" required type="string" />
-
-  CAPTCHA scenario identifier, passed in the following format: `"sceneId":"1ww7426c4"` (see [the corresponding section](#sceneid) for how to find this value)
+  The captcha scenario identifier, passed in the following format: `"sceneId":"1ww7426c"` — **the value is provided as an example**. <br />
+  Use your own value. Instructions for obtaining it are provided in the [corresponding section](#sceneid).
 
   ---
+  
   <ParamItem title="prefix (inside metadata)" required type="string" />
 
   CAPTCHA initialization parameter, passed in the URL of the request used to load the task text on the page.<br />
@@ -85,31 +85,37 @@ Specify these parameters only if they are present on the website (*see more deta
 
 <ParamItem title="userId (inside metadata)" type="string" />
 A unique identifier of the user or session on the website side. <br />
+Example: `HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=`
 
 ---
 
 <ParamItem title="userUserId (inside metadata)" type="string" />
 An additional (secondary) user identifier. <br />
+Example: `/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=`
 
 ---
 
 <ParamItem title="verifyType (inside metadata)" type="string" />
 The version or type of the captcha verification mechanism. <br />
+Example: `1.0`
 
 ---
 
 <ParamItem title="region (inside metadata)" type="string" />
 The server or data center region through which the captcha is processed. <br />
+Example: `sgp`
 
 ---
 
 <ParamItem title="UserCertifyId (inside metadata)" type="string" />
 A unique verification ID associated with the current captcha session. <br />
+Example: `0a03e59417757735511105780e2a5e`
 
 ---
 
 <ParamItem title="apiGetLib (inside metadata)" type="string" />
 A link to the captcha JS library used by the website. The value is generated on the client side and may change dynamically on each page render. <br />
+Example: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
 </div>
 
@@ -151,8 +157,7 @@ A link to the captcha JS library used by the website. The value is generated on 
 
   ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Create task method
 
@@ -167,7 +172,7 @@ A link to the captcha JS library used by the website. The value is generated on 
     </MethodItem>
     <MethodDescription>
       
-      **Request**
+      **Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -177,14 +182,14 @@ A link to the captcha JS library used by the website. The value is generated on 
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix"
     }
   }
 }     
 ```
 
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -202,7 +207,7 @@ A link to the captcha JS library used by the website. The value is generated on 
     </MethodItem>
     <MethodDescription>
       
-      **Request**
+      **Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -212,19 +217,19 @@ A link to the captcha JS library used by the website. The value is generated on 
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
     }
   }
 }
 ```
 
-      **Response**
+      **Response example**
       ```json
       {
         "errorId": 0,
@@ -246,7 +251,7 @@ A link to the captcha JS library used by the website. The value is generated on 
     </MethodItem>
     <MethodDescription>
       
-      **Request**
+      **Request example**
 ```json
 {
   "clientKey": "API_KEY",
@@ -256,20 +261,20 @@ A link to the captcha JS library used by the website. The value is generated on 
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }
   }
-}    
+}     
 ```
 
-  **Response**
+  **Response example**
   ```json
   {
     "errorId": 0,
@@ -288,7 +293,7 @@ A link to the captcha JS library used by the website. The value is generated on 
     </MethodItem>
     <MethodDescription>
 
-  **Request**
+  **Request example**
 
 ```json
 {
@@ -299,24 +304,24 @@ A link to the captcha JS library used by the website. The value is generated on 
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-  **Response**
+  **Response example**
   ```json
   {
     "errorId": 0,
@@ -332,8 +337,7 @@ A link to the captcha JS library used by the website. The value is generated on 
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the Alibaba Captcha solution.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
@@ -341,7 +345,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the
   </MethodItem>
   <MethodDescription>
 
-  **Request**
+  **Request example**
   ```json
   {
     "clientKey": "API_KEY",
@@ -349,7 +353,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the
   }
 ```
 
-**Response**
+**Response example**
 
 ```json
 {
@@ -366,8 +370,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the
 ```
 
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## How to find all required parameters for task creation
 
@@ -494,6 +497,8 @@ this.AliyunGeneratedDynamicJS =
 
 These data are sent to our captcha solving service:
 
+> **Important:** all values shown are provided for example purposes only. Replace them with the actual values for your project before use.
+
 ```json
 {
   "metadata": {
@@ -601,7 +606,7 @@ class Worker {
 
     this.currentDate = new Date();
     // Dynamic captcha JS library URL generation
-    this.AliyunGeneratedDynamicJS = `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=${
+`https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=${
       this.currentDate.getFullYear() +
       (this.currentDate.getMonth() + 1) +
       this.currentDate.getDate() +
@@ -610,7 +615,7 @@ class Worker {
 
     this.websiteUrl = "https://example.com/auth"; // Replace with captcha page URL
     this.userAgent =
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
+      "userAgentPlaceholder";
   }
 
   async executor() {
@@ -653,12 +658,12 @@ class Worker {
           Referer: "https://example.com/auth",
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -688,12 +693,12 @@ class Worker {
           Referer: "https://example.com/auth", // Replace with actual Referer
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -880,9 +885,7 @@ class Worker:
 
         self.website_url = "https://example.com/auth"  # Replace with captcha page URL
         self.user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/146.0.0.0 Safari/537.36"
+            "userAgentPlaceholder"
         )
 
         self.authorization_params = {}
@@ -914,7 +917,7 @@ class Worker:
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            "sec-ch-ua": '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",

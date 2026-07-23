@@ -42,8 +42,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 ## Параметры запроса
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (при использовании прокси)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -62,7 +61,8 @@ CapMonster Cloud по умолчанию работает через встро�
 
   <ParamItem title="sceneId (внутри metadata)" required type="string" />
 
-  Идентификатор сценария капчи, передаётся в следующем формате: `"sceneId":"1ww7426c4"` (как найти значение этого параметра, см. в [соответствующем разделе](#sceneid))
+  Идентификатор сценария капчи, передаётся в следующем формате: `"sceneId":"1ww7426c4"`— **значение указано в качестве примера**. <br />
+  Используйте собственное значение — инструкции по его получению приведены в [соответствующем разделе](#sceneid)
 
   ---
   <ParamItem title="prefix (внутри metadata)" required type="string" />
@@ -85,31 +85,37 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <ParamItem title="userId (внутри metadata)" type="string" />
 Уникальный идентификатор пользователя или сессии на стороне сайта. <br />
+Пример: `HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=`
 
 ---
 
 <ParamItem title="userUserId (внутри metadata)" type="string" />
 Дополнительный (вторичный) идентификатор пользователя. <br />
+Пример: `/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=`
 
 ---
 
 <ParamItem title="verifyType (внутри metadata)" type="string" />
 Версия или тип механизма проверки капчи. <br />
+Пример: `1.0`
 
 ---
 
 <ParamItem title="region (внутри metadata)" type="string" />
 Регион сервера или дата-центра, через который обрабатывается капча. <br />
+Пример: `sgp`
 
 ---
 
 <ParamItem title="UserCertifyId (внутри metadata)" type="string" />
 Уникальный ID проверки, связанный с текущей сессией капчи. <br />
+Пример: `0a03e59417757735511105780e2a5e`
 
 ---
 
 <ParamItem title="apiGetLib (внутри metadata)" type="string" />
 Ссылка на JS-библиотеку капчи, используемую сайтом. Значение формируется на стороне клиента и может генерироваться динамически при каждом рендеринге страницы. <br />
+Пример: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
 </div>
 
@@ -151,15 +157,14 @@ CapMonster Cloud по умолчанию работает через встро�
 
   ---
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод создания задачи
 
 ### Обычный вариант (без дополнительных параметров)
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
+  <TabItem value="proxyless" label="CustomTask" default className="method-panel">
     <MethodItem>
     ```http
     https://api.capmonster.cloud/createTask
@@ -167,7 +172,7 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -177,14 +182,14 @@ CapMonster Cloud по умолчанию работает через встро�
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix"
     }
   }
 }     
 ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -202,7 +207,7 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -212,19 +217,19 @@ CapMonster Cloud по умолчанию работает через встро�
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
     }
   }
 }
 ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -248,7 +253,7 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -258,20 +263,20 @@ CapMonster Cloud по умолчанию работает через встро�
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }
   }
 }     
 ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -289,7 +294,7 @@ CapMonster Cloud по умолчанию работает через встро�
     </MethodItem>
     <MethodDescription>
       
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -299,25 +304,25 @@ CapMonster Cloud по умолчанию работает через встро�
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
-      "verifyType": "1.0",
-      "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
+      "sceneId": "your-scene-id",
+      "prefix": "your-prefix",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "your-verify-type",
+      "region": "your-region",
+      "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -331,8 +336,7 @@ CapMonster Cloud по умолчанию работает через встро�
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Alibaba капчи.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
       ```http
     https://api.capmonster.cloud/getTaskResult
@@ -340,7 +344,7 @@ CapMonster Cloud по умолчанию работает через встро�
   </MethodItem>
   <MethodDescription>
 
-  **Запрос**
+  **Пример запроса**
   ```json
   {
     "clientKey": "API_KEY",
@@ -348,7 +352,7 @@ CapMonster Cloud по умолчанию работает через встро�
   }
   ```
 
-  **Ответ**
+  **Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -363,8 +367,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }
   ```
   </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Как найти все нужные параметры для создания задачи
 
@@ -482,7 +485,9 @@ this.AliyunGeneratedDynamicJS =
 
 5. Формирование `metadata` и запроса для решения капчи.
 
-Эти данные передаются в наш сервис для решения капчи:
+Эти данные передаются в наш сервис для решения капчи: 
+
+>**Важно:** все указанные значения приведены исключительно в качестве примера. Перед использованием замените их на актуальные данные для вашего проекта.
 
 ```json
 {
@@ -597,7 +602,7 @@ class Worker {
 
     this.websiteUrl = "https://example.com/auth"; // Замените на URL страницы с капчей
     this.userAgent =
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
+      "userAgentPlaceholder";
   }
 
   async executor() {
@@ -640,12 +645,12 @@ class Worker {
           Referer: "https://example.com/auth",
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -675,12 +680,12 @@ class Worker {
           Referer: "https://example.com/auth", // Замените на актуальный Referer сайта
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -855,9 +860,7 @@ class Worker:
 
         self.website_url = "https://example.com/auth"  # Замените на URL страницы с капчей
         self.user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/146.0.0.0 Safari/537.36"
+            "userAgentPlaceholder"
         )
 
         self.authorization_params = {}
@@ -889,7 +892,7 @@ class Worker:
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            "sec-ch-ua": '"Chromium";v="150", "Not-A.Brand";v="24", "Google Chrome";v="150"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",

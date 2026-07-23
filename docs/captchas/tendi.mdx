@@ -35,8 +35,7 @@ CapMonster Cloud по умолчанию работает через встро�
 :::
 
 ## Параметры запроса
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -53,7 +52,7 @@ CapMonster Cloud по умолчанию работает через встро�
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    captchaAppId. Например `"websiteKey": "189123456"` - уникальный параметр для вашего сайта. Можно взять с html страницы с капчей или из трафика (см. описание ниже).
+    **captchaAppId**, соответствует значению `aid`. Например, `"websiteKey": "189123456"` - уникальный параметр для вашего сайта. Можно взять с html страницы с капчей или из трафика (см. описание ниже).
 
     ---
 
@@ -98,8 +97,7 @@ CapMonster Cloud по умолчанию работает через встро�
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод создания задачи
@@ -113,15 +111,15 @@ CapMonster Cloud по умолчанию работает через встро�
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "TenDI",
-          "websiteURL": "https://example.com",
-          "websiteKey": "189123456",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
             "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
@@ -130,7 +128,7 @@ CapMonster Cloud по умолчанию работает через встро�
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -147,29 +145,29 @@ CapMonster Cloud по умолчанию работает через встро�
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
         "task": {
           "type": "CustomTask",
           "class": "TenDI",
-          "websiteURL": "https://example.com",
-          "websiteKey": "189123456",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
             "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
           },
-          "proxyType": "http",
-          "proxyAddress": "8.8.8.8",
-          "proxyPort": 8080,
-          "proxyLogin": "proxyLoginHere",
-          "proxyPassword": "proxyPasswordHere"
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
         }
       }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -184,22 +182,21 @@ CapMonster Cloud по умолчанию работает через встро�
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение TenDI.
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -216,8 +213,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Как получить websiteKey (captchaAppId)
@@ -487,7 +483,7 @@ async def solve_tendi_custom():
     # CapMonster Cloud автоматически использует свои прокси
     tendi_request = TenDiCustomTaskRequest(
         websiteUrl="https://example.com", # URL страницы с Tencent (TenDI) капчей
-        websiteKey="189956587", # TencentCaptcha appid
+        websiteKey="189956587", # Замените на корректное значение
         userAgent="userAgentPlaceholder"
     )
 
@@ -554,7 +550,7 @@ class Program
         var tenDiRequest = new TenDiCustomTaskRequest
         {
             WebsiteUrl = "https://example.com",   // URL страницы с капчей
-            WebsiteKey = "189956587",             // TencentCaptcha appid
+            WebsiteKey = "189956587",             // Замените на корректное значение
             UserAgent = "userAgentPlaceholder"
         };
 
@@ -588,4 +584,3 @@ class Program
   </TabItem>
 
 </Tabs>
-

@@ -1,6 +1,8 @@
 ---
 sidebar_position: 4
 sidebar_label: reCAPTCHA (click)
+title: "ComplexImageTask reCAPTCHA — 图像点击验证码的自动识别与解决 | API"
+description: "ComplexImageTask reCAPTCHA — 通过 CapMonster Cloud API 配置图像点击验证码的自动识别与解决！"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -39,8 +41,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,31 +52,35 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
     ---
 
-    <ParamItem title="imageUrls" required="required (如果 imagesBase64 未填写)" type="array" />
-    单张 4x4 图片，[3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)或新的 1x1 验证码部分（数组中）。
-    示例: [“[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)”]\
+    <ParamItem title="imageUrls" required="required（如果未填写 imagesBase64）" type="array" />
+    完整的 4x4、[3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) 图像，或验证码中新加载的 1x1 部分（数组形式）。
+    示例：["[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)"]
 
     ---
 
-    <ParamItem title="imagesBase64" required="required (如果 imageUrls 未填写)" type="array" />
-    单张 4x4 图片，[3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)或新的 1x1 验证码部分的 base64 格式（数组中）。
-    示例: [ “/9j/4AAQSkZJRgABAQEAAAAAAAD…”]
+    <ParamItem title="imagesBase64" required="required（如果未填写 imageUrls）" type="array" />
+    完整的 4x4、[3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) 图像，或验证码中新加载的 1x1 部分的 base64 格式数据（数组形式）。<br />
+
+    格式应如下：[ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"]（*不包含前缀 data:image/jpeg;base64,*）。
 
     ---
 
     <ParamItem title="Grid （在 metadata 中）" required type="string" />
-    图片网格大小。
-    可能的值: 4x4, 3x3, 1x1
+    图像网格大小。
+    可选值：4x4、3x3、1x1
 
     ---
 
-    <ParamItem title="TaskDefinition （在 metadata 中）" required="required (如果 Task 未填写)" type="string" />
-    定义任务类型的技术值 如何获取 TaskDefinition。该数据可以在对 `/recaptcha/{recaptchaApi}/reload` 或 `/recaptcha/{recaptchaApi}/userverify` 请求的响应中找到，其中 recaptchaApi 是 "enterprise" 或 "api2"，具体取决于 Recaptcha 的类型。响应包含 JSON，可以从中获取加载的验证码的 TaskDefinitions 列表。
+    <ParamItem title="TaskDefinition（位于 metadata 中）" required="required（如果未填写 Task）" type="string" />    
+	<p>用于确定任务类型的技术值</p>
+	<p>**如何获取 TaskDefinition**</p>
+	<p>可在 `/recaptcha/{recaptchaApi}/reload` 或 `/recaptcha/{recaptchaApi}/userverify` 请求的响应中找到数据，其中 recaptchaApi 根据 Recaptcha 类型为 "enterprise" 或 "api2"。响应中包含 json，可从中获取已加载验证码的 TaskDefinition 列表。</p>
 
     ---
 
-    <ParamItem title="Task （在 metadata 中）" required="required (if TaskDefinition is not filled)" type="string" />
-    可能的值：`点击交通灯` 及其他 <br /> 任务名称 (<u>英文</u>)。
+    <ParamItem title="Task（位于 metadata 中）" required="required（如果未填写 TaskDefinition）" type="string" />
+    可选值：`Click on traffic lights` 等 <br />
+    任务文本（<u>英文</u>）。
 
     ---
 
@@ -86,9 +91,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
     <ParamItem title="websiteURL" type="string" />
     解决验证码的页面 URL。
-</TabItem>
-</Tabs>
-
+</div>
 
 ### 参数说明
 
@@ -104,21 +107,20 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 **Task（在 metadata 中）**：与任务相关的附加元数据。
 
-**userAgent**：用户代理信息。当前 userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36
+**userAgent**：用户代理信息。我们的服务当前支持的 userAgent：`userAgentPlaceholder`
 
-**websiteURL**：包含验证码的网页地址。
+**websiteURL**：包含验证码的网页地址。 
 
 ## 创建任务方法 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
@@ -134,11 +136,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
       "TaskDefinition": "/m/015qff"
     },
     "userAgent": "userAgentPlaceholder",
-    "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"
+    "websiteUrl": "https://mydomain.com/page-with-recaptcha"
   }
 }
 ```
-		**回应**
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -146,30 +148,28 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## 获取任务结果方法
 
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取验证码解决方案。根据系统负载情况，您将在300毫秒到6秒的时间内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**回应**
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -180,8 +180,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 }		
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -206,11 +205,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 #### websitekey：
 
-查找方式类似于 [ReCaptchaV2Task](https://docs.capmonster.cloud/zh/docs/captchas/no-captcha-task#如何查找任务创建所需的所有参数) 和 [ReCaptchaV2Enterprise](https://docs.capmonster.cloud/zh/docs/captchas/recaptcha-v2-enterprise-task#如何查找任务创建所需的所有参数)。
+查找过程与查找 [reCAPTCHA V2](https://docs.capmonster.cloud/zh/docs/captchas/no-captcha-task#如何查找创建解决任务所需的全部参数) 和 [reCAPTCHA V2 Enterprise](https://docs.capmonster.cloud/zh/docs/captchas/recaptcha-v2-enterprise-task#如何查找创建解决任务所需的全部参数) 的 websitekey 类似。
 
 #### imageUrls：
 
-在元素属性中查找 URL：
+在元素属性中找到链接：
 
 ![imgUrl](images/recaptcha-click/img-url-elements.png)
 
@@ -231,7 +230,6 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 :::warning **重要**
 所提供的代码片段仅作为获取必要参数的基础示例。具体实现方式取决于包含验证码的网站、本身的页面结构，以及所使用的 HTML 元素和选择器。
 :::
-
 
 <Tabs className="full-width-tabs filled-tabs request-tabs">
   <TabItem value="js" label="JavaScript" default className="method-panel">
@@ -267,10 +265,10 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
       } else if (tileCount === 25) {
         gridSize = '5x5';
       } else {
-        gridSize = '未知';
+        gridSize = 'Unknown';
       }
 
-      console.log(`网格大小: ${gridSize}`);
+      console.log(`网格大小：${gridSize}`);
       ```
     </details>
     <details>
@@ -353,10 +351,10 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
         } else if (tileCount === 25) {
           gridSize = "5x5";
         } else {
-          gridSize = "未知";
+          gridSize = "Unknown";
         }
 
-        console.log(`网格大小: ${gridSize}`);
+        console.log(`网格大小：${gridSize}`);
 
         await browser.close();
       }
@@ -392,7 +390,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
               await page.wait_for_timeout(1000)
 
-              # 查找挑战 iframe
+              # 查找包含任务的框架
               challenge_frame = next((f for f in page.frames if "api2/bframe" in f.url), None)
               if not challenge_frame:
                   print("未找到 reCAPTCHA 的挑战 iframe")
@@ -429,7 +427,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
               elif visible_count == 25:
                   grid = "5x5"
               else:
-                  grid = "未知"
+                  grid = "Unknown"
 
               print("网格大小:", grid)
               await browser.close()
@@ -512,7 +510,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
                   9 => "3x3",
                   16 => "4x4",
                   25 => "5x5",
-                  _ => "未知"
+                  _ => "Unknown"
               };
 
               Console.WriteLine("网格大小: " + gridSize);
@@ -547,15 +545,16 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
       // 如有必要，可以检查余额
       const balance = await cmcClient.getBalance();
-      console.log('Balance:', balance);
+      console.log("Balance:", balance);
 
-      // 基本示例，无需代理
-      // CapMonster Cloud 会自动使用它们的代理
-      const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // 您的验证码页面 URL
-        websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-        minScore: 0.6,  
-        pageAction: 'myverify',
+      const complexImageRecaptchaRequest = new ComplexImageRecaptchaRequest({
+          imageUrls: ['https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg'], // 替换为实际值
+          metaData: {
+              Grid: '3x3',
+              Task: 'Please click each image containing a mountain',
+              TaskDefinition: '/m/015qff'
+          },
+          websiteURL: 'https://mydomain.com/page-with-recaptcha' // 包含验证码的页面 URL
       });
 
       const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -583,13 +582,14 @@ async function solveRecaptchaV3() {
     const balance = await cmcClient.getBalance();
     console.log("Balance:", balance);
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
-    const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta", // 您的验证码页面 URL
-        websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-        minScore: 0.6,
-        pageAction: "myverify",
+    const complexImageRecaptchaRequest = new ComplexImageRecaptchaRequest({
+        imageUrls: ['https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg'], // 替换为实际值
+        metaData: {
+            Grid: '3x3',
+            Task: 'Please click each image containing a mountain',
+            TaskDefinition: '/m/015qff'
+        },
+        websiteURL: 'https://mydomain.com/page-with-recaptcha' // 包含验证码的页面 URL
     });
 
     const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -599,7 +599,6 @@ async function solveRecaptchaV3() {
 solveRecaptchaV3().catch(console.error);
 ```
 </details>
-    
 	
   </TabItem>
   
@@ -616,19 +615,22 @@ solveRecaptchaV3().catch(console.error);
     client_options = ClientOptions(api_key="YOUR_API_KEY")  # 输入您的 CapMonster Cloud API 密钥
     cap_monster_client = CapMonsterClient(options=client_options)
 
-    # 如有必要，可以检查余额
-    balance = asyncio.run(cap_monster_client.get_balance())
-    print("Balance:", balance)
-
-    recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-        websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # 您的验证码页面 URL
-        websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-        minScore=0.6,  
-        pageAction="myverify"  
+    complex_image_recaptcha_request = RecaptchaComplexImageTaskRequest(
+        imagesUrls=["https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"],  # 替换为实际值
+        metadata={
+            "Task": "Click on traffic lights",
+            "Grid": "3x3",
+            "TaskDefinition": "/m/015qff",
+        }
     )
 
     async def solve_captcha():
-        return await cap_monster_client.solve_captcha(recaptcha_v3_request)
+        # 如有需要，可以检查余额
+        balance = await cap_monster_client.get_balance()
+        print("Balance:", balance)
+
+        solution = await cap_monster_client.solve_captcha(complex_image_recaptcha_request)
+        return solution
 
     responses = asyncio.run(solve_captcha())
     print(responses)
@@ -642,6 +644,8 @@ solveRecaptchaV3().catch(console.error);
     ```csharp
     // https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
+    using System;
+    using System.Threading.Tasks;
     using Zennolab.CapMonsterCloud.Requests;
     using Zennolab.CapMonsterCloud;
 
@@ -660,20 +664,24 @@ solveRecaptchaV3().catch(console.error);
             var balance = await cmCloudClient.GetBalanceAsync();
             Console.WriteLine("Balance: " + balance);
 
-            var recaptchaV3Request = new RecaptchaV3ProxylessRequest
+            var complexImageRecaptchaRequest = new RecaptchaComplexImageTaskRequest
             {
-                WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // 您的验证码页面 URL
-                WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-                MinScore = 0.6,
-                PageAction = "myverify"
+                ImageUrls = new[] { "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg" }, // 替换为实际值
+                Metadata = new RecaptchaComplexImageTaskRequest.RecaptchaMetadata
+                {
+                    Task = "Click on traffic lights",
+                    Grid = RecaptchaComplexImageTaskRequest.RecaptchaMetadata.GridSize.Grid3x3,
+                    TaskDefinition = "/m/015qff"
+                }
             };
 
-            var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);
+            var complexImageRecaptchaResult = await cmCloudClient.SolveAsync(complexImageRecaptchaRequest);
 
-            Console.WriteLine("Solution: " + recaptchaV3Result.Solution.Value);
+            Console.WriteLine("Captcha Solution: " + string.Join(", ", complexImageRecaptchaResult.Solution.Answer));
         }
     }
     ```
-	</details>
+    </details>
+	
   </TabItem>
 </Tabs>

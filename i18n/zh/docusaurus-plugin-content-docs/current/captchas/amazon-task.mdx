@@ -55,8 +55,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 <br />
 
 ### 选项 1
-<Tabs>
-<TabItem value="proxyless" label="AmazonTask (无代理)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **AmazonTask**
 
@@ -66,179 +65,180 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     解决验证码的主页面地址。
 
     ---
+	
+	  <ParamItem title="websiteKey" required type="string" />
+    可在验证码渲染时的 `apiKey` 字段中找到。 <br />
 
-    <ParamItem title="websiteKey" required type="string" />
-    可以在渲染验证码时的 `apiKey` 字段找到。
+    示例：`h15hX7brbaRTR...Za1_1`
 
     ---
 
     <ParamItem title="captchaScript" required type="string" />
-    HTML 页面中 jsapi.js 的链接，格式如 \<Integration URL\>/jsapi.js。
+    html 页面上的 `jsapi.js` 链接，格式为 `\<Integration URL\>/jsapi.js`
 
     ---
 
     <ParamItem title="cookieSolution" type="boolean" />
-    默认 **false** — 响应将包含 "captcha_voucher" 和 "existing_token"。  
-    如果需要 "aws-waf-token" cookie，请设置为 **true**。
-
-    ---
-
-  <ParamItem title="proxyType" type="string" />
-  **http** - 标准 http/https 代理；<br />
-  **https** - 仅在 "http" 无效时尝试（某些自定义代理需要）；<br />
-  **socks4** - socks4 代理；<br />
-  **socks5** - socks5 代理。
-
-  ---
-
-  <ParamItem title="proxyAddress" type="string" />
-  <p>
-    代理 IPv4/IPv6 地址。禁止：
-    - 透明代理（客户端 IP 可见）；
-    - 本地机器上的代理。
-  </p>
-
-  ---
-
-  <ParamItem title="proxyPort" type="integer" />
-  代理端口。
-
-  ---
-
-  <ParamItem title="proxyLogin" type="string" />
-  代理服务器登录名。
-
-  ---
-
-  <ParamItem title="proxyPassword" type="string" />
-  代理服务器密码。
-
-  ---
-
-</TabItem>
-</Tabs>
-
-### 选项 2 
-<Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless (无代理)" default className="bordered-panel">
-    <ParamItem title="type" required type="string" />
-    **AmazonTask**
-
-    --- 
-
-    <ParamItem title="websiteURL" required type="string" />
-    解决验证码的主页面地址。
-
-    ---
-
-    <ParamItem title="challengeScript" required type="string" />
-    challenge.js 的链接（详见下面说明）。
-
-    ---
-
-    <ParamItem title="websiteKey" required type="string" />
-    可以从 HTML 验证码页面或通过 JavaScript 获取：`window.gokuProps.key`。
-
-    ---
-
-    <ParamItem title="context" required type="string" />
-    可以从 HTML 验证码页面或通过 JavaScript 获取：`window.gokuProps.context`。
-
-    ---
-
-    <ParamItem title="iv" required type="string" />
-    可以从 HTML 验证码页面或通过 JavaScript 获取：`window.gokuProps.iv`。
-
-    ---
-
-    <ParamItem title="captchaScript" type="string" />
-    captcha.js 链接（如果仅存在挑战，则可能为空）。
-
-    ---
-
-    <ParamItem title="cookieSolution" type="boolean" />
-    默认 **false** — 响应将包含 "captcha_voucher" 和 "existing_token"。  
-    如果需要 "aws-waf-token" cookie，请设置为 **true**。
-
-    ---
-
-  <ParamItem title="proxyType" type="string" />
-  **http** - 标准 http/https 代理；<br />
-  **https** - 仅在 "http" 无效时尝试（某些自定义代理需要）；<br />
-  **socks4** - socks4 代理；<br />
-  **socks5** - socks5 代理。
-
-  ---
-
-  <ParamItem title="proxyAddress" type="string" />
-  <p>
-    代理 IPv4/IPv6 地址。禁止：
-    - 透明代理（客户端 IP 可见）；
-    - 本地机器上的代理。
-  </p>
-
-  ---
-
-  <ParamItem title="proxyPort" type="integer" />
-  代理端口。
-
-  ---
-
-  <ParamItem title="proxyLogin" type="string" />
-  代理服务器登录名。
-
-  ---
-
-  <ParamItem title="proxyPassword" type="string" />
-  代理服务器密码。
-
----
-
-</TabItem>
-</Tabs>
-
-### 选项 3
-
-如果网站使用隐形验证码且仅加载 `challenge.js`，请使用此选项。  
-在这种情况下，不需要传递选项 2 的所有参数 — 可保留为空。只需传递 `challenge.js` 的值。
-
-<Tabs>
-<TabItem value="proxyless" label="AmazonTaskProxyless (无代理)" default className="bordered-panel">
-    <ParamItem title="type" required type="string" />
-    **AmazonTask**
-
-    --- 
-
-    <ParamItem title="websiteURL" required type="string" />
-    解决验证码的主页面地址。
-
-    ---
-
-    <ParamItem title="challengeScript" required type="string" />
-    `challenge.js` 链接。
-
-    ---
-
-    <ParamItem title="context" required type="string" />
-    提供空字符串。
-
-    ---
-
-    <ParamItem title="iv" required type="string" />
-    提供空字符串。
-
-    ---
-
-    <ParamItem title="cookieSolution" type="boolean" />
-    设置为 **true** 以获取 "aws-waf token"。
+    默认值为 **false**——响应中将返回 "captcha_voucher" 和 "existing_token"。如果您需要 "aws-waf-token" Cookie，请指定值 **true**。
 
     ---
 
     <ParamItem title="userAgent" type="string" />
-    浏览器的 User-Agent。<br />
-**请仅传递当前 Windows 系统下的有效 UA。当前推荐值为**：`userAgentPlaceholder`
-   
+    浏览器的 User-Agent。 <br />
+  **仅传递当前有效的 Windows 操作系统 UA。目前为**：`userAgentPlaceholder`
+
+    ---
+
+  <ParamItem title="proxyType" type="string" />
+  **http** - 普通 http/https 代理；<br />
+  **https** - 仅当“http”不起作用时尝试此选项（某些自定义代理需要）；<br />
+  **socks4** - socks4 代理；<br />
+  **socks5** - socks5 代理。
+
   ---
+
+  <ParamItem title="proxyAddress" type="string" />
+  <p>
+    IPv4/IPv6 代理 IP 地址。不允许：
+    - 使用透明代理（可看到客户端 IP 的代理）；
+    - 使用本地计算机上的代理。
+  </p>
+
+  ---
+
+  <ParamItem title="proxyPort" type="integer" />
+  代理端口。
+
+  ---
+
+  <ParamItem title="proxyLogin" type="string" />
+  代理服务器登录名。
+
+  ---
+
+  <ParamItem title="proxyPassword" type="string" />
+  代理服务器密码。
+
+  ---
+
+</div>
+
+### 选项 2 
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **AmazonTask**
+
+    --- 
+
+    <ParamItem title="websiteURL" required type="string" />
+    解决验证码的主页面地址。
+
+    ---
+
+    <ParamItem title="challengeScript" required type="string" />
+    `challenge.js` 的链接（参见下方说明）
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    可从包含验证码的 html 页面中获取，或通过执行 javascript `window.gokuProps.key` 获取的字符串
+    
+    示例：`AQIDA...wZwdADFLWk7XOA==`
+
+    ---
+
+    <ParamItem title="context" required type="string" />
+    可从包含验证码的 html 页面中获取，或通过执行 javascript `window.gokuProps.context` 获取的字符串。
+
+    示例：`qoJYgnKsc...aormh/dYYK+Y=`
+
+    ---
+
+    <ParamItem title="iv" required type="string" />
+    可从包含验证码的 html 页面中获取，或通过执行 javascript `window.gokuProps.iv` 获取的字符串。
+
+    示例：`CgAAXFFFFSAAABVk`
+
+    ---
+
+    <ParamItem title="captchaScript" type="string" />
+    `captcha.js` 的链接（如果只有质询，则可能不存在）
+
+    ---
+
+    <ParamItem title="cookieSolution" type="boolean" />
+    默认值为 **false**——响应中将返回 "captcha_voucher" 和 "existing_token"。如果您需要 "aws-waf-token" Cookie，请指定值 **true**。
+
+    ---
+
+  <ParamItem title="proxyType" type="string" />
+  **http** - 普通 http/https 代理；<br />
+  **https** - 仅当“http”不起作用时尝试此选项（某些自定义代理需要）；<br />
+  **socks4** - socks4 代理；<br />
+  **socks5** - socks5 代理。
+
+  ---
+
+  <ParamItem title="proxyAddress" type="string" />
+  <p>
+    代理 IPv4/IPv6 地址。禁止：
+    - 透明代理（客户端 IP 可见）；
+    - 本地机器上的代理。
+  </p>
+
+  ---
+
+  <ParamItem title="proxyPort" type="integer" />
+  代理端口。
+
+  ---
+
+  <ParamItem title="proxyLogin" type="string" />
+  代理服务器登录名。
+
+  ---
+
+  <ParamItem title="proxyPassword" type="string" />
+  代理服务器密码。
+
+---
+
+</div>
+
+### 选项 3
+
+如果网站使用隐形验证码并且只加载 `challenge.js`，请使用此方案。在这种情况下，无需像方案 2 那样传递所有参数——这些值可以留空。仅传递 `challenge.js` 的值。
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **AmazonTask**
+
+    --- 
+
+    <ParamItem title="websiteURL" required type="string" />
+    解决验证码的主页面地址。
+
+    ---
+
+    <ParamItem title="challengeScript" required type="string" />
+    `challenge.js` 的链接。
+
+    ---
+
+    <ParamItem title="context" required type="string" />
+    请指定空字符串。
+
+    ---
+
+    <ParamItem title="iv" required type="string" />
+    请指定空字符串。
+
+    ---
+
+    <ParamItem title="cookieSolution" type="boolean" />
+    请指定值 **true** 以获取 "aws-waf token"。 
+
+    ---
 
   <ParamItem title="proxyType" type="string" />
   **http** - 标准 http/https 代理；<br />
@@ -272,20 +272,19 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ---
 
-</TabItem>
-</Tabs>
+</div>
 
 
 ### 如何获取 `websiteKey`、`context`、`iv` 和 `challengeScript` 参数
-访问网站时，您会收到 **405** 响应和带验证码的 HTML 页面。可以从此页面中提取所有参数：  
-![](./images/amazon-task/aws1.png)  
-![](./images/amazon-task/aws2.png)  
+访问网站时，您会收到 **405** 响应和一个包含验证码的 html 页面。所有参数都可以从该页面中提取：
+![](./images/amazon-task/aws1.png) 
+![](./images/amazon-task/aws2.png) 
 
 
 ## 任务创建方法
 ### 选项 1
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="AmazonTask (无代理)" default className="method-panel">
+  <TabItem value="proxyless" label="AmazonTask（无代理）" default className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -293,23 +292,23 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
 
-    **请求**
+    **请求示例**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com/index.html",
-        "websiteKey": "h15hX7brbaRTR...Za1_1",
-        "userAgent": "userAgentPlaceholder",
-        "captchaScript": "https://234324vgvc23.yejk.captcha-sdk.awswaf.com/234324vgvc23/jsapi.js",
-        "cookieSolution": true
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "captchaScript": "https://example.captcha-sdk.awswaf.com/jsapi.js",
+    "cookieSolution": true
+  }
+}
+```
 
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -321,7 +320,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodDescription>
   </TabItem>
 
-  <TabItem value="proxy" label="AmazonTask (有代理)" className="method-panel">
+  <TabItem value="proxy" label="AmazonTask（使用代理）" className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -329,28 +328,28 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
 
-    **请求**
+    **请求示例**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com/index.html",
-        "websiteKey": "h15hX7brbaRTR...Za1_1",
-        "userAgent": "userAgentPlaceholder",
-        "captchaScript": "https://234324vgvc23.yejk.captcha-sdk.awswaf.com/234324vgvc23/jsapi.js",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "captchaScript": "https://example.captcha-sdk.awswaf.com/jsapi.js",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -365,7 +364,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ### 选项 2
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="AmazonTask (无代理)" default className="method-panel">
+  <TabItem value="proxyless" label="AmazonTask（无代理）" default className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -373,25 +372,25 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
 
-    **请求**
+    **请求示例**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        "websiteKey": "AQIDA...wZwdADFLWk7XOA==",
-        "context": "qoJYgnKsc...aormh/dYYK+Y=",
-        "iv": "CgAAXFFFFSAAABVk",
-        "cookieSolution": true
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "captchaScript": "https://example.captcha.awswaf.com/captcha.js",
+    "websiteKey": "your-website-key",
+    "context": "your-context",
+    "iv": "your-iv",
+    "cookieSolution": true
+  }
+}
+```
 
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -403,7 +402,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodDescription>
   </TabItem>
 
-  <TabItem value="proxy" label="AmazonTask (有代理)" className="method-panel">
+  <TabItem value="proxy" label="AmazonTask（使用代理）" className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -411,30 +410,30 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
 
-    **请求**
+    **请求示例**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "captchaScript": "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        "websiteKey": "AQIDA...wZwdADFLWk7XOA==",
-        "context": "qoJYgnKsc...aormh/dYYK+Y=",
-        "iv": "CgAAXFFFFSAAABVk",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "captchaScript": "https://example.captcha.awswaf.com/captcha.js",
+    "websiteKey": "your-website-key",
+    "context": "your-context",
+    "iv": "your-iv",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -449,7 +448,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ### 选项 3
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="AmazonTask (无代理)" default className="method-panel">
+  <TabItem value="proxyless" label="AmazonTask（无代理）" default className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -457,15 +456,15 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
 
-    **请求**
+    **请求示例**
 
     ```json
     {
       "clientKey": "API_KEY",
       "task": {
         "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
+        "websiteURL": "https://example.com/page-with-aws-waf",
+        "challengeScript": "https://example.token.awswaf.com/challenge.js",
         "context": "",
         "iv": "",
         "cookieSolution": true
@@ -473,7 +472,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     }
     ```
 
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -485,7 +484,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodDescription>
   </TabItem>
 
-  <TabItem value="proxy" label="AmazonTask (有代理)" className="method-panel">
+  <TabItem value="proxy" label="AmazonTask（使用代理）" className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
@@ -493,28 +492,28 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodItem>
     <MethodDescription>
 
-    **请求**
+    **请求示例**
 
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "AmazonTask",
-        "websiteURL": "https://example.com",
-        "challengeScript": "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        "context": "",
-        "iv": "",
-        "cookieSolution": true,
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
-      }
-    }
-    ```
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "AmazonTask",
+    "websiteURL": "https://example.com/page-with-aws-waf",
+    "challengeScript": "https://example.token.awswaf.com/challenge.js",
+    "context": "",
+    "iv": "",
+    "cookieSolution": true,
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
 
-    **响应**
+    **响应示例**
 
     ```json
     {
@@ -530,22 +529,21 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ## 获取任务结果方法
 使用[getTaskResult](../api/methods/get-task-result.mdx)方法获取 AmazonTask 的解决方案。
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**要求**
+		**请求示例**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**回应**
+**响应示例**
 ```json
 {
   "errorId": 0,
@@ -559,8 +557,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## 如何查找任务创建所需的所有参数
 
@@ -724,46 +721,48 @@ import { CapMonsterCloudClientFactory, ClientOptions, AmazonRequest } from '@zen
 
 const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  document.addEventListener("DOMContentLoaded", async () => {
+      const client = CapMonsterCloudClientFactory.Create(
+          new ClientOptions({ clientKey: API_KEY })
+      );
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
-    let amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com", // AWS WAF 保护页面的 URL
-        websiteKey: "websiteKey",
-        challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        context: "qoJYgnKsc...aormh/dYYK+Y=",
-        iv: "CgAAXFFFFSAAABVk",
-        cookieSolution: false
-    });
+      // 基本示例，无需代理
+      // CapMonster Cloud 会自动使用其代理
+      let amazonRequest = new AmazonRequest({
+          websiteURL: "https://example.com", // 受 AWS WAF 保护的页面 URL
+          websiteKey: "websiteKey",
+          // 替换为您自己的值
+          challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
+          captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
+          context: "qoJYgnKsc...aormh/dYYK+Y=",
+          iv: "CgAAXFFFFSAAABVk",
+          cookieSolution: false
+      });
 
     // 使用您自己的代理的示例
     // 如果想使用自己的代理，请取消注释以下代码块
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+      /*
+      const proxy = {
+          proxyType: "http",
+          proxyAddress: "123.45.67.89",
+          proxyPort: 8080,
+          proxyLogin: "username",
+          proxyPassword: "password"
+      };
 
-    amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "websiteKey",
-        challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        context: "qoJYgnKsc...aormh/dYYK+Y=",
-        iv: "CgAAXFFFFSAAABVk",
-        proxy,
-        userAgent: "userAgentPlaceholder",
-        cookieSolution: false
-    });
-    */
+      amazonRequest = new AmazonRequest({
+          websiteURL: "https://example.com",
+          websiteKey: "websiteKey",
+          // 替换为您自己的值
+          challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
+          captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
+          context: "qoJYgnKsc...aormh/dYYK+Y=",
+          iv: "CgAAXFFFFSAAABVk",
+          proxy,
+          userAgent: "userAgentPlaceholder",
+          cookieSolution: false
+      });
+      */
 
     // 如有必要，可以检查余额
     const balance = await client.getBalance();
@@ -792,8 +791,9 @@ async function solveAwsWaf() {
     // 基本示例，无需代理
     // CapMonster Cloud 会自动使用它们的代理
     let amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com",               // AWS WAF 保护页面的 URL
+        websiteURL: "https://example.com",               // 受 AWS WAF 保护的页面 URL
         websiteKey: "websiteKey",
+        // 替换为您自己的值
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -814,8 +814,9 @@ async function solveAwsWaf() {
     };
 
     amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com", // AWS WAF 保护页面的 URL
+        websiteURL: "https://example.com", // 受 AWS WAF 保护的页面 URL
         websiteKey: "websiteKey",
+        // 替换为您自己的值
         challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
         captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
         context: "qoJYgnKsc...aormh/dYYK+Y=",
@@ -859,8 +860,8 @@ async def solve_amazon_waf_captcha():
     # 基本示例，无需代理
     # CapMonster Cloud 会自动使用它们的代理
     amazon_waf_request = AmazonWafRequest(
-        websiteUrl="https://example.com",  # AWS WAF 保护页面的 URL
-        challengeScript="https://example.com/path/to/challenge.js",  # 替换为正确值
+        websiteUrl="https://example.com",  # 受 AWS WAF 保护的页面 URL
+        challengeScript="https://example.com/path/to/challenge.js",
         captchaScript="https://example.com/path/to/captcha.js",
         websiteKey="your_website_key",
         context="your_context_value",
@@ -879,8 +880,8 @@ async def solve_amazon_waf_captcha():
     # )
     #
     # amazon_waf_request = AmazonWafRequest(
-    #     websiteUrl="https://example.com", 
-    #     challengeScript="https://example.com/path/to/challenge.js",
+    #     websiteUrl="https://example.com",  # 受 AWS WAF 保护的页面 URL
+    #     challengeScript="https://example.com/path/to/challenge.js", 
     #     captchaScript="https://example.com/path/to/captcha.js",
     #     websiteKey="your_website_key",
     #     context="your_context_value",
@@ -902,7 +903,6 @@ asyncio.run(solve_amazon_waf_captcha())
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
-
 <details>
       <summary>显示代码</summary>
 ```csharp
@@ -930,7 +930,7 @@ class Program
 
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com", 
+            WebsiteUrl = "https://example.com", // 受 AWS WAF 保护的页面 URL
             WebsiteKey = "website_key", 
             ChallengeScript = "URL_of_challenge.js",       
             CaptchaScript = "URL_of_captcha.js",
@@ -945,7 +945,7 @@ class Program
         /*
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com",
+            WebsiteUrl = "https://example.com",  // 受 AWS WAF 保护的页面 URL
             WebsiteKey = "website_key",
             ChallengeScript = "URL_of_challenge.js",
             CaptchaScript = "URL_of_captcha.js",
@@ -978,4 +978,3 @@ class Program
   </TabItem>
 
 </Tabs>
-

@@ -38,8 +38,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 ## Параметры запроса
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -52,7 +51,9 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
     <ParamItem title="websiteKey" required type="string" />
    Ключ-идентификатор ReCaptcha3 на целевой странице.
-   <br/>https://www.google.com/recaptcha/api.js?render=THIS_ONE
+   `https://www.google.com/recaptcha/api.js?render=THIS_ONE`<br/>
+
+   Имеет следующий примерный формат: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob`
 
    ---
 
@@ -72,35 +73,33 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
     <p>Значение параметра action, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если его значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод создания задачи
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3TaskProxyless",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
     "isEnterprise": false,
     "minScore": 0.7,
-    "pageAction": "myverify"
+    "pageAction": "your-verify"
   }
 }
 ```
 
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -108,8 +107,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Метод получения результата задачи
@@ -120,22 +118,21 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение ReCaptcha3. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 30 с.
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -162,8 +159,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
@@ -265,7 +261,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
           } catch (e) {}
         });
 
-        const targetUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta";
+        const targetUrl = "https://yourwebsite.com/page-with-recaptcha";
         await page.goto(targetUrl, { timeout: 60000 });
         await page.waitForTimeout(3000);
 
@@ -357,7 +353,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
                   "action": found_action
               })
 
-      asyncio.run(extract_recaptcha_v3_execute("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta"))
+      asyncio.run(extract_recaptcha_v3_execute("https://yourwebsite.com/page-with-recaptcha"))
       ```
     </details>
   </TabItem>
@@ -378,7 +374,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
           public static async Task Main(string[] args)
           {
               await ExtractRecaptchaV3Execute
-              ("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta");
+              ("https://yourwebsite.com/page-with-recaptcha");
           }
 
           public static async Task ExtractRecaptchaV3Execute(string url)
@@ -472,10 +468,10 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
       console.log('Balance:', balance);
 
       const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // URL вашей страницы с капчей
-        websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-        minScore: 0.6,  
-        pageAction: 'myverify',
+        websiteURL: 'https://yourwebsite.com/page-with-recaptcha', // URL вашей страницы с капчей
+        websiteKey: 'your-website-key',
+        minScore: 0.7,  
+        pageAction: 'your-verify',
       });
 
       const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -505,10 +501,10 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
           console.log("Balance:", balance);
 
           const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-              websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-              websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-              minScore: 0.6,
-              pageAction: "myverify",
+              websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+              websiteKey: "your-website-key",
+              minScore: 0.7,
+              pageAction: "your-verify",
           });
 
           const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -544,10 +540,10 @@ balance = asyncio.run(cap_monster_client.get_balance())
 print("Balance:", balance)
 
 recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-    websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # URL вашей страницы с капчей
-    websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",  # Замените на корректное значение
-    minScore=0.6,  
-    pageAction="myverify"  
+    websiteUrl="https://yourwebsite.com/page-with-recaptcha",  # URL вашей страницы с капчей
+    websiteKey="your-website-key",  # Замените на корректное значение
+    minScore=0.7,  
+    pageAction="your-verify"  
 )
 
 async def solve_captcha():
@@ -590,10 +586,10 @@ class Program
 
         var recaptchaV3Request = new RecaptchaV3ProxylessRequest
         {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // URL вашей страницы с капчей
-            WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-            MinScore = 0.6,
-            PageAction = "myverify"
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",  // URL вашей страницы с капчей
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
         };
 
         var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);

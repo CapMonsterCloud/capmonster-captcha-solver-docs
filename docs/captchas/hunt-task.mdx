@@ -52,8 +52,7 @@ Hunt-капча — это антибот-система, используема
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxy" label="HuntTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -125,8 +124,7 @@ User-Agent браузера. <br />
 <ParamItem title="proxyPassword" required type="string" />
 Пароль прокси-сервера.
 
-</TabItem>
-</Tabs>
+</div>
 --- 
 
 **Решение поддерживает два режима работы:**
@@ -174,33 +172,32 @@ User-Agent браузера. <br />
 
 ### Метод создания задачи для генерации X-HD
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (c прокси)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "type": "CustomTask",
   "class": "HUNT",
-  "websiteURL": "https://example.com",
+  "websiteURL": "https://yourwebsite.com/page-with-hunt",
   "metadata": {
     "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-      **Ответ**
+      **Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -208,8 +205,7 @@ User-Agent браузера. <br />
 }
 ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Режим 2. Решение капчи. 
 
@@ -240,15 +236,14 @@ User-Agent браузера. <br />
 
 Значение `meta.token` нужно передать в `data`.
 
-<Tabs>
-<TabItem value="proxy" label="CustomTask (c прокси)" className="method-panel">
+<div className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
 ```json
 {
   "type": "CustomTask",
@@ -256,18 +251,18 @@ User-Agent браузера. <br />
   "websiteUrl": "https://example.com",        
   "metadata": {
       "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-      "data": "kufyHK/s/jTNU...AfwIW", // значение META_TOKEN
+      "data": "meta-token-value",
   },
   "userAgent": "userAgentPlaceholder",
-  "proxyType": "http",
-  "proxyAddress": "8.8.8.8",
-  "proxyPort": 8080,
-  "proxyLogin": "proxyLoginHere",
-  "proxyPassword": "proxyPasswordHere"
+  "proxyType": "your-proxy-type",
+  "proxyAddress": "your-proxy-address",
+  "proxyPort": 1234,
+  "proxyLogin": "your-proxy-login",
+  "proxyPassword": "your-proxy-password"
 }
 ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -275,8 +270,7 @@ User-Agent браузера. <br />
     }
       ```
     </MethodDescription>
-  </TabItem>
-</Tabs>
+  </div>
 
 ## Метод получения результата задачи
 
@@ -289,22 +283,21 @@ User-Agent браузера. <br />
 * В режиме **решения капчи** `solution.data.token` — это токен решения, который необходимо передать обратно на сайт для подтверждения действия.
 :::
 
-<Tabs>
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -317,8 +310,7 @@ User-Agent браузера. <br />
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## Работа с cookies
@@ -410,7 +402,7 @@ const htmlHeaders = {
   "cache-control": "no-cache",
   pragma: "no-cache",
   priority: "u=0, i",
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "document",
@@ -431,7 +423,7 @@ const apiHeaders = {
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
   referer: BASE_URL + "/", // Актуальный referer с сайта
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "empty",
@@ -657,7 +649,7 @@ html_headers = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "priority": "u=0, i",
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "document",
@@ -678,7 +670,7 @@ api_headers = {
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
     "referer": BASE_URL + "/en", # Замените на актуальный referer с сайта
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",

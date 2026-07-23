@@ -1,6 +1,8 @@
 ---
 sidebar_position: 1
 sidebar_label: reCAPTCHA v3
+title: "通过代理识别和解决 reCAPTCHA v3 — reCAPTCHA v3 Task | API"
+description: "CapMonster Cloud Docs 文档中详细介绍了如何使用代理服务器，通过 reCAPTCHA v3 Task 自动识别并解决（绕过）reCAPTCHA v3。"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -38,8 +40,7 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
 
 ## 请求参数
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -51,53 +52,57 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-	Recaptcha 网站密钥。<br/>https://www.google.com/recaptcha/api.js?render=THIS_ONE
+   目标页面上的 ReCaptcha v3 标识密钥。
+   `https://www.google.com/recaptcha/api.js?render=THIS_ONE`<br/>
 
-	---
+   大致格式如下：`6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob`
 
-  <ParamItem title="isEnterprise" type="boolean" />
-    reCAPTCHA 版本。 支持的值：`true` / `false`（也可使用 `1` / `0`，整数类型）。
-    
-    如果需要以 Enterprise 方式解决 reCAPTCHA，请设置 `true` —— 在这种情况下，任务将按照与 [RecaptchaV3EnterpriseTask](../recaptcha-v3-enterprise-task/) 相同的方式处理。
+   ---
 
-    --- 
-
-	<ParamItem title="minScore" type="double" />
-    从 0.1 到 0.9 的值。
+   <ParamItem title="isEnterprise" type="boolean" />
+   reCAPTCHA 版本。支持的值：`true` / `false`（也允许使用整数类型的 `1` / `0`）。
+   
+   如果需要解决 Enterprise 版本的 reCAPTCHA，请指定 `true`——在这种情况下，任务将按照 [RecaptchaV3EnterpriseTask](../recaptcha-v3-enterprise-task/) 的方式处理。
 
     ---
-    
+
+   <ParamItem title="minScore" type="double" />
+    可取值范围为 0.1 到 0.9
+
+   ---
+
     <ParamItem title="pageAction" type="string" />
-    <p>小部件操作值。网站所有者通过此参数定义用户在页面上的活动。默认值: *verify*</p><p>示例:<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*。</p>
-</TabItem>
-</Tabs>
+    <p>ReCaptcha 小部件传递给 Google 的 action 参数值，网站所有者在服务器端后续验证时可以看到该值。如果该值不同于默认值 *verify*，请指定此参数。</p>
+	<p>html 示例：
+	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+</div>
 
 
 ## 创建任务方法 
 
-<Tabs>
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-**要求**
+		**请求示例**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3TaskProxyless",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
     "isEnterprise": false,
     "minScore": 0.7,
-    "pageAction": "myverify"
+    "pageAction": "your-verify"
   }
 }
 ```
-		**回应**
+
+		**响应示例**
 		```json
 		{
 		  "errorId":0,
@@ -105,8 +110,7 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
 		}
 		```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 
 ## 获取任务结果方法
@@ -117,22 +121,21 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
 
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 请求获取 ReCaptcha3 的答案。根据服务负载情况，您将在 10 到 30 秒内收到响应。
 
-<Tabs>
-<TabItem value="proxyless" label="GeeTestTaskProxyless (without proxy)" default className="method-panel-full">
-    <MethodItem>
+<div className="method-panel-full">
+	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
-    </MethodItem>
-    <MethodDescription>
-		**要求**
-		```json
-		{
-		  "clientKey":"API_KEY",
-		  "taskId": 407533072
-		}
-		```
-		**回应**
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
+```json
+{
+  "clientKey":"API_KEY",
+  "taskId": 407533072
+}
+```
+		**响应示例**
 ```json
 {
   "errorId": 0,
@@ -158,37 +161,36 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
 }
 ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 <br />
 
 |**属性**|**类型**|**描述**|
 | :- | :- | :- |
-|gRecaptchaResponse|String|应插入到 Recaptcha3 提交表单中的哈希值 `<textarea id="g-recaptcha-response"></textarea>`。长度为 500 到 2190 字节。|
+|gRecaptchaResponse|String|需要填入 ReCaptcha3 表单中 `<textarea id="g-recaptcha-response" ></textarea>` 的哈希值。长度为 500 到 2190 字节。|
 
 ## 如何查找任务创建所需的所有参数
 
 ### 手动方式
 
-1. 请在浏览器中访问您的网站，该网站包含验证码功能。
-2. 右键点击验证码元素，选择 **检查（Inspect）**。
+1. 在浏览器中打开显示验证码的网站。
+2. 右键单击验证码元素并选择 **Inspect**。
 
 #### websiteKey
 
 公开站点密钥(sitekey)，通常可以在包含的脚本中找到：
 
-在**Elements**中：
+在 **Elements** 中：
 
 ![elements](images/recaptcha-v3/sitekey-elements.png)
 
-在**Network**标签页中：
+在 **Network** 选项卡中：
 
 ![network](images/recaptcha-v3/sitekey-network.png)
 
 #### pageAction
 
-传递给*grecaptcha.execute()*的动作名称，例如：
+传递给 *grecaptcha.execute()* 的操作名称。例如：
 
 ![action](images/recaptcha-v3/action.png)
 
@@ -261,7 +263,7 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
           } catch (e) {}
         });
 
-        const targetUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta";
+        const targetUrl = "https://yourwebsite.com/page-with-recaptcha";
         await page.goto(targetUrl, { timeout: 60000 });
         await page.waitForTimeout(3000);
 
@@ -353,7 +355,7 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
                   "action": found_action
               })
 
-      asyncio.run(extract_recaptcha_v3_execute("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta"))
+      asyncio.run(extract_recaptcha_v3_execute("https://yourwebsite.com/page-with-recaptcha"))
       ```
     </details>
   </TabItem>
@@ -374,7 +376,7 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
           public static async Task Main(string[] args)
           {
               await ExtractRecaptchaV3Execute
-              ("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta");
+              ("https://yourwebsite.com/page-with-recaptcha");
           }
 
           public static async Task ExtractRecaptchaV3Execute(string url)
@@ -467,13 +469,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const balance = await cmcClient.getBalance();
   console.log('Balance:', balance);
 
-  // 基本示例，无需代理
-  // CapMonster Cloud 会自动使用它们的代理
   const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-    websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // 您的验证码页面 URL
-    websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-    minScore: 0.6,  
-    pageAction: 'myverify',
+    websiteURL: 'https://yourwebsite.com/page-with-recaptcha', // 包含验证码的页面 URL
+    websiteKey: 'your-website-key',
+    minScore: 0.7,  
+    pageAction: 'your-verify',
   });
 
   const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -501,13 +501,11 @@ async function solveRecaptchaV3() {
     const balance = await cmcClient.getBalance();
     console.log("Balance:", balance);
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
     const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta", // 您的验证码页面 URL
-        websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-        minScore: 0.6,
-        pageAction: "myverify",
+        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+        websiteKey: "your-website-key",
+        minScore: 0.7,
+        pageAction: "your-verify",
     });
 
     const solution = await cmcClient.Solve(recaptchaV3Request);
@@ -540,10 +538,10 @@ balance = asyncio.run(cap_monster_client.get_balance())
 print("Balance:", balance)
 
 recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-    websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # 您的验证码页面 URL
-    websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-    minScore=0.6,  
-    pageAction="myverify"  
+    websiteUrl="https://yourwebsite.com/page-with-recaptcha",  # 包含验证码的页面 URL
+    websiteKey="your-website-key",  # 替换为正确的值
+    minScore=0.7,  
+    pageAction="your-verify"  
 )
 
 async def solve_captcha():
@@ -584,10 +582,10 @@ class Program
 
         var recaptchaV3Request = new RecaptchaV3ProxylessRequest
         {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // 您的验证码页面 URL
-            WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-            MinScore = 0.6,
-            PageAction = "myverify"
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",  // 包含验证码的页面 URL
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
         };
 
         var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);

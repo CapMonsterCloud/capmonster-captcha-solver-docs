@@ -38,8 +38,7 @@ A solicitação deve conter uma única imagem no formato base64.
 </span>
 <br />
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -51,27 +50,25 @@ A solicitação deve conter uma única imagem no formato base64.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Imagem codificada em formato base64.
+    Imagem codificada em base64 (envolvida em um array, sem o prefixo `data:image/png;base64,`).
 
     ---
 
     <ParamItem title="Task (dentro de metadata)" required type="string" />
     Nome da tarefa: `"shein"`
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para criar tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **Solicitação**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
@@ -93,7 +90,7 @@ A solicitação deve conter uma única imagem no formato base64.
     	![](../images/ComplexImageTask-Recognition/shein1.png)
     	![](../images/ComplexImageTask-Recognition/shein2.png)
 
-    	**Resposta**
+    	**Exemplo de resposta**
     	```json
     	{
     	  "errorId":0,
@@ -102,27 +99,26 @@ A solicitação deve conter uma única imagem no formato base64.
     	```
     </MethodDescription>
 
-</TabItem>
-</Tabs>
+</div>
 
 ## Método para obter o resultado da tarefa
 
-<Tabs>
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**Resposta:** coordenadas que devem ser clicadas em uma ordem específica.
+		**Exemplo de resposta** <br/>
+    A resposta contém as coordenadas nas quais é necessário clicar em uma determinada ordem.
       ```json
       {
         "solution": {
@@ -143,8 +139,7 @@ A solicitação deve conter uma única imagem no formato base64.
       }
       ```
 	</MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Como obter Base64
 
