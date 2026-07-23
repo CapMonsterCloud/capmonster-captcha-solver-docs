@@ -27,7 +27,7 @@ const PRODUCT_NAME = 'CapMonster Cloud';
 const TAGLINE =
   'Cloud captcha solving API. Send captcha parameters via createTask, ' +
   'poll getTaskResult, receive a solution token. Supports reCAPTCHA v2/v3, ' +
-  'Turnstile, GeeTest, hCaptcha, Cloudflare Challenge, and 20+ other types.';
+  'Turnstile, GeeTest, Cloudflare Challenge, and 20+ other types.';
 
 // Locale-specific paths (matches your repo layout)
 const LOCALES = {
