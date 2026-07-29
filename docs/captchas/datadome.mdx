@@ -39,11 +39,22 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 <br />
 <span style={{ fontSize: "15px", fontWeight: 700 }}>
->  ВАЖНО: значения некоторых параметров являются динамическими — они меняются при каждом рендеринге страницы с DataDome.  
+>  ВАЖНО: значения некоторых параметров являются динамическими – они меняются при каждом рендеринге страницы с DataDome.  
 > Извлекайте их непосредственно перед созданием задачи, чтобы избежать ошибок при решении.
 > Примеры извлечения параметров см. в разделах [Как найти datadomeCookie](#как-найти-datadomecookie) и [Примеры автоматического решения DataDome](#примеры-автоматического-решения-datadome).
 </span>
 <br />
+
+:::warning Важно
+Перед созданием задачи проверьте значение параметра `t` в объекте DataDome или сформированном `captchaUrl`:
+
+* `t=fe` – можно продолжить создание задачи;
+
+* `t=bv` – IP-адрес или прокси заблокирован DataDome.
+
+При `t=bv` смените прокси и повторно получите актуальные параметры. Подробные примеры кода см. в разделе [Примеры автоматического решения DataDome](#примеры-автоматического-решения-datadome).
+:::
+
 
 <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
@@ -62,7 +73,14 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="captchaUrl (внутри metadata)" required="required" type="string" />
-    `"captchaUrl"` - ссылка на капчу. Обычно имеет следующий формат: `"https://geo.captcha-delivery.com/captcha/?initialCid=..."`.
+
+Ссылка на CAPTCHA с актуальными динамическими параметрами. Обычно имеет следующий формат:
+
+```text
+https://geo.captcha-delivery.com/captcha/?initialCid=...&hash=...&cid=...&t=fe&referer=...&s=...
+```
+
+Передавайте URL только после [проверки параметра `t`](#параметры-запроса).
 
     ---
 
@@ -226,7 +244,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 3. Найдите домен сайта (например, www.example.com).
 
-Среди cookie будет ключ datadome — это нужный параметр `datadomeCookie`.
+Среди cookie будет ключ datadome – это нужный параметр `datadomeCookie`.
 
 ![](./images/datadome/datadomeCookie.png)
 

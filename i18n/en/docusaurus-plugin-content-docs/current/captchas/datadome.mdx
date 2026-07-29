@@ -44,6 +44,16 @@ This type of captcha usually requires the user to solve a puzzle by moving a sli
 </span>
 <br />
 
+:::warning Important
+Before creating a task, check the value of the `t` parameter in the DataDome object or the generated `captchaUrl`:
+
+* `t=fe` – you can proceed with task creation;
+
+* `t=bv` – the IP address or proxy has been blocked by DataDome.
+
+If `t=bv` is returned, change the proxy and retrieve fresh parameters. For detailed code examples, see [DataDome automatic solving examples](#examples-of-automatic-datadome-solving).
+
+:::
 
 <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
@@ -62,7 +72,13 @@ The main page URL where the captcha is solved.
 ---
 
 <ParamItem title="captchaUrl (inside metadata)" required="required" type="string" />
-`"captchaUrl"` - link to the captcha. Usually in the format: `"https://geo.captcha-delivery.com/captcha/?initialCid=..."`.
+A CAPTCHA URL containing the latest dynamic parameters. It usually has the following format:
+
+```text
+https://geo.captcha-delivery.com/captcha/?initialCid=...&hash=...&cid=...&t=fe&referer=...&s=...
+```
+
+Submit the URL only after [checking the `t` parameter](#request-parameters).
 
 ---
 

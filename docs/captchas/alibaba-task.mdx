@@ -117,6 +117,18 @@ CapMonster Cloud по умолчанию работает через встро�
 Ссылка на JS-библиотеку капчи, используемую сайтом. Значение формируется на стороне клиента и может генерироваться динамически при каждом рендеринге страницы. <br />
 Пример: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
+---
+
+<ParamItem title="cookieRequired (внутри metadata)" type="boolean" />
+
+Возвращает cookies вместе с результатом решения CAPTCHA.
+
+Используйте значение `true` только для сайтов, использующих **Alibaba WAF** или **Amazon WAF**, где после успешного прохождения проверки требуется получить cookies.
+
+По умолчанию параметр не используется.
+
+---
+
 </div>
 
   <ParamItem title="userAgent" type="string" />
@@ -333,8 +345,119 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 </Tabs>
 
+### Вариант с возвратом cookies (`cookieRequired`)
+
+Для некоторых сайтов, использующих **Alibaba WAF** или **Amazon WAF**, после успешного решения необходимо получить cookies, которые затем используются при последующих запросах.
+
+Для этого добавьте в объект `metadata` параметр:
+
+```json
+{
+  "cookieRequired": true
+}
+````
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+  **Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    }
+  }
+}
+```
+
+  **Пример ответа**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+</MethodDescription>
+
+  </TabItem>
+
+  <TabItem value="proxy" label="CustomTask (с прокси)" className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+  **Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+  **Пример ответа**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+</MethodDescription>
+
+  </TabItem>
+</Tabs>
+
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Alibaba капчи.
+
+Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам.
+Используйте cookies из объекта `Domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
 
 <div className="method-panel-full">
   <MethodItem>
