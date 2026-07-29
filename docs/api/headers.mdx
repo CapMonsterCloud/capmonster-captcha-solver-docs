@@ -162,170 +162,14 @@ Cookies также должны быть получены в той же сес�
 Рекомендуется использовать заголовки из активной браузерной сессии, а не формировать их вручную.
 
 
-### Генерация заголовков
-
-Заголовки можно сформировать программно или с помощью специальных библиотек, например, *header-generator* и аналогичных инструментов.
-
 :::tip Браузерный fingerprint
 
-Сайт может также учитывать параметры браузерного окружения, включая экран, часовой пояс, Canvas и WebGL. Fingerprint формируется браузером или специализированными библиотеками и должен соответствовать User-Agent, Client Hints и другим параметрам сессии.
+Сайт может учитывать не только HTTP-заголовки, но и параметры браузерного окружения: экран, часовой пояс, Canvas, WebGL и другие характеристики.
+
+Для проверки передаваемых данных можно использовать специализированные диагностические онлайн-сервисы.
 
 :::
 
-
-**Примеры генерации заголовков**
-
-Примеры получают актуальный User-Agent из CapMonster Cloud, определяют версию Chrome и создают базовый набор браузерных заголовков с помощью специальной библиотеки. Затем случайный User-Agent заменяется актуальным значением, а Client Hints приводятся в соответствие с его версией и платформой.
-
-После этого сформированные заголовки используются для отправки GET-запроса к странице.
-
-<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
-  <details>
-      <summary>Показать код</summary>
-```js
-import { HeaderGenerator } from "header-generator";
-
-const USER_AGENT_URL = "https://capmonster.cloud/api/useragent/actual";
-
-async function createBrowserHeaders() {
-  const userAgentResponse = await fetch(USER_AGENT_URL);
-
-  if (!userAgentResponse.ok) {
-    throw new Error(
-      `Не удалось получить User-Agent: ${userAgentResponse.status}`,
-    );
-  }
-
-  const userAgent = (await userAgentResponse.text()).trim();
-
-  const versionMatch = userAgent.match(/(?:Chrome|Chromium)\/(\d+)/);
-
-  if (!versionMatch) {
-    throw new Error("Не удалось определить версию Chrome из User-Agent");
-  }
-
-  const chromeVersion = versionMatch[1];
-
-  const generator = new HeaderGenerator({
-    browsers: ["chrome"],
-    operatingSystems: ["windows"],
-    devices: ["desktop"],
-    locales: ["en-US", "en"],
-    httpVersion: "2",
-  });
-
-  // Генерируем базовый набор без ограничения версии Chrome
-  const generatedHeaders = generator.getHeaders();
-
-  // Headers предотвращает появление дубликатов
-  // с разным регистром названий.
-  const headers = new Headers(generatedHeaders);
-
-  // Заменяем случайный User-Agent точным значением
-  // от CapMonster Cloud.
-  headers.set("User-Agent", userAgent);
-
-  // Согласовываем Client Hints с версией Chrome.
-  headers.set(
-    "Sec-CH-UA",
-    `"Chromium";v="${chromeVersion}", ` +
-      `"Google Chrome";v="${chromeVersion}", ` +
-      '"Not:A-Brand";v="99"',
-  );
-
-  headers.set("Sec-CH-UA-Mobile", "?0");
-  headers.set("Sec-CH-UA-Platform", '"Windows"');
-
-  return headers;
-}
-
-const headers = await createBrowserHeaders();
-
-const response = await fetch("https://example.com/", {
-  method: "GET",
-  headers,
-  redirect: "follow",
-});
-
-console.log(response.status);
-
-console.log(Object.fromEntries(headers.entries()));
-```
-</details>
-</TabItem>
-
-  <TabItem value="python" label="Python" className="method-panel">
-  <details>
-      <summary>Показать код</summary>
-```python
-import re
-
-import requests
-from browserforge.headers import HeaderGenerator
-
-
-USER_AGENT_URL = "https://capmonster.cloud/api/useragent/actual"
-
-
-def create_browser_headers() -> dict[str, str]:
-    response = requests.get(USER_AGENT_URL, timeout=30)
-    response.raise_for_status()
-
-    user_agent = response.text.strip()
-
-    version_match = re.search(r"(?:Chrome|Chromium)/(\d+)", user_agent)
-
-    if version_match is None:
-        raise ValueError(
-            "Не удалось определить версию Chrome из User-Agent"
-        )
-
-    chrome_version = version_match.group(1)
-
-    generator = HeaderGenerator(
-        browser="chrome",
-        os="windows",
-        device="desktop",
-        locale=("en-US", "en"),
-        http_version=2,
-    )
-
-    # Генерируем базовый набор без ограничения версии Chrome.
-    headers = generator.generate()
-
-    # Заменяем случайный User-Agent значением CapMonster Cloud.
-    headers["User-Agent"] = user_agent
-
-    # Согласовываем Client Hints с версией Chrome.
-    headers["Sec-CH-UA"] = (
-        f'"Chromium";v="{chrome_version}", '
-        f'"Google Chrome";v="{chrome_version}", '
-        '"Not:A-Brand";v="99"'
-    )
-    headers["Sec-CH-UA-Mobile"] = "?0"
-    headers["Sec-CH-UA-Platform"] = '"Windows"'
-
-    return headers
-
-
-headers = create_browser_headers()
-
-with requests.Session() as session:
-    session.headers.update(headers)
-
-    response = session.get(
-        "https://example.com/",
-        timeout=30,
-        allow_redirects=True,
-    )
-
-    print(response.status_code)
-    print(dict(session.headers))
-```
-</details>
-</TabItem>
-</Tabs>
 
 ## Пример набора заголовков
 
@@ -368,7 +212,7 @@ Sec-CH-UA-Platform: "Windows"
 ```
 
 :::tip Sec-Fetch-*
-Значения `Sec-Fetch-*` зависят от способа отправки запроса. В примере показано открытие страницы напрямую, а не переход по ссылке с другого сайта.
+Значения заголовков `Sec-Fetch-*` зависят от контекста запроса. В примере они указаны для прямого открытия страницы; при переходе по ссылке с другого сайта значения могут отличаться.
 :::
 
 ## Использование при решении CAPTCHA

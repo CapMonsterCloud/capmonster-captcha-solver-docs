@@ -160,173 +160,13 @@ Cookie 也必须来自发送请求时使用的同一会话。
 
 建议使用活动浏览器会话中的标头，而不是手动构造。
 
-### 生成标头
-
-可以通过程序或专用库生成标头，例如 *header-generator* 及类似工具。
-
 :::tip 浏览器指纹
 
-网站还可能考虑浏览器环境参数，包括屏幕、时区、Canvas 和 WebGL。浏览器指纹由浏览器或专用库生成，并且应与 User-Agent、Client Hints 以及其他会话参数保持一致。
+网站不仅可能检查 HTTP 请求头，还可能考虑浏览器环境参数，例如屏幕分辨率、时区、Canvas、WebGL 以及其他特征。
+
+您可以使用专业的在线诊断服务检查浏览器传输的数据。
 
 :::
-
-**标头生成示例**
-
-以下示例会从 CapMonster Cloud 获取当前 User-Agent，确定 Chrome 版本，并使用专用库创建一组基础浏览器标头。随后，将随机生成的 User-Agent 替换为当前值，并使 Client Hints 与其版本和平台保持一致。
-
-然后，使用生成的标头向页面发送 GET 请求。
-
-<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
-  <details>
-      <summary>显示代码</summary>
-
-```js
-import { HeaderGenerator } from "header-generator";
-
-const USER_AGENT_URL = "https://capmonster.cloud/api/useragent/actual";
-
-async function createBrowserHeaders() {
-  const userAgentResponse = await fetch(USER_AGENT_URL);
-
-  if (!userAgentResponse.ok) {
-    throw new Error(
-      `无法获取 User-Agent：${userAgentResponse.status}`,
-    );
-  }
-
-  const userAgent = (await userAgentResponse.text()).trim();
-
-  const versionMatch = userAgent.match(/(?:Chrome|Chromium)\/(\d+)/);
-
-  if (!versionMatch) {
-    throw new Error("无法从 User-Agent 中确定 Chrome 版本");
-  }
-
-  const chromeVersion = versionMatch[1];
-
-  const generator = new HeaderGenerator({
-    browsers: ["chrome"],
-    operatingSystems: ["windows"],
-    devices: ["desktop"],
-    locales: ["en-US", "en"],
-    httpVersion: "2",
-  });
-
-  // 生成基础标头集合，不限制 Chrome 版本。
-  const generatedHeaders = generator.getHeaders();
-
-  // Headers 可防止出现仅大小写不同的重复标头名称。
-  const headers = new Headers(generatedHeaders);
-
-  // 使用 CapMonster Cloud 返回的准确值
-  // 替换随机生成的 User-Agent。
-  headers.set("User-Agent", userAgent);
-
-  // 使 Client Hints 与 Chrome 版本保持一致。
-  headers.set(
-    "Sec-CH-UA",
-    `"Chromium";v="${chromeVersion}", ` +
-      `"Google Chrome";v="${chromeVersion}", ` +
-      '"Not:A-Brand";v="99"',
-  );
-
-  headers.set("Sec-CH-UA-Mobile", "?0");
-  headers.set("Sec-CH-UA-Platform", '"Windows"');
-
-  return headers;
-}
-
-const headers = await createBrowserHeaders();
-
-const response = await fetch("https://example.com/", {
-  method: "GET",
-  headers,
-  redirect: "follow",
-});
-
-console.log(response.status);
-
-console.log(Object.fromEntries(headers.entries()));
-```
-
-</details>
-</TabItem>
-
-  <TabItem value="python" label="Python" className="method-panel">
-  <details>
-      <summary>显示代码</summary>
-
-```python
-import re
-
-import requests
-from browserforge.headers import HeaderGenerator
-
-
-USER_AGENT_URL = "https://capmonster.cloud/api/useragent/actual"
-
-
-def create_browser_headers() -> dict[str, str]:
-    response = requests.get(USER_AGENT_URL, timeout=30)
-    response.raise_for_status()
-
-    user_agent = response.text.strip()
-
-    version_match = re.search(r"(?:Chrome|Chromium)/(\d+)", user_agent)
-
-    if version_match is None:
-        raise ValueError(
-            "无法从 User-Agent 中确定 Chrome 版本"
-        )
-
-    chrome_version = version_match.group(1)
-
-    generator = HeaderGenerator(
-        browser="chrome",
-        os="windows",
-        device="desktop",
-        locale=("en-US", "en"),
-        http_version=2,
-    )
-
-    # 生成基础标头集合，不限制 Chrome 版本。
-    headers = generator.generate()
-
-    # 使用 CapMonster Cloud 返回的值
-    # 替换随机生成的 User-Agent。
-    headers["User-Agent"] = user_agent
-
-    # 使 Client Hints 与 Chrome 版本保持一致。
-    headers["Sec-CH-UA"] = (
-        f'"Chromium";v="{chrome_version}", '
-        f'"Google Chrome";v="{chrome_version}", '
-        '"Not:A-Brand";v="99"'
-    )
-    headers["Sec-CH-UA-Mobile"] = "?0"
-    headers["Sec-CH-UA-Platform"] = '"Windows"'
-
-    return headers
-
-
-headers = create_browser_headers()
-
-with requests.Session() as session:
-    session.headers.update(headers)
-
-    response = session.get(
-        "https://example.com/",
-        timeout=30,
-        allow_redirects=True,
-    )
-
-    print(response.status_code)
-    print(dict(session.headers))
-```
-
-</details>
-</TabItem>
-</Tabs>
 
 ## 标头集合示例
 
@@ -369,7 +209,7 @@ JSON 格式：
 ```
 
 :::tip Sec-Fetch-*
-`Sec-Fetch-*` 的值取决于请求的发送方式。本示例展示的是直接打开页面，而不是从其他网站通过链接跳转。
+`Sec-Fetch-*` 请求头的值取决于请求上下文。本示例中的值适用于直接打开页面；如果通过其他网站的链接跳转到该页面，这些值可能会有所不同。
 :::
 
 ## 解决 CAPTCHA 时的使用方式
