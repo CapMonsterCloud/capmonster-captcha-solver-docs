@@ -117,6 +117,18 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 网站使用的验证码 JS 库链接。该值在客户端生成，并可能在每次页面渲染时动态生成。 <br />
 示例：`https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
+---
+
+<ParamItem title="cookieRequired（位于 metadata 中）" type="boolean" />
+
+与 CAPTCHA 识别结果一起返回 cookies。
+
+仅当网站使用 **Alibaba WAF** 或 **Amazon WAF**，并且成功完成验证后需要获取 cookies 时，才应将该参数设置为 `true`。
+
+默认情况下不使用此参数。
+
+---
+
 </div>
 
   <ParamItem title="userAgent" type="string" />
@@ -333,8 +345,123 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   </TabItem>
 </Tabs>
 
+### 返回 cookies 的选项（`cookieRequired`）
+
+对于某些使用 **Alibaba WAF** 或 **Amazon WAF** 的网站，成功完成 CAPTCHA 识别后还需要获取 cookies，以便在后续请求中使用。
+
+为此，请在 `metadata` 对象中添加以下参数：
+
+```json
+{
+  "cookieRequired": true
+}
+```
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    }
+  }
+}
+```
+
+**响应示例**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+</MethodDescription>
+
+  </TabItem>
+
+  <TabItem value="proxy" label="CustomTask（使用代理）" className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+**响应示例**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+</MethodDescription>
+
+  </TabItem>
+</Tabs>
+
+
 ## 获取任务结果的方法
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Alibaba 验证码的解决结果。
+
+如果请求中指定了 `"cookieRequired": true`，响应还会包含按域名分组的 cookies。
+请将 `Domains` 对象中的 cookies 与 CAPTCHA 识别结果一起用于向相应域名发送的后续请求。
 
 <div className="method-panel-full">
   <MethodItem>

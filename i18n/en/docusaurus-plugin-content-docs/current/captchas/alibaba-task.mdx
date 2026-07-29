@@ -117,6 +117,19 @@ Example: `0a03e59417757735511105780e2a5e`
 A link to the captcha JS library used by the website. The value is generated on the client side and may change dynamically on each page render. <br />
 Example: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
+---
+
+<ParamItem title="cookieRequired (inside metadata)" type="boolean" />
+
+Returns cookies together with the CAPTCHA solution.
+
+Use the value `true` only for websites that use **Alibaba WAF** or **Amazon WAF** and require cookies after the verification has been successfully completed.
+
+By default, this parameter is not used.
+
+---
+
+
 </div>
 
   <ParamItem title="userAgent" type="string" />
@@ -240,7 +253,7 @@ Example: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?
   </TabItem>
 </Tabs>
 
-### Variant with extended parameters (`userId`, `userUserId`, `verifyType`, etc.):
+### Option with extended parameters (`userId`, `userUserId`, `verifyType`, etc.):
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel">
@@ -333,9 +346,125 @@ Example: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?
   </TabItem>
 </Tabs>
 
+### Option with cookie return (`cookieRequired`)
+
+For some websites that use **Alibaba WAF** or **Amazon WAF**, cookies must be obtained after the CAPTCHA has been successfully solved. These cookies are then used in subsequent requests.
+
+To enable this, add the following parameter to the `metadata` object:
+
+```json
+{
+  "cookieRequired": true
+}
+```
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    }
+  }
+}
+```
+
+**Response example**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+</MethodDescription>
+
+  </TabItem>
+
+  <TabItem value="proxy" label="CustomTask (with proxy)" className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+**Response example**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+</MethodDescription>
+
+  </TabItem>
+</Tabs>
+
+
 ## Get task result method
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the Alibaba Captcha solution.
+
+If `"cookieRequired": true` was specified in the request, the response additionally contains cookies grouped by domain.
+Use the cookies from the `Domains` object in subsequent requests to the corresponding domain together with the CAPTCHA solution.
+
 
 <div className="method-panel-full">
   <MethodItem>

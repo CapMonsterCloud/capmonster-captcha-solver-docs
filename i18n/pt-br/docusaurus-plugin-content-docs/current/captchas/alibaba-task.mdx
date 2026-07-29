@@ -116,6 +116,18 @@ Exemplo: `0a03e59417757735511105780e2a5e`
 Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no lado do cliente e pode mudar dinamicamente a cada renderização da página. <br />
 Exemplo: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
 
+---
+
+<ParamItem title="cookieRequired (dentro de metadata)" type="boolean" />
+
+Retorna cookies junto com a solução do CAPTCHA.
+
+Use o valor `true` somente para sites que utilizam **Alibaba WAF** ou **Amazon WAF** e exigem cookies após a conclusão bem-sucedida da verificação.
+
+Por padrão, esse parâmetro não é utilizado.
+
+---
+
 </div>
 
   <ParamItem title="userAgent" type="string" />
@@ -332,9 +344,125 @@ Exemplo: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?
   </TabItem>
 </Tabs>
 
+### Variante com retorno de cookies (`cookieRequired`)
+
+Para alguns sites que utilizam **Alibaba WAF** ou **Amazon WAF**, é necessário obter cookies após a resolução bem-sucedida. Esses cookies são utilizados nas solicitações subsequentes.
+
+Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
+
+```json
+{
+  "cookieRequired": true
+}
+```
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**Exemplo de solicitação**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    }
+  }
+}
+```
+
+**Exemplo de resposta**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+</MethodDescription>
+
+  </TabItem>
+
+  <TabItem value="proxy" label="CustomTask (com proxy)" className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**Exemplo de solicitação**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
+      "verifyType": "1.0",
+      "region": "sgp",
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+**Exemplo de resposta**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+</MethodDescription>
+
+  </TabItem>
+</Tabs>
+
+
 ## Método de obter resultado da tarefa
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do CAPTCHA Alibaba.
+
+Se `"cookieRequired": true` tiver sido especificado na solicitação, a resposta também conterá cookies agrupados por domínio.
+
+Use os cookies do objeto `Domains` nas solicitações subsequentes ao domínio correspondente, juntamente com a solução do CAPTCHA.
 
 <div className="method-panel-full">
   <MethodItem>
