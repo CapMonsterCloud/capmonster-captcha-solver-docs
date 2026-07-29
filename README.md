@@ -1,57 +1,79 @@
-<p align="center"><img src="https://github.com/CapMonsterCloud/docs/blob/master/static/img/logo_docs.svg"></p>
+<p align="center">
+  <img src="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/blob/master/static/img/logo_docs.svg" alt="CapMonster Cloud CAPTCHA Solver Documentation">
+</p>
 
+# CapMonster Cloud API Documentation & CAPTCHA Solver Guides
 
-# Documentation for CapMonster Cloud
+Welcome to the official documentation repository for **CapMonster Cloud** — the fastest AI-powered CAPTCHA solver and anti-bot bypass infrastructure. 
 
-This website is built using [Docusaurus 3](https://docusaurus.io/), a modern static website generator.
+Here you will find API references, integration guides, and code examples for bypassing reCAPTCHA, Cloudflare Turnstile, hCaptcha, DataDome, and more.
 
-## Installation
+**[👉 Get your Free API Key and Start Solving CAPTCHAs](https://capmonster.cloud/Dashboard/Registration?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
+
+---
+
+## 📚 Table of Contents
+
+Navigate to our official hosted documentation to get started:
+- 🚀 **[Getting Started & Quick Setup](https://docs.capmonster.cloud/docs/getting-started)**
+- 🧩 **[CAPTCHA Task Types & API Reference](https://docs.capmonster.cloud/docs/captchas/)**
+- 💻 **[Official SDKs (Python, Node.js, C#, Go)](https://docs.capmonster.cloud/docs/api/libraries)**
+- 💳 **[Account & Balance Management](https://docs.capmonster.cloud/docs/account/)**
+
+*(Looking for a specific integration? Check out our [n8n Community Node](https://github.com/CapMonsterCloud/n8n-nodes-capmonstercloud) or direct [Chrome Extension](https://capmonster.cloud/extension?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)).*
+
+---
+
+## 🛠 For Contributors & Maintainers
+
+This documentation website is built using [Docusaurus 3](https://docusaurus.io/), a modern static website generator. The instructions below are for developers who want to run or edit this documentation locally.
+
+### Installation
+
+Install the required dependencies using Yarn or npm:
 
 ```bash
 yarn
-```
-or
-```bash
+# or
 npm install
 ```
 
-## Local Development
+### Local Development
+
+To start a local development server with hot-reloading:
 
 ```bash
 yarn start
 ```
+This command opens up a browser window. Most changes are reflected in real time, with no need to restart the server. By default, this runs the **English** version.
 
-This command starts a local development server and opens up a browser window. Most changes are reflected in real time, no need to restart the server.
-By default this is the English version.
-
-If you want to start the Russian version, run
+If you want to start the **Russian** version locally, run:
 
 ```bash
 yarn start -- --locale ru
 ```
 
-## Build
+### Build for Production
 
 ```bash
 yarn build
 ```
+This command generates static content into the `build` directory, which can be served using any static content hosting service.
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-After build you can view fully generated site with `ru` and `en` versions, just run
+After the build, you can view the fully generated site (including both `ru` and `en` locales) by running:
 
 ```bash
 yarn serve
 ```
 
-## Structure
+### Directory Structure & Localization
 
-Russian documentation is located in `/docs`.
+- **Russian documentation** is located in the `/docs` directory.
+- **English documentation** is located in `/i18n/en/docusaurus-plugin-content-docs/current/`.
 
-Each folder is a category for an article.
+Each folder represents a category for the articles. If you need the same article for both the `ru` and `en` versions, you must create a markdown file in both directories with the exact same filename and folder structure.
 
-English documentation is located in `/i18n/en/docusaurus-plugin-content-docs/current/`.
+For more information about markdown syntax and Docusaurus structure, visit the [official Docusaurus docs](https://docusaurus.io/).
 
-If you need the same article for ru and en version, you should create a file in `/docs` and `/i18n/en/docusaurus-plugin-content-docs/current/` directories with same filename and folder.
-
-For more information about syntax and structure, you can visit [https://docusaurus.io/](https://docusaurus.io/).
+---
+**[Get your CapMonster Cloud API Key](https://capmonster.cloud/Dashboard/Registration?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
