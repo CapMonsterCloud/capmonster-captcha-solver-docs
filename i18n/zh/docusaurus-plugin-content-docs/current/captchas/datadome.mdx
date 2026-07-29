@@ -44,6 +44,17 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 </span>
 <br />
 
+:::warning 重要
+创建任务前，请检查 DataDome 对象或已生成的 `captchaUrl` 中参数 `t` 的值：
+
+* `t=fe` – 可以继续创建任务；
+
+* `t=bv` – IP 地址或代理已被 DataDome 封禁。
+
+如果参数值为 `t=bv`，请更换代理并重新获取最新参数。详细代码示例请参阅[自动解决 DataDome 示例](#datadome-自动化解决示例)。
+
+:::
+
 <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -61,7 +72,13 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ---
 
     <ParamItem title="captchaUrl（位于 metadata 中）" required="required" type="string" />
-    `"captchaUrl"` - 验证码链接。通常采用以下格式：`"https://geo.captcha-delivery.com/captcha/?initialCid=..."`。
+    包含最新动态参数的 CAPTCHA 链接。通常采用以下格式：
+
+```text
+https://geo.captcha-delivery.com/captcha/?initialCid=...&hash=...&cid=...&t=fe&referer=...&s=...
+```
+
+仅在[检查参数 `t`](#请求参数)后传递该 URL。
 
     ---
 

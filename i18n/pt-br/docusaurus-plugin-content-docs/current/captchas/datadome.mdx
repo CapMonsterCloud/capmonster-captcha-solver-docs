@@ -44,6 +44,16 @@ Este tipo de captcha geralmente exige que o usuário resolva um quebra-cabeça m
 </span>
 <br />
 
+:::warning Importante
+Antes de criar a tarefa, verifique o valor do parâmetro `t` no objeto DataDome ou no `captchaUrl` gerado:
+
+* `t=fe` – você pode prosseguir com a criação da tarefa;
+
+* `t=bv` – o endereço IP ou o proxy foi bloqueado pelo DataDome.
+
+Se o valor for `t=bv`, altere o proxy e obtenha os parâmetros atualizados novamente. Para exemplos detalhados de código, consulte a seção [Exemplos de resolução automática do DataDome](#exemplos-de-resolução-automática-do-datadome).
+
+:::
 
 <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
@@ -62,7 +72,13 @@ URL da página principal onde o captcha será resolvido.
 ---
 
 <ParamItem title="captchaUrl (dentro de metadata)" required="required" type="string" />
-`"captchaUrl"` - link para o captcha. Normalmente no formato: `"https://geo.captcha-delivery.com/captcha/?initialCid=..."`.
+URL da CAPTCHA com os parâmetros dinâmicos atualizados. Geralmente, apresenta o seguinte formato:
+
+```text
+https://geo.captcha-delivery.com/captcha/?initialCid=...&hash=...&cid=...&t=fe&referer=...&s=...
+```
+
+Envie o URL somente após [verificar o parâmetro `t`](#parâmetros-da-solicitação).
 
 ---
 
