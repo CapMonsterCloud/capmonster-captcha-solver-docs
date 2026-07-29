@@ -1,0 +1,451 @@
+---
+sidebar_position: 3
+title: 浏览器 HTTP 标头
+description: 在向网页发送请求时获取和使用浏览器 HTTP 标头。
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import BlogLink from '@theme/BlogLink';
+import { ArticleHead } from '../../src/theme/ArticleHead';
+
+<ArticleHead slug="api/headers" />
+
+# 浏览器 HTTP 标头
+
+在解决 CAPTCHA 并向目标网站发送请求时，服务器可能会考虑 HTTP 标头、Cookie 以及浏览器会话的其他参数。如果这些数据缺失或彼此不一致，服务器可能会拒绝请求、重定向用户，或要求再次验证。
+
+在同一会话中，建议保持以下参数一致：
+
+- `User-Agent`;
+- Client Hints;
+- Cookie;
+- 浏览器语言;
+- 代理（如使用）;
+- 请求参数。
+
+:::warning 重要
+
+请使用 CapMonster Cloud 当前支持的 User-Agent：
+
+```text
+GET https://capmonster.cloud/api/useragent/actual
+```
+
+在打开页面、创建任务以及使用 CAPTCHA 解决结果时，都应传递该值。
+
+:::
+
+<BlogLink url="https://capmonster.cloud/zh/blog/user-agent-updates/"/>
+
+## 标头的用途
+
+| 标头 | 用途 |
+| --- | --- |
+| `User-Agent` | 浏览器和操作系统信息 |
+| `Accept` | 可接受的响应格式 |
+| `Accept-Language` | 首选语言 |
+| `Accept-Encoding` | 支持的压缩方式 |
+| `Referer` | 发起跳转的页面 URL |
+| `Origin` | POST 和 CORS 请求中使用的请求来源 |
+| `Cookie` | 当前会话的 Cookie |
+| `Sec-CH-UA` | 浏览器品牌和版本 |
+| `Sec-CH-UA-Mobile` | 移动端或桌面端模式 |
+| `Sec-CH-UA-Platform` | 浏览器平台 |
+| `Sec-Fetch-Site` | 请求来源与目标资源之间的关系 |
+| `Sec-Fetch-Mode` | 请求模式 |
+| `Sec-Fetch-Dest` | 请求资源的类型 |
+
+## 应传递哪些标头
+
+不存在通用的标头集合，具体取决于网站和请求类型。
+
+通常会使用：
+
+- `User-Agent`;
+- `Accept`;
+- `Accept-Language`;
+- Client Hints;
+- 与请求对应的 `Sec-Fetch-*`。
+
+仅当 `Cookie`、`Referer` 和 `Origin` 出现在原始浏览器请求中，或当前会话确实需要时，才应传递这些标头。
+
+不要手动设置：
+
+- `Host`;
+- `Content-Length`;
+- `Transfer-Encoding`;
+- `Content-Encoding`。
+
+这些值通常由 HTTP 客户端自动生成。
+
+## 会话一致性
+
+在同一会话中，如无必要，请不要更改：
+
+- `User-Agent`;
+- `Sec-CH-UA`;
+- `Sec-CH-UA-Mobile`;
+- `Sec-CH-UA-Platform`;
+- 语言;
+- 代理。
+
+User-Agent 和 Client Hints 应描述同一个浏览器。
+
+错误示例：
+
+```text
+User-Agent: Chrome/150
+Sec-CH-UA: "Google Chrome";v="140"
+```
+
+正确示例：
+
+```text
+User-Agent: Chrome/150
+Sec-CH-UA: "Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"
+```
+
+Cookie 也必须来自发送请求时使用的同一会话。
+
+## 处理重定向
+
+发生重定向时，请保持以下主要会话参数不变：
+
+- `User-Agent`;
+- Client Hints;
+- Cookie;
+- 语言;
+- 代理。
+
+与上下文相关的标头可能会变化：
+
+- `Referer` 应对应上一页面；
+- `Sec-Fetch-Site` 取决于当前域名；
+- 收到 `Set-Cookie` 后应更新 Cookie；
+- 新 URL 的 `Host` 应由 HTTP 客户端生成。
+
+不要手动向其他域名发送 Cookie 或授权标头。
+
+## 获取标头
+
+### 通过开发者工具
+
+1. 在浏览器中打开页面。
+2. 按 **F12** 并切换到 **Network** 选项卡。
+3. 执行所需操作或重新加载页面。
+4. 选择对应的请求。
+5. 在 **Headers** 选项卡中，从 **Request Headers** 部分复制相关值。
+
+![](./images/headers/devtools.png)
+
+也可以使用 **Copy as cURL** 或 **Copy as fetch** 命令复制请求。
+
+发布示例前，请删除真实 Cookie、授权令牌以及其他敏感数据。
+
+### 从浏览器会话中获取
+
+使用浏览器自动化时，应从当前会话中获取标头和 Cookie。不要混用不同浏览器上下文中的数据。
+
+可使用以下方式：
+
+- **Playwright** — 请求事件、`request.headers()` 方法或 HAR 录制。
+- **Puppeteer** — 网络请求处理器或 Chrome DevTools Protocol。
+- **Selenium** — Chrome DevTools Protocol 或其他网络工具。
+- [**ZennoPoster**](https://zennolab.com/zh/products/zennoposter/) — 当前浏览器会话中的网络请求。
+- **HAR 文件** — 请求数据，包括标头、Cookie 和请求正文。
+- **代理分析工具** — 查看 HTTP(S) 流量和实际发送的标头。
+- **cURL** — 重现并检查通过 DevTools 中 **Copy as cURL** 复制的请求。
+
+建议使用活动浏览器会话中的标头，而不是手动构造。
+
+### 生成标头
+
+可以通过程序或专用库生成标头，例如 *header-generator* 及类似工具。
+
+:::tip 浏览器指纹
+
+网站还可能考虑浏览器环境参数，包括屏幕、时区、Canvas 和 WebGL。浏览器指纹由浏览器或专用库生成，并且应与 User-Agent、Client Hints 以及其他会话参数保持一致。
+
+:::
+
+**标头生成示例**
+
+以下示例会从 CapMonster Cloud 获取当前 User-Agent，确定 Chrome 版本，并使用专用库创建一组基础浏览器标头。随后，将随机生成的 User-Agent 替换为当前值，并使 Client Hints 与其版本和平台保持一致。
+
+然后，使用生成的标头向页面发送 GET 请求。
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+
+```js
+import { HeaderGenerator } from "header-generator";
+
+const USER_AGENT_URL = "https://capmonster.cloud/api/useragent/actual";
+
+async function createBrowserHeaders() {
+  const userAgentResponse = await fetch(USER_AGENT_URL);
+
+  if (!userAgentResponse.ok) {
+    throw new Error(
+      `无法获取 User-Agent：${userAgentResponse.status}`,
+    );
+  }
+
+  const userAgent = (await userAgentResponse.text()).trim();
+
+  const versionMatch = userAgent.match(/(?:Chrome|Chromium)\/(\d+)/);
+
+  if (!versionMatch) {
+    throw new Error("无法从 User-Agent 中确定 Chrome 版本");
+  }
+
+  const chromeVersion = versionMatch[1];
+
+  const generator = new HeaderGenerator({
+    browsers: ["chrome"],
+    operatingSystems: ["windows"],
+    devices: ["desktop"],
+    locales: ["en-US", "en"],
+    httpVersion: "2",
+  });
+
+  // 生成基础标头集合，不限制 Chrome 版本。
+  const generatedHeaders = generator.getHeaders();
+
+  // Headers 可防止出现仅大小写不同的重复标头名称。
+  const headers = new Headers(generatedHeaders);
+
+  // 使用 CapMonster Cloud 返回的准确值
+  // 替换随机生成的 User-Agent。
+  headers.set("User-Agent", userAgent);
+
+  // 使 Client Hints 与 Chrome 版本保持一致。
+  headers.set(
+    "Sec-CH-UA",
+    `"Chromium";v="${chromeVersion}", ` +
+      `"Google Chrome";v="${chromeVersion}", ` +
+      '"Not:A-Brand";v="99"',
+  );
+
+  headers.set("Sec-CH-UA-Mobile", "?0");
+  headers.set("Sec-CH-UA-Platform", '"Windows"');
+
+  return headers;
+}
+
+const headers = await createBrowserHeaders();
+
+const response = await fetch("https://example.com/", {
+  method: "GET",
+  headers,
+  redirect: "follow",
+});
+
+console.log(response.status);
+
+console.log(Object.fromEntries(headers.entries()));
+```
+
+</details>
+</TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+
+```python
+import re
+
+import requests
+from browserforge.headers import HeaderGenerator
+
+
+USER_AGENT_URL = "https://capmonster.cloud/api/useragent/actual"
+
+
+def create_browser_headers() -> dict[str, str]:
+    response = requests.get(USER_AGENT_URL, timeout=30)
+    response.raise_for_status()
+
+    user_agent = response.text.strip()
+
+    version_match = re.search(r"(?:Chrome|Chromium)/(\d+)", user_agent)
+
+    if version_match is None:
+        raise ValueError(
+            "无法从 User-Agent 中确定 Chrome 版本"
+        )
+
+    chrome_version = version_match.group(1)
+
+    generator = HeaderGenerator(
+        browser="chrome",
+        os="windows",
+        device="desktop",
+        locale=("en-US", "en"),
+        http_version=2,
+    )
+
+    # 生成基础标头集合，不限制 Chrome 版本。
+    headers = generator.generate()
+
+    # 使用 CapMonster Cloud 返回的值
+    # 替换随机生成的 User-Agent。
+    headers["User-Agent"] = user_agent
+
+    # 使 Client Hints 与 Chrome 版本保持一致。
+    headers["Sec-CH-UA"] = (
+        f'"Chromium";v="{chrome_version}", '
+        f'"Google Chrome";v="{chrome_version}", '
+        '"Not:A-Brand";v="99"'
+    )
+    headers["Sec-CH-UA-Mobile"] = "?0"
+    headers["Sec-CH-UA-Platform"] = '"Windows"'
+
+    return headers
+
+
+headers = create_browser_headers()
+
+with requests.Session() as session:
+    session.headers.update(headers)
+
+    response = session.get(
+        "https://example.com/",
+        timeout=30,
+        allow_redirects=True,
+    )
+
+    print(response.status_code)
+    print(dict(session.headers))
+```
+
+</details>
+</TabItem>
+</Tabs>
+
+## 标头集合示例
+
+对于 HTML 页面请求，可以使用以下基础集合：
+
+```http
+User-Agent: userAgentPlaceholder
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.9
+Accept-Encoding: gzip, deflate, br
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Sec-CH-UA: "Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"
+Sec-CH-UA-Mobile: ?0
+Sec-CH-UA-Platform: "Windows"
+```
+
+JSON 格式：
+
+```json
+{
+  "headers": {
+    "User-Agent": "userAgentPlaceholder",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Sec-CH-UA": "\"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\", \"Not:A-Brand\";v=\"99\"",
+    "Sec-CH-UA-Mobile": "?0",
+    "Sec-CH-UA-Platform": "\"Windows\""
+  }
+}
+```
+
+:::tip Sec-Fetch-*
+`Sec-Fetch-*` 的值取决于请求的发送方式。本示例展示的是直接打开页面，而不是从其他网站通过链接跳转。
+:::
+
+## 解决 CAPTCHA 时的使用方式
+
+在与目标网站交互的所有阶段，都应保持浏览器会话参数一致：
+
+1. 打开包含 CAPTCHA 的页面。
+2. 获取当前会话的 Cookie、标头和参数。
+3. 确定 CAPTCHA 参数，包括 `websiteURL`、`websiteKey` 以及其他必填值。
+4. 在 CapMonster Cloud 中[创建任务](/docs/api/methods/create-task)。
+5. 获取[解决结果](/docs/api/methods/get-task-result)。
+6. 在同一会话中，将解决结果（例如令牌或 Cookie）发送到验证页面或目标网站 API。
+
+### 将解决结果发送到 HTML 页面
+
+请使用：
+
+- 相同的 `User-Agent`;
+- 匹配的 Client Hints;
+- 当前会话的 Cookie;
+- 相同的浏览器语言;
+- 相同的代理（如之前使用）;
+- 原始请求中存在的 `Referer` 和 `Origin`。
+
+### 通过 API 发送解决结果
+
+请使用原始 API 请求中的标头。
+
+如果原始请求中没有 `Sec-Fetch-User` 和 `Upgrade-Insecure-Requests` 等浏览器导航标头，请不要额外添加。
+
+### 请求顺序
+
+```text
+GET /page
+        │
+        ├─ Cookie 和 HTTP 标头
+        ├─ CAPTCHA 参数
+        │
+        ▼
+CapMonster Cloud
+        │
+        ├─ 解决结果
+        │
+        ▼
+POST /verify
+        │
+        ├─ 当前会话的 Cookie
+        ├─ 相同的 User-Agent
+        ├─ 匹配的 Client Hints
+        ├─ 当前的 Referer 和 Origin
+        │
+        ▼
+目标网站响应
+```
+
+:::info
+
+通过 CAPTCHA 和其他安全验证时使用标头的示例：
+
+- [Cloudflare Challenge (cf_clearance)](/docs/captchas/turnstile-challenge-task/#cloudflare-challenge-cf_clearance-自动解决示例)
+- [TSPD](/docs/captchas/tspd-task/#tspd-%E8%87%AA%E5%8A%A8%E8%A7%A3%E5%86%B3%E7%A4%BA%E4%BE%8B)
+- [Hunt CAPTCHA](/docs/captchas/hunt-task/#hunt-captcha-%E8%A7%A3%E5%86%B3%E7%A4%BA%E4%BE%8B)
+
+:::
+
+## 常见错误
+
+| 错误 | 检查内容 |
+| --- | --- |
+| 仅传递了 `User-Agent` | 添加原始请求中的相关标头 |
+| 使用了不同会话的数据 | 从同一浏览器上下文中获取标头和 Cookie |
+| `User-Agent` 与 `Sec-CH-UA` 不匹配 | 统一浏览器版本和平台 |
+| 发送了过期 Cookie | 重新获取 Cookie 或处理 `Set-Cookie` |
+| API 请求中使用了 HTML 导航标头 | 使用同类型请求中的标头 |
+| 手动设置了 `Host` 或 `Content-Length` | 删除这些标头，让 HTTP 客户端自动生成 |
+
+<br />
+
+如果请求失败，请将其与浏览器 **Network** 选项卡中的请求进行比较。检查 URL、方法、正文、Cookie、标头、代理以及重定向后的最终 URL。
