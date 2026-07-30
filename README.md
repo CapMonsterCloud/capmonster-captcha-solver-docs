@@ -20,7 +20,7 @@ Navigate to our official hosted documentation to get started:
 - 💻 **[Official SDKs (Python, Node.js, C#, n8n)](https://github.com/orgs/CapMonsterCloud/repositories)**
 - 💳 **[API Methods (Solve, Get Balance, etc.)](https://docs.capmonster.cloud/docs/methods/)**
 
-*(Looking for a specific integration? Check out our [n8n Community Node](https://github.com/CapMonsterCloud/n8n-nodes-capmonstercloud) or direct [Chrome Extension](https://capmonster.cloud/extension?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)).*
+*(Looking for a specific integration? Check out our [n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver) or direct [Chrome Extension](https://capmonster.cloud/en/browser-extension-captcha/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)).*
 
 ---
 
