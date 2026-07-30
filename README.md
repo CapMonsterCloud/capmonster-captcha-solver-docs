@@ -17,8 +17,8 @@ Here you will find API references, integration guides, and code examples for byp
 Navigate to our official hosted documentation to get started:
 - 🚀 **[Getting Started & Quick Setup](https://docs.capmonster.cloud/docs/getting-started)**
 - 🧩 **[CAPTCHA Task Types & API Reference](https://docs.capmonster.cloud/docs/captchas/)**
-- 💻 **[Official SDKs (Python, Node.js, C#, Go)](https://docs.capmonster.cloud/docs/api/libraries)**
-- 💳 **[Account & Balance Management](https://docs.capmonster.cloud/docs/account/)**
+- 💻 **[Official SDKs (Python, Node.js, C#, n8n)](https://github.com/orgs/CapMonsterCloud/repositories)**
+- 💳 **[API Methods (Solve, Get Balance, etc.)]([https://docs.capmonster.cloud/docs/account/](https://docs.capmonster.cloud/docs/methods/)**
 
 *(Looking for a specific integration? Check out our [n8n Community Node](https://github.com/CapMonsterCloud/n8n-nodes-capmonstercloud) or direct [Chrome Extension](https://capmonster.cloud/extension?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)).*
 
@@ -76,4 +76,4 @@ Each folder represents a category for the articles. If you need the same article
 For more information about markdown syntax and Docusaurus structure, visit the [official Docusaurus docs](https://docusaurus.io/).
 
 ---
-**[Get your CapMonster Cloud API Key](https://capmonster.cloud/Dashboard/Registration?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
+**[Get your CapMonster Cloud API Key](https://dash.capmonster.cloud/Account/SignUp?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
