@@ -8,7 +8,7 @@ Welcome to the official documentation repository for **CapMonster Cloud** — th
 
 Here you will find API references, integration guides, and code examples for bypassing reCAPTCHA, Cloudflare Turnstile, hCaptcha, DataDome, and more.
 
-**[👉 Get your Free API Key and Start Solving CAPTCHAs](https://capmonster.cloud/Dashboard/Registration?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
+**[👉 Get your Free API Key and Start Solving CAPTCHAs](https://dash.capmonster.cloud/Account/SignUp?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
 
 ---
 
