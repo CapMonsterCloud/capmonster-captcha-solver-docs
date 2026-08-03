@@ -119,15 +119,33 @@ CapMonster Cloud по умолчанию использует встроенны
 
 ## Метод создания задачи
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-	<TabItem value="proxyless" label="RecaptchaV2Task (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
-		<MethodDescription>
-			**Пример запроса**
+  <TabItem value="proxyless" label="RecaptchaV2Task (без прокси)" default className="method-panel">
+    <MethodDescription>
+
+**Пример запроса**
+
 ```json
 {
   "clientKey": "API_KEY",
@@ -138,24 +156,24 @@ CapMonster Cloud по умолчанию использует встроенны
   }
 }
 ```
-			**Пример ответа**
+
+**Пример ответа**
+
 ```json
 {
-  "errorId":0,
-  "taskId":407533072
+  "errorId": 0,
+  "taskId": 407533072
 }
 ```
-		</MethodDescription>
-	</TabItem>
 
-	<TabItem value="proxy" label="RecaptchaV2Task (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
-		<MethodDescription>
-			**Пример запроса**
+    </MethodDescription>
+  </TabItem>
+
+  <TabItem value="proxy" label="RecaptchaV2Task (при использовании прокси)" className="method-panel">
+    <MethodDescription>
+
+**Пример запроса**
+
 ```json
 {
   "clientKey": "API_KEY",
@@ -172,40 +190,64 @@ CapMonster Cloud по умолчанию использует встроенны
   }
 }
 ```
-			**Пример ответа**
+
+**Пример ответа**
+
 ```json
 {
-  "errorId":0,
-  "taskId":407533072
+  "errorId": 0,
+  "taskId": 407533072
 }
 ```
-		</MethodDescription>
-	</TabItem>  
+
+    </MethodDescription>
+  </TabItem>
 </Tabs>
 
 ## Метод получения результата задачи
 
 :::warning **Внимание!**
+
 На некоторых сайтах важно, чтобы UserAgent совпадал с тем, что использовался при решении капчи. Поэтому, если вместе с токеном CapMonster Cloud возвращает UserAgent, **обязательно** применяйте его при отправке формы или подтверждении решения на целевой странице.
+
 :::
 
-Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение ReCaptcha2. В зависимости от загрузки системы вы получите ответ через время от 100 мс.
+Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение reCAPTCHA v2. В зависимости от загрузки системы ответ может быть получен через 100 мс.
 
-<div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
-	<MethodDescription>
-		**Пример запроса**
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<MethodDescription>
+
+**Пример запроса**
+
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "taskId": 407533072
 }
 ```
-		**Пример ответа**
+
+**Пример ответа**
+
 ```json
 {
   "errorId": 0,
@@ -216,8 +258,8 @@ CapMonster Cloud по умолчанию использует встроенны
 }
 ```
 
-    Для некоторых сайтов ответ может выглядеть следующим образом. При отправке решения необходимо использовать UserAgent, указанный в ответе, даже если он отличается от текущего, используемого вашим браузером или скриптом.
- 
+Для некоторых сайтов ответ может выглядеть следующим образом. При отправке решения необходимо использовать UserAgent, указанный в ответе, даже если он отличается от текущего UserAgent браузера или скрипта.
+
 ```json
 {
   "errorId": 0,
@@ -231,8 +273,8 @@ CapMonster Cloud по умолчанию использует встроенны
   }
 }
 ```
-	</MethodDescription>
-</div>
+
+</MethodDescription>
 
 <br />
 
