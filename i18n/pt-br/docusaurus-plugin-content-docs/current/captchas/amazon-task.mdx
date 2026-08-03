@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../../../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -25,14 +27,12 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ### <span style={{fontSize: '1.5rem'}}>Exemplos de tarefas</span>
 
-<Tabs className="full-width-tabs">
-  <TabItem value="waf1" label="Click" default>
-    ![](./images/amazon-task/Waf1.png)
-  </TabItem>
-  <TabItem value="waf2" label="Puzzle">
-    ![](./images/amazon-task/Waf2.png)
-  </TabItem>
-</Tabs>
+Abaixo estão exemplos dos tipos de tarefas Amazon AWS WAF atualmente compatíveis com o CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap title="Click">![](./images/amazon-task/Waf1.png)</ImageWrap>
+  <ImageWrap title="Puzzle">![](./images/amazon-task/Waf2.png)</ImageWrap>
+</ImagesLayout>
 
 Resolvendo CAPTCHA e Challenge no AWS WAF
 

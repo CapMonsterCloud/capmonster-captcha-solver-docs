@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../../../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -23,7 +25,15 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
   <PriceBlock title="RecaptchaV2" captchaId="rc2"/>
 </PriceBlockWrap>
 
-![](./images/no-captcha/recaptchaV2.png) ![](./images/no-captcha/recaptchaV2_1.png) ![](./images/no-captcha/recaptchaV2_2.png)
+## 任务示例
+
+以下是 CapMonster Cloud 当前支持的 reCAPTCHA v2 示例：
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap>![](./images/no-captcha/recaptchaV2.png)</ImageWrap>
+  <ImageWrap>![](./images/no-captcha/recaptchaV2_1.png)</ImageWrap>
+  <ImageWrap>![](./images/no-captcha/recaptchaV2_2.png)</ImageWrap>
+</ImagesLayout>
 
 该对象包含 Google reCAPTCHA v2 解决任务的数据。为确保解决此类验证码的普遍性，您需要使用在自动填写目标网站表单时使用的所有数据，包括代理、浏览器用户代理和 cookies。这将有助于避免在 Google 更改其验证码代码时出现任何问题。
 

@@ -25,7 +25,15 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   {/* <PriceBlock  captchaId="rc2e-spotify-yahoo"/> */}
 </PriceBlockWrap>
 
-![](./images/recaptcha-enterprise/recaptchaV2enterprise.png) ![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png) ![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)
+## Примеры заданий
+
+Ниже представлены примеры вариантов reCAPTCHA v2 Enterprise, поддерживаемых CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)</ImageWrap>
+</ImagesLayout>
 
 :::warning **Внимание!**
 CapMonster Cloud по умолчанию работает через встроенные прокси — они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
@@ -191,13 +199,29 @@ Object.defineProperty(window, 'grecaptcha', {
 
 ## Метод создания задачи
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Пример запроса**
 ```json
@@ -224,11 +248,6 @@ Object.defineProperty(window, 'grecaptcha', {
 	</TabItem>
 
 	<TabItem value="proxy" label="RecaptchaV2EnterpriseTask (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Пример запроса**
 ```json
@@ -265,12 +284,28 @@ Object.defineProperty(window, 'grecaptcha', {
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение ReCaptcha2. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 80 с.
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
 <div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
 	<MethodDescription>
 		**Пример запроса**
 ```json

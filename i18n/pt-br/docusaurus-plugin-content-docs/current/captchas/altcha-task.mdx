@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -24,14 +26,13 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## Exemplos de tarefas
 
-<Tabs className="full-width-tabs">
-  <TabItem value="pow" label="PoW (Proof-of-Work)" default>
-    ![](./images/altcha/altcha_frictionless.png)
-  </TabItem>
-  <TabItem value="code" label="Code Captcha">
-    ![](./images/altcha/altcha_code.png)
-  </TabItem>
-</Tabs>
+Abaixo estão exemplos dos tipos de tarefas Altcha atualmente compatíveis com o CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap title="PoW (Proof-of-Work)">![](./images/altcha/altcha_frictionless.png)</ImageWrap>
+  <ImageWrap title="Code Captcha">![](./images/altcha/altcha_code.png)</ImageWrap>
+</ImagesLayout>
+<br />
 
 *Existe também um **captcha invisível** (**Invisible Captcha**), que não possui interface visível na página e não requer qualquer ação do usuário — a verificação ocorre em segundo plano.*
 
