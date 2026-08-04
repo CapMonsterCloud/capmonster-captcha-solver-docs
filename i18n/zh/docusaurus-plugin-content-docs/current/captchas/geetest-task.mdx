@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../../../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -49,22 +51,16 @@ V4 (captcha_id = gt)
 
 ## <span style={{fontSize: '2.25rem'}}>GeeTest V3</span>
 
-### <span style={{fontSize: '1.5rem'}}>可能的验证码变体。</span>
+### <span style={{fontSize: '1.5rem'}}>任务示例</span>
 
-<Tabs className="full-width-tabs">
-  <TabItem value="intelligent" label="Intelligent mode" default className="bordered-panel">
-    ![](./images/geetest-task/intelligent.png)
-  </TabItem>
-  <TabItem value="slide" label="Slide CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/slide.png)
-  </TabItem>
-  <TabItem value="icon" label="Icon CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/icon.png)
-  </TabItem>
-  <TabItem value="space" label="Space CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/space.png)
-  </TabItem>
-</Tabs>
+以下是 CapMonster Cloud 当前支持的 GeeTest V3 任务类型示例：
+
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Intelligent mode">![](./images/geetest-task/intelligent.png)</ImageWrap>
+  <ImageWrap title="Slide CAPTCHA">![](./images/geetest-task/slide.png)</ImageWrap>
+  <ImageWrap title="Icon CAPTCHA">![](./images/geetest-task/icon.png)</ImageWrap>
+  <ImageWrap title="Space CAPTCHA">![](./images/geetest-task/space.png)</ImageWrap>
+</ImagesLayout>
 
 ### <span style={{fontSize: '1.5rem'}}>请求参数</span>
 

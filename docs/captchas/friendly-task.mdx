@@ -113,6 +113,27 @@ CapMonster Cloud по умолчанию работает через встро�
 
 ## Метод создания задачи
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 Используйте значение параметра `apiGetLib` в `metadata`, соответствующее версии Friendly Captcha.
 
 **Например:**
@@ -130,11 +151,6 @@ CapMonster Cloud по умолчанию работает через встро�
 <br />
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
-    <MethodItem>
-    ```http
-    https://api.capmonster.cloud/createTask
-    ```
-    </MethodItem>
     <MethodDescription>
       
       **Пример запроса**
@@ -164,11 +180,6 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 
     <TabItem value="proxy" label="CustomTask (с прокси)" className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
     <MethodDescription>
       
       **Пример запроса**
@@ -212,12 +223,28 @@ CapMonster Cloud по умолчанию работает через встро�
 
 **V2**: `"AQQA.8Q2TbgK_..._pknXDweJjKT2qwmroOhHcZsU4dHyu-jaGIPx9k7432p_num13buuTu6n4lVA=="`
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
 <div className="method-panel-full">
-  <MethodItem>
-      ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
   <MethodDescription>
 
   **Пример запроса**

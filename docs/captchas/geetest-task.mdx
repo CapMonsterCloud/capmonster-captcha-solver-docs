@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -53,20 +55,14 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Примеры заданий</span>
 
-<Tabs className="full-width-tabs">
-  <TabItem value="intelligent" label="Intelligent mode" default className="bordered-panel">
-    ![](./images/geetest-task/intelligent.png)
-  </TabItem>
-  <TabItem value="slide" label="Slide CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/slide.png)
-  </TabItem>
-  <TabItem value="icon" label="Icon CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/icon.png)
-  </TabItem>
-  <TabItem value="space" label="Space CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/space.png)
-  </TabItem>
-</Tabs>
+Ниже представлены примеры типов заданий GeeTest V3, которые на данный момент поддерживаются сервисом CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Intelligent mode">![](./images/geetest-task/intelligent.png)</ImageWrap>
+  <ImageWrap title="Slide CAPTCHA">![](./images/geetest-task/slide.png)</ImageWrap>
+  <ImageWrap title="Icon CAPTCHA">![](./images/geetest-task/icon.png)</ImageWrap>
+  <ImageWrap title="Space CAPTCHA">![](./images/geetest-task/space.png)</ImageWrap>
+</ImagesLayout>
 
 ### <span style={{fontSize: '1.5rem'}}>Параметры запроса</span>
 
@@ -162,13 +158,29 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод создания задачи</span>
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Пример запроса**
 ```json
@@ -196,11 +208,6 @@ V4 (captcha_id = gt)
 	</TabItem>
 	
 	<TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Пример запроса**
 ```json 
@@ -237,12 +244,28 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
 <div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
 	<MethodDescription>
 		**Пример запроса**
 		```json
@@ -807,14 +830,30 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод создания задачи</span>
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Пример запроса**
 ```json
@@ -842,11 +881,6 @@ V4 (captcha_id = gt)
 	</TabItem>
   
 	<TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Пример запроса**
   ```json
@@ -884,12 +918,28 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
 <div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
 	<MethodDescription>
 		**Пример запроса**
 		```json

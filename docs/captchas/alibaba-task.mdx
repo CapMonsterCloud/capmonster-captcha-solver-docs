@@ -173,15 +173,27 @@ CapMonster Cloud по умолчанию работает через встро�
 
 ## Метод создания задачи
 
-### Обычный вариант (без дополнительных параметров)
-
-<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="CustomTask" default className="method-panel">
     <MethodItem>
     ```http
     https://api.capmonster.cloud/createTask
     ```
-    </MethodItem>
+    </MethodItem><br />
+    
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+### Обычный вариант (без дополнительных параметров)
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="proxyless" label="CustomTask" default className="method-panel">
     <MethodDescription>
       
       **Пример запроса**
@@ -212,11 +224,11 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 
     <TabItem value="proxy" label="CustomTask (с прокси)" className="method-panel">
-    <MethodItem>
+    {/* <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
-    </MethodItem>
+    </MethodItem> */}
     <MethodDescription>
       
       **Пример запроса**
@@ -258,11 +270,11 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
-    <MethodItem>
+    {/* <MethodItem>
     ```http
     https://api.capmonster.cloud/createTask
     ```
-    </MethodItem>
+    </MethodItem> */}
     <MethodDescription>
       
       **Пример запроса**
@@ -299,11 +311,11 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 
     <TabItem value="proxy" label="CustomTask (с прокси)" className="method-panel">
-    <MethodItem>
+    {/* <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
-    </MethodItem>
+    </MethodItem> */}
     <MethodDescription>
       
       **Пример запроса**
@@ -359,11 +371,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
+
     <MethodDescription>
 
   **Пример запроса**
@@ -404,11 +412,11 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 
   <TabItem value="proxy" label="CustomTask (с прокси)" className="method-panel">
-    <MethodItem>
+    {/* <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
-    </MethodItem>
+    </MethodItem> */}
     <MethodDescription>
 
   **Пример запроса**
@@ -454,28 +462,45 @@ CapMonster Cloud по умолчанию работает через встро�
 </Tabs>
 
 ## Метод получения результата задачи
-Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Alibaba капчи.
 
-Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам.
-Используйте cookies из объекта `Domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
+Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Alibaba CAPTCHA.
 
-<div className="method-panel-full">
-  <MethodItem>
-      ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
-  <MethodDescription>
+Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам. Используйте cookies из объекта `Domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
 
-  **Пример запроса**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "taskId": 407533077
-  }
-  ```
+<MethodItem>
 
-  **Пример ответа**
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<MethodDescription>
+
+**Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533077
+}
+```
+
+**Пример ответа**
+
 ```json
 {
   "errorId": 0,
@@ -488,9 +513,10 @@ CapMonster Cloud по умолчанию работает через встро�
     }
   }
 }
-  ```
-  </MethodDescription>
-</div>
+```
+
+</MethodDescription>
+
 
 ## Как найти все нужные параметры для создания задачи
 

@@ -7,6 +7,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../../../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -19,10 +21,18 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 <PriceBlockWrap>
   <PriceBlock captchaId="rc2e"/>
-  <PriceBlock captchaId="rc2e-spotify-yahoo"/>
+  {/* <PriceBlock captchaId="rc2e-spotify-yahoo"/> */}
 </PriceBlockWrap>
 
-![](./images/recaptcha-enterprise/recaptchaV2enterprise.png) ![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png) ![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)
+## Exemplos de tarefas
+
+Abaixo estão exemplos das variantes de reCAPTCHA v2 Enterprise compatíveis com o CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)</ImageWrap>
+</ImagesLayout>
 
 O objeto contém dados para a resolução de tarefas do Google reCAPTCHA Enterprise. Para fornecer universalidade sólida na resolução desse tipo de tarefa, reproduzimos todos os componentes do ambiente usados para uma tarefa de automação que você planeja concluir. Isso inclui acesso via proxy, o user-agent do navegador e, opcionalmente, cookies.
 

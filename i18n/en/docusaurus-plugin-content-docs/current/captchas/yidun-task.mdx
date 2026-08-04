@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -24,32 +26,18 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 ## Examples of tasks
 
-<Tabs className="full-width-tabs">
-  <TabItem value="jigsaw" label="Jigsaw" default>
-    ![](./images/yidun-task/jigsaw.png)
-  </TabItem>
-    <TabItem value="jigsaw (slide_trajectory)" label="Jigsaw (slide_trajectory)" default>
-    ![](./images/yidun-task/jigsaw-slide_trajectory.png)
-  </TabItem>
-  <TabItem value="picture-click" label="Picture-click">
-    ![](./images/yidun-task/picture-click.png)
-  </TabItem>
-  <TabItem value="avoid" label="Avoid">
-    ![](./images/yidun-task/avoid.png)
-  </TabItem>
-  <TabItem value="icon-click" label="Icon-click">
-    ![](./images/yidun-task/icon-click.png)
-  </TabItem>
-  <TabItem value="inference" label="Inference">
-    ![](./images/yidun-task/inference.png)
-  </TabItem>
-  <TabItem value="sense" label="Sense">
-    ![](./images/yidun-task/sense.png)
-  </TabItem>
-  <TabItem value="space-inference" label="Space-inference">
-    ![](./images/yidun-task/space-inference.png)
-  </TabItem>
-</Tabs>
+Below are examples of Yidun task types currently supported by CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Jigsaw">![](./images/yidun-task/jigsaw.png)</ImageWrap>
+  <ImageWrap title="Jigsaw (slide_trajectory)">![](./images/yidun-task/jigsaw-slide_trajectory.png)</ImageWrap>
+  <ImageWrap title="Picture-click">![](./images/yidun-task/picture-click.png)</ImageWrap>
+  <ImageWrap title="Avoid">![](./images/yidun-task/avoid.png)</ImageWrap>
+  <ImageWrap title="Icon-click">![](./images/yidun-task/icon-click.png)</ImageWrap>
+  <ImageWrap title="Inference">![](./images/yidun-task/inference.png)</ImageWrap>
+  <ImageWrap title="Sense">![](./images/yidun-task/sense.png)</ImageWrap>
+  <ImageWrap title="Space-inference">![](./images/yidun-task/space-inference.png)</ImageWrap>
+</ImagesLayout>
 
 :::warning **Attention!**
 CapMonster Cloud uses built-in proxies by default — their cost is already included in the service. You only need to specify your own proxies in cases where the website does not accept the token or access to the built-in services is restricted.

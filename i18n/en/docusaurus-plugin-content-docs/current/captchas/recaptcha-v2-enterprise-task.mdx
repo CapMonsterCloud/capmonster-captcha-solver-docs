@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../../../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -21,8 +23,18 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 <PriceBlockWrap>
   <PriceBlock  captchaId="rc2e"/>
-  <PriceBlock  captchaId="rc2e-spotify-yahoo"/>
+  {/* <PriceBlock  captchaId="rc2e-spotify-yahoo"/> */}
 </PriceBlockWrap>
+
+## Task examples
+
+Below are examples of reCAPTCHA v2 Enterprise variants supported by CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)</ImageWrap>
+</ImagesLayout>
 
 :::warning **Attention!**
 CapMonster Cloud uses built-in proxies by default — their cost is already included in the service. You only need to specify your own proxies in cases where the website does not accept the token or access to the built-in services is restricted.
