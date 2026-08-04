@@ -26,7 +26,7 @@ const config: Config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
+    defaultLocale: 'ru',
     locales: ['en', 'ru', 'zh', 'pt-br'],
   },
   customFields: {
@@ -80,12 +80,12 @@ const config: Config = {
     //   textColor: 'white',
     //   isCloseable: false,
     // },
-    algolia: {
-      appId: process.env.ALGOLIA_APP_ID,
-      apiKey: process.env.ALGOLIA_API_KEY,
-      indexName: process.env.ALGOLIA_INDEX_NAME,
-      contextualSearch: true,
-    },
+    // algolia: {
+    //   appId: process.env.ALGOLIA_APP_ID,
+    //   apiKey: process.env.ALGOLIA_API_KEY,
+    //   indexName: process.env.ALGOLIA_INDEX_NAME,
+    //   contextualSearch: true,
+    // },
     // Replace with your project's social card
     image: 'img/social-card.jpg',
     navbar: {

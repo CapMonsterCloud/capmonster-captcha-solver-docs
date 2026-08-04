@@ -56,7 +56,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
     ---
 
     <ParamItem title="captchaUrl (dentro da metadata)" type="string" />
-    Link para o script do captcha. Normalmente termina com `TCaptcha.js` ou `TCaptcha-global.js`. Pode ser encontrado na lista de requisições (veja o exemplo abaixo).
+    Link para o script do CAPTCHA. Normalmente, o arquivo se chama `TCaptcha.js` ou `TCaptcha-global.js`. Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha.js` ou `TJCaptcha.js`. O script pode ser encontrado entre as requisições de rede (veja o exemplo abaixo).
 	
     ---
 
@@ -215,9 +215,13 @@ Ative as *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o cap
 ![](./images/tendi/tendi-devtools.png) 
 
 ## Como obter captchaUrl
-Abra *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o captcha e examine as requisições de rede. Entre elas aparecerá `TCaptcha.js` ou `TCaptcha-global.js`, no qual você pode encontrar um link semelhante a este:
+Abra *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o captcha e examine as requisições de rede. Entre os arquivos carregados, encontre `TCaptcha.js` ou `TCaptcha-global.js`:
 
 ![](./images/tendi/tendi_captchaUrl.png)
+
+Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha.js` ou `TJCaptcha.js`:
+
+![](./images/tendi/tendi_captchaUrl-1.png)
 
 ## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
 
