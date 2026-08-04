@@ -10,6 +10,10 @@
   gap: 18px;
 }
 
+.iconsWrap svg path {
+  fill: #555a64;
+}
+
 .iconsWrap svg:hover,
 .iconsWrap svg:focus,
 .iconsWrap svg:active {
@@ -27,4 +31,18 @@
   font-size: 16px;
   line-height: 20px;
   margin-bottom: 12px;
+}
+
+[data-theme='dark'] .header {
+  color: #d2d7e1;
+}
+
+[data-theme='dark'] .iconsWrap svg path {
+  fill: #828791;
+}
+
+[data-theme='dark'] .iconsWrap svg:hover path,
+[data-theme='dark'] .iconsWrap svg:focus path,
+[data-theme='dark'] .iconsWrap svg:active path {
+  fill: #735fff;
 }
