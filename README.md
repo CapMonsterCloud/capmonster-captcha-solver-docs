@@ -6,7 +6,7 @@
 
 Welcome to the official documentation repository for **CapMonster Cloud** — the fastest AI-powered CAPTCHA solver and anti-bot bypass infrastructure. 
 
-Here you will find API references, integration guides, and code examples for bypassing reCAPTCHA, Cloudflare Turnstile, hCaptcha, DataDome, and more.
+Here you will find API references, integration guides, and code examples for bypassing reCAPTCHA, Cloudflare Turnstile, DataDome, and more.
 
 **[👉 Get your Free API Key and Start Solving CAPTCHAs](https://dash.capmonster.cloud/Account/SignUp?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
 
