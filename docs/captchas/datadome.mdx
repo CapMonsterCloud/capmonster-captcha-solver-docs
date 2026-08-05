@@ -95,6 +95,13 @@ https://geo.captcha-delivery.com/captcha/?initialCid=...&hash=...&cid=...&t=fe&r
 Если параметр не указан, применяется прежний метод решения, поддерживающий только **i.js**.
 
     ---
+
+  <ParamItem title="userAgent" type="string" />
+  User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+    ---
     
 
     <ParamItem title="proxyType" required type="string" />
@@ -126,12 +133,6 @@ https://geo.captcha-delivery.com/captcha/?initialCid=...&hash=...&cid=...&t=fe&r
 
     <ParamItem title="proxyPassword" required type="string" />
     Пароль прокси-сервера.
-	  
-    ---
-
-    <ParamItem title="userAgent" type="string" />
-    User-Agent браузера. <br />
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
 	
      ---
 </div>
