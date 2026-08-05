@@ -56,7 +56,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
     ---
 
     <ParamItem title="captchaUrl (dentro da metadata)" type="string" />
-    Link para o script do CAPTCHA. Normalmente, o arquivo se chama `TCaptcha.js` ou `TCaptcha-global.js`. Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha.js` ou `TJCaptcha.js`. O script pode ser encontrado entre as requisições de rede (veja o exemplo abaixo).
+    Link para o script do CAPTCHA. Normalmente, o arquivo se chama `TCaptcha.js` ou `TCaptcha-global.js`. Para a segunda versão, também podem ser ser usados arquivos chamados `TJNCaptcha*.js` e `TJCaptcha*.js`, em que `*` representa qualquer sequência de caracteres ou uma sequência vazia, por exemplo `-global`. O script pode ser encontrado entre as requisições de rede (veja o exemplo abaixo).
 	
     ---
 
@@ -215,13 +215,15 @@ Ative as *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o cap
 ![](./images/tendi/tendi-devtools.png) 
 
 ## Como obter captchaUrl
-Abra *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o captcha e examine as requisições de rede. Entre os arquivos carregados, encontre `TCaptcha.js` ou `TCaptcha-global.js`:
+Abra *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o CAPTCHA e examine as requisições de rede. Entre os arquivos carregados, encontre `TCaptcha.js` ou `TCaptcha-global.js`:
 
 ![](./images/tendi/tendi_captchaUrl.png)
 
-Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha.js` ou `TJCaptcha.js`:
+Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha*.js` e `TJCaptcha*.js`:
 
 ![](./images/tendi/tendi_captchaUrl-1.png)
+
+O caractere `*` no nome do arquivo representa qualquer sequência de caracteres ou uma sequência vazia. Por exemplo, o padrão `TJNCaptcha*.js` pode corresponder aos arquivos `TJNCaptcha.js` ou `TJNCaptcha-global.js`.
 
 ## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
 

@@ -57,7 +57,7 @@ CapMonster Cloud по умолчанию работает через встро�
     ---
 
     <ParamItem title="captchaUrl (внутри metadata)" type="string" />
-    Ссылка на скрипт CAPTCHA. Обычно файл называется `TCaptcha.js` или `TCaptcha-global.js`. Для второй версии также встречаются имена вида `TJNCaptcha.js` и `TJCaptcha.js`. Скрипт можно найти среди сетевых запросов (см. пример ниже).
+    Ссылка на скрипт CAPTCHA. Обычно файл называется `TCaptcha.js` или `TCaptcha-global.js`. Для второй версии также встречаются файлы вида `TJNCaptcha*.js` и `TJCaptcha*.js`, где `*` означает произвольную или пустую строку, например `-global`. Скрипт можно найти среди сетевых запросов (см. пример ниже).
 	
     ---
 
@@ -249,13 +249,15 @@ https://ru.api.capmonster.cloud/getTaskResult
 ![](./images/tendi/tendi-devtools.png) 
 
 ## Как получить captchaUrl
-Откройте *Инструменты разработчика*, перейдите на вкладку **Network**, активируйте капчу и изучите сетевые запросы. Среди загруженных файлов найдите `TCaptcha.js` или `TCaptcha-global.js`:
+Откройте *Инструменты разработчика*, перейдите на вкладку **Network**, активируйте CAPTCHA и изучите сетевые запросы. Среди загруженных файлов найдите `TCaptcha.js` или `TCaptcha-global.js`:
 
 ![](./images/tendi/tendi_captchaUrl.png)
 
-Для второй версии также встречаются файлы вида `TJNCaptcha.js` или `TJCaptcha.js`:
+Для второй версии также встречаются файлы вида `TJNCaptcha*.js` и `TJCaptcha*.js`:
 
 ![](./images/tendi/tendi_captchaUrl-1.png)
+
+`*` в имени файла означает произвольную или пустую строку. Например, шаблон `TJNCaptcha*.js` может соответствовать файлам `TJNCaptcha.js` или `TJNCaptcha-global.js`.
 
 
 ## Как найти все нужные параметры для создания задачи на решение

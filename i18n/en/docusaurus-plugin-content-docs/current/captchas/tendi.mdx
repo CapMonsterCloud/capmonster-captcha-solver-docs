@@ -56,7 +56,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
     ---
 
     <ParamItem title="captchaUrl (inside metadata)" type="string" />
-    Link to the CAPTCHA script. The file is usually named `TCaptcha.js` or `TCaptcha-global.js`. For the second version, files named `TJNCaptcha.js` or `TJCaptcha.js` may also be used. You can find the script among the network requests (see the example below).
+    Link to the CAPTCHA script. The file is usually named `TCaptcha.js` or `TCaptcha-global.js`. For the second version, files named `TJNCaptcha*.js` and `TJCaptcha*.js` may also be used, where `*` represents any string or an empty string, for example `-global`. You can find the script among the network requests (see the example below).
 
     ---
 
@@ -214,13 +214,15 @@ Turn on the *Developer Tools*, go to the **Network** tab, activate the captcha a
 ![](./images/tendi/tendi-devtools.png) 
 
 ## How to get captchaUrl
-Open *Developer Tools*, go to the **Network** tab, trigger the captcha, and inspect the network requests. Among the loaded files, find `TCaptcha.js` or `TCaptcha-global.js`:
+Open *Developer Tools*, go to the **Network** tab, trigger the CAPTCHA, and inspect the network requests. Among the loaded files, find `TCaptcha.js` or `TCaptcha-global.js`:
 
 ![](./images/tendi/tendi_captchaUrl.png)
 
-For the second version, files named `TJNCaptcha.js` or `TJCaptcha.js` may also be used:
+For the second version, files named `TJNCaptcha*.js` and `TJCaptcha*.js` may also be used:
 
 ![](./images/tendi/tendi_captchaUrl-1.png)
+
+`*` in the filename represents any string or an empty string. For example, the pattern `TJNCaptcha*.js` can match files such as `TJNCaptcha.js` or `TJNCaptcha-global.js`.
 
 ## How to find all required parameters for task creation
 

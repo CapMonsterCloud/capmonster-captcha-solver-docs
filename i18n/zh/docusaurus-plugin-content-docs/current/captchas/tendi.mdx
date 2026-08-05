@@ -57,7 +57,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     ---
 
     <ParamItem title="captchaUrl（位于 metadata 中）" type="string" />
-    CAPTCHA 脚本链接。文件通常名为 `TCaptcha.js` 或 `TCaptcha-global.js`。对于第二个版本，也可能使用名为 `TJNCaptcha.js` 或 `TJCaptcha.js` 的文件。可在网络请求中找到该脚本（参见下方示例）。
+    CAPTCHA 脚本链接。文件通常名为 `TCaptcha.js` 或 `TCaptcha-global.js`。对于第二个版本，也可能使用名为 `TJNCaptcha*.js` 和 `TJCaptcha*.js` 的文件，其中 `*` 表示任意字符串或空字符串，例如 `-global`。可在网络请求中找到该脚本（参见下方示例）。
 	
     ---
 
@@ -220,9 +220,11 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ![](./images/tendi/tendi_captchaUrl.png)
 
-对于第二个版本，也可能使用名为 `TJNCaptcha.js` 或 `TJCaptcha.js` 的文件：
+对于第二个版本，也可能使用名为 `TJNCaptcha*.js` 和 `TJCaptcha*.js` 的文件：
 
 ![](./images/tendi/tendi_captchaUrl-1.png)
+
+文件名中的 `*` 表示任意字符串或空字符串。例如，`TJNCaptcha*.js` 可以匹配 `TJNCaptcha.js` 或 `TJNCaptcha-global.js`。
 
 ## 如何查找任务创建所需的所有参数
 
