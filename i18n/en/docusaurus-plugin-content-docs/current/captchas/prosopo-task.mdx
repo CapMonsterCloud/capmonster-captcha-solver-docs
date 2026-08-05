@@ -51,7 +51,14 @@ The token-based automatic CAPTCHA solving method Prosopo Procaptcha.
     It typically has the following format: `5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV`.
 
 	
-	---
+	  ---
+
+  <ParamItem title="userAgent" type="string" />
+  Browser User-Agent. Use the current value supported by CapMonster Cloud: `userAgentPlaceholder`<br />
+
+You can get the latest value at: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+    ---
 
     <ParamItem title="proxyType" type="string" />
     **http** - regular http/https proxy;<br />**https** - try this option only if "http" doesn't work (required for some custom proxies);<br />**socks4** - socks4 proxy;<br />**socks5** - socks5 proxy.
