@@ -1,8 +1,8 @@
 ---
 sidebar_position: 26
 sidebar_label: Hunt Captcha
-title: "Automatic Detection and Bypass of Hunt CAPTCHA | API"
-description: "Learn how to detect Hunt using the automatic CAPTCHA solving API service CapMonster Cloud!"
+title: "Automatic Hunt CAPTCHA Recognition and Bypass | API"
+description: "Learn how to solve Hunt CAPTCHA using the CapMonster Cloud API."
 ---
 
 import Tabs from '@theme/Tabs';
@@ -11,7 +11,7 @@ import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
 import ImageWrap from '@theme/ImageWrap';
 import ImagesLayout from '@theme/ImagesLayout';
-import MethodDescription from '@theme/MethodDescription'
+import MethodDescription from '@theme/MethodDescription';
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
@@ -24,9 +24,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
   <PriceBlock title="Hunt" captchaId="hunt"/>
 </PriceBlockWrap>
 
+Hunt CAPTCHA is an anti-bot system that analyzes user behavior and launches an interactive challenge when suspicious activity is detected.
+
 ## Task examples
 
-Below are examples of Hunt Captcha task types that are currently supported by the CapMonster Cloud service:
+Below are examples of Hunt CAPTCHA variants supported by CapMonster Cloud:
 
 <ImagesLayout gap="16px" columns={3}>
   <ImageWrap title="Puzzle CAPTCHA">![](./images/hunt-task/slider-captcha.png)</ImageWrap>
@@ -34,25 +36,42 @@ Below are examples of Hunt Captcha task types that are currently supported by th
   <ImageWrap title="Checkbox CAPTCHA">![](./images/hunt-task/checkbox-captcha.png)</ImageWrap>
 </ImagesLayout>
 
-Hunt CAPTCHA is an anti-bot system used on betting platforms to detect automated activity. It monitors user behavior and, if suspicious actions are detected, triggers an interactive verification.
+CapMonster Cloud supports:
 
-:::warning **Attention!**
+- X-HD generation;
+- CAPTCHA solving via `meta.token`;
+- CAPTCHA solving via `widgetUrl`.
 
-* For this task, use **your own proxies**.
+:::warning Attention:
 
-* Our solving system has two operating modes: **X-HD generation (fingerprint)** and **CAPTCHA solving**. If you only want to generate X-HD, do not pass the `data` parameter. If you need to solve the CAPTCHA, pass the token that the target site provides during certain actions (for example, when requesting an SMS).
-  :::
+For this task, use **your own proxies**.
+
+:::
+
+## Choosing a scenario
+
+| Scenario | Parameters in `metadata` | Result |
+| --- | --- | --- |
+| X-HD generation | `apiGetLib` | X-HD |
+| Solving via `meta.token` | `apiGetLib`, `data` | CAPTCHA solution token |
+| Solving via `widgetUrl` | `apiGetLib`, `widgetUrl` | CAPTCHA solution token |
+
+
+
+Use `widgetUrl` when the full widget URL is available on the page. In this scenario, you do not need to obtain X-HD or `meta.token`.
+
+If `widgetUrl` is unavailable, first generate X-HD, obtain `meta.token` from the website, and then create a task with the `data` parameter (*see [Hunt CAPTCHA solving example using `data`](#hunt-captcha-solving-example-using-data) for details*).
+
+
 
 ## Request parameters
-
 <br />
 <span style={{ fontSize: "15px", fontWeight: 700 }}>
->  IMPORTANT: some parameter values are dynamic — they change with each render of the page using Hunt.  
-> Extract them immediately before creating the task to avoid errors during solving.  
-> See examples of automatic parameter extraction in the sections [How to get meta.token](#how-to-get-metatoken) and [Example of solving Hunt CAPTCHA](#example-of-solving-hunt-captcha).
+>  IMPORTANT: Some parameter values are dynamic and change every time the page with Hunt is rendered.  
+> Extract them immediately before creating the task to avoid solving errors.
+> For automatic parameter extraction examples, see [How to obtain `widgetUrl`](#how-to-obtain-widgeturl) and [Hunt CAPTCHA solving example using `data`](#hunt-captcha-solving-example-using-data).
 </span>
 <br />
-
 
 <div className="bordered-panel">
 <ParamItem title="type" required type="string" />
@@ -66,33 +85,50 @@ Hunt CAPTCHA is an anti-bot system used on betting platforms to detect automated
 ---
 
 <ParamItem title="websiteURL" required type="string" />
-The URL of the page where the Hunt CAPTCHA is located.
+
+Full URL of the page where Hunt CAPTCHA is used.
 
 ---
 
 <ParamItem title="apiGetLib (inside metadata)" required type="string" />
 
-The full link to the `api.js` file.
+Full URL of the `api.js` file.
 
-Example:  
-`https://www.example.com/hd-api/external/apps/<hash>/api.js`
+Example:
 
-Pass it in the following format:  
-`"apiGetLib":"https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"`
+```text
+https://example.com/hd-api/external/apps/<app-hash>/api.js
+```
 
-You can find this link in DevTools (the **Network** or **Elements** tabs) on the page with the Hunt CAPTCHA.  
-Use keyword search such as: `hd-api` or `api.js`.
+Find the request to `api.js` in the **Network** tab of DevTools. Search for `hd-api` or `api.js`.
 
 ---
 
 <ParamItem title="data (inside metadata)" type="string" />
-The `data` parameter must be specified when using CAPTCHA solving mode (see details below).
+
+The `meta.token` value received from the website.
+
+**Important**: send this parameter only when solving CAPTCHA via `meta.token`. Do not use it together with `widgetUrl`.
+
+---
+
+<ParamItem title="widgetUrl (inside metadata)" type="string" />
+
+Full URL of the Hunt CAPTCHA widget.
+
+Example:
+
+```text
+https://captcha.example.com/widget?hash=<widget-hash>
+```
+
+**Important:** send the complete URL, including the domain, path, and query parameters. Do not use it together with `data`.
 
 ---
 
 <ParamItem title="userAgent" type="string" />
 Browser User-Agent.<br />
-**Provide only the current Windows UA:** userAgentPlaceholder
+**Provide only the current Windows UA:** `userAgentPlaceholder`
 
 ---
 
@@ -127,79 +163,51 @@ Browser User-Agent.<br />
   Proxy password.
 
 </div>
---- 
 
-**The solution supports two operating modes:**
+## Create task method
 
-1. **X-HD (fingerprint) generation**
+Use the [createTask](/docs/api/methods/create-task/) method:
 
-   * In this mode, you do not pass the `data` parameter.
-   * After creating the task, you will receive an **X-HD** — a unique fingerprint tied to your IP address, which can be used for subsequent requests to the website.
+<MethodItem>
 
-2. **CAPTCHA solving**
+```http
+https://api.capmonster.cloud/createTask
+```
 
-   * In this mode, you must pass a **token** (the value of `meta.token`) in the `data` parameter. This token is issued by the website during specific actions (for example, when requesting an SMS).
-   * After creating the task, you will receive the **CAPTCHA solution** as a token ready to be used on the website.
+</MethodItem>
+<br />
 
----
 
-**When to use each mode:**
+### X-HD generation
 
-| Situation                      | Is `data` required? |
-| ------------------------------ | ------------------- |
-| Initial initialization         | No                  |
-| Need to obtain X-HD            | No                  |
-| Website returned Captcha error | Yes                 |
-| `meta.token` received          | Yes                 |
-
----
-
-**Example of a complete workflow:**
-
-1. Create a task **without `data`**
-2. Receive X-HD from our service
-3. Send a request to the website using X-HD
-4. Receive `meta.token`
-5. Create a task **with `data = meta.token`**
-6. Receive the solution
-7. Submit the solution to the website
-
-:::warning Important
-If you change the proxy, you must obtain a new X-HD.
-:::
-
-## Mode 1. X-HD Generation
-
-Used to obtain an X-HD token bound to the IP address.
-
-### Create task method for X-HD generation
+Send only `apiGetLib` inside `metadata`.
 
 <div className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
-    <MethodDescription>
-      **Request example**
+  <MethodDescription>
+
+**Request example**
+
 ```json
 {
-  "type": "CustomTask",
-  "class": "HUNT",
-  "websiteURL": "https://yourwebsite.com/page-with-hunt",
-  "metadata": {
-    "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
-  },
-  "userAgent": "userAgentPlaceholder",
-  "proxyType": "your-proxy-type",
-  "proxyAddress": "your-proxy-address",
-  "proxyPort": 1234,
-  "proxyLogin": "your-proxy-login",
-  "proxyPassword": "your-proxy-password"
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://yourwebsite.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
 }
 ```
-  **Response example**
 
+**Response example**
 
 ```json
 {
@@ -207,66 +215,79 @@ Used to obtain an X-HD token bound to the IP address.
   "taskId": 407533072
 }
 ```
-</MethodDescription>
+
+  </MethodDescription>
 </div>
 
+### Solving via `meta.token`
 
-## Mode 2. CAPTCHA solving
+Use this scenario if the `widgetUrl` parameter is unavailable.
 
-Used after the website returns a captcha error and provides `meta.token`.
+#### Step 1. Get X-HD
 
-### How to get `meta.token`
+1. Create a task with only `apiGetLib`.
+2. Get X-HD from the `getTaskResult` response.
 
-1. Send a request to the website (for example, an SMS request).
-2. Receive X-HD.
+#### Step 2. Get `meta.token`
+
+Pass the received X-HD in a request to the target website, for example, when requesting an SMS code.
 
 ![](./images/hunt-task/x-hd(data).png)
+
 ![](./images/hunt-task/x-hd(data)-1.png)
 
-3. The website responds with:
+If the website requires CAPTCHA verification, it will return a response similar to the following:
 
 ```json
 {
-  "errors": [{"code": "113", "title": "Captcha error"}],
+  "errors": [
+    {
+      "code": "113",
+      "title": "Captcha error"
+    }
+  ],
   "meta": {
     "token": "SITE_META_TOKEN"
   }
 }
 ```
+
 ![](./images/hunt-task/token(data).png)
 
+#### Step 3. Solve the CAPTCHA
 
-### Create task method for CAPTCHA solving
+Create a new task and pass:
 
-The value of `meta.token` must be passed in the `data` parameter.
+- `apiGetLib`;
+- the received `meta.token` in the `data` parameter.
 
 <div className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
-    <MethodDescription>
-      **Request example**
+  <MethodDescription>
+
+**Request example**
+
 ```json
 {
-  "type": "CustomTask",
-  "class": "HUNT",
-  "websiteUrl": "https://example.com",        
-  "metadata": {
-      "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-      "data": "meta-token-value",
-  },
-  "userAgent": "userAgentPlaceholder",
-  "proxyType": "your-proxy-type",
-  "proxyAddress": "your-proxy-address",
-  "proxyPort": 1234,
-  "proxyLogin": "your-proxy-login",
-  "proxyPassword": "your-proxy-password"
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://example.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+      "data": "SITE_META_TOKEN"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
 }
 ```
 
-  **Response example**
+**Response example**
 
 ```json
 {
@@ -274,36 +295,104 @@ The value of `meta.token` must be passed in the `data` parameter.
   "taskId": 407533072
 }
 ```
-</MethodDescription>
+
+  </MethodDescription>
+</div>
+
+
+### Solving via `widgetUrl`
+
+Use this scenario when the full Hunt CAPTCHA widget URL is available on the page.
+
+You do not need to obtain X-HD or `meta.token`.
+
+#### How to obtain `widgetUrl`
+
+1. Open the page with Hunt CAPTCHA.
+2. Open DevTools and go to the **Network** tab.
+3. Perform the action that triggers the CAPTCHA.
+4. Find the request by searching for `widget` or `hash`.
+5. Copy the complete **Request URL** value.
+6. Send it in `widgetUrl` (inside `metadata`).
+
+![](./images/hunt-task/widgetUrl.png)
+
+<br />
+
+:::warning Important:
+
+Obtain the current `widgetUrl` in the same session immediately before creating the task.
+
+Do not send only the `hash` value: the service requires the full URL.
+
+:::
+
+<div className="method-panel">
+  <MethodDescription>
+
+**Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://example.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+      "widgetUrl": "https://captcha.example.com/widget?hash=<widget-hash>"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+**Response example**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533072
+}
+```
+
+  </MethodDescription>
 </div>
 
 ## Get task result method
 
-Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the X-HD fingerprint or the Hunt CAPTCHA solution.
+Use the [getTaskResult](/docs/api/methods/get-task-result/) method to obtain the X-HD fingerprint or the Hunt CAPTCHA solution:
 
-:::warning **Attention!**
-The value of `solution.data.token`:
+<MethodItem>
 
-* In X-HD generation mode — this is the X-HD token that must be used in requests to the target website.
+```http
+https://api.capmonster.cloud/getTaskResult
+```
 
-* In CAPTCHA solving mode — `solution.data.token` is the solution token that must be sent back to the website to confirm the action.
-  :::
+</MethodItem>
+<br />
+
 
 <div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
-	<MethodDescription>
-		**Request example**
-		```json
-		{
-		  "clientKey": "API_KEY",
-		  "taskId": 407533072
-		}
-		```
-		**Response example**
+  <MethodDescription>
+
+**Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533072
+}
+```
+
+**Response example**
+
 ```json
 {
   "errorId": 0,
@@ -315,13 +404,21 @@ The value of `solution.data.token`:
   }
 }
 ```
-	</MethodDescription>
+
+  </MethodDescription>
 </div>
+<br />
+
+The value of `solution.data.token` depends on the scenario:
+
+- for X-HD generation, it contains X-HD;
+- when solving via `data`, it contains the CAPTCHA solution token;
+- when solving via `widgetUrl`, it contains the CAPTCHA solution token.
 
 ## Working with cookies
 
-:::warning **Attention!**
-The target site may use special **cookies** to manage the session. If they are missing or not sent with requests, the server may reject the request or require re-verification.
+:::warning Important:
+The target website may use special **cookies** to manage the session. If they are missing or are not sent with requests, the server may reject the request or require another verification.
 :::
 
 **Example of cookies received from the website:**
@@ -331,33 +428,38 @@ platform_type=desktop; typeBetNames=full; _glhf=1234567890; coefview=0; visit=1-
 v3fr=1; lng=en; flaglng=en; SESSION=12a3aea8cdcfdbb9e7df8ee99b526a84; auid=ab0dW2mqlz1Tjo2AAwplAg==; ggru=195; che_g=12abcede-691f-c7b2-d1e8-8488bc557d98
 ```
 
-**General principle of working with cookies:**
 
-1. First, you need to open a page on the website or send a **GET request** to the required page. This allows the server to initialize a user session and set the necessary cookies.
+**General workflow for cookies:**
 
-2. In the response, the server sends cookies via the `Set-Cookie` header. These cookies may contain a session identifier, security parameters, and anti‑bot related data.
+1. First, open the website page or send a GET request to the required page. This allows the server to initialize the user session and set the required cookies.
 
-3. The received cookies must be stored, as they are used to identify the client in subsequent requests.
+2. The server sends cookies in the `Set-Cookie` response header. These cookies may contain a session identifier, security parameters, and anti-bot data.
 
-4. When sending further requests to the site’s API, the cookies must be sent back to the server in the `Cookie` header so that the server understands the request belongs to the same session.
+3. Save the received cookies because they are used to identify the client in subsequent requests.
 
-5. All requests should be performed within the same session using the same **IP address (or proxy)** and **User-Agent**. Otherwise, the server may treat the request as suspicious and require additional verification.
+4. In subsequent API requests, send the cookies back to the server in the `Cookie` header so that the server can associate the request with the same session.
 
-6. Sometimes some cookies are created on the client side (for example, by JavaScript on the page). During automation or testing, it may be necessary to extract cookies directly from the browser or generate them in a similar way.
+5. All requests must be sent within the same session using the same IP address (or proxy) and User-Agent. Otherwise, the server may consider the request suspicious and require another verification.
+
+6. Some cookies may be created on the client side, for example by JavaScript on the page. During automation or testing, you may need to extract these cookies from the browser or generate them in a similar way.
 
 
-## Example of solving Hunt CAPTCHA
+## Hunt CAPTCHA solving example using `data`
 
-The examples below demonstrate a typical interaction flow with a website that uses **Hunt CAPTCHA**. The code shows how to:
+Below is a complete example of solving Hunt CAPTCHA using X-HD and `meta.token`. Use it when `widgetUrl` is unavailable.
 
-* obtain initial cookies by opening a page on the website;
-* generate additional cookies that may normally be created on the client side;
-* create a **fingerprint (X‑HD)** via CapMonster Cloud used by the website to verify requests;
-* send a request to the website API to initiate an action (for example, sending an SMS);
-* pass the received data to the captcha solving service;
-* after receiving the solution, send a **final request** to the API with the required parameters.
+The code demonstrates how to:
 
-It is also important to use **up‑to‑date HTTP headers and a [correct `User-Agent`](https://capmonster.cloud/api/useragent/actual)**.
+* obtain initial cookies when opening the website page;
+* generate additional cookies that may be created on the client side;
+* create a **fingerprint (X-HD)** through CapMonster Cloud, which the website uses to verify requests;
+* send a request to the website API to initiate an action, such as sending an SMS;
+* send the received data to the CAPTCHA-solving service;
+* send the final API request with the required parameters after receiving the solution.
+
+:::warning Important:
+Use current HTTP headers (see the [HTTP headers documentation](/docs/api/headers/) for details) and a [valid `User-Agent`](https://capmonster.cloud/api/useragent/actual).
+:::
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
@@ -383,7 +485,7 @@ const COUNTRY_CODE = "54"; // Country code
 
 const UA = "userAgentPlaceholder"; // User-Agent for requests
 
-/* ================= Proxy settings ================= */
+/* ================= PROXY SETTINGS ================= */
 
 const PROXY_HOST = "proxyAddress";
 const PROXY_PORT = 8080;
@@ -393,8 +495,8 @@ const PROXY_PASS = "proxyPassword";
 const PROXY = `http://${PROXY_USER}:${PROXY_PASS}@${PROXY_HOST}:${PROXY_PORT}`;
 
 /* ================= HEADERS ================= */
-// HTTP request headers
-// htmlHeaders — for GET page requests
+// Headers for HTTP requests
+// htmlHeaders — for page GET requests
 // apiHeaders — for website API requests
 
 const htmlHeaders = {
@@ -425,7 +527,7 @@ const apiHeaders = {
   priority: "u=1, i",
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
-  referer: BASE_URL + "/", // Actual referer from the website
+  referer: BASE_URL + "/", // Current referer from the website
   "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
@@ -437,7 +539,7 @@ const apiHeaders = {
 };
 
 /* ================= UTILS ================= */
-// Helper functions
+// Utility functions
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -452,7 +554,7 @@ function randomString(len = 20) {
 }
 
 /* ================= CAPMONSTER CLOUD ================= */
-// Creating a task and waiting for captcha solution
+// Create a task and wait for the CAPTCHA solution
 
 async function createTask(task) {
   const { body } = await gotScraping.post(`${SOLVER_URL}/createTask`, {
@@ -481,7 +583,7 @@ async function waitResult(taskId) {
 }
 
 /* ================= MAIN FLOW ================= */
-// Main process of automatic registration with captcha
+// Main automated registration flow with CAPTCHA
 
 (async () => {
   try {
@@ -489,7 +591,7 @@ async function waitResult(taskId) {
     console.log("STEP 1 — Getting cookies...");
 
     const base = await gotScraping.get(
-      BASE_URL + "/registration?type=phone_reg", // Replace with the actual registration page from the website
+      BASE_URL + "/registration?type=phone_reg", // Replace with the current registration page URL from the website
       {
         headers: htmlHeaders,
         proxyUrl: PROXY,
@@ -501,7 +603,7 @@ async function waitResult(taskId) {
       .map((c) => c.split(";")[0])
       .join("; ");
 
-    // Generate additional cookies that are created on the client side
+    // Generate additional cookies created on the client side
     const che_g = crypto.randomUUID();
     const ggru = randomString();
 
@@ -529,11 +631,11 @@ async function waitResult(taskId) {
     const xhd = await waitResult(fingerprintTaskId);
     console.log("X-HD:", xhd);
 
-    // ---------------- STEP 3: Send request to trigger SMS ----------------
+    // ---------------- STEP 3: Send SMS request ----------------
     console.log("\nSTEP 3 — Trigger SMS...");
 
     const smsResp = await gotScraping.post(
-      BASE_URL + "/web-api/api/web/registration/v2/sms", // Replace with the actual API endpoint from the website
+      BASE_URL + "/web-api/api/web/registration/v2/sms", // Replace with the current API endpoint from the website
       {
         headers: { ...apiHeaders, cookie: cookies, "x-hd": xhd },
         json: {
@@ -552,7 +654,7 @@ async function waitResult(taskId) {
 
     console.log("meta.token:", metaToken);
 
-    // ---------------- STEP 4: Solve captcha ----------------
+    // ---------------- STEP 4: Solve CAPTCHA ----------------
     console.log("\nSTEP 4 — Solving Hunt captcha...");
 
     const solveTaskId = await createTask({
@@ -571,11 +673,11 @@ async function waitResult(taskId) {
     const captchaToken = await waitResult(solveTaskId);
     console.log("Captcha token:", captchaToken);
 
-    // ---------------- STEP 5: Final request ----------------
+    // ---------------- STEP 5: Send final request ----------------
     console.log("\nSTEP 5 — Sending final request...");
 
     const finalResp = await gotScraping.post(
-      BASE_URL + "/api/web/registration/v2/sms", // Replace with the actual API endpoint from the website
+      BASE_URL + "/api/web/registration/v2/sms", // Replace with the current API endpoint from the website
       {
         headers: { ...apiHeaders, cookie: cookies, "x-hd": xhd },
         body: JSON.stringify({
@@ -604,7 +706,7 @@ async function waitResult(taskId) {
 
   <TabItem value="python" label="Python" default className="method-panel">
 <details>
-      <summary>Show Code</summary>
+      <summary>Show code</summary>
 ```python
 import requests
 import uuid
@@ -613,20 +715,20 @@ import string
 import time
 
 # ================= CONFIG (recommended to store in .env) =================
-# CapMonster Cloud API settings, target website settings, and user data
+# CapMonster Cloud API settings, website settings, and user data
 
 API_KEY = "YOUR_CAPMONSTER_API_KEY"  # Replace with your CapMonster Cloud API key
 SOLVER_URL = "https://api.capmonster.cloud"
 
-BASE_URL = "https://example.com"  # Base URL of the website
-API_GET_LIB = "https://example.com/hd-api/external/apps/c1e24d5857463de4393e3f1489b00ebd4495da64/api.js"  # Replace with the actual api.js URL from the website
+BASE_URL = "https://example.com"  # Website base URL
+API_GET_LIB = "https://example.com/hd-api/external/apps/c1e24d5857463de4393e3f1489b00ebd4495da64/api.js"  # Replace with the current api.js URL from the website
 
-PHONE = "9102345678"  # Phone number for registration (without country code)
+PHONE = "9102345678"  # Registration phone number (without country code)
 COUNTRY_CODE = "7"  # Country code
 
 UA = "userAgentPlaceholder"  # User-Agent
 
-# ================= Proxy settings =================
+# ================= PROXY SETTINGS =================
 
 PROXY_HOST = "proxyAdress" 
 PROXY_PORT = 8080
@@ -641,9 +743,9 @@ proxies = {
 }
 
 # ================= HEADERS =================
-# HTTP request headers
-# html_headers — for regular GET page requests
-# api_headers — for requests to the website API
+# Headers for HTTP requests
+# html_headers — for standard page GET requests
+# api_headers — for website API requests
 
 html_headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
@@ -672,7 +774,7 @@ api_headers = {
     "priority": "u=1, i",
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
-    "referer": BASE_URL + "/en", # Replace with the actual referer from the website
+    "referer": BASE_URL + "/en", # Replace with the current referer from the website
     "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
@@ -684,19 +786,19 @@ api_headers = {
 }
 
 # ================= UTILS =================
-# Helper functions
+# Utility functions
 
 def delay(ms):
     """Pause in milliseconds"""
     time.sleep(ms / 1000)
 
 def random_string(length=20):
-    """Generate a random string (letters + digits)"""
+    """Generate a random string (letters and digits)"""
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
 
 # ================= CAPMONSTER CLOUD =================
-# Functions for working with CapMonster Cloud (creating tasks and waiting for captcha solutions)
+# CapMonster Cloud functions (create a task and wait for the CAPTCHA solution)
 
 def create_task(task):
     """Create a task in CapMonster Cloud"""
@@ -716,7 +818,7 @@ def create_task(task):
     return data["taskId"]
 
 def wait_result(task_id):
-    """Wait for the task solution"""
+    """Wait for the task result"""
     while True:
         r = requests.post(
             SOLVER_URL + "/getTaskResult",
@@ -734,12 +836,12 @@ def wait_result(task_id):
         delay(3000)
 
 # ================= SESSION =================
-# Create a requests session to store cookies between requests
+# Create a requests session to preserve cookies between requests
 
 session = requests.Session()
 
 # ================= MAIN =================
-# Main process of automatic registration with captcha
+# Main automated registration flow with CAPTCHA
 
 try:
 
@@ -747,7 +849,7 @@ try:
     print("STEP 1 — Getting cookies")
 
     r = session.get(
-        BASE_URL + "/en/registration?type=phone", # Replace with the actual registration page from the website
+        BASE_URL + "/en/registration?type=phone", # Replace with the current registration page URL from the website
         headers=html_headers,
         proxies=proxies
     )
@@ -755,7 +857,7 @@ try:
     # Save cookies received from the server
     cookies = "; ".join([f"{c.name}={c.value}" for c in session.cookies])
 
-    # Generate additional cookies that are created on the client side
+    # Generate additional cookies created on the client side
     che_g = str(uuid.uuid4())
     ggru = random_string()
     cookies += f"; che_g={che_g}"
@@ -781,15 +883,15 @@ try:
         "proxyPassword": PROXY_PASSWORD
     })
 
-    # Get the result (X-HD) which is required for the website API
+    # Obtain the result (X-HD) required by the website API
     xhd = wait_result(fingerprint_task)
     print("X-HD:", xhd)
 
-    # ---------------- STEP 3: Send request to trigger SMS ----------------
+    # ---------------- STEP 3: Send SMS request ----------------
     print("\nSTEP 3 — Trigger SMS")
 
     sms_resp = session.post(
-        BASE_URL + "/web-api/api/web/registration/v2/sms", # Replace with the actual API endpoint from the website
+        BASE_URL + "/web-api/api/web/registration/v2/sms", # Replace with the current API endpoint from the website
         headers={**api_headers, "cookie": cookies, "x-hd": xhd},
         json={
             "data": {
@@ -818,7 +920,7 @@ try:
 
     print("meta.token:", meta_token)
 
-    # ---------------- STEP 4: Solve captcha ----------------
+    # ---------------- STEP 4: Solve CAPTCHA ----------------
     print("\nSTEP 4 — Solving captcha")
 
     solve_task = create_task({
@@ -840,11 +942,11 @@ try:
     captcha_token = wait_result(solve_task)
     print("Captcha token:", captcha_token)
 
-    # ---------------- STEP 5: Final request ----------------
+    # ---------------- STEP 5: Send final request ----------------
     print("\nSTEP 5 — Final request")
 
     final = session.post(
-        BASE_URL + "/web-api/api/web/registration/v2/sms", # Replace with the actual API endpoint from the website
+        BASE_URL + "/web-api/api/web/registration/v2/sms", # Replace with the current API endpoint from the website
         headers={**api_headers, "cookie": cookies, "x-hd": xhd},
         json={
             "data": {

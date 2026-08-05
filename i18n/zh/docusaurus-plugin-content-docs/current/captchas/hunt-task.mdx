@@ -1,8 +1,8 @@
 ---
 sidebar_position: 26
 sidebar_label: Hunt Captcha
-title: "自动识别与绕过 Hunt CAPTCHA | API"
-description: "了解如何使用 CapMonster Cloud 的自动识别与验证码解决服务，通过 API 识别 Hunt！"
+title: "Hunt CAPTCHA 自动识别与解决 | API"
+description: "了解如何使用 CapMonster Cloud API 解决 Hunt CAPTCHA。"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -11,7 +11,7 @@ import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
 import ImageWrap from '@theme/ImageWrap';
 import ImagesLayout from '@theme/ImagesLayout';
-import MethodDescription from '@theme/MethodDescription'
+import MethodDescription from '@theme/MethodDescription';
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
@@ -24,6 +24,8 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
   <PriceBlock title="Hunt" captchaId="hunt"/>
 </PriceBlockWrap>
 
+Hunt CAPTCHA 是一种反机器人系统，会分析用户行为，并在检测到可疑活动时启动交互式验证。
+
 ## 任务示例
 
 以下是目前 CapMonster Cloud 服务支持的 Hunt Captcha 任务类型示例：
@@ -34,22 +36,40 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
   <ImageWrap title="Checkbox CAPTCHA">![](./images/hunt-task/checkbox-captcha.png)</ImageWrap>
 </ImagesLayout>
 
-Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自动化行为。它会跟踪用户行为，并在检测到可疑活动时启动交互式验证。
+CapMonster Cloud 支持：
 
-:::warning **注意！**
+- 生成 X-HD；
+- 通过 `meta.token` 解决 CAPTCHA；
+- 通过 `widgetUrl` 解决 CAPTCHA。
 
-* 要完成此任务，请使用**您自己的代理**。
+:::warning 注意：
 
-* 我们的解决系统有两种工作模式：**生成 X-HD（指纹）** 和 **验证码求解**。如果您只需要生成 X-HD，请不要传递 `data` 参数。如果您需要解决验证码，请在 `data` 中传递目标网站在特定操作时生成的令牌（例如请求短信时）。
-  :::
+执行此任务时，请使用**您自己的代理**。
+
+:::
+
+## 选择场景
+
+| 场景 | `metadata` 中的参数 | 结果 |
+| --- | --- | --- |
+| 生成 X-HD | `apiGetLib` | X-HD |
+| 通过 `meta.token` 解决 | `apiGetLib`, `data` | CAPTCHA 解决令牌 |
+| 通过 `widgetUrl` 解决 | `apiGetLib`, `widgetUrl` | CAPTCHA 解决令牌 |
+
+
+
+如果页面中可以获取完整的组件链接，请使用 `widgetUrl`。在此场景中，无需获取 X-HD 和 `meta.token`。
+
+如果无法获取 `widgetUrl`，请先生成 X-HD，从网站获取 `meta.token`，然后使用 `data` 参数创建任务（*详情请参阅[通过 data 解决 Hunt CAPTCHA 的示例](#通过-data-解决-hunt-captcha-的示例)*）。
+
+
 
 ## 请求参数
-
 <br />
 <span style={{ fontSize: "15px", fontWeight: 700 }}>
->  重要提示：某些参数的值是动态的 — 它们会在每次渲染包含 Hunt 的页面时发生变化。  
-> 请在创建任务前立即提取这些参数，以避免在解决过程中出现错误。  
-> 自动提取参数的示例请参见章节 [如何获取 meta.token](#如何获取-metatoken) 和 [Hunt CAPTCHA 解决示例](#hunt-captcha-解决示例)。
+>  重要：部分参数值是动态的，每次渲染包含 Hunt 的页面时都会发生变化。  
+> 请在创建任务前立即提取这些参数，以避免解决过程中出现错误。
+> 自动提取参数的示例请参阅[如何获取 widgetUrl](#如何获取-widgeturl)和[通过 data 解决 Hunt CAPTCHA 的示例](#通过-data-解决-hunt-captcha-的示例)。
 </span>
 <br />
 
@@ -65,27 +85,44 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 ---
 
 <ParamItem title="websiteURL" required type="string" />
-包含 Hunt 验证码的页面地址。
+
+使用 Hunt CAPTCHA 的页面完整 URL。
 
 ---
 
-<ParamItem title="apiGetLib (在 metadata 内)" required type="string" />
+<ParamItem title="apiGetLib (位于 metadata 中)" required type="string" />
 
 `api.js` 文件的完整链接。
 
 示例：
-`https://www.example.com/hd-api/external/apps/<hash>/api.js`
 
-请按以下格式传递：
-`"apiGetLib":"https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"`
+```text
+https://example.com/hd-api/external/apps/<app-hash>/api.js
+```
 
-可在包含 Hunt 验证码的页面中通过 DevTools（**Network** 或 **Elements** 选项卡）查找该链接。  
-请使用关键字 `hd-api` 或 `api.js` 进行搜索。
+在 DevTools 的 **Network** 选项卡中查找对 `api.js` 的请求。可使用 `hd-api` 或 `api.js` 进行搜索。
 
 ---
 
 <ParamItem title="data（位于 metadata 中）" type="string" />
-选择验证码解决模式时必须指定 `data`（详情见下文）
+
+从网站获取的 `meta.token` 值。
+
+**重要**：仅在通过 `meta.token` 解决 CAPTCHA 时传递。不要与 `widgetUrl` 同时使用。
+
+---
+
+<ParamItem title="widgetUrl（位于 metadata 中）" type="string" />
+
+Hunt CAPTCHA 组件的完整 URL。
+
+示例：
+
+```text
+https://captcha.example.com/widget?hash=<widget-hash>
+```
+
+**重要**：请传递完整链接，包括域名、路径和请求参数。不要与 `data` 同时使用。
 
 ---
 
@@ -126,182 +163,236 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
 代理密码
 
 </div>
---- 
 
-**该解决方案支持两种工作模式：**
+## 创建任务的方法
 
-### 1. 生成 X-HD（指纹）
+使用 [createTask](/docs/api/methods/create-task/) 方法：
 
-* 在此模式下，您无需传递 `data`。
-* 创建任务后，您将获得 **X-HD** —— 一个与您的 IP 绑定的唯一指纹，可用于后续向网站发送请求。
+<MethodItem>
 
-### 2. 验证码求解
+```http
+https://api.capmonster.cloud/createTask
+```
 
-* 在此模式下，您需要在参数 `data` 中传递网站在特定操作时生成的**令牌**（`meta.token`），例如在请求短信时。
-* 创建任务后，您将获得**验证码解决结果**，即一个可直接在网站上使用的令牌。
+</MethodItem>
+<br />
 
----
 
-### 何时使用每种模式
+### 生成 X-HD
 
-| 情况                  | 是否需要传递 `data`？ |
-| ------------------------- | ------------- |
-| 初始初始化   | 否            |
-| 需要获取 X-HD            | 否             |
-| 网站返回 Captcha error | 是             |
-| 已获取 `meta.token`      | 是             |
-
----
-
-### 完整工作流程示例
-
-1. 创建任务 **不传递 `data`**
-2. 从我们的服务获取 X-HD
-3. 使用 X-HD 向网站发送请求
-4. 获取 `meta.token`
-5. 创建任务 **并设置 `data = meta.token`**
-6. 获取解决结果
-7. 将解决结果提交到网站
-
-:::warning 重要
-如果更换代理，需要重新获取 X-HD。
-:::
-
-## 模式 1：生成 X-HD
-
-用于获取与 IP 绑定的 X-HD 令牌。
-
-### 创建用于生成 X-HD 的任务方法
+仅在 `metadata` 中传递 `apiGetLib`。
 
 <div className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
-    <MethodDescription>
-      **请求示例**
+  <MethodDescription>
+
+**请求示例**
+
 ```json
 {
-  "type": "CustomTask",
-  "class": "HUNT",
-  "websiteURL": "https://yourwebsite.com/page-with-hunt",
-  "metadata": {
-    "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
-  },
-  "userAgent": "userAgentPlaceholder",
-  "proxyType": "your-proxy-type",
-  "proxyAddress": "your-proxy-address",
-  "proxyPort": 1234,
-  "proxyLogin": "your-proxy-login",
-  "proxyPassword": "your-proxy-password"
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://yourwebsite.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
 }
 ```
 
-      **响应示例**
+**响应示例**
+
 ```json
 {
   "errorId": 0,
   "taskId": 407533072
 }
 ```
-    </MethodDescription>
-  </div>
 
----
+  </MethodDescription>
+</div>
 
-## 模式 2：验证码求解
+### 通过 `meta.token` 解决
 
-当网站返回 captcha 错误并提供 `meta.token` 后使用。
+如果无法获取 `widgetUrl` 参数，请使用此方案。
 
-### 如何获取 `meta.token`
+#### 步骤 1：获取 X-HD
 
-1. 向网站发送请求（例如请求短信验证码）
-2. 获取 X-HD
+1. 创建任务时仅传递 `apiGetLib`。
+2. 从 `getTaskResult` 响应中获取 X-HD。
+
+#### 步骤 2：获取 `meta.token`
+
+将获取到的 X-HD 发送到目标网站，例如在请求短信验证码时。
 
 ![](./images/hunt-task/x-hd(data).png)
+
 ![](./images/hunt-task/x-hd(data)-1.png)
 
-3. 网站返回：
+如果网站要求进行 CAPTCHA 验证，将返回类似以下内容的响应：
 
 ```json
 {
-  "errors":[{"code":"113","title":"Captcha error"}],
-  "meta":{
-    "token":"SITE_META_TOKEN"
+  "errors": [
+    {
+      "code": "113",
+      "title": "Captcha error"
+    }
+  ],
+  "meta": {
+    "token": "SITE_META_TOKEN"
   }
 }
 ```
 
 ![](./images/hunt-task/token(data).png)
 
-### 创建用于验证码求解的任务方法
+#### 步骤 3：解决 CAPTCHA
 
-需要将 `meta.token` 的值传递到 `data` 参数中。
+创建一个新任务，并传递：
+
+- `apiGetLib`；
+- 在 `data` 参数中传递获取到的 `meta.token`。
 
 <div className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
-    <MethodDescription>
-      **请求示例**
+  <MethodDescription>
+
+**请求示例**
+
 ```json
 {
-  "type": "CustomTask",
-  "class": "HUNT",
-  "websiteUrl": "https://example.com",        
-  "metadata": {
-      "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-      "data": "meta-token-value",
-  },
-  "userAgent": "userAgentPlaceholder",
-  "proxyType": "your-proxy-type",
-  "proxyAddress": "your-proxy-address",
-  "proxyPort": 1234,
-  "proxyLogin": "your-proxy-login",
-  "proxyPassword": "your-proxy-password"
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://example.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+      "data": "SITE_META_TOKEN"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
 }
 ```
 
-      **响应示例**
-      ```json
-      {
-        "errorId": 0,
-        "taskId": 407533072
-    }
-      ```
-    </MethodDescription>
-  </div>
+**响应示例**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533072
+}
+```
+
+  </MethodDescription>
+</div>
+
+
+### 通过 `widgetUrl` 解决
+
+如果页面中可以获取 Hunt CAPTCHA 组件的完整链接，请使用此场景。
+
+无需获取 X-HD 和 `meta.token`。
+
+#### 如何获取 `widgetUrl`
+
+1. 打开包含 Hunt CAPTCHA 的页面。
+2. 打开 DevTools，并切换到 **Network** 选项卡。
+3. 执行会触发 CAPTCHA 的操作。
+4. 使用 `widget` 或 `hash` 关键字查找请求。
+5. 复制完整的 **Request URL**。
+6. 将其传递到 `widgetUrl`（位于 `metadata` 内）。
+
+![](./images/hunt-task/widgetUrl.png)
+
+<br />
+
+:::warning 重要：
+
+请在同一会话中、创建任务前立即获取当前有效的 `widgetUrl`。
+
+不要只传递 `hash` 值：服务需要完整 URL。
+
+:::
+
+<div className="method-panel">
+  <MethodDescription>
+
+**请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://example.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+      "widgetUrl": "https://captcha.example.com/widget?hash=<widget-hash>"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+**响应示例**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533072
+}
+```
+
+  </MethodDescription>
+</div>
 
 ## 获取任务结果的方法
 
-使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法来获取 X-HD 指纹或 Hunt 验证码的解决结果。
+使用 [getTaskResult](/docs/api/methods/get-task-result/) 方法获取 X-HD 指纹或 Hunt CAPTCHA 解决结果：
 
-:::warning **注意！**
-`solution.data.token` 的值：
+<MethodItem>
 
-* 在生成 X-HD 模式下 —— 这是 X-HD 令牌，需要在向目标网站发送请求时使用。
+```http
+https://api.capmonster.cloud/getTaskResult
+```
 
-* 在验证码求解模式下 —— `solution.data.token` 是验证码解决令牌，需要将其提交回网站以确认操作。
-  :::
+</MethodItem>
+<br />
+
 
 <div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
-	<MethodDescription>
-		**请求示例**
-		```json
-		{
-		  "clientKey":"API_KEY",
-		  "taskId": 407533072
-		}
-		```
-		**响应示例**
+  <MethodDescription>
+
+**请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533072
+}
+```
+
+**响应示例**
+
 ```json
 {
   "errorId": 0,
@@ -313,73 +404,83 @@ Hunt 验证码是一种用于博彩平台的反机器人系统，用于检测自
   }
 }
 ```
-	</MethodDescription>
+
+  </MethodDescription>
 </div>
+<br />
 
+`solution.data.token` 的值取决于所选场景：
 
-## Cookies 的使用
+- 生成 X-HD 时，该字段包含 X-HD；
+- 通过 `data` 解决时，该字段包含 CAPTCHA 解决令牌；
+- 通过 `widgetUrl` 解决时，该字段包含 CAPTCHA 解决令牌。
 
-:::warning **注意！**
-目标网站可能使用特殊的 cookies 来管理会话。如果这些 **cookies** 缺失或未随请求发送，服务器可能会拒绝请求或要求重新验证。
+## Cookie 的使用
+
+:::warning 重要：
+目标网站可能会使用特定 **Cookie** 管理会话。如果缺少这些 Cookie，或请求中未传递这些 Cookie，服务器可能会拒绝请求或要求重新验证。
 :::
 
-**从网站获取的 cookies 示例：**
+**从网站获取的 Cookie 示例：**
 
 ```text
 platform_type=desktop; typeBetNames=full; _glhf=1234567890; coefview=0; visit=1-123abc012345d1be726746568edc62d9; fast_coupon=true;
 v3fr=1; lng=en; flaglng=en; SESSION=12a3aea8cdcfdbb9e7df8ee99b526a84; auid=ab0dW2mqlz1Tjo2AAwplAg==; ggru=195; che_g=12abcede-691f-c7b2-d1e8-8488bc557d98
 ```
 
-**Cookies 的基本工作原理:**
 
-1. 首先需要打开网站页面，或者向目标页面发送 **GET 请求**。这样服务器会初始化用户会话并设置必要的 cookies。
+**Cookie 的一般工作原理：**
 
-2. 在响应中，服务器会通过 `Set-Cookie` 头返回 cookies。这些 cookies 可能包含会话 ID、安全参数以及反机器人相关数据。
+1. 首先打开网站页面，或向所需页面发送 GET 请求。这样服务器就可以初始化用户会话并设置必要的 Cookie。
 
-3. 需要保存这些 cookies，因为后续请求会使用它们来识别客户端。
+2. 服务器通过响应头 `Set-Cookie` 返回 Cookie。这些 Cookie 可能包含会话标识符、安全参数和反机器人保护数据。
 
-4. 在向网站 API 发送后续请求时，需要在 `Cookie` 请求头中将 cookies 发送回服务器，以便服务器确认该请求属于同一会话。
+3. 请保存收到的 Cookie，因为后续请求会使用它们识别客户端。
 
-4. 向 API 发送后续请求时，必须在 `Cookie` 请求头中将 Cookie 传回服务器，以便服务器确认请求属于同一会话。
+4. 向 API 发送后续请求时，应在 `Cookie` 请求头中将 Cookie 传回服务器，以便服务器识别该请求属于同一会话。
 
-5. 所有请求都必须在同一会话中使用相同的 IP（或代理）和 User-Agent。否则，服务器可能会将请求视为可疑并要求重新验证。
+5. 所有请求都应在同一会话中执行，并使用相同的 IP（或代理）和 User-Agent。否则，服务器可能会将请求视为可疑请求，并要求重新验证。
 
-6. 某些 Cookie 有时会在客户端生成（例如页面中的 JavaScript）。在自动化或测试过程中，有时需要从浏览器中提取 Cookie，或以类似方式生成它们。
+6. 部分 Cookie 可能在客户端生成，例如由页面中的 JavaScript 创建。在自动化或测试过程中，有时需要从浏览器中提取这些 Cookie，或以类似方式生成。
 
 
-## Hunt CAPTCHA 解决示例
+## 通过 `data` 解决 Hunt CAPTCHA 的示例
 
-下面的示例展示了与使用 **Hunt CAPTCHA** 的网站交互的典型流程。代码演示了如何：
+下面提供了通过 X-HD 和 `meta.token` 解决问题的完整示例。如果无法获取 `widgetUrl`，请使用此示例。
 
-* 打开网站页面以获取初始 cookies；
-* 生成可能在客户端创建的额外 cookies；
-* 通过 CapMonster Cloud 创建用于请求验证的 **fingerprint（X‑HD）**；
-* 向网站 API 发送请求以触发某个操作（例如发送 SMS）；
-* 将获取的数据传递给验证码识别服务；
-* 在获得验证码解决结果后，向 API 发送 **最终请求** 并附带所需参数。
+代码展示了如何：
 
-同时，还需要使用 **最新的 HTTP 请求头以及正确的 [`User-Agent`](https://capmonster.cloud/api/useragent/actual)**。
+* 打开网站页面时获取初始 Cookie；
+* 生成可能在客户端创建的其他 Cookie；
+* 通过 CapMonster Cloud 创建网站用于验证请求的**指纹（X-HD）**；
+* 向网站 API 发送请求以触发操作，例如发送短信；
+* 将获得的数据发送到 CAPTCHA 解决服务；
+* 获取解决结果后，使用必要参数向 API 发送最终请求。
+
+:::warning 重要：
+请使用最新的 HTTP 请求头（详情请参阅[此部分](/docs/api/headers/)）以及[正确的 `User-Agent`](https://capmonster.cloud/api/useragent/actual)。
+:::
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
   <TabItem value="js" label="JavaScript" default className="method-panel">
 <details>
-      <summary>显示代码 (Node.js)</summary>
+      <summary>显示代码（Node.js）</summary>
 ```js
 import { gotScraping } from "got-scraping";
 import crypto from "crypto";
 
-/* ================= CONFIG（建议存储在 .env 中） ================= */
-// CapMonster Cloud API、网站以及用户数据的配置
+/* ================= CONFIG (建议保存在 .env 中) ================= */
+// CapMonster Cloud API、网站和用户数据设置
 
 const API_KEY = "YOUR_API_KEY"; // 您的 CapMonster Cloud API 密钥
 const SOLVER_URL = "https://api.capmonster.cloud";
 
-const BASE_URL = "https://example.com"; // 网站的基础 URL
+const BASE_URL = "https://example.com"; // 网站基础 URL
 const API_GET_LIB =
   "https://example.com/hd-api/external/apps/a1047eab1035d58682a53557e0b2a75edbfd15fd/api.js"; // 网站的 api.js
 
-const PHONE = "91123456789"; // 用于注册的电话号码（不包含国家代码）
+const PHONE = "91123456789"; // 用于注册的电话号码（不含国家代码）
 const COUNTRY_CODE = "54"; // 国家代码
 
 const UA = "userAgentPlaceholder"; // 请求使用的 User-Agent
@@ -395,7 +496,7 @@ const PROXY = `http://${PROXY_USER}:${PROXY_PASS}@${PROXY_HOST}:${PROXY_PORT}`;
 
 /* ================= HEADERS ================= */
 // HTTP 请求头
-// htmlHeaders — 用于 GET 页面请求
+// htmlHeaders — 用于页面 GET 请求
 // apiHeaders — 用于网站 API 请求
 
 const htmlHeaders = {
@@ -453,7 +554,7 @@ function randomString(len = 20) {
 }
 
 /* ================= CAPMONSTER CLOUD ================= */
-// 创建任务并等待验证码解决结果
+// 创建任务并等待 CAPTCHA 解决结果
 
 async function createTask(task) {
   const { body } = await gotScraping.post(`${SOLVER_URL}/createTask`, {
@@ -482,27 +583,27 @@ async function waitResult(taskId) {
 }
 
 /* ================= MAIN FLOW ================= */
-// 带验证码的自动注册主流程
+// 带 CAPTCHA 的自动注册主流程
 
 (async () => {
   try {
-    // ---------------- STEP 1: 获取 cookies ----------------
+    // ---------------- STEP 1: 获取 Cookie ----------------
     console.log("STEP 1 — Getting cookies...");
 
     const base = await gotScraping.get(
-      BASE_URL + "/registration?type=phone_reg", // 请替换为网站当前的注册页面
+      BASE_URL + "/registration?type=phone_reg", // 替换为网站当前有效的注册页面
       {
         headers: htmlHeaders,
         proxyUrl: PROXY,
       },
     );
 
-    // 保存服务器返回的 cookies
+    // 保存服务器返回的 Cookie
     let cookies = (base.headers["set-cookie"] || [])
       .map((c) => c.split(";")[0])
       .join("; ");
 
-    // 生成客户端创建的额外 cookies
+    // 生成在客户端创建的其他 Cookie
     const che_g = crypto.randomUUID();
     const ggru = randomString();
 
@@ -511,7 +612,7 @@ async function waitResult(taskId) {
 
     console.log("Cookies:", cookies);
 
-    // ---------------- STEP 2: 创建 fingerprint ----------------
+    // ---------------- STEP 2: 创建指纹 ----------------
     console.log("\nSTEP 2 — Creating fingerprint...");
 
     const fingerprintTaskId = await createTask({
@@ -530,11 +631,11 @@ async function waitResult(taskId) {
     const xhd = await waitResult(fingerprintTaskId);
     console.log("X-HD:", xhd);
 
-    // ---------------- STEP 3: 发送 SMS 请求 ----------------
+    // ---------------- STEP 3: 发送短信请求 ----------------
     console.log("\nSTEP 3 — Trigger SMS...");
 
     const smsResp = await gotScraping.post(
-      BASE_URL + "/web-api/api/web/registration/v2/sms", // 请替换为网站当前的 API endpoint
+      BASE_URL + "/web-api/api/web/registration/v2/sms", // 替换为网站当前有效的 API 端点
       {
         headers: { ...apiHeaders, cookie: cookies, "x-hd": xhd },
         json: {
@@ -553,7 +654,7 @@ async function waitResult(taskId) {
 
     console.log("meta.token:", metaToken);
 
-    // ---------------- STEP 4: 解决验证码 ----------------
+    // ---------------- STEP 4: 解决 CAPTCHA ----------------
     console.log("\nSTEP 4 — Solving Hunt captcha...");
 
     const solveTaskId = await createTask({
@@ -572,11 +673,11 @@ async function waitResult(taskId) {
     const captchaToken = await waitResult(solveTaskId);
     console.log("Captcha token:", captchaToken);
 
-    // ---------------- STEP 5: 发送最终请求 ----------------
+    // ---------------- STEP 5: 最终请求 ----------------
     console.log("\nSTEP 5 — Sending final request...");
 
     const finalResp = await gotScraping.post(
-      BASE_URL + "/api/web/registration/v2/sms", // 请替换为网站当前的 API endpoint
+      BASE_URL + "/api/web/registration/v2/sms", // 替换为网站当前有效的 API 端点
       {
         headers: { ...apiHeaders, cookie: cookies, "x-hd": xhd },
         body: JSON.stringify({
@@ -614,15 +715,15 @@ import string
 import time
 
 # ================= CONFIG (建议保存在 .env 中) =================
-# CapMonster Cloud API、网站以及用户数据的配置
+# CapMonster Cloud API、网站和用户数据设置
 
-API_KEY = "YOUR_CAPMONSTER_API_KEY"  # 替换为你的 CapMonster Cloud API Key
+API_KEY = "YOUR_CAPMONSTER_API_KEY"  # Замените на ваш API-ключ CapMonster Cloud
 SOLVER_URL = "https://api.capmonster.cloud"
 
 BASE_URL = "https://example.com"  # 网站基础 URL
-API_GET_LIB = "https://example.com/hd-api/external/apps/c1e24d5857463de4393e3f1489b00ebd4495da64/api.js"  # 替换为网站中实际使用的 api.js 地址
+API_GET_LIB = "https://example.com/hd-api/external/apps/c1e24d5857463de4393e3f1489b00ebd4495da64/api.js"  # 替换为网站当前有效的 api.js 链接
 
-PHONE = "9102345678"  # 注册使用的手机号（不包含国家代码）
+PHONE = "9102345678"  # 用于注册的电话号码（不含国家代码）
 COUNTRY_CODE = "7"  # 国家代码
 
 UA = "userAgentPlaceholder"  # User-Agent
@@ -644,7 +745,7 @@ proxies = {
 # ================= HEADERS =================
 # HTTP 请求头
 # html_headers — 用于普通页面 GET 请求
-# api_headers — 用于网站 API 请求
+# api_headers — для запросов к API сайта
 
 html_headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
@@ -673,7 +774,7 @@ api_headers = {
     "priority": "u=1, i",
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
-    "referer": BASE_URL + "/en", # 替换为网站当前有效的 referer
+    "referer": BASE_URL + "/zh", # 替换为网站当前有效的 referer
     "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
@@ -688,19 +789,19 @@ api_headers = {
 # 辅助函数
 
 def delay(ms):
-    """毫秒级延时"""
+    """暂停指定毫秒数"""
     time.sleep(ms / 1000)
 
 def random_string(length=20):
-    """生成随机字符串（字母 + 数字）"""
+    """生成随机字符串（字母和数字）"""
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
 
 # ================= CAPMONSTER CLOUD =================
-# 用于操作 CapMonster Cloud 的函数（创建任务并等待验证码解决结果）
+# 用于操作 CapMonster Cloud 的函数（创建任务并等待 CAPTCHA 解决结果）
 
 def create_task(task):
-    """在 CapMonster Cloud 创建任务"""
+    """在 CapMonster Cloud 中创建任务"""
     r = requests.post(
         SOLVER_URL + "/createTask",
         json={
@@ -717,7 +818,7 @@ def create_task(task):
     return data["taskId"]
 
 def wait_result(task_id):
-    """等待任务完成"""
+    """等待任务结果"""
     while True:
         r = requests.post(
             SOLVER_URL + "/getTaskResult",
@@ -735,28 +836,28 @@ def wait_result(task_id):
         delay(3000)
 
 # ================= SESSION =================
-# 创建 requests 会话，用于在多个请求之间保持 cookies
+# 创建 requests 会话，以便在请求之间保留 Cookie
 
 session = requests.Session()
 
 # ================= MAIN =================
-# 自动注册流程（包含验证码处理）
+# 带 CAPTCHA 的自动注册主流程
 
 try:
 
-    # ---------------- STEP 1: 获取 cookies ----------------
+    # ---------------- STEP 1: 获取 Cookie ----------------
     print("STEP 1 — Getting cookies")
 
     r = session.get(
-        BASE_URL + "/en/registration?type=phone", # 替换为网站实际的注册页面
+        BASE_URL + "/zh/registration?type=phone", # 替换为网站当前有效的注册页面
         headers=html_headers,
         proxies=proxies
     )
 
-    # 保存服务器返回的 cookies
+    # 保存服务器返回的 Cookie
     cookies = "; ".join([f"{c.name}={c.value}" for c in session.cookies])
 
-    # 生成客户端侧创建的 cookies
+    # 生成在客户端创建的其他 Cookie
     che_g = str(uuid.uuid4())
     ggru = random_string()
     cookies += f"; che_g={che_g}"
@@ -764,13 +865,13 @@ try:
 
     print("Cookies:", cookies)
 
-    # ---------------- STEP 2: 创建 fingerprint ----------------
+    # ---------------- STEP 2: 创建指纹 ----------------
     print("\nSTEP 2 — Creating fingerprint")
 
     fingerprint_task = create_task({
         "type": "CustomTask",
         "class": "HUNT",
-        "websiteURL": BASE_URL + "/en/",
+        "websiteURL": BASE_URL + "/zh/",
         "userAgent": UA,
         "metadata": {
             "apiGetLib": API_GET_LIB
@@ -782,15 +883,15 @@ try:
         "proxyPassword": PROXY_PASSWORD
     })
 
-    # 获取结果（X-HD），用于后续 API 请求
+    # Получаем результат (X-HD), который нужен 用于网站 API 请求
     xhd = wait_result(fingerprint_task)
     print("X-HD:", xhd)
 
-    # ---------------- STEP 3: 触发 SMS 请求 ----------------
+    # ---------------- STEP 3: 发送短信请求 ----------------
     print("\nSTEP 3 — Trigger SMS")
 
     sms_resp = session.post(
-        BASE_URL + "/web-api/api/web/registration/v2/sms", # 替换为网站实际 API endpoint
+        BASE_URL + "/web-api/api/web/registration/v2/sms", # 替换为网站当前有效的 API 端点
         headers={**api_headers, "cookie": cookies, "x-hd": xhd},
         json={
             "data": {
@@ -808,7 +909,7 @@ try:
     try:
         sms_data = sms_resp.json()
     except:
-        print("服务器返回的不是 JSON:")
+        print("Server returned non JSON:")
         print(sms_resp.text)
         raise Exception("Invalid JSON response")
 
@@ -819,13 +920,13 @@ try:
 
     print("meta.token:", meta_token)
 
-    # ---------------- STEP 4: 解决验证码 ----------------
+    # ---------------- STEP 4: 解决 CAPTCHA ----------------
     print("\nSTEP 4 — Solving captcha")
 
     solve_task = create_task({
         "type": "CustomTask",
         "class": "HUNT",
-        "websiteURL": BASE_URL + "/en/",
+        "websiteURL": BASE_URL + "/zh/",
         "userAgent": UA,
         "metadata": {
             "apiGetLib": API_GET_LIB,
@@ -841,11 +942,11 @@ try:
     captcha_token = wait_result(solve_task)
     print("Captcha token:", captcha_token)
 
-    # ---------------- STEP 5: 发送最终请求 ----------------
+    # ---------------- STEP 5: 最终请求 ----------------
     print("\nSTEP 5 — Final request")
 
     final = session.post(
-        BASE_URL + "/web-api/api/web/registration/v2/sms", # 替换为网站实际 API endpoint
+        BASE_URL + "/web-api/api/web/registration/v2/sms", # 替换为网站当前有效的 API 端点
         headers={**api_headers, "cookie": cookies, "x-hd": xhd},
         json={
             "data": {

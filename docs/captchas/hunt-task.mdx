@@ -2,7 +2,7 @@
 sidebar_position: 26
 sidebar_label: Hunt Captcha
 title: "Автоматическое распознавание и обход Hunt CAPTCHA | API"
-description: "Узнайте, как распознать Hunt с помощью API сервиса автоматического рапознавания и решения капч CapMonster Cloud!" 
+description: "Узнайте, как распознать Hunt CAPTCHA с помощью API сервиса CapMonster Cloud."
 ---
 
 import Tabs from '@theme/Tabs';
@@ -11,7 +11,7 @@ import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
 import ImageWrap from '@theme/ImageWrap';
 import ImagesLayout from '@theme/ImagesLayout';
-import MethodDescription from '@theme/MethodDescription'
+import MethodDescription from '@theme/MethodDescription';
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../src/theme/ArticleHead';
@@ -24,9 +24,11 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   <PriceBlock title="Hunt" captchaId="hunt"/>
 </PriceBlockWrap>
 
+Hunt CAPTCHA — антибот-система, которая анализирует поведение пользователя и при обнаружении подозрительной активности запускает интерактивную проверку.
+
 ## Примеры заданий
 
-Ниже представлены примеры типов заданий Hunt Captcha, которые на данный момент поддерживаются сервисом CapMonster Cloud:
+Ниже представлены примеры вариантов Hunt CAPTCHA, поддерживаемых CapMonster Cloud:
 
 <ImagesLayout gap="16px" columns={3}>
   <ImageWrap title="Puzzle CAPTCHA">![](./images/hunt-task/slider-captcha.png)</ImageWrap>
@@ -34,21 +36,40 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   <ImageWrap title="Checkbox CAPTCHA">![](./images/hunt-task/checkbox-captcha.png)</ImageWrap>
 </ImagesLayout>
 
-Hunt-капча — это антибот-система, используемая на букмекерских платформах для выявления автоматизированной активности. Она отслеживает поведение пользователя и при обнаружении подозрительных действий инициирует интерактивную проверку.
+CapMonster Cloud поддерживает:
 
-:::warning **Внимание!**
-* Для выполнения данной задачи используйте **ваши собственные прокси**.
+- генерацию X-HD;
+- решение CAPTCHA через `meta.token`;
+- решение CAPTCHA через `widgetUrl`.
 
-* Наша система решения имеет два режима работы: **генерация X-HD (fingerprint)** и **решение капчи**. Если вы хотите только сгенерировать X-HD, не передавайте параметр `data`. Если вам нужно решить капчу, передайте в `data` токен, который целевой сайт выдаёт при определённых действиях (например, при запросе SMS).
+:::warning Внимание:
+
+Для выполнения данной задачи используйте **ваши собственные прокси**.
+
 :::
 
-## Параметры запроса
+## Выбор сценария
 
+| Сценарий | Параметры в `metadata` | Результат |
+| --- | --- | --- |
+| Генерация X-HD | `apiGetLib` | X-HD |
+| Решение через `meta.token` | `apiGetLib`, `data` | Токен решения CAPTCHA |
+| Решение через `widgetUrl` | `apiGetLib`, `widgetUrl` | Токен решения CAPTCHA |
+
+
+
+Используйте `widgetUrl`, если полная ссылка на виджет доступна на странице. В этом сценарии получать X-HD и `meta.token` не требуется.
+
+Если `widgetUrl` недоступен, сначала сгенерируйте X-HD, получите от сайта `meta.token`, а затем создайте задачу с параметром `data` (*см. подробнее в разделе  [Пример решения Hunt CAPTCHA через data](#пример-решения-hunt-captcha-через-data)*).
+
+
+
+## Параметры запроса
 <br />
 <span style={{ fontSize: "15px", fontWeight: 700 }}>
 >  ВАЖНО: значения некоторых параметров являются динамическими — они меняются при каждом рендеринге страницы с Hunt.  
 > Извлекайте их непосредственно перед созданием задачи, чтобы избежать ошибок при решении.
-> Примеры автоматического извлечения параметров см. в разделе [Как получить meta.token](#как-получить-metatoken) и [Пример решения Hunt CAPTCHA](#пример-решения-hunt-captcha) .
+> Примеры автоматического извлечения параметров см. в разделах [Как получить widgetUrl](#как-получить-widgeturl) и [Пример решения Hunt CAPTCHA через data](#пример-решения-hunt-captcha-через-data) .
 </span>
 <br />
 
@@ -64,7 +85,8 @@ Hunt-капча — это антибот-система, используема
 ---
 
 <ParamItem title="websiteURL" required type="string" />
-Адрес страницы, на которой находится капча Hunt.
+
+Полный URL страницы, на которой используется Hunt CAPTCHA.
 
 ---
 
@@ -73,18 +95,34 @@ Hunt-капча — это антибот-система, используема
 Полная ссылка на файл `api.js`.
 
 Пример:
-`https://www.example.com/hd-api/external/apps/<hash>/api.js`
 
-Передавайте в формате:
-`"apiGetLib":"https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"`
+```text
+https://example.com/hd-api/external/apps/<app-hash>/api.js
+```
 
-Найти ссылку можно в DevTools (вкладки **Network** или **Elements**) на странице с Hunt-капчей.  
-Используйте поиск по ключевым словам: `hd-api` или `api.js`.
+Найдите запрос к `api.js` в DevTools на вкладке **Network**. Для поиска используйте `hd-api` или `api.js`.
 
 ---
 
 <ParamItem title="data (внутри metadata)" type="string" />
-Указание `data` необходимо при выборе режима решения капчи (см. подробнее ниже)
+
+Значение `meta.token`, полученное от сайта.
+
+**Важно**: передавайте только при решении CAPTCHA через `meta.token`. Не используйте одновременно с `widgetUrl`.
+
+---
+
+<ParamItem title="widgetUrl (внутри metadata)" type="string" />
+
+Полный URL виджета Hunt CAPTCHA.
+
+Пример:
+
+```text
+https://captcha.example.com/widget?hash=<widget-hash>
+```
+
+**Важно**: передавайте ссылку целиком, включая домен, путь и параметры запроса. Не используйте одновременно с `data`.
 
 ---
 
@@ -125,52 +163,10 @@ User-Agent браузера. <br />
 Пароль прокси-сервера.
 
 </div>
---- 
 
-**Решение поддерживает два режима работы:**
+## Метод создания задачи
 
-1. **Генерация X-HD (fingerprint)**
-
-   * В этом режиме вы не передаёте `data`.
-   * После создания задачи вы получите **X-HD** — уникальный отпечаток, привязанный к вашему IP, который можно использовать для последующих запросов к сайту.
-
-2. **Решение капчи**
-
-   * В этом режиме в параметре `data` вы передаёте **токен** (значение `meta.token`), который сайт выдаёт при определённых действиях (например, при запросе SMS).
-   * После создания задачи вы получите **решение капчи** в виде токена, готового для использования на сайте.
-
----
-
-**Когда использовать каждый режим:**
-
-| Ситуация                  | Нужно ли передавать `data`? |
-| ------------------------- | ------------- |
-| Первичная инициализация   | Нет            |
-| Нужно получить X-HD            | Нет             |
-| Сайт вернул Captcha error | Да             |
-| Получен `meta.token`      | Да             |
-
----
-
-**Пример полного сценария работы:**
-
-1. Создать задачу **без `data`**
-2. Получить от нашего сервиса X-HD
-3. Отправить запрос на сайт с X-HD
-4. Получить `meta.token`
-5. Создать задачу **с `data = meta.token`**
-6. Получить решение
-7. Передать решение на сайт
-
-:::warning Важно
-При смене прокси необходимо повторно получать X-HD.
-:::
-
-## Режим 1. Генерация X-HD.
-
-Используется для получения X-HD токена, привязанного к IP.
-
-### Метод создания задачи для генерации X-HD
+Используйте метод [createTask](/docs/api/methods/create-task/):
 
 <MethodItem>
 
@@ -193,120 +189,196 @@ https://ru.api.capmonster.cloud/createTask
 
 :::
 
+### Генерация X-HD
+
+Передайте только `apiGetLib` внутри `metadata`.
+
 <div className="method-panel">
-    <MethodDescription>
-      **Пример запроса**
+  <MethodDescription>
+
+**Пример запроса**
+
 ```json
 {
-  "type": "CustomTask",
-  "class": "HUNT",
-  "websiteURL": "https://yourwebsite.com/page-with-hunt",
-  "metadata": {
-    "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js"
-  },
-  "userAgent": "userAgentPlaceholder",
-  "proxyType": "your-proxy-type",
-  "proxyAddress": "your-proxy-address",
-  "proxyPort": 1234,
-  "proxyLogin": "your-proxy-login",
-  "proxyPassword": "your-proxy-password"
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://yourwebsite.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
 }
 ```
 
-      **Пример ответа**
+**Пример ответа**
+
 ```json
 {
   "errorId": 0,
   "taskId": 407533072
 }
 ```
-    </MethodDescription>
-  </div>
 
-## Режим 2. Решение капчи. 
+  </MethodDescription>
+</div>
 
-Используется после того, как сайт вернул ошибку captcha и выдал `meta.token`.
+### Решение через `meta.token`
 
-### Как получить `meta.token`
+Используйте этот сценарий, если параметр `widgetUrl` недоступен.
 
-1. Делаете запрос к сайту (например, запрос SMS)
-2. Получаете X-HD
+#### Шаг 1. Получите X-HD
+
+1. Создайте задачу, передав только `apiGetLib`.
+2. Получите X-HD из результата `getTaskResult`.
+
+#### Шаг 2. Получите `meta.token`
+
+Передайте полученный X-HD в запросе к целевому сайту (например, при запросе SMS).
 
 ![](./images/hunt-task/x-hd(data).png)
+
 ![](./images/hunt-task/x-hd(data)-1.png)
 
-3. Сайт возвращает:
+Если сайту требуется прохождение CAPTCHA, он вернёт ответ вида:
 
 ```json
 {
-  "errors":[{"code":"113","title":"Captcha error"}],
-  "meta":{
-    "token":"SITE_META_TOKEN"
+  "errors": [
+    {
+      "code": "113",
+      "title": "Captcha error"
+    }
+  ],
+  "meta": {
+    "token": "SITE_META_TOKEN"
   }
 }
 ```
 
 ![](./images/hunt-task/token(data).png)
 
-### Метод создания задачи для решения капчи
+#### Шаг 3. Решите CAPTCHA
 
-<MethodItem>
+Создайте новую задачу, передав:
 
-```http
-https://api.capmonster.cloud/createTask
-```
-
-</MethodItem>
-<br />
-
-:::info Альтернативный адрес метода
-
-Для пользователей из России также доступен:
-
-```text
-https://ru.api.capmonster.cloud/createTask
-```
-
-Подробнее в разделе [createTask](/docs/api/methods/create-task/).
-
-:::
-
-Значение `meta.token` нужно передать в `data`.
+- `apiGetLib`;
+- полученный `meta.token` в параметре `data`.
 
 <div className="method-panel">
-    <MethodDescription>
-      **Пример запроса**
+  <MethodDescription>
+
+
+**Пример запроса**
+
 ```json
 {
-  "type": "CustomTask",
-  "class": "HUNT",
-  "websiteUrl": "https://example.com",        
-  "metadata": {
-      "apiGetLib": "https://example.com/hd-api/external/apps/a2157wab1045d68672a63557e0n2a77edbfd15ea/api.js",
-      "data": "meta-token-value",
-  },
-  "userAgent": "userAgentPlaceholder",
-  "proxyType": "your-proxy-type",
-  "proxyAddress": "your-proxy-address",
-  "proxyPort": 1234,
-  "proxyLogin": "your-proxy-login",
-  "proxyPassword": "your-proxy-password"
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://example.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+      "data": "SITE_META_TOKEN"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
 }
 ```
 
-      **Пример ответа**
-      ```json
-      {
-        "errorId": 0,
-        "taskId": 407533072
-    }
-      ```
-    </MethodDescription>
-  </div>
+**Пример ответа**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533072
+}
+```
+
+  </MethodDescription>
+</div>
+
+### Решение через `widgetUrl`
+
+Используйте этот сценарий, если на странице доступна полная ссылка на виджет Hunt CAPTCHA.
+
+Получать X-HD и `meta.token` не требуется.
+
+#### Как получить `widgetUrl`
+
+1. Откройте страницу с Hunt CAPTCHA.
+2. Откройте DevTools и перейдите на вкладку **Network**.
+3. Выполните действие, после которого появляется CAPTCHA.
+4. Найдите запрос по словам `widget` или `hash`.
+5. Скопируйте полное значение **Request URL**.
+6. Передайте его в `widgetUrl` (внутри `metadata`).
+
+![](./images/hunt-task/widgetUrl.png)
+
+<br />
+
+:::warning Важно:
+
+Получайте актуальный `widgetUrl` в той же сессии непосредственно перед созданием задачи.
+
+Не передавайте только значение `hash`: сервису нужен полный URL.
+
+:::
+
+<div className="method-panel">
+  <MethodDescription>
+
+**Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "HUNT",
+    "websiteURL": "https://example.com/page-with-hunt",
+    "metadata": {
+      "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+      "widgetUrl": "https://captcha.example.com/widget?hash=<widget-hash>"
+    },
+    "userAgent": "userAgentPlaceholder",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+**Пример ответа**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533072
+}
+```
+
+  </MethodDescription>
+</div>
 
 ## Метод получения результата задачи
 
-Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить fingerprint X-HD или решение Hunt капчи.
+Используйте метод [getTaskResult](/docs/api/methods/get-task-result/), чтобы получить fingerprint X-HD или решение Hunt капчи:
 
 <MethodItem>
 
@@ -324,28 +396,23 @@ https://api.capmonster.cloud/getTaskResult
 ```text
 https://ru.api.capmonster.cloud/getTaskResult
 ```
-
 Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
-
-:::
-
-:::warning **Внимание!**
-Значение `solution.data.token`:
-* В режиме **генерации X-HD** — это X-HD токен, который нужно использовать в запросах к целевому сайту. 
-
-* В режиме **решения капчи** `solution.data.token` — это токен решения, который необходимо передать обратно на сайт для подтверждения действия.
 :::
 
 <div className="method-panel-full">
-	<MethodDescription>
-		**Пример запроса**
-		```json
-		{
-		  "clientKey":"API_KEY",
-		  "taskId": 407533072
-		}
-		```
-		**Пример ответа**
+  <MethodDescription>
+
+**Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533072
+}
+```
+
+**Пример ответа**
+
 ```json
 {
   "errorId": 0,
@@ -357,13 +424,20 @@ https://ru.api.capmonster.cloud/getTaskResult
   }
 }
 ```
-	</MethodDescription>
-</div>
 
+  </MethodDescription>
+</div>
+<br />
+
+Значение `solution.data.token` зависит от сценария:
+
+- при генерации X-HD содержит X-HD;
+- при решении через `data` содержит токен решения CAPTCHA;
+- при решении через `widgetUrl` содержит токен решения CAPTCHA.
 
 ## Работа с cookies
 
-:::warning **Внимание!**
+:::warning Важно:
 Целевой сайт может использовать специальные **cookies** для управления сессией. Если они отсутствуют или не передаются с запросами, сервер может отклонить запрос или потребовать повторную проверку.
 :::
 
@@ -390,9 +464,11 @@ v3fr=1; lng=en; flaglng=en; SESSION=12a3aea8cdcfdbb9e7df8ee99b526a84; auid=ab0dW
 6. Иногда часть cookies создаётся на стороне клиента (например, JavaScript на странице). При автоматизации или тестировании иногда необходимо извлекать cookies из браузера или генерировать их аналогичным образом.
 
 
-## Пример решения Hunt CAPTCHA
+## Пример решения Hunt CAPTCHA через `data`
 
-Приведённые ниже примеры демонстрируют работу типичного процесса взаимодействия с сайтом, использующим Hunt капчу. В коде показано, как:
+Ниже приведён полный пример решения через X-HD и `meta.token`. Используйте его, если `widgetUrl` недоступен.
+
+В коде показано, как:
 
 * получить начальные cookies при открытии страницы сайта;
 * сгенерировать дополнительные cookies, которые могут создаваться на стороне клиента;
@@ -401,8 +477,9 @@ v3fr=1; lng=en; flaglng=en; SESSION=12a3aea8cdcfdbb9e7df8ee99b526a84; auid=ab0dW
 * передать полученные данные в сервис решения капчи;
 * после получения решения выполнить финальный запрос к API с необходимыми параметрами.
 
-**Важно:** Используйте **актуальные HTTP‑заголовки и [корректный `User-Agent`](https://capmonster.cloud/api/useragent/actual)**.
-
+:::warning Важно:
+Используйте актуальные HTTP‑заголовки (подробнее о заголовках в [данном разделе](/docs/api/headers/)) и [корректный `User-Agent`](https://capmonster.cloud/api/useragent/actual).
+:::
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
