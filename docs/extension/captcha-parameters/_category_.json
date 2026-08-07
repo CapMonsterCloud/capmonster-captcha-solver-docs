@@ -5,6 +5,7 @@
   "link": {
     "type": "generated-index",
     "title": "Маппинг параметров в расширении",
+    "slug": "/category/extension-parameter-mapping",
     "description": "Просмотр параметров CAPTCHA в расширениях CapMonster Cloud."
   }
 }
