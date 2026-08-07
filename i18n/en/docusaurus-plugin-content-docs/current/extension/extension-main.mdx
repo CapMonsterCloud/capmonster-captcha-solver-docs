@@ -1,6 +1,7 @@
 ﻿---
 sidebar_position: 0
 sidebar_label: Chrome browser extension
+title: "Chrome browser extension"
 ---
 
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
@@ -8,160 +9,147 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <ArticleHead slug="extension/extension-main" />
 
 # Chrome browser extension
+
 ## Description
-With this extension, you can recognize captchas automatically directly in the browser.
 
-The extension works in the Google Chrome browser.
+With this extension, you can solve CAPTCHA automatically directly in your browser.
 
------
+The extension is designed for use with Google Chrome.
+
+---
+
 ## Automatic installation
-**Important!** It is not recommended to install extensions in incognito mode or guest mode.
+
+:::warning Important
+It is not recommended to install the extension in Incognito mode or Guest mode.
+:::
 
 1. Open the [Chrome Web Store](https://chrome.google.com/webstore/detail/capmonster-cloud-%E2%80%94-automa/pabjfbciaedomjjfelfafejkppknjleh?hl=en).
 2. Click **Install**.
 
-To get started with the extension, click on its icon to the right of the address bar. Go to the [Settings](extension-main.mdx#settings).
+To get started, click the extension icon to the right of the address bar and go to [Settings](#settings).
 
-*If for some reason it was not possible to install the extension from the Chrome Web Store, use the instructions for manual installation.*
+If you cannot install the extension from the Chrome Web Store, follow the manual installation instructions below.
 
 <details>
-    <summary>Manual installation</summary>
+<summary>Manual installation</summary>
 
-1. Download the [archive with the extension](https://zenno.link/chrome-actual-build).
+1. Download the [extension archive](https://zenno.link/chrome-actual-build).
 
-2. Extract the downloaded archive to a folder with any name.
+2. Extract the downloaded archive into any folder.
 
-   > `Important:` after installation, do not delete the folder with the extension, otherwise the browser will no longer be able to use it.
+   :::warning Important
+   Do not delete the extension folder after installation. Otherwise, Chrome will no longer be able to use the extension.
+   :::
 
 3. Enter `chrome://extensions` in the browser address bar and press `Enter`.
 
-   You can open the extensions page in one of the following ways:
+   You can also open the Extensions page in one of the following ways:
 
-   - Through the menu: click `⋮` in the upper-right corner, next to the profile image → `Extensions` → `Manage extensions`.
+   - click `⋮` in the upper-right corner → `Extensions` → `Manage Extensions`;
 
      ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.004.png)
 
-   - Or open Google Chrome settings and select `Extensions` in the left menu, at the very bottom of the list.
+   - open Google Chrome settings and select `Extensions` from the left menu.
 
      ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.005.png)
 
 4. Enable `Developer mode`.
 
-5. A panel will appear at the top of the page. Click the `Load unpacked` button.
+5. Click `Load unpacked` at the top of the page.
 
    ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.006.png)
 
-6. In the window that opens, select the folder where the archive was extracted.
+6. Select the folder where you extracted the archive.
 
-7. After that, the extension will appear in the list of installed extensions.
+7. The extension will appear in the list of installed extensions.
 
    ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.007.png)
 
-  </details>
+</details>
 
 <details>
-    <summary>Manual update of the extension</summary>
+<summary>Manual extension update</summary>
 
-If you are installing the extension over the previous version, then when you update the original extension files, you also need to click the update button on the `Extensions` page (how to open this page is described above in the `Manual installation` section).
+If you install a new version over an existing one, click `Update` on the `Extensions` page after replacing the extension files.
+
+Instructions for opening this page are provided in the manual installation section above.
 
 ![](./images/extension-main-firefox/Aspose.Words.d14847ca-5ce8-4c9f-8081-1ec99b44a6b3.008.png)
+
 </details>
 
------
-## Settings
-<details>
-    <summary>How to pin the extension</summary>
+---
 
-By default the installed extension is hidden. To pin it you have to click on the **Pin** button:
+## Settings
+
+<details>
+<summary>How to pin the extension</summary>
+
+By default, a newly installed extension is hidden. To keep it visible, pin it using the corresponding icon.
 
 ![](./images/extension-main-firefox/pin1.png)
+
 </details>
 
-After launching the extension you’ll see this window:
+After activating the extension, the following window will open:
 
 ![](./images/extension-main-firefox/ext.screen.en.png)
-### <a name="id-browserextension-apikey"></a>API key
-Enter API key in the corresponding field(**1**), press **Save** button(**2**). If you entered the correct key, your balance will be displayed below(**3**).
+
+### API key
+
+Enter your API key in the corresponding field (**1**) and click **Save** (**2**).
+
+If the key is valid, your current balance (**3**) will be displayed below.
 
 ![](./images/extension-main-firefox/api-key.png)
-### <a name="id-browserextension-automaticcaptchasolving"></a>Automated captcha solving
-Here you can select the types of captchas that the extension will recognize automatically.
+
+### Automatic CAPTCHA solving
+
+Select the CAPTCHA types that the extension should solve automatically.
 
 ![](./images/extension-main-firefox/extension.example.png)
 
-:::info !
-
-You may need to reload the page with captcha for the changes to take effect!
-
+:::info
+After changing the settings, you may need to reload the page containing the CAPTCHA.
 :::
-### <a name="id-browserextension-repeatcaptchasolvingincaseofanerror"></a>Repeat captcha solving in case of an error
-If the first attempt to solve the captcha is failed, the extension will send repeated tasks until the captcha is not solved, or until the limit specified in this setting will not be reached.
+
+### Repeat CAPTCHA solving after an error
+
+If the CAPTCHA cannot be solved on the first attempt, the extension will continue submitting new tasks until the CAPTCHA is solved or the retry limit specified in the settings is reached.
 
 ### <a name="id-browserextension-proxy"></a>Proxy
 ![](./images/extension-main-firefox/proxy.png) 
 
-In this section, you can specify a proxy that will be passed along with the recognition task.
+In this section, you can specify a proxy that will be sent together with the recognition task.
 
-The **Login** and **Password** fields are optional. The extension also supports proxies with **IPv6**.
+The **Login** and **Password** fields are optional. The extension also supports **IPv6** proxies.
 
-### <a name="id-browserextension-blacklistcontrol"></a>Blacklist control
-Using the blacklist you can configure the extension to ignore captchas on specific websites.
+### Blacklist management
 
-After enabling this option, a field for entering sites will appear:
+The blacklist allows you to specify websites where the extension should ignore CAPTCHAs.
+
+After enabling this option, a field for entering websites will appear:
 
 ![](./images/extension-main-firefox/blacklist-control.png)
 
-Domains must be specified along with the protocol (https:// or http://).
-You can use masks:
+Specify domains together with the protocol: `https://` or `http://`.
 
-- ? - any one character except period
-- \* - any number of any characters
+You can use the following wildcards:
 
-Examples:
+- `?` — any single character except `.`;
+- `*` — any number of any characters.
 
-|**Filter**|**Description**|
-| :-: | :-: |
-|`https://zennolab.com`|Prohibition of the extension on the site `https://zennolab.com`|
-|`https://*.zennolab.com`|Prohibition of the extension on all subdomains `https://zennolab.com`|
-|`https://www.google.*`|Prohibiting the extension from working on Google in all zones (ru, com, com.ua, etc.)|
+| Filter | Description |
+|---|---|
+| `https://zennolab.com` | Prevents the extension from working on `https://zennolab.com` |
+| `https://*.zennolab.com` | Prevents the extension from working on all subdomains of `zennolab.com` |
+| `https://www.google.*` | Prevents the extension from working on Google in all domain zones |
 
-When errors occur in solving captchas, see the [error glossary](/api/api-errors.mdx).
+If CAPTCHA solving fails, see the [error glossary](/api/api-errors.mdx).
 
-## Captcha parameter mapping
+## Getting CAPTCHA parameters
 
-The **CapMonster Cloud** extension provides a convenient way to view the parameters of various captcha types required for correct task submission and successful solving. The displayed data helps ensure that the parameters you send are accurate and can be used as examples when forming your API requests.
+In the **CapMonster Cloud** tab of the browser's Developer Tools, you can view the parameters of the detected CAPTCHA and the contents of the `task` object that the extension sends to CapMonster Cloud.
 
-### Supported captcha types and their parameters
-
-| Captcha type                        | Displayed parameters                                                                                                      |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
-| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (inside `metadata`), `Grid` (inside `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                    |
-| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                              |
-| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                      |
-| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                         |
-| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                           |
-| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                   |
-| **ImageToText**                     | `body` (in `base64` format), `type`                                                                                       |
-| **BLS**                             | `class`, `imagesBase64`, `Task` (inside `metadata`), `TaskArgument` (inside `metadata`), `type`                           |
-| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                             |
-
-
-To use this feature, enable the extension, specify your API key in the settings, and make sure there are funds on your balance. Then open the page with the captcha, check that its type is supported and selected for solving, and follow these steps:
-
-1. Open **Developer Tools** and go to the **Capmonster Cloud** tab:  
-   
-   ![](./images/params_extension.png)
-
-2. Reload the page.
-
-:::warning **Important**
-For API requests, use an up-to-date `userAgent` supported by [our service](https://capmonster.cloud/api/useragent/actual).
-:::
-
-Captcha parameters will be displayed automatically:  
-
-![](./images/params_extension1.png)
+For more information, see [Parameter mapping in the Chrome extension](./captcha-parameters/captcha-parameters.mdx).

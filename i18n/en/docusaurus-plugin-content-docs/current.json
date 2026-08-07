@@ -130,5 +130,17 @@
   "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
     "message": "Use Text Modules — specialized components for solving image-based captchas with object selection. The response returns recognition results (text or index of the correct option) according to the task.",
     "description": "The generated-index page description for category Text in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении": {
+    "message": "Parameter mapping in the extension",
+    "description": "The label for category Маппинг параметров в расширении in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.title": {
+    "message": "Parameter mapping in the extension",
+    "description": "The generated-index page title for category Получение параметров CAPTCHA в расширении in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
+    "message": "View CAPTCHA parameter mappings in CapMonster Cloud browser extensions.",
+    "description": "The generated-index page description for category Получение параметров CAPTCHA в расширении in sidebar tutorialSidebar"
   }
 }

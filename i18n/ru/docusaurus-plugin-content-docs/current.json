@@ -18,5 +18,17 @@
   "sidebar.tutorialSidebar.category.Типы капч.link.generated-index.description": {
     "message": "Документация по основным типам капч",
     "description": "The generated-index page description for category Типы капч in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении": {
+    "message": "Маппинг параметров в расширении",
+    "description": "The label for category Маппинг параметров в расширении in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.title": {
+    "message": "Маппинг параметров в расширении",
+    "description": "The generated-index page title for category Маппинг параметров в расширении in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
+    "message": "Просмотрите параметры CAPTCHA в расширениях CapMonster Cloud для браузеров.",
+    "description": "The generated-index page description for category Маппинг параметров в расширении in sidebar tutorialSidebar"
   }
 }

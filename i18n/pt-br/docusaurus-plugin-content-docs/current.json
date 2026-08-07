@@ -135,5 +135,17 @@
   "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
     "message": "Use módulos de Text — componentes especializados para resolver captchas baseados em imagem com seleção de objetos. A resposta retorna resultados de reconhecimento (texto ou índice da opção correta) de acordo com a tarefa.",
     "description": "A descrição da página generated-index para a categoria Text na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении": {
+    "message": "Mapeamento de parâmetros na extensão",
+    "description": "O rótulo da categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.title": {
+    "message": "Mapeamento de parâmetros na extensão",
+    "description": "O título da página generated-index para a categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
+    "message": "Visualize o mapeamento dos parâmetros de CAPTCHA nas extensões de navegador do CapMonster Cloud.",
+    "description": "A descrição da página generated-index para a categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
   }
 }
