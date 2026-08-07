@@ -135,5 +135,17 @@
   "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
     "message": "使用 Text Modules —— 专门用于解决基于图像的对象选择验证码。返回识别结果（文本或正确选项索引）。",
     "description": "The generated-index page description for category Text in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении": {
+    "message": "扩展程序中的参数映射",
+    "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的标签"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.title": {
+    "message": "扩展程序中的参数映射",
+    "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的 generated-index 页面标题"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
+    "message": "查看 CapMonster Cloud 浏览器扩展程序中的 CAPTCHA 参数映射。",
+    "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的 generated-index 页面描述"
   }
 }

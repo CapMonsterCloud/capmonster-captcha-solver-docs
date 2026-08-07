@@ -1,6 +1,7 @@
 ﻿---
 sidebar_position: 1
 sidebar_label: Extensão para o navegador Firefox
+title: "Extensão para o navegador Firefox"
 ---
 
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
@@ -10,27 +11,31 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 # Extensão do navegador Firefox
 
 ## Descrição
-Com esta extensão, você pode reconhecer captchas automaticamente diretamente no navegador.
 
-A extensão funciona no navegador Mozilla Firefox.
+Com esta extensão, você pode reconhecer CAPTCHA automaticamente diretamente no navegador.
 
------
+A extensão foi desenvolvida para funcionar no navegador Mozilla Firefox.
+
+---
+
 ## Instalação automática
 1. Abra a [Loja de Add-ons do Firefox](https://addons.mozilla.org/pt-br/firefox/addon/capmonster-cloud/).
 2. Clique em **Adicionar ao Firefox**.
-3. Confirme a adição da extensão clicando no botão **Adicionar** na janela modal.
+3. Confirme a instalação da extensão clicando em `Adicionar` na janela modal.
+
    ![](./images/extension-main-firefox/modal.png)
 
 Para começar a usar a extensão, clique em seu ícone à direita da barra de endereços. Vá para as [configurações](extension-firefox.mdx#configurações).
 
-*Se por algum motivo não for possível instalar a extensão pela Loja de Add-ons do Firefox, use as instruções para instalação manual.*
+Se não for possível instalar a extensão pela loja, siga as instruções de instalação manual.
 
 <details>
     <summary>Instalação manual</summary>
 
 1. Baixe o [arquivo com a extensão](https://zenno.link/firefox-actual-build).
 
-2. Abra o navegador Firefox e acesse o gerenciamento de extensões:
+2. Abra o Firefox e acesse o gerenciamento de extensões:
+
    ![](./images/extension-main-firefox/extension-menu.png)
 
 3. Vá para `Gerenciamento de extensões`, clique no botão de engrenagem e, no menu suspenso que será aberto, selecione `Instalar de um arquivo…`
@@ -41,7 +46,8 @@ Para começar a usar a extensão, clique em seu ícone à direita da barra de en
 5. Após a extensão ser carregada, vá para `Gerenciamento de extensões` e clique na extensão instalada.
    ![](./images/extension-main-firefox/extension1.png)
 
-6. Acesse a guia `Permissões` e verifique se todas as permissões foram concedidas.
+6. Acesse a guia `Permissões` e verifique se todas as permissões necessárias foram concedidas.
+
    ![](./images/extension-main-firefox/extension2.png)
 
 Se ocorrerem erros durante a instalação padrão, utilize o modo de depuração de complementos:
@@ -53,107 +59,86 @@ Se ocorrerem erros durante a instalação padrão, utilize o modo de depuração
 </details>
 
 <details>
-    <summary>Atualização manual da extensão</summary>
+<summary>Atualização manual da extensão</summary>
 
-Se você estiver instalando a extensão sobre a versão anterior, ao atualizar os arquivos originais da extensão, também precisará clicar no botão de atualização na página `Extensões` (como abrir esta página está descrito acima na seção `Instalação manual`).
+Se você estiver instalando a extensão sobre uma versão anterior, clique em `Atualizar` na página `Gerenciar extensões` após atualizar os arquivos originais.
+
+As instruções para abrir essa página estão disponíveis acima, na seção de instalação manual.
+
 </details>
 
------
-## Configurações
-<details>
-    <summary>Como fixar a extensão</summary>
+---
 
-Por padrão, uma extensão recém-instalada é fixada automaticamente no painel do navegador. 
-   ![](./images/extension-main-firefox/extension-panel.png)
+## Configurações
+
+<details>
+<summary>Como fixar a extensão</summary>
+
+Por padrão, a extensão instalada é fixada automaticamente na barra de ferramentas do navegador.
+
+![](./images/extension-main-firefox/extension-panel.png)
+
 </details>
 
 Após iniciar a extensão, você verá esta janela:
 
 ![](./images/extension-main-firefox/ext.screen.en.png)
-### <a name="id-browserextension-apikey"></a>Chave API
-Insira a chave da API no campo correspondente (1), pressione o botão salvar (2). Se você inseriu a chave correta, seu saldo será exibido abaixo (3).
+
+### Chave de API
+
+Insira a chave de API no campo correspondente (**1**) e clique em **Save** (**2**).
+
+Se a chave estiver correta, o saldo atual será exibido abaixo (**3**).
 
 ![](./images/extension-main-firefox/api-key.png)
-### <a name="id-browserextension-automaticcaptchasolving"></a>Solução automática de captchas
-Aqui você pode selecionar os tipos de captchas que a extensão reconhecerá automaticamente.
+
+### Resolução automática de CAPTCHA
+
+Selecione os tipos de CAPTCHA que a extensão deve reconhecer automaticamente.
 
 ![](./images/extension-main-firefox/extension.example.png)
 
-:::info !
-
-Pode ser necessário recarregar a página com captcha para que as alterações tenham efeito!
+:::info
+Após alterar as configurações, pode ser necessário recarregar a página com a CAPTCHA.
 :::
 
-### <a name="id-browserextension-repeatcaptchasolvingincaseofanerror"></a>Repetir solução de captcha em caso de erro
+### Repetir a resolução da CAPTCHA em caso de erro
 
-Se a primeira tentativa de resolver o captcha falhar, a extensão enviará tarefas repetidas até que o captcha seja resolvido ou até que o limite especificado nesta configuração seja atingido.
+Se não for possível resolver a CAPTCHA na primeira tentativa, a extensão enviará novas tarefas até que ela seja resolvida ou até que o limite definido nas configurações seja atingido.
 
-### <a name="id-browserextension-proxy"></a>Proxy
+### Proxy
 
 ![](./images/extension-main-firefox/proxy.png)
 
-Nesta seção, você pode especificar um proxy que será enviado juntamente com a tarefa de reconhecimento.
+Nesta seção, você pode especificar o proxy que será enviado com a tarefa de reconhecimento.
 
 Os campos **Login** e **Senha** são opcionais. A extensão também oferece suporte a proxies com **IPv6**.
 
-### <a name="id-browserextension-blacklistcontrol"></a>Controle de lista negra
-Usando a lista negra, você pode configurar a extensão para ignorar captchas em sites específicos.
+### Gerenciamento da lista de bloqueio
 
-Após ativar esta opção, aparecerá um campo para inserir os sites:
+Com a lista de bloqueio, você pode configurar os sites nos quais a extensão deve ignorar as CAPTCHA.
 
+Após ativar esta opção, será exibido um campo para inserir os sites:
 
 ![](./images/extension-main-firefox/blacklist-control.png)
 
-Os domínios devem ser especificados junto com o protocolo (https:// ou http://).
-Você pode usar máscaras:
+Os domínios devem ser especificados com o protocolo: `https://` ou `http://`.
 
-- ? - qualquer um caractere, exceto ponto final
-- \* - qualquer número de caracteres
+Você pode usar as seguintes máscaras:
 
-Exemplos:
+- `?` — qualquer caractere único, exceto ponto;
+- `*` — qualquer quantidade de caracteres.
 
-|**Filtro**|**Descrição**|
-| :-: | :-: |
-|`https://zennolab.com`|Proibição da extensão no site `https://zennolab.com`|
-|`https://*.zennolab.com`|Proibição da extensão em todos os subdomínios `https://zennolab.com`|
-|`https://www.google.*`|Proibição da extensão de funcionar no Google em todas as zonas (ru, com, com.ua, etc.)|
+| Filtro | Descrição |
+|---|---|
+| `https://zennolab.com` | Impede o funcionamento da extensão no site `https://zennolab.com` |
+| `https://*.zennolab.com` | Impede o funcionamento da extensão em todos os subdomínios de `zennolab.com` |
+| `https://www.google.*` | Impede o funcionamento da extensão no Google em todas as zonas de domínio |
 
-Quando erros ocorrerem na solução de captchas, veja o [glossário de erros](/api/api-errors.mdx).
+Se ocorrerem erros durante a resolução da CAPTCHA, consulte o [glossário de erros](/api/api-errors.mdx).
 
-## Mapeamento de parâmetros de captcha
+## Obtenção dos parâmetros da CAPTCHA
 
-A extensão **CapMonster Cloud** oferece uma maneira prática de visualizar os parâmetros de vários tipos de captcha necessários para o envio correto da tarefa ao servidor e sua resolução com sucesso. Os dados exibidos ajudam a garantir a precisão dos parâmetros enviados e podem ser usados como exemplo na criação de suas requisições de API.
+Na guia **CapMonster Cloud** das ferramentas do desenvolvedor, você pode visualizar os parâmetros da CAPTCHA detectada e o conteúdo do objeto `task` enviado pela extensão ao CapMonster Cloud.
 
-### Tipos de captcha suportados e seus parâmetros
-
-| Tipo de captcha                     | Quais parâmetros são exibidos                                                                                                   |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **reCAPTCHA V2 (Click)**            | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 (Token)**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
-| **reCAPTCHA V2 Invisible**          | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise (Click)** | `class`, `imageUrls`, `Task` (dentro de `metadata`), `Grid` (dentro de `metadata`), `recognizingThreshold`, `userAgent`, `type` |
-| **reCAPTCHA V2 Enterprise (Token)** | `websiteURL`, `websiteKey`, `userAgent`, `recaptchaDataSValue`, `type`                                                          |
-| **reCAPTCHA V3**                    | `websiteURL`, `websiteKey`, `pageAction`, `minScore`, `type`                                                                    |
-| **GeeTest v3**                      | `websiteURL`, `gt`, `challenge`, `userAgent`, `type`                                                                            |
-| **GeeTest v4**                      | `websiteURL`, `gt` (`captcha_id`), `userAgent`, `version`, `type`                                                               |
-| **Cloudflare Turnstile**            | `websiteURL`, `websiteKey`, `userAgent`, `type`                                                                                 |
-| **Cloudflare Challenge**            | `websiteURL`, `websiteKey`, `userAgent`, `pageAction`, `data`, `pageData`, `cloudflareTaskType`, `type`                         |
-| **ImageToText**                     | `body` (no formato `base64`), `type`                                                                                            |
-| **BLS**                             | `class`, `imagesBase64`, `Task` (dentro de `metadata`), `TaskArgument` (dentro de `metadata`), `type`                           |
-| **Binance**                         | `websiteURL`, `websiteKey`, `validateId`, `userAgent`, `type`                                                                   |
-
-Para usar esta função, ative a extensão, informe a chave de API nas configurações e verifique se há saldo disponível. Em seguida, abra a página com o captcha, confirme se o tipo dele é compatível e está selecionado para resolução, e siga estas etapas:
-
-1. Abra as Ferramentas de **Desenvolvedor** (DevTools) e vá até a aba **CapMonster Cloud**:  
-   
-![](./images/extension-main-firefox/params_extension2.png)
-
-2. Recarregue a página.
-
-:::warning **Importante**
-Para solicitações de API, use um `userAgent` atualizado, compatível com [nosso serviço](https://capmonster.cloud/api/useragent/actual).
-:::
-
-Os parâmetros do captcha selecionado serão exibidos automaticamente:  
-
-![](./images/extension-main-firefox/params_extension3.png)
+Para mais informações, consulte a seção [Mapeamento dos parâmetros da CAPTCHA na extensão para Firefox](./captcha-parameters/captcha-parameters-firefox.mdx).
