@@ -18,6 +18,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/recaptcha-v2-enterprise-task" />
 
+
 # reCAPTCHA v2 Enterprise
 
 <PriceBlockWrap>
@@ -86,9 +87,15 @@ Neste exemplo, `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` é o valor do parâmet
 
     ---
 
+    <ParamItem title="enterprisePayload" type="object" />
+    Objeto com parâmetros adicionais do reCAPTCHA Enterprise.
 
-    <ParamItem title="enterprisePayload" type="string" />
-    Algumas implementações do reCAPTCHA Enterprise podem conter um parâmetro adicional `s`, transmitido para `grecaptcha.enterprise.render` juntamente com `sitekey`. Por exemplo, o valor `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`:
+    **Parâmetros do objeto:**
+
+    - `s` — `string`, parâmetro adicional do reCAPTCHA Enterprise que pode ser enviado para `grecaptcha.enterprise.render` junto com `sitekey`.
+
+    Por exemplo:
+
 
 ```js
 grecaptcha.enterprise.render("some-div-id", {
@@ -97,6 +104,7 @@ grecaptcha.enterprise.render("some-div-id", {
   s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA"
 });
 ```
+
 
     ---
 
@@ -147,10 +155,9 @@ Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragen
   </div>
 
 <br />
-Para `enterprisePayload` - antes de chamá-lo, você precisa substituir a função `grecaptcha.enterprise.render` pela sua própria e capturar o valor de seus parâmetros. A função existe após o carregamento do script, e o captcha geralmente é renderizado imediatamente ou com base em um evento da página. Se o captcha for renderizado com o campo `s` atual no cliente, o token provavelmente não será aceito. 
-A função original pode ser chamada sem o campo `s`.
+Para obter o parâmetro `s` de `enterprisePayload`, substitua a função `grecaptcha.enterprise.render` antes que ela seja chamada e extraia o valor do objeto de parâmetros transmitido. A função fica disponível após o carregamento do script, e a CAPTCHA geralmente é renderizada imediatamente ou por um evento da página, portanto a interceptação deve ser configurada com antecedência. A função original pode ser chamada sem o campo `s`.
 
-`apiDomain` é o domínio que hospeda a interface da API para interagir com o reCAPTCHA; é usado para verificar se o usuário passou no captcha.
+`apiDomain` é o domínio que hospeda a interface da API usada para interagir com o reCAPTCHA e verificar se o usuário concluiu a CAPTCHA.
 
 <details>
     <summary>Script</summary>
@@ -164,7 +171,7 @@ var __test_render = undefined;
 
 var __test_render_widget = undefined;
 
-var __test_render_args = undefined; // aqui estará o objeto com o qual o render é chamado.
+var __test_render_args = undefined; // aqui ficará o objeto com o qual render é chamado.
 
 var __test_handler = {
   get: function(target, name, receiver) {
@@ -305,12 +312,12 @@ https://api.capmonster.cloud/getTaskResult
 | :- | :- | :- |
 |gRecaptchaResponse|String|Hash que deve ser inserido no formulário de envio do Recaptcha2 em `<textarea id="g-recaptcha-response" ..></textarea>`. Tem um comprimento de 500 a 2190 bytes.|
 
-## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
+## Como encontrar todos os parâmetros necessários para criar a tarefa
 
 ### Manualmente
 
-1. Abra seu site onde o captcha aparece no navegador.
-2. Clique com o botão direito no elemento do captcha e selecione **Inspecionar**.
+1. Abra no navegador o site em que a CAPTCHA é exibida.
+2. Clique com o botão direito no elemento da CAPTCHA e selecione **Inspect**.
 
 #### websiteKey
 
@@ -333,7 +340,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 <Tabs className="full-width-tabs filled-tabs request-tabs">
   <TabItem value="js" label="JavaScript" default className="method-panel">
     <details>
-      <summary>Mostrar Código (no navegador)</summary>
+      <summary>Mostrar código (no navegador)</summary>
 
       ```js
       (() => {
@@ -375,7 +382,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
     </details>
 
     <details>
-      <summary>Mostrar Código (Node.js)</summary>
+      <summary>Mostrar código (Node.js)</summary>
 
       ```js
       import { chromium } from 'playwright';
@@ -447,7 +454,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
   <TabItem value="python" label="Python" className="method-panel">
     <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 
       ```python
       import asyncio
@@ -508,7 +515,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
   <TabItem value="csharp" label="C#" className="method-panel">
     <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 
       ```csharp
       using System;
@@ -603,7 +610,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
   <TabItem value="js" label="JavaScript" default className="method-panel">
   <details>
-      <summary>Mostrar Código (para navegador)</summary>
+      <summary>Mostrar código (para navegador)</summary>
     ```js
     // https://github.com/ZennoLab/capmonstercloud-client-js
 
@@ -624,10 +631,10 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
       // Exemplo básico sem proxy
       // O CapMonster Cloud usa automaticamente seus próprios proxies
       let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a captcha
-        websiteKey: "your-website-key",             // Substitua por um valor válido
+        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a CAPTCHA
+        websiteKey: "your-website-key",             // Substitua pelo valor correto
         enterprisePayload: {
-          s: "your-value",   // Parâmetro opcional do Enterprise
+          s: "your-value",   // Parâmetro Enterprise opcional
         }
       });
 
@@ -662,69 +669,70 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
     ```  
 </details>
 
-<details>
-      <summary>Mostrar Código (Node.js)</summary>
-```javascript
-// https://github.com/ZennoLab/capmonstercloud-client-js
+    <details>
+      <summary>Mostrar código (Node.js)</summary>
+      ```javascript
+      // https://github.com/ZennoLab/capmonstercloud-client-js
 
-import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV2EnterpriseRequest } from '@zennolab_com/capmonstercloud-client';
+      import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV2EnterpriseRequest } from '@zennolab_com/capmonstercloud-client';
 
-const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
+      const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
 
-async function solveRecaptchaV2Enterprise() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+      async function solveRecaptchaV2Enterprise() {
+          const client = CapMonsterCloudClientFactory.Create(
+              new ClientOptions({ clientKey: API_KEY })
+          );
 
-    // Exemplo básico sem proxy
-    // O CapMonster Cloud usa automaticamente seus próprios proxies
-    let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a captcha
-        websiteKey: "your-website-key", // Substitua pelo valor correto
-        enterprisePayload: {
-            s: "your-value", // Parâmetro enterprise opcional
-        }
-    });
+          // Exemplo básico sem proxy
+          // O CapMonster Cloud usa automaticamente seus próprios proxies
+          let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+              websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a CAPTCHA
+              websiteKey: "your-website-key", // Substitua pelo valor correto
+              enterprisePayload: {
+                  s: "your-value", // Parâmetro Enterprise opcional
+              }
+          });
 
-    // Exemplo de uso do seu próprio proxy
-    // Descomente este bloco se quiser usar um proxy personalizado
+          // Exemplo de uso do seu próprio proxy
+          // Descomente este bloco se quiser usar um proxy personalizado
 
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+          /*
+          const proxy = {
+              proxyType: "http",
+              proxyAddress: "123.45.67.89",
+              proxyPort: 8080,
+              proxyLogin: "username",
+              proxyPassword: "password"
+          };
 
-    recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "your-website-key",
-        enterprisePayload: { s: "your-value" },
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+          recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+              websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
+              websiteKey: "your-website-key",
+              enterprisePayload: { s: "your-value" },
+              proxy,
+              userAgent: "userAgentPlaceholder"
+          });
+          */
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+          // Se necessário, você pode verificar o saldo 
+          const balance = await client.getBalance();
+          console.log("Balance:", balance);
 
-    const result = await client.Solve(recaptchaV2EnterpriseRequest);
-    console.log("Solution:", result);
-}
+          const result = await client.Solve(recaptchaV2EnterpriseRequest);
+          console.log("Solution:", result);
+      }
 
-solveRecaptchaV2Enterprise().catch(console.error);
+      solveRecaptchaV2Enterprise().catch(console.error);
 ```
 </details>
+
 
     <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/javascript-recaptcha-v2"/>
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
     ```python
     # https://github.com/ZennoLab/capmonstercloud-client-python
 
@@ -764,13 +772,13 @@ solveRecaptchaV2Enterprise().catch(console.error);
         #     websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
         #     websiteKey="your-website-key",
         #     enterprisePayload={
-        #         "s": "your-value"
+                # "s": "your-value"
         #     },
         #     proxy=proxy,
         #     userAgent="userAgentPlaceholder"
         # )
 
-        # Se necessário, você pode verificar o saldo
+        # Se necessário, você pode verificar o saldo 
         balance = await cap_monster_client.get_balance()
         print("Balance:", balance)
 
@@ -780,75 +788,83 @@ solveRecaptchaV2Enterprise().catch(console.error);
     asyncio.run(solve_recaptcha_v2_enterprise())
     ```
     </details>
-    
+
     <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/python-recaptcha-v2"/>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
-    ```csharp
-    // https://github.com/ZennoLab/capmonstercloud-client-dotnet
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud;
-    using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            // Insira sua chave de API do CapMonster Cloud
-            var clientOptions = new ClientOptions
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        // Exemplo básico sem proxy
+        // O CapMonster Cloud usa automaticamente seus próprios proxies
+        var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        {
+            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a CAPTCHA
+            WebsiteKey = "your-website-key", // Substitua pelo valor correto
+            EnterprisePayload = JsonSerializer.Serialize(new
             {
-                ClientKey = "YOUR_API_KEY" 
-            };
+                s = "your-value"
+            })
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
-
-            // Se necessário, você pode verificar o saldo
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
-
-            // Exemplo básico sem proxy
-            // O CapMonster Cloud usa automaticamente seus próprios proxies
-            var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        // Exemplo de uso do seu próprio proxy
+        // Descomente este bloco se quiser usar um proxy personalizado
+        /*
+        var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        {
+            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
+            WebsiteKey = "your-website-key",
+            EnterprisePayload = JsonSerializer.Serialize(new
             {
-                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL da página com a captcha
-                WebsiteKey = "your-website-key", // Substitua pelo valor correto
-                EnterprisePayload = "{\"s\":\"your-value\"}"
-            };
+                s = "your-value"
+            }),
 
-            // Exemplo de uso do seu próprio proxy
-            // Descomente este bloco se quiser usar um proxy personalizado
-            /*
-            var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
-            {
-                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
-                WebsiteKey = "your-website-key",
-                EnterprisePayload = "{\"s\":\"your-value\"}",
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
 
-                Proxy = new ProxyContainer(
-                    "123.45.67.89",          
-                    8080,               
-                    ProxyType.Http,     
-                    "username",   
-                    "password" 
-                )
-            };
-            */
+        var recaptchaV2EnterpriseResult =
+            await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
 
-            var recaptchaV2EnterpriseResult = await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
-
-            Console.WriteLine("Solution: " + recaptchaV2EnterpriseResult.Solution.Value);
-        }
+        Console.WriteLine(
+            "Solution: " + recaptchaV2EnterpriseResult.Solution.Value
+        );
     }
-    ```
-    </details>
-    
+}
+``` 
+</details>
     <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/c-recaptcha-v2"/>
   </TabItem>
 
 </Tabs>
-

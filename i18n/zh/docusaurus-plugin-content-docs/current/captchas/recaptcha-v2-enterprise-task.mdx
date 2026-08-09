@@ -53,9 +53,8 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <BlogLink url="https://capmonster.cloud/zh/blog/re-1/recaptcha-enterprise-how-to-solve-complete-guide"/>
 
-
 ## 请求参数
-
+  
   <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
@@ -89,8 +88,15 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     
     ---
 
-    <ParamItem title="enterprisePayload" type="string" />
-    某些 reCAPTCHA Enterprise 实现可能包含额外的 `s` 参数，该参数会与 `sitekey` 一起传递给 `grecaptcha.enterprise.render`。例如值 `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`：
+    <ParamItem title="enterprisePayload" type="object" />
+    包含 reCAPTCHA Enterprise 附加参数的对象。
+
+    **对象参数：**
+
+    - `s` — `string`，reCAPTCHA Enterprise 的附加参数，可与 `sitekey` 一起传递给 `grecaptcha.enterprise.render`。
+
+    例如：
+
 
 ```js
 grecaptcha.enterprise.render("some-div-id", {
@@ -152,11 +158,9 @@ grecaptcha.enterprise.render("some-div-id", {
   </div>
 
 <br />
-对于 `enterprisePayload` - 在调用它之前，您需要用自己的函数替换 `grecaptcha.enterprise.render` 函数，并从其参数中获取值。该函数在加载脚本后存在，验证码通常立即渲染或基于页面事件渲染。如果验证码在客户端使用当前字段 `s` 渲染，那么令牌很可能不会被接受。
-可以在没有 `s` 字段的情况下调用原始函数。
+要从 `enterprisePayload` 中获取参数 `s`，请在调用 `grecaptcha.enterprise.render` 之前替换该函数，并从传入的参数对象中提取相应值。该函数会在脚本加载后可用，而 CAPTCHA 通常会立即渲染或由页面事件触发，因此需要提前设置拦截。调用原始函数时可以不传递 `s` 字段。
 
-
-`apiDomain` 是托管用于与reCAPTCHA交互的API接口的域，用于验证用户是否通过验证码。
+`apiDomain` 是托管 reCAPTCHA 交互 API 接口的域名，用于验证用户是否已通过 CAPTCHA。
 
 <details>
     <summary>脚本</summary>
@@ -725,6 +729,7 @@ solveRecaptchaV2Enterprise().catch(console.error);
 ```
 </details>
 
+
     <BlogLink url="https://capmonster.cloud/zh/blog/re-1/javascript-recaptcha-v2"/>
   </TabItem>
 
@@ -797,6 +802,7 @@ asyncio.run(solve_recaptcha_v2_enterprise())
 // https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Zennolab.CapMonsterCloud;
 using Zennolab.CapMonsterCloud.Requests;
@@ -808,7 +814,7 @@ class Program
         // 输入您的 CapMonster Cloud API 密钥
         var clientOptions = new ClientOptions
         {
-            ClientKey = "YOUR_API_KEY" 
+            ClientKey = "YOUR_API_KEY"
         };
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
@@ -821,9 +827,12 @@ class Program
         // CapMonster Cloud 会自动使用它们的代理
         var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
         {
-            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // 包含验证码的页面 URL
+            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // 包含 CAPTCHA 的页面 URL
             WebsiteKey = "your-website-key", // 替换为正确的值
-            EnterprisePayload = "{\"s\":\"your-value\"}"
+            EnterprisePayload = JsonSerializer.Serialize(new
+            {
+                s = "your-value"
+            })
         };
 
         // 使用您自己的代理的示例
@@ -833,26 +842,31 @@ class Program
         {
             WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
             WebsiteKey = "your-website-key",
-            EnterprisePayload = "{\"s\":\"your-value\"}",
+            EnterprisePayload = JsonSerializer.Serialize(new
+            {
+                s = "your-value"
+            }),
 
             Proxy = new ProxyContainer(
-                "123.45.67.89",          
-                8080,               
-                ProxyType.Http,     
-                "username",   
-                "password" 
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
             )
         };
         */
 
-        var recaptchaV2EnterpriseResult = await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
+        var recaptchaV2EnterpriseResult =
+            await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
 
-        Console.WriteLine("Solution: " + recaptchaV2EnterpriseResult.Solution.Value);
+        Console.WriteLine(
+            "Solution: " + recaptchaV2EnterpriseResult.Solution.Value
+        );
     }
 }
-    ```
-    </details>
-    
+``` 
+</details>
     <BlogLink url="https://capmonster.cloud/zh/blog/re-1/c-recaptcha-v2"/>
   </TabItem>
 

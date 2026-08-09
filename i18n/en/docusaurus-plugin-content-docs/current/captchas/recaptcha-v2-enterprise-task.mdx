@@ -86,8 +86,15 @@ In this example, `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` is the value of the 
     ---
 
 
-    <ParamItem title="enterprisePayload" type="string" />
-    Some reCAPTCHA Enterprise implementations may include an additional `s` parameter passed to `grecaptcha.enterprise.render` together with the `sitekey`. For example, the value `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`:
+    <ParamItem title="enterprisePayload" type="object" />
+    Object containing additional reCAPTCHA Enterprise parameters.
+
+    **Object parameters:**
+
+    - `s` — `string`, an additional reCAPTCHA Enterprise parameter that may be passed to `grecaptcha.enterprise.render` together with the `sitekey`.
+
+    For example:
+
 
 ```js
 grecaptcha.enterprise.render("some-div-id", {
@@ -100,7 +107,7 @@ grecaptcha.enterprise.render("some-div-id", {
     ---
 
     <ParamItem title="apiDomain" type="string" />
-    <p>Domain address from which to load reCAPTCHA Enterprise. For example: <br />- [www.google.com](http://www.google.com)<br />- [www.recaptcha.net](http://www.recaptcha.net)</p><p>Don't use a parameter if you don't know why it's needed.</p>
+    <p>Domain address from which to load reCAPTCHA Enterprise. For example: <br />- [www.google.com](http://www.google.com)<br />- [www.recaptcha.net](http://www.recaptcha.net)</p>
 
     ---
 
@@ -146,8 +153,7 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
   </div>
 
 <br />
-For `enterprisePayload` - before calling it, you need to replace the `grecaptcha.enterprise.render` function with your own and take the value from its parameters. The function exists after loading the script, and the captcha is usually rendered immediately or based on a page event. If the captcha is rendered with the current field `s` on the client, then the token will most likely not be accepted.
-The original function can be called without the `s` field.
+To obtain the `s` parameter from `enterprisePayload`, replace the `grecaptcha.enterprise.render` function before it is called and extract the value from the parameters object passed to it. The function becomes available after the script loads, and the CAPTCHA is usually rendered immediately or on a page event, so the interception must be set up in advance. The original function can be called without the `s` field.
 
 `apiDomain` is the domain that hosts the API interface for interacting with reCAPTCHA, it is used to verify that the user passes the captcha.
 
@@ -196,13 +202,17 @@ Object.defineProperty(window, 'grecaptcha', {
 
 ## Create task method
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (without proxy)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Request example**
 ```json
@@ -227,13 +237,8 @@ Object.defineProperty(window, 'grecaptcha', {
 			```
 		</MethodDescription>
 	</TabItem>
-  
+
 	<TabItem value="proxy" label="RecaptchaV2EnterpriseTask (with proxy)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
 			**Request example**
 ```json
@@ -263,20 +268,22 @@ Object.defineProperty(window, 'grecaptcha', {
 }
 ```
 		</MethodDescription>
-	</TabItem>
-  
+	</TabItem> 
 </Tabs>
-
 
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to request answer for ReCaptcha2. You will get response within 10 - 80 sec period depending on service workload.
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
 <div className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
 	<MethodDescription>
 		**Request example**
 ```json
@@ -789,6 +796,7 @@ solveRecaptchaV2Enterprise().catch(console.error);
     // https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
     using System;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using Zennolab.CapMonsterCloud;
     using Zennolab.CapMonsterCloud.Requests;
@@ -815,7 +823,10 @@ solveRecaptchaV2Enterprise().catch(console.error);
             {
                 WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL of the page with the captcha
                 WebsiteKey = "your-website-key", // Replace with the correct value
-                EnterprisePayload = "{\"s\":\"your-value\"}"
+                EnterprisePayload = JsonSerializer.Serialize(new
+            {
+                s = "your-value"
+            })
             };
 
             // Example of using your own proxy
@@ -825,7 +836,10 @@ solveRecaptchaV2Enterprise().catch(console.error);
             {
                 WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
                 WebsiteKey = "your-website-key",
-                EnterprisePayload = "{\"s\":\"your-value\"}",
+                EnterprisePayload = JsonSerializer.Serialize(new
+            {
+                s = "your-value"
+            }),
 
                 Proxy = new ProxyContainer(
                     "123.45.67.89",          
