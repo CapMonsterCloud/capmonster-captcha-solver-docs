@@ -36,13 +36,11 @@ Abaixo estão exemplos das variantes de reCAPTCHA v2 Enterprise compatíveis com
   <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)</ImageWrap>
 </ImagesLayout>
 
-O objeto contém dados para a resolução de tarefas do Google reCAPTCHA Enterprise. Para fornecer universalidade sólida na resolução desse tipo de tarefa, reproduzimos todos os componentes do ambiente usados para uma tarefa de automação que você planeja concluir. Isso inclui acesso via proxy, o user-agent do navegador e, opcionalmente, cookies.
+O objeto contém os dados da tarefa para resolver o ReCaptcha2 Enterprise do Google. Para garantir a universalidade da resolução desse tipo de CAPTCHA, precisamos utilizar todos os dados usados durante a automação do preenchimento do formulário no site de destino, incluindo proxy, UserAgent do navegador e cookies. Isso ajuda a evitar possíveis problemas caso o Google altere o código da CAPTCHA.
+Esse tipo de CAPTCHA não apresenta diferenças visuais em relação ao ReCaptcha v.2. A diferença pode ser identificada pelo código da CAPTCHA, por exemplo, nas ferramentas de desenvolvedor, na guia **Network**, nas solicitações:
+URL da solicitação (anchor): `https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s&co=aHR0cHM6Ly8yY2FwdGNoYS5jb206NDQz&hl=en&v=1kRDYC3bfA-o6-tsWzIBvp7k&size=normal&cb=43r1q2d3mx66`
+A resolução desse tipo de CAPTCHA pode levar mais tempo do que a de uma CAPTCHA comum, mas o valor `g-recaptcha-response` obtido permanece válido por mais 60 segundos após a resolução da CAPTCHA.
 
-Esse tipo de captcha não tem diferenças visuais em relação ao ReCaptcha v.2; você pode ver a diferença utilizando o código do captcha, por exemplo, nas ferramentas de desenvolvedor, na aba Rede em Consultas:
-
-*URL da solicitação (anchor): `https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s&co=aHR0cHM6Ly8yY2FwdGNoYS5jb206NDQz&hl=en&v=1kRDYC3bfA-o6-tsWzIBvp7k&size=normal&cb=43r1q2d3mx66`*
-
-Esse tipo de captcha pode demorar um pouco mais para ser resolvido do que o captcha de imagem usual, mas esse problema é compensado pelo fato de que o valor `g-captcha-response` que enviamos para você é válido pelos próximos 60 segundos após resolvermos seu ReCaptcha2.
 
 <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/recaptcha-enterprise-how-to-solve-complete-guide"/>
 

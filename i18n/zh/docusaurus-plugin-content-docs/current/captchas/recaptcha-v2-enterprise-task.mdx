@@ -43,13 +43,11 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 :::
 
 
-该对象包含用于解决Google reCAPTCHA Enterprise任务的数据。为了提供解决此类任务的通用性，我们已经再现了您计划完成的自动化任务所需的每一个环境因素。包括代理访问、浏览器的用户代理、Cookies（可选）。
+该对象包含用于解决 Google Enterprise 版 ReCaptcha2 任务的数据。为了确保此类 CAPTCHA 解决方案的通用性，我们需要使用您在目标网站自动填写表单时所使用的所有数据，包括代理、浏览器 UserAgent 和 cookies。这样可以避免 Google 更改其 CAPTCHA 代码时可能出现的问题。
+这种类型的 CAPTCHA 与 ReCaptcha v.2 在视觉上没有区别。可以通过 CAPTCHA 代码识别差异，例如在开发者工具的 **Network（网络）** 选项卡中查看请求：
+请求 URL（anchor）：`https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s&co=aHR0cHM6Ly8yY2FwdGNoYS5jb206NDQz&hl=en&v=1kRDYC3bfA-o6-tsWzIBvp7k&size=normal&cb=43r1q2d3mx66`
+与普通 CAPTCHA 相比，此类 CAPTCHA 的解决时间可能更长，但获取到的 `g-recaptcha-response` 在 CAPTCHA 解决后仍会继续有效 60 秒。
 
-这种类型的验证码与ReCaptcha v.2在视觉上没有区别，您可以通过使用开发者工具中的网络选项卡下的查询来查看验证码代码的差异，例如：
-
-*请求URL（锚点）：`https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s&co=aHR0cHM6Ly8yY2FwdGNoYS5jb206NDQz&hl=en&v=1kRDYC3bfA-o6-tsWzIBvp7k&size=normal&cb=43r1q2d3mx66`*
-
-这种类型的验证码可能比普通的图片验证码解决时间稍长一些，但这个问题被我们在解决您的ReCaptcha2后发送给您的g-captcha-response值在接下来的60秒内有效这一事实所弥补。
 
 <BlogLink url="https://capmonster.cloud/zh/blog/re-1/recaptcha-enterprise-how-to-solve-complete-guide"/>
 
