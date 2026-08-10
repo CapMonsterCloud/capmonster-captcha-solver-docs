@@ -88,8 +88,15 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     
     ---
 
-    <ParamItem title="enterprisePayload" type="string" />
-    Некоторые реализации reCAPTCHA Enterprise могут содержать дополнительный параметр `s`, передаваемый в `grecaptcha.enterprise.render` вместе с `sitekey`. Например, значение `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`:
+    <ParamItem title="enterprisePayload" type="object" />
+    Объект с дополнительными параметрами reCAPTCHA Enterprise.
+
+    **Параметры объекта:**
+
+    - `s` — `string`, дополнительный параметр reCAPTCHA Enterprise, который может передаваться в `grecaptcha.enterprise.render` вместе с `sitekey`.
+
+    Например:
+
 
 ```js
 grecaptcha.enterprise.render("some-div-id", {
@@ -154,7 +161,7 @@ grecaptcha.enterprise.render("some-div-id", {
   </div>
 
 <br />
-Для `enterprisePayload` - необходимо заменять функцию `grecaptcha.enterprise.render` перед её вызовом на свою и забирать значение из её параметров. Функция существует после загрузки скрипта, а рендерится капча обычно сразу или по событию страницы, если капча отрендерится с текущим полем `s` на клиенте, то токен с большой вероятностью принят не будет. Оригинальную функцию можно вызывать без поля `s`.
+Для получения параметра `s` из `enterprisePayload` замените функцию `grecaptcha.enterprise.render` перед её вызовом и извлеките значение из передаваемого объекта параметров. Функция становится доступной после загрузки скрипта, а CAPTCHA обычно рендерится сразу или по событию страницы, поэтому перехват необходимо выполнить заранее. Оригинальную функцию можно вызывать без поля `s`.
 
 `apiDomain` – это домен, на котором размещается API-интерфейс для взаимодействия с reCAPTCHA, используется для верификации прохождения капчи пользователем.
 
@@ -820,64 +827,74 @@ https://ru.api.capmonster.cloud/getTaskResult
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```csharp
-    // https://github.com/ZennoLab/capmonstercloud-client-dotnet
+```csharp
+// https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud;
-    using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            // Ваш API-ключ CapMonster Cloud
-            var clientOptions = new ClientOptions
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        // Базовый пример без прокси
+        // CapMonster Cloud автоматически использует свои прокси
+        var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        {
+            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
+            WebsiteKey = "your-website-key", // Замените на корректное значение
+            EnterprisePayload = JsonSerializer.Serialize(new
             {
-                ClientKey = "YOUR_API_KEY" 
-            };
+                s = "your-value"
+            })
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
-
-            // При необходимости можно проверить баланс 
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
-
-            // Базовый пример без прокси
-            // CapMonster Cloud автоматически использует свои прокси
-            var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        // Пример использования вашего собственного прокси
+        // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+        /*
+        var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        {
+            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
+            WebsiteKey = "your-website-key",
+            EnterprisePayload = JsonSerializer.Serialize(new
             {
-                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
-                WebsiteKey = "your-website-key", // Замените на корректное значение
-                EnterprisePayload = "{\"s\":\"your-value\"}"
-            };
+                s = "your-value"
+            }),
 
-            // Пример использования вашего собственного прокси
-            // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
-            /*
-            var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
-            {
-                WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
-                WebsiteKey = "your-website-key",
-                EnterprisePayload = "{\"s\":\"your-value\"}",
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
 
-                Proxy = new ProxyContainer(
-                    "123.45.67.89",          
-                    8080,               
-                    ProxyType.Http,     
-                    "username",   
-                    "password" 
-                )
-            };
-            */
+        var recaptchaV2EnterpriseResult =
+            await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
 
-            var recaptchaV2EnterpriseResult = await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
-
-            Console.WriteLine("Solution: " + recaptchaV2EnterpriseResult.Solution.Value);
-        }
+        Console.WriteLine(
+            "Solution: " + recaptchaV2EnterpriseResult.Solution.Value
+        );
     }
-    ``` 
+}
+``` 
 </details>
     <BlogLink url="https://capmonster.cloud/ru/blog/re-1/c-recaptcha-v2"/>
   </TabItem>

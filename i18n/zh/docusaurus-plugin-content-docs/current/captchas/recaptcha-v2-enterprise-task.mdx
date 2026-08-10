@@ -43,19 +43,16 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 :::
 
 
-该对象包含用于解决Google reCAPTCHA Enterprise任务的数据。为了提供解决此类任务的通用性，我们已经再现了您计划完成的自动化任务所需的每一个环境因素。包括代理访问、浏览器的用户代理、Cookies（可选）。
+该对象包含用于解决 Google Enterprise 版 ReCaptcha2 任务的数据。为了确保此类 CAPTCHA 解决方案的通用性，我们需要使用您在目标网站自动填写表单时所使用的所有数据，包括代理、浏览器 UserAgent 和 cookies。这样可以避免 Google 更改其 CAPTCHA 代码时可能出现的问题。
+这种类型的 CAPTCHA 与 ReCaptcha v.2 在视觉上没有区别。可以通过 CAPTCHA 代码识别差异，例如在开发者工具的 **Network（网络）** 选项卡中查看请求：
+请求 URL（anchor）：`https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s&co=aHR0cHM6Ly8yY2FwdGNoYS5jb206NDQz&hl=en&v=1kRDYC3bfA-o6-tsWzIBvp7k&size=normal&cb=43r1q2d3mx66`
+与普通 CAPTCHA 相比，此类 CAPTCHA 的解决时间可能更长，但获取到的 `g-recaptcha-response` 在 CAPTCHA 解决后仍会继续有效 60 秒。
 
-这种类型的验证码与ReCaptcha v.2在视觉上没有区别，您可以通过使用开发者工具中的网络选项卡下的查询来查看验证码代码的差异，例如：
-
-*请求URL（锚点）：`https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s&co=aHR0cHM6Ly8yY2FwdGNoYS5jb206NDQz&hl=en&v=1kRDYC3bfA-o6-tsWzIBvp7k&size=normal&cb=43r1q2d3mx66`*
-
-这种类型的验证码可能比普通的图片验证码解决时间稍长一些，但这个问题被我们在解决您的ReCaptcha2后发送给您的g-captcha-response值在接下来的60秒内有效这一事实所弥补。
 
 <BlogLink url="https://capmonster.cloud/zh/blog/re-1/recaptcha-enterprise-how-to-solve-complete-guide"/>
 
-
 ## 请求参数
-
+  
   <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
@@ -89,8 +86,15 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     
     ---
 
-    <ParamItem title="enterprisePayload" type="string" />
-    某些 reCAPTCHA Enterprise 实现可能包含额外的 `s` 参数，该参数会与 `sitekey` 一起传递给 `grecaptcha.enterprise.render`。例如值 `2JvUXHNTnZl1Jb6WEvbDyB...ugQA`：
+    <ParamItem title="enterprisePayload" type="object" />
+    包含 reCAPTCHA Enterprise 附加参数的对象。
+
+    **对象参数：**
+
+    - `s` — `string`，reCAPTCHA Enterprise 的附加参数，可与 `sitekey` 一起传递给 `grecaptcha.enterprise.render`。
+
+    例如：
+
 
 ```js
 grecaptcha.enterprise.render("some-div-id", {
@@ -152,11 +156,9 @@ grecaptcha.enterprise.render("some-div-id", {
   </div>
 
 <br />
-对于 `enterprisePayload` - 在调用它之前，您需要用自己的函数替换 `grecaptcha.enterprise.render` 函数，并从其参数中获取值。该函数在加载脚本后存在，验证码通常立即渲染或基于页面事件渲染。如果验证码在客户端使用当前字段 `s` 渲染，那么令牌很可能不会被接受。
-可以在没有 `s` 字段的情况下调用原始函数。
+要从 `enterprisePayload` 中获取参数 `s`，请在调用 `grecaptcha.enterprise.render` 之前替换该函数，并从传入的参数对象中提取相应值。该函数会在脚本加载后可用，而 CAPTCHA 通常会立即渲染或由页面事件触发，因此需要提前设置拦截。调用原始函数时可以不传递 `s` 字段。
 
-
-`apiDomain` 是托管用于与reCAPTCHA交互的API接口的域，用于验证用户是否通过验证码。
+`apiDomain` 是托管 reCAPTCHA 交互 API 接口的域名，用于验证用户是否已通过 CAPTCHA。
 
 <details>
     <summary>脚本</summary>
@@ -725,6 +727,7 @@ solveRecaptchaV2Enterprise().catch(console.error);
 ```
 </details>
 
+
     <BlogLink url="https://capmonster.cloud/zh/blog/re-1/javascript-recaptcha-v2"/>
   </TabItem>
 
@@ -797,6 +800,7 @@ asyncio.run(solve_recaptcha_v2_enterprise())
 // https://github.com/ZennoLab/capmonstercloud-client-dotnet
 
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Zennolab.CapMonsterCloud;
 using Zennolab.CapMonsterCloud.Requests;
@@ -808,7 +812,7 @@ class Program
         // 输入您的 CapMonster Cloud API 密钥
         var clientOptions = new ClientOptions
         {
-            ClientKey = "YOUR_API_KEY" 
+            ClientKey = "YOUR_API_KEY"
         };
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
@@ -821,9 +825,12 @@ class Program
         // CapMonster Cloud 会自动使用它们的代理
         var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
         {
-            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // 包含验证码的页面 URL
+            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // 包含 CAPTCHA 的页面 URL
             WebsiteKey = "your-website-key", // 替换为正确的值
-            EnterprisePayload = "{\"s\":\"your-value\"}"
+            EnterprisePayload = JsonSerializer.Serialize(new
+            {
+                s = "your-value"
+            })
         };
 
         // 使用您自己的代理的示例
@@ -833,26 +840,31 @@ class Program
         {
             WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
             WebsiteKey = "your-website-key",
-            EnterprisePayload = "{\"s\":\"your-value\"}",
+            EnterprisePayload = JsonSerializer.Serialize(new
+            {
+                s = "your-value"
+            }),
 
             Proxy = new ProxyContainer(
-                "123.45.67.89",          
-                8080,               
-                ProxyType.Http,     
-                "username",   
-                "password" 
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
             )
         };
         */
 
-        var recaptchaV2EnterpriseResult = await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
+        var recaptchaV2EnterpriseResult =
+            await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
 
-        Console.WriteLine("Solution: " + recaptchaV2EnterpriseResult.Solution.Value);
+        Console.WriteLine(
+            "Solution: " + recaptchaV2EnterpriseResult.Solution.Value
+        );
     }
 }
-    ```
-    </details>
-    
+``` 
+</details>
     <BlogLink url="https://capmonster.cloud/zh/blog/re-1/c-recaptcha-v2"/>
   </TabItem>
 
