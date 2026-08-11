@@ -295,295 +295,68 @@ Como os sites diferem em seus mecanismos de proteção, estrutura de requisiçõ
   <TabItem value="js" label="Node.js" default className="method-panel">
 
 <details>
-      <summary>Mostrar código</summary>
-```js
-// npm install axios cheerio https-proxy-agent
-
-import axios from "axios";
-import * as cheerio from "cheerio";
-import { URL } from "url";
-import { HttpsProxyAgent } from "https-proxy-agent";
-
-// ======================================================
-// CONFIGURAÇÕES
-// ======================================================
-
-// Ativa/desativa logs detalhados
-// Usado apenas para conveniência durante o desenvolvimento e depuração
-const DEBUG = true; 
-
-const CAPMONSTER_API_KEY = "YOUR_API_KEY"; // Especifique sua chave de API do CapMonster Cloud
-const PAGE_URL = "https://www.example.com/"; // Especifique a URL da página onde o DataDome é acionado
-
-const USER_AGENT =
-  "userAgentPlaceholder";
-
-const PROXY_URL = "http://login:pass@address:port";
-
-const CREATE_TASK = "https://api.capmonster.cloud/createTask";
-const GET_RESULT = "https://api.capmonster.cloud/getTaskResult";
-
-const MAX_WAIT = 120000;
-
-// ======================================================
-// LOGGER DE DEPURAÇÃO
-// ======================================================
-
-function log(title, data = null) {
-  if (!DEBUG) return;
-
-  console.log(`\n${"=".repeat(25)} ${title} ${"=".repeat(25)}`);
-
-  if (typeof data === "object") console.log(JSON.stringify(data, null, 2));
-  else if (data) console.log(data);
-
-  console.log("=".repeat(70));
-}
-
-// ======================================================
-// EXTRAÇÃO DO OBJETO DD
-// ======================================================
-
-function extractDD(html) {
-  const $ = cheerio.load(html);
-  const scripts = $("script").toArray();
-
-  for (const s of scripts) {
-    const text = $(s).html();
-    if (text && text.includes("var dd=")) {
-      try {
-        const raw = text.split("var dd=")[1].split(";")[0].replace(/'/g, '"');
-        return JSON.parse(raw);
-      } catch (e) {
-        return null;
-      }
-    }
-  }
-
-  return null;
-}
-
-// ======================================================
-// MONTAGEM DA CAPTCHA URL
-// ======================================================
-
-function buildCaptchaUrl(dd) {
-  const base = `https://${dd.host}/captcha/`;
-
-  const params = new URLSearchParams({
-    initialCid: dd.cid,
-    hash: dd.hsh,
-    cid: dd.cookie,
-    t: dd.t,
-    referer: PAGE_URL,
-    s: dd.s,
-    dm: "cd",
-  });
-
-  if (dd.e) params.append("e", dd.e);
-
-  return base + "?" + params.toString();
-}
-
-// ======================================================
-// TRABALHANDO COM CAPMONSTER CLOUD
-// ======================================================
-
-async function createTask(payload) {
-  log("CREATE TASK REQUEST", payload);
-
-  const { data } = await axios.post(CREATE_TASK, payload);
-
-  log("CREATE TASK RESPONSE", data);
-
-  return data.taskId;
-}
-
-async function waitResult(taskId) {
-  const start = Date.now();
-
-  while (true) {
-    if (Date.now() - start > MAX_WAIT) throw new Error("CapMonster timeout");
-
-    await new Promise((r) => setTimeout(r, 3000));
-
-    const { data } = await axios.post(GET_RESULT, {
-      clientKey: CAPMONSTER_API_KEY,
-      taskId,
-    });
-
-    if (data.status === "processing") {
-      console.log("... solving");
-      continue;
-    }
-
-    if (data.status === "ready") return data.solution;
-
-    if (data.errorId) throw new Error(JSON.stringify(data));
-  }
-}
-
-// ======================================================
-// SOLVER PRINCIPAL
-// ======================================================
-
-async function solveDataDome() {
-  console.log("\nDataDome → CapMonster solver started (HTTP mode)\n");
-
-  let agent = null;
-  let parsedProxy = null;
-
-  if (PROXY_URL) {
-    parsedProxy = new URL(PROXY_URL);
-    agent = new HttpsProxyAgent(PROXY_URL);
-  }
-
-  // 1. Primeira requisição
-  console.log("Opening page...");
-
-  const response = await axios.get(PAGE_URL, {
-    headers: {
-      "User-Agent": USER_AGENT,
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-      "Accept-Language": "en-US,en;q=0.9",
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-      "Upgrade-Insecure-Requests": "1",
-    },
-    httpsAgent: agent,
-    proxy: false, // importante ao usar httpsAgent
-    validateStatus: () => true,
-  });
-
-  const html = response.data;
-
-  log("STATUS", response.status);
-
-  const dd = extractDD(html);
-
-  if (!dd) {
-    console.log("No DataDome detected.");
-    return;
-  }
-
-  log("DD OBJECT", dd);
-
-  if (dd.t === "bv") {
-    console.log("Proxy banned. Change proxy.");
-    return;
-  }
-
-  // 2. Montagem da captcha URL
-  const captchaUrl = buildCaptchaUrl(dd);
-  log("CAPTCHA URL", captchaUrl);
-
-  //  3. Criação da tarefa no CapMonster Cloud
-  const task = {
-    type: "CustomTask",
-    class: "DataDome",
-    websiteURL: PAGE_URL,
-    userAgent: USER_AGENT,
-    metadata: {
-      captchaUrl,
-      datadomeCookie: `datadome=${dd.cookie}`,
-      datadomeVersion: "new",
-    },
-  };
-
-  if (PROXY_URL) {
-    task.proxyType = "http";
-    task.proxyAddress = parsedProxy.hostname;
-    task.proxyPort = parseInt(parsedProxy.port);
-    task.proxyLogin = parsedProxy.username;
-    task.proxyPassword = parsedProxy.password;
-  }
-
-  const payload = {
-    clientKey: CAPMONSTER_API_KEY,
-    task,
-  };
-
-  const taskId = await createTask(payload);
-
-  if (!taskId) {
-    console.log("Failed to create task.");
-    return;
-  }
-
-  const solution = await waitResult(taskId);
-
-  log("SOLUTION", solution);
-
-  console.log("\nDataDome solved successfully.\n");
-}
-
-solveDataDome().catch(console.error);
-```
-
-  </details>
-
-<details>
       <summary>Mostrar código (Node.js + Playwright)</summary>
 ```js
-// npm install axios cheerio playwright
+// npm install cheerio playwright @zennolab_com/capmonstercloud-client
+// npx playwright install chromium
 
-import axios from "axios";
-import * as cheerio from "cheerio";
-import { chromium } from "playwright";
-import { URL } from "url";
+const cheerio = require("cheerio");
+const { chromium } = require("playwright");
 
-// ======================================================
-// CONFIGURAÇÕES
-// ======================================================
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  DataDomeRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-// Ativa/desativa saída detalhada de logs
-// Usado apenas para conveniência no desenvolvimento e depuração
-const DEBUG = true;
+const API_KEY = "YOUR_API_KEY"; // Insira sua chave da API do CapMonster Cloud
 
-const CAPMONSTER_API_KEY = "YOUR_API_KEY"  // Informe sua chave de API do CapMonster Cloud
-const PAGE_URL = "https://www.example.com/" // Informe a URL da página onde o DataDome é acionado
+const PAGE_URL = "https://example.com/"; // Insira a URL da página protegida pelo DataDome
 
-const USER_AGENT =
-  "userAgentPlaceholder";
+const USER_AGENT = "userAgentPlaceholder";
 
-const PROXY_URL = "http://login:pass@address:port" // Informe seu proxy
+const BASE_HEADERS = {
+  accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+  "accept-language": "en-US,en;q=0.9",
+  "cache-control": "no-cache",
+  pragma: "no-cache",
+  "sec-ch-ua":
+    '"Chromium";v="150", "Google Chrome";v="150", ";Not A Brand";v="99"',
+  "sec-ch-ua-mobile": "?0",
+  "sec-ch-ua-platform": '"Windows"',
+  "sec-fetch-dest": "document",
+  "sec-fetch-mode": "navigate",
+  "sec-fetch-site": "none",
+  "sec-fetch-user": "?1",
+  "upgrade-insecure-requests": "1",
+};
 
-const CREATE_TASK = "https://api.capmonster.cloud/createTask";
-const GET_RESULT = "https://api.capmonster.cloud/getTaskResult";
+const PROXY = {
+  proxyType: "http",
+  proxyAddress: "127.0.0.1",
+  proxyPort: 8080,
+  proxyLogin: "proxy_login",
+  proxyPassword: "proxy_password",
+};
 
-const MAX_WAIT = 120000;
-
-// ======================================================
-// LOGGER DE DEPURAÇÃO
-// ======================================================
-
-function log(title, data = null) {
-  if (!DEBUG) return;
-
-  console.log(`\n${"=".repeat(25)} ${title} ${"=".repeat(25)}`);
-
-  if (typeof data === "object") console.log(JSON.stringify(data, null, 2));
-  else if (data) console.log(data);
-
-  console.log("=".repeat(70));
-}
-
-// ======================================================
-// EXTRAÇÃO DO OBJETO DD
-// ======================================================
-
+/**
+ * Extrai os parâmetros do DataDome do HTML da página
+ *
+ * @param {string} html
+ */
 function extractDD(html) {
   const $ = cheerio.load(html);
-  const scripts = $("script").toArray();
 
-  for (const s of scripts) {
-    const text = $(s).html();
+  for (const script of $("script").toArray()) {
+    const text = $(script).html();
+
     if (text && text.includes("var dd=")) {
       try {
         const raw = text.split("var dd=")[1].split(";")[0].replace(/'/g, '"');
+
         return JSON.parse(raw);
-      } catch (e) {
+      } catch {
         return null;
       }
     }
@@ -592,13 +365,13 @@ function extractDD(html) {
   return null;
 }
 
-// ======================================================
-// MONTAGEM DA URL DA CAPTCHA
-// ======================================================
-
+/**
+ * Gera a URL do CAPTCHA do DataDome usando os parâmetros
+ * extraídos da página
+ *
+ * @param {any} dd
+ */
 function buildCaptchaUrl(dd) {
-  const base = `https://${dd.host}/captcha/`;
-
   const params = new URLSearchParams({
     initialCid: dd.cid,
     hash: dd.hsh,
@@ -609,657 +382,447 @@ function buildCaptchaUrl(dd) {
     dm: "cd",
   });
 
-  if (dd.e) params.append("e", dd.e);
-
-  return base + "?" + params.toString();
-}
-
-// ======================================================
-// TRABALHANDO COM CAPMONSTER CLOUD
-// ======================================================
-
-async function createTask(payload) {
-  log("CREATE TASK REQUEST", payload);
-
-  const { data } = await axios.post(CREATE_TASK, payload);
-
-  log("CREATE TASK RESPONSE", data);
-
-  return data.taskId;
-}
-
-async function waitResult(taskId) {
-  const start = Date.now();
-
-  while (true) {
-    if (Date.now() - start > MAX_WAIT) throw new Error("CapMonster timeout");
-
-    await new Promise((r) => setTimeout(r, 3000));
-
-    const { data } = await axios.post(GET_RESULT, {
-      clientKey: CAPMONSTER_API_KEY,
-      taskId,
-    });
-
-    if (data.status === "processing") {
-      console.log("... resolvendo");
-      continue;
-    }
-
-    if (data.status === "ready") return data.solution;
-
-    if (data.errorId) throw new Error(JSON.stringify(data));
-  }
-}
-
-// ======================================================
-// SOLVER PRINCIPAL (PLAYWRIGHT)
-// ======================================================
-
-async function solveDataDome() {
-  console.log("\nDataDome → CapMonster solver iniciado\n");
-
-  let proxyConfig = null;
-  let parsedProxy = null;
-
-  if (PROXY_URL) {
-    parsedProxy = new URL(PROXY_URL);
-
-    proxyConfig = {
-      server: `http://${parsedProxy.hostname}:${parsedProxy.port}`,
-      username: parsedProxy.username,
-      password: parsedProxy.password,
-    };
+  if (dd.e) {
+    params.append("e", dd.e);
   }
 
+  return `https://${dd.host}/captcha/?${params.toString()}`;
+}
+
+(async () => {
+  // Configura o proxy para o navegador
+  // O navegador e a tarefa do CapMonster Cloud devem usar o mesmo proxy
+  const proxyConfig = {
+    server: `http://${PROXY.proxyAddress}:${PROXY.proxyPort}`,
+    username: PROXY.proxyLogin,
+    password: PROXY.proxyPassword,
+  };
+
+  // Inicia o Chromium com o proxy especificado
   const browser = await chromium.launch({
     headless: false,
     proxy: proxyConfig,
   });
 
+  // Cria um contexto do navegador com o User-Agent e os cabeçalhos HTTP definidos
   const context = await browser.newContext({
     userAgent: USER_AGENT,
+    extraHTTPHeaders: BASE_HEADERS,
   });
 
   const page = await context.newPage();
 
-  console.log("Abrindo página...");
-  await page.goto(PAGE_URL, { waitUntil: "domcontentloaded" });
+  // Abre a página protegida
+  await page.goto(PAGE_URL, {
+    waitUntil: "domcontentloaded",
+  });
 
+  // Obtém o HTML da página e extrai os parâmetros do DataDome
   const html = await page.content();
+
   const dd = extractDD(html);
 
   if (!dd) {
-    console.log("DataDome não detectado.");
-    await browser.close();
-    return;
+    throw new Error("Parâmetros do DataDome não encontrados.");
   }
 
-  log("DD OBJECT", dd);
-
+  // Verifica se o proxy foi bloqueado pelo DataDome
   if (dd.t === "bv") {
-    console.log("Proxy banido. Troque o proxy.");
-    await browser.close();
-    return;
+    throw new Error("Proxy bloqueado pelo DataDome.");
   }
 
+  // Gera a URL completa do CAPTCHA para enviar na tarefa
   const captchaUrl = buildCaptchaUrl(dd);
-  log("CAPTCHA URL", captchaUrl);
 
-  const task = {
-    type: "CustomTask",
-    class: "DataDome",
+  // Cria o cliente do CapMonster Cloud
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({
+      clientKey: API_KEY,
+    }),
+  );
+
+  // Verifica o saldo atual da conta
+  const balance = await client.getBalance();
+
+  console.log("Saldo:", balance);
+
+  // Cria a tarefa do DataDome para o CapMonster Cloud
+  const request = new DataDomeRequest({
+    _class: "DataDome",
     websiteURL: PAGE_URL,
     userAgent: USER_AGENT,
+    proxy: PROXY,
     metadata: {
       captchaUrl,
       datadomeCookie: `datadome=${dd.cookie}`,
       datadomeVersion: "new",
     },
-  };
+  });
 
-  if (PROXY_URL) {
-    task.proxyType = "http";
-    task.proxyAddress = parsedProxy.hostname;
-    task.proxyPort = parseInt(parsedProxy.port);
-    task.proxyLogin = parsedProxy.username;
-    task.proxyPassword = parsedProxy.password;
+  console.log("Enviando a tarefa do DataDome para resolução...");
+
+  // Envia a tarefa para o CapMonster Cloud e aguarda o resultado
+  const result = await client.Solve(request);
+
+  console.dir(result, { depth: null });
+
+  // =====================================
+  // EXTRAÇÃO DOS COOKIES DA RESPOSTA
+  // DO CAPMONSTER CLOUD
+  // =====================================
+
+  const domains = result?.solution?.domains ?? {};
+
+  const allCookies = [];
+
+  // Converte os cookies da resposta do CapMonster Cloud
+  // para o formato aceito pelo Playwright
+  for (const [domain, data] of Object.entries(domains)) {
+    const cookies = data?.cookies ?? {};
+
+    for (const [name, value] of Object.entries(cookies)) {
+      allCookies.push({
+        name,
+        value,
+        domain: ".example.com", // Substitua pelo domínio necessário
+        path: "/",
+        secure: true,
+        sameSite: "Lax",
+      });
+    }
   }
 
-  const payload = {
-    clientKey: CAPMONSTER_API_KEY,
-    task,
-  };
-
-  const taskId = await createTask(payload);
-
-  if (!taskId) {
-    console.log("Falha ao criar tarefa.");
-    await browser.close();
-    return;
+  if (!allCookies.length) {
+    throw new Error("O CapMonster Cloud não retornou cookies.");
   }
 
-  const solution = await waitResult(taskId);
-  log("SOLUTION", solution);
+  // ===============================
+  // APLICA OS COOKIES NO PLAYWRIGHT
+  // ===============================
+
+  // Obtém os cookies do contexto atual do navegador
+  const existingCookies = await context.cookies();
+
+  // Remove os cookies antigos do DataDome
+  // para evitar conflitos com a nova solução
+  const filtered = existingCookies.filter((c) => {
+    const name = c.name.toLowerCase();
+
+    return !name.includes("datadome");
+  });
+
+  await context.clearCookies();
+
+  // Restaura os demais cookies da sessão atual
+  if (filtered.length) {
+    await context.addCookies(filtered);
+  }
+
+  console.log("Cookies antigos do DataDome removidos.");
+
+  // Adiciona os cookies recebidos do CapMonster Cloud
+  await context.addCookies(allCookies);
+
+  console.log("Cookies do CapMonster Cloud aplicados:", allCookies);
+
+  // ===============================
+  // RECARREGA A PÁGINA
+  // COM OS NOVOS COOKIES
+  // ===============================
+
+  // Envia os cookies recebidos junto com os cabeçalhos HTTP originais
+  await context.setExtraHTTPHeaders({
+    ...BASE_HEADERS,
+    cookie: allCookies.map((c) => `${c.name}=${c.value}`).join("; "),
+  });
+
+  // Recarrega a página com os cookies resolvidos do DataDome
+  await page.reload({
+    waitUntil: "domcontentloaded",
+  });
+
+  console.log("Página recarregada com os cookies do DataDome.");
+
+  await page.waitForTimeout(10000);
 
   await browser.close();
-}
-
-solveDataDome().catch(console.error);
-
+})().catch(console.error);
 ```
 </details>
       </TabItem>
 
 <TabItem value="python" label="Python" className="method-panel">
-<details>
-      <summary>Mostrar código</summary>
-```python
-# pip install requests beautifulsoup4
-
-import time
-import json
-import requests
-import urllib.parse   # Para analisar e codificar URLs (proxy, parâmetros da captcha)
-from bs4 import BeautifulSoup  # Para fazer parsing do HTML e extrair o objeto DataDome (var dd)
-from urllib.parse import urlparse
-
-
-# ======================================================
-# CONFIGURAÇÕES
-# ======================================================
-
-# Ativa/desativa saída detalhada de logs
-# Usado apenas para conveniência no desenvolvimento e depuração
-DEBUG = True   
-
-CAPMONSTER_API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
-
-PAGE_URL = "https://www.example.com/" # Informe a URL da página onde o DataDome é acionado
-
-USER_AGENT = (
-    "userAgentPlaceholder"
-)
-
-PROXY_URL = "http://login:pass@address:port" # Informe seu proxy 
-
-CREATE_TASK = "https://api.capmonster.cloud/createTask"
-GET_RESULT = "https://api.capmonster.cloud/getTaskResult"
-
-MAX_WAIT = 120
-
-
-# ======================================================
-# LOGGER DE DEPURAÇÃO
-# ======================================================
-
-def log(title, data=None):
-    if not DEBUG:
-        return
-
-    print(f"\n{'='*25} {title} {'='*25}")
-
-    if isinstance(data, (dict, list)):
-        print(json.dumps(data, indent=2, ensure_ascii=False))
-    elif data:
-        print(data)
-
-    print("=" * 70)
-
-
-# ======================================================
-# CABEÇALHOS (VOCÊ PODE DEFINIR OS SEUS)
-# ======================================================
-
-def build_headers(first_request=True):
-    return {
-        "User-Agent": USER_AGENT,
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-        "Cache-Control": "max-age=0",
-        "DNT": "1",
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none" if first_request else "same-origin",
-        "Sec-Fetch-User": "?1",
-    }
-
-
-# ======================================================
-# PROXY
-# ======================================================
-
-def build_proxy(proxy_url):
-    if not proxy_url:
-        return None, None
-
-    parsed = urlparse(proxy_url)
-
-    proxy_dict = {
-        "http": proxy_url,
-        "https": proxy_url
-    }
-
-    proxy_data = {
-        "proxyType": "http",
-        "proxyAddress": parsed.hostname,
-        "proxyPort": parsed.port,
-        "proxyLogin": parsed.username or "",
-        "proxyPassword": parsed.password or ""
-    }
-
-    return proxy_dict, proxy_data
-
-
-# ======================================================
-# EXTRAÇÃO DO OBJETO DD
-# ======================================================
-
-def extract_dd(html):
-    soup = BeautifulSoup(html, "html.parser")
-
-    script = soup.find("script", string=lambda t: t and "var dd=" in t)
-    if not script:
-        return None
-
-    raw = script.text.split("var dd=")[1].split(";")[0]
-    raw = raw.replace("'", '"')
-
-    return json.loads(raw)
-
-
-# ======================================================
-# MONTAGEM DA CAPTCHA URL
-# ======================================================
-
-def build_captcha_url(dd):
-    base = f"https://{dd['host']}/captcha/"
-
-    parts = [
-        ("initialCid", dd["cid"]),
-        ("hash", dd["hsh"]),
-        ("cid", dd["cookie"]),
-        ("t", dd["t"]),
-        ("referer", PAGE_URL),
-        ("s", dd["s"]),
-    ]
-
-    if dd.get("e"):
-        parts.append(("e", dd["e"]))
-
-    parts.append(("dm", "cd"))
-
-    query = "&".join(
-        f"{k}={urllib.parse.quote(str(v), safe='')}"
-        for k, v in parts
-    )
-
-    return base + "?" + query
-
-
-# ======================================================
-# RESOLUÇÃO VIA CAPMONSTER CLOUD
-# ======================================================
-
-def create_task(payload):
-    log("CREATE TASK REQUEST", payload)
-
-    r = requests.post(CREATE_TASK, json=payload)
-    resp = r.json()
-
-    log("CREATE TASK RESPONSE", resp)
-
-    return resp.get("taskId")
-
-
-def wait_result(task_id):
-    start = time.time()
-
-    while True:
-        if time.time() - start > MAX_WAIT:
-            raise TimeoutError("Tempo de espera do CapMonster excedido")
-
-        time.sleep(2)
-
-        r = requests.post(GET_RESULT, json={
-            "clientKey": CAPMONSTER_API_KEY,
-            "taskId": task_id
-        })
-
-        resp = r.json()
-
-        if resp.get("status") == "processing":
-            print("... resolvendo")
-            continue
-
-        if resp.get("status") == "ready":
-            return resp["solution"]
-
-        if resp.get("errorId"):
-            raise Exception(resp)
-
-
-# ======================================================
-# SOLVER PRINCIPAL
-# ======================================================
-
-def solve_datadome():
-
-    print("\n DataDome → CapMonster solver iniciado\n")
-
-    proxy_dict, proxy_data = build_proxy(PROXY_URL)
-
-    session = requests.Session()
-
-    session.headers.update(build_headers(first_request=True))
-
-    if proxy_dict:
-        session.proxies.update(proxy_dict)
-
-    # --------------------------------------------------
-    # 1. Primeira requisição
-    # --------------------------------------------------
-
-    print("Abrindo página...")
-
-    r = session.get(PAGE_URL)
-
-    log("FIRST STATUS", r.status_code)
-
-    dd = extract_dd(r.text)
-
-    if not dd:
-        print("DataDome não detectado")
-        return
-
-    log("DD OBJECT", dd)
-
-    if dd.get("t") == "bv":
-        print("Proxy banido (t=bv). Troque o proxy ou os headers.")
-        return
-
-    # --------------------------------------------------
-    # 2. Montagem da captcha URL
-    # --------------------------------------------------
-
-    captcha_url = build_captcha_url(dd)
-
-    log("CAPTCHA URL", captcha_url)
-
-    # --------------------------------------------------
-    # 3. Criação da tarefa no CapMonster Cloud
-    # --------------------------------------------------
-
-    task = {
-        "type": "CustomTask",
-        "class": "DataDome",
-        "websiteURL": PAGE_URL,
-        "userAgent": USER_AGENT,
-        "metadata": {
-            "captchaUrl": captcha_url,
-            "datadomeCookie": f"datadome={dd['cookie']}",
-            "datadomeVersion": "new"
-        }
-    }
-
-    if proxy_data:
-        task.update(proxy_data)
-
-    payload = {
-        "clientKey": CAPMONSTER_API_KEY,
-        "task": task
-    }
-
-    task_id = create_task(payload)
-
-    if not task_id:
-        print("Falha ao criar tarefa")
-        return
-
-    # --------------------------------------------------
-    # 4. Aguardando solução
-    # --------------------------------------------------
-
-    solution = wait_result(task_id)
-
-    log("SOLUTION", solution)
-
-if __name__ == "__main__":
-    solve_datadome()
-```
-
-</details>
 
 <details>
       <summary>Mostrar código (Python + Playwright)</summary>
 ```python
-# pip install requests beautifulsoup4 playwright
+# pip install playwright beautifulsoup4 capmonstercloudclient
+# playwright install chromium
 
-import time
 import json
-import requests
-import urllib.parse  # Para codificar parâmetros de URL (captcha URL)
-from bs4 import BeautifulSoup  # Para fazer parsing do HTML e extrair o objeto var dd
-from urllib.parse import urlparse
-from playwright.sync_api import sync_playwright  # Para iniciar o navegador e trabalhar com a página via Playwright
+import asyncio
+from urllib.parse import urlencode
 
+from bs4 import BeautifulSoup
+from playwright.async_api import async_playwright
 
-# ======================================================
-# CONFIGURAÇÕES
-# ======================================================
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import DataDomeCustomTaskRequest
 
-# Ativa/desativa saída detalhada de logs
-# Usado apenas para conveniência no desenvolvimento e depuração
-DEBUG = True
-
-CAPMONSTER_API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
-
-PAGE_URL = "https://www.example.com/" # Informe a URL da página onde o DataDome é acionado
-
+API_KEY = "YOUR_CAPMONSTER_API_KEY"  # Insira sua chave da API do CapMonster Cloud
+PAGE_URL = "https://example.com/"  # Insira a URL da página com DataDome
 USER_AGENT = (
     "userAgentPlaceholder"
 )
 
-PROXY_URL = "http://login:pass@address:port" # Informe seu proxy
+BASE_HEADERS = {
+    "accept": (
+        "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/avif,image/webp,image/apng,*/*;q=0.8"
+    ),
+    "accept-language": "en-US,en;q=0.9",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "sec-ch-ua": '"Chromium";v="150", "Google Chrome";v="150", ";Not A Brand";v="99"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "none",
+    "sec-fetch-user": "?1",
+    "upgrade-insecure-requests": "1",
+}
 
-CREATE_TASK = "https://api.capmonster.cloud/createTask"
-GET_RESULT = "https://api.capmonster.cloud/getTaskResult"
+PROXY = {
+    "proxyType": "http",
+    "proxyAddress": "YOUR_PROXY_ADDRESS",
+    "proxyPort": 12345,
+    "proxyLogin": "YOUR_PROXY_LOGIN",
+    "proxyPassword": "YOUR_PROXY_PASSWORD",
+}
 
-MAX_WAIT = 120
+def extract_dd(html: str):
+    """
+    Extração dos parâmetros do DataDome do código HTML da página
 
-
-# ======================================================
-# LOGGER DE DEPURAÇÃO
-# ======================================================
-
-def log(title, data=None):
-    if not DEBUG:
-        return
-
-    print(f"\n{'='*25} {title} {'='*25}")
-
-    if isinstance(data, (dict, list)):
-        print(json.dumps(data, indent=2, ensure_ascii=False))
-    elif data:
-        print(data)
-
-    print("=" * 70)
-
-
-# ======================================================
-# EXTRAÇÃO DO OBJETO DD
-# ======================================================
-
-def extract_dd(html):
+    :param html: código HTML da página
+    """
     soup = BeautifulSoup(html, "html.parser")
 
-    script = soup.find("script", string=lambda t: t and "var dd=" in t)
-    if not script:
-        return None
+    for script in soup.find_all("script"):
+        text = script.string or script.get_text()
 
-    raw = script.text.split("var dd=")[1].split(";")[0]
-    raw = raw.replace("'", '"')
+        if text and "var dd=" in text:
+            try:
+                raw = text.split("var dd=")[1].split(";")[0].replace("'", '"')
+                return json.loads(raw)
+            except Exception:
+                return None
 
-    return json.loads(raw)
-
-
-# ======================================================
-# MONTAGEM DA CAPTCHA URL
-# ======================================================
+    return None
 
 def build_captcha_url(dd):
-    base = f"https://{dd['host']}/captcha/"
+    """
+    Formação da URL do CAPTCHA DataDome com base nos parâmetros
+    obtidos da página
 
-    parts = [
-        ("initialCid", dd["cid"]),
-        ("hash", dd["hsh"]),
-        ("cid", dd["cookie"]),
-        ("t", dd["t"]),
-        ("referer", PAGE_URL),
-        ("s", dd["s"]),
-    ]
+    :param dd: parâmetros do DataDome
+    """
+    params = {
+        "initialCid": dd.get("cid"),
+        "hash": dd.get("hsh"),
+        "cid": dd.get("cookie"),
+        "t": dd.get("t"),
+        "referer": PAGE_URL,
+        "s": dd.get("s"),
+        "dm": "cd",
+    }
 
     if dd.get("e"):
-        parts.append(("e", dd["e"]))
+        params["e"] = dd.get("e")
 
-    parts.append(("dm", "cd"))
+    return f"https://{dd.get('host')}/captcha/?{urlencode(params)}"
 
-    query = "&".join(
-        f"{k}={urllib.parse.quote(str(v), safe='')}"
-        for k, v in parts
-    )
+def normalize_result(result):
+    if isinstance(result, dict):
+        return result
 
-    return base + "?" + query
+    if hasattr(result, "model_dump"):
+        return result.model_dump()
 
+    if hasattr(result, "dict"):
+        return result.dict()
 
-# ======================================================
-# TRABALHANDO COM CAPMONSTER CLOUD
-# ======================================================
+    return result
 
-def create_task(payload):
-    log("CREATE TASK REQUEST", payload)
-    r = requests.post(CREATE_TASK, json=payload)
-    resp = r.json()
-    log("CREATE TASK RESPONSE", resp)
-    return resp.get("taskId")
+def extract_datadome_cookies(result):
+    result = normalize_result(result)
 
+    print("Resultado da resolução:")
+    print(json.dumps(result, indent=2, default=str))
 
-def wait_result(task_id):
-    start = time.time()
+    # =====================================
+    # EXTRAÇÃO DE COOKIES DA RESPOSTA
+    # DO CAPMONSTER CLOUD
+    # =====================================
 
-    while True:
-        if time.time() - start > MAX_WAIT:
-            raise TimeoutError("Tempo de espera do CapMonster excedido")
+    solution = result.get("solution", result) if isinstance(result, dict) else result
 
-        time.sleep(2)
+    domains = {}
 
-        r = requests.post(GET_RESULT, json={
-            "clientKey": CAPMONSTER_API_KEY,
-            "taskId": task_id
-        })
+    if isinstance(solution, dict):
+        domains = solution.get("domains") or {}
 
-        resp = r.json()
+    all_cookies = []
 
-        if resp.get("status") == "processing":
-            print("... resolvendo")
-            continue
+    # Conversão dos cookies da resposta do CapMonster Cloud
+    # para o formato aceito pelo Playwright
+    for domain, data in domains.items():
+        cookies = data.get("cookies", {}) if isinstance(data, dict) else {}
 
-        if resp.get("status") == "ready":
-            return resp["solution"]
+        for name, value in cookies.items():
+            all_cookies.append({
+                "name": name,
+                "value": value,
+                "domain": ".example.com",  # Substitua pelo domínio necessário
+                "path": "/",
+                "secure": True,
+                "sameSite": "Lax",
+            })
 
-        if resp.get("errorId"):
-            raise Exception(resp)
+    return all_cookies
 
+async def main():
+    # Configuração do proxy para o navegador
+    # O mesmo proxy deve ser usado para o navegador e para a tarefa do CapMonster Cloud
+    proxy_config = {
+        "server": f"http://{PROXY['proxyAddress']}:{PROXY['proxyPort']}",
+        "username": PROXY["proxyLogin"],
+        "password": PROXY["proxyPassword"],
+    }
 
-# ======================================================
-# SOLVER PRINCIPAL (PLAYWRIGHT)
-# ======================================================
+    async with async_playwright() as p:
+        # Inicialização do Chromium com o proxy especificado
+        browser = await p.chromium.launch(
+            headless=False,
+            proxy=proxy_config,
+        )
 
-def solve_datadome():
+        # Criação do contexto do navegador com User-Agent e cabeçalhos HTTP especificados
+        context = await browser.new_context(
+            user_agent=USER_AGENT,
+            extra_http_headers=BASE_HEADERS,
+        )
 
-    print("\n DataDome → CapMonster solver (Playwright) iniciado\n")
+        page = await context.new_page()
 
-    proxy = None
-    if PROXY_URL:
-        parsed = urlparse(PROXY_URL)
-        proxy = {
-            "server": f"http://{parsed.hostname}:{parsed.port}",
-            "username": parsed.username,
-            "password": parsed.password
-        }
+        # Abertura da página protegida
+        await page.goto(
+            PAGE_URL,
+            wait_until="domcontentloaded",
+        )
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, proxy=proxy)
-        context = browser.new_context(user_agent=USER_AGENT)
-        page = context.new_page()
-
-        print("Abrindo página no navegador real...")
-        page.goto(PAGE_URL, wait_until="domcontentloaded")
-
-        html = page.content()
-
-        log("FIRST PAGE LOADED")
+        # Obtenção do código HTML da página e extração dos parâmetros do DataDome
+        html = await page.content()
 
         dd = extract_dd(html)
 
         if not dd:
-            print("DataDome não detectado")
-            browser.close()
-            return
+            raise Exception("Parâmetros do DataDome não encontrados.")
 
-        log("DD OBJECT", dd)
-
+        # Verificação de bloqueio do proxy pelo DataDome
         if dd.get("t") == "bv":
-            print("Proxy banido (t=bv). Troque o proxy.")
-            browser.close()
-            return
+            raise Exception("O proxy foi bloqueado pelo DataDome.")
 
+        # Formação da URL completa do CAPTCHA para envio na tarefa
         captcha_url = build_captcha_url(dd)
-        log("CAPTCHA URL", captcha_url)
 
-        task = {
-            "type": "CustomTask",
-            "class": "DataDome",
-            "websiteURL": PAGE_URL,
-            "userAgent": USER_AGENT,
-            "metadata": {
+        # Criação do cliente do CapMonster Cloud
+        client = CapMonsterClient(
+            options=ClientOptions(
+                api_key=API_KEY,
+            )
+        )
+
+        # Verificação do saldo atual da conta
+        balance = await client.get_balance()
+
+        print("Saldo:", balance)
+
+        # Formação da tarefa DataDome para o CapMonster Cloud
+        request = DataDomeCustomTaskRequest(
+            _class="DataDome",
+            websiteUrl=PAGE_URL,
+            userAgent=USER_AGENT,
+            proxy=PROXY,
+            metadata={
                 "captchaUrl": captcha_url,
-                "datadomeCookie": f"datadome={dd['cookie']}",
-                "datadomeVersion": "new"
-            }
-        }
+                "datadomeCookie": f"datadome={dd.get('cookie')}",
+                "datadomeVersion": "new",
+            },
+        )
 
-        if PROXY_URL:
-            task.update({
-                "proxyType": "http",
-                "proxyAddress": parsed.hostname,
-                "proxyPort": parsed.port,
-                "proxyLogin": parsed.username,
-                "proxyPassword": parsed.password
-            })
+        print("Enviando DataDome para resolução...")
 
-        payload = {
-            "clientKey": CAPMONSTER_API_KEY,
-            "task": task
-        }
+        # Envio da tarefa ao CapMonster Cloud e espera pelo resultado
+        result = await client.solve_captcha(request)
 
-        task_id = create_task(payload)
+        all_cookies = extract_datadome_cookies(result)
 
-        if not task_id:
-            print("Falha ao criar tarefa")
-            browser.close()
-            return
+        if not all_cookies:
+            raise Exception("O CapMonster Cloud não retornou cookies.")
 
-        solution = wait_result(task_id)
-        log("SOLUTION", solution)
+        # ===============================
+        # APLICAÇÃO DOS COOKIES NO PLAYWRIGHT
+        # ===============================
 
-        browser.close()
+        # Obtenção dos cookies do contexto atual do navegador
+        existing_cookies = await context.cookies()
 
-if __name__ == "__main__":
-    solve_datadome()
+        # Remoção dos cookies antigos do DataDome
+        # para evitar conflito com a nova solução
+        filtered = [
+            c for c in existing_cookies
+            if "datadome" not in c.get("name", "").lower()
+        ]
+
+        await context.clear_cookies()
+
+        # Restauração dos demais cookies da sessão atual
+        if filtered:
+            await context.add_cookies(filtered)
+
+        print("Cookies antigos do DataDome removidos.")
+
+        # Adição dos cookies obtidos do CapMonster Cloud
+        await context.add_cookies(all_cookies)
+
+        print("Cookies do CapMonster Cloud aplicados:", all_cookies)
+
+        # ===============================
+        # RECARREGAMENTO DA PÁGINA
+        # COM OS NOVOS COOKIES
+        # ===============================
+
+        # Envio dos cookies obtidos junto com os cabeçalhos HTTP originais
+        await context.set_extra_http_headers({
+            **BASE_HEADERS,
+            "cookie": "; ".join(
+                f"{cookie['name']}={cookie['value']}" for cookie in all_cookies
+            ),
+        })
+
+        # Recarregamento da página com a verificação do DataDome resolvida
+        await page.reload(
+            wait_until="domcontentloaded",
+        )
+
+        print("Página recarregada com os cookies do DataDome obtidos.")
+
+        await page.wait_for_timeout(10000)
+        await browser.close()
+
+asyncio.run(main())
 ```
 
 </details>
