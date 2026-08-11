@@ -1,0 +1,143 @@
+---
+sidebar_position: 1
+sidebar_label: Passing module name
+title: "Passing the module name for captcha recognition"
+description: "Passing the module name to recognize a specific captcha can be useful in cases of working with a specific service (e.g. Google, SolveMedia, Whatsapp, etc.).  This will increase the speed and quality of recognition and reduce the probability of errors." 
+---
+
+import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/ImageToText/module-name" />
+
+# Passing module name
+
+When working with automatic CAPTCHA recognition, recognition accuracy and processing speed are important. Different services use their own CAPTCHA types, and a universal solution may not handle all of them equally effectively. For example, CAPTCHAs from **Google**, **SolveMedia**, **WhatsApp**, or **Yandex** may have specific characteristics that can cause the standard recognition module to work more slowly or produce errors.
+
+To improve efficiency and reduce the likelihood of incorrect recognition, CapMonster Cloud allows you to specify the module that will process your CAPTCHA. The system will use a specialized recognition algorithm designed for the specific service instead of the universal CAPTCHA processing method.
+
+## How to pass the module name in CapMonster Cloud using only the ApiKey field
+
+If the integration provides only a field for the API key, append the required module name to the key using the following format:
+
+```text
+{apikey}__module-name
+```
+
+For example:
+
+```text
+00f87cb0f01330d33709ce3339ad0c8c__solvemedia
+```
+
+The API key and module name must be separated by **two underscores (****`__`****)**.
+
+The list of available module names:
+<table>
+    <tbody>
+        <tr>
+            <td align="center">amazon</td>
+            <td align="center">![](../images/image-to-text/module-name/amazon.png)</td>
+        </tr>
+        <tr>
+            <td align="center">apple</td>
+            <td align="center">![](../images/image-to-text/module-name/apple.png)</td>
+        </tr>
+        <tr>
+            <td align="center">botdetect</td>
+            <td align="center">![](../images/image-to-text/module-name/botdetect.png)</td>
+        </tr>                
+        <tr>
+            <td align="center">facebook</td>
+            <td align="center">![](../images/image-to-text/module-name/facebook.png)</td>
+        </tr>
+        <tr>
+            <td align="center">gmx</td>
+            <td align="center">![](../images/image-to-text/module-name/gmx.png)</td>
+        </tr>
+        <tr>
+            <td align="center">google</td>
+            <td align="center">![](../images/image-to-text/module-name/google.png)</td>
+        </tr>
+        <tr>
+            <td align="center">hotmail</td>
+            <td align="center">![](../images/image-to-text/module-name/hotmail.png)</td>
+        </tr>
+        <tr>
+            <td align="center">mailru</td>
+            <td align="center">![](../images/image-to-text/module-name/mailru.png)</td>
+        </tr>
+        <tr>
+            <td align="center">okeng</td>
+            <td align="center">![](../images/image-to-text/module-name/okeng.png)</td>
+        </tr>
+        <tr>
+            <td align="center">okrus</td>
+            <td align="center">![](../images/image-to-text/module-name/okrus.png)</td>
+        </tr>
+        <tr>
+            <td align="center">partiallyblur</td>
+            <td align="center">![](../images/image-to-text/module-name/partiallyblur.png)</td>
+        </tr>
+        <tr>
+            <td align="center">ramblerrus</td>
+            <td align="center">![](../images/image-to-text/module-name/rambler.png)</td>
+        </tr>
+        <tr>
+            <td align="center">ramblerrusnew</td>
+            <td align="center">![](../images/image-to-text/module-name/ramblerrusnew.png)</td>
+        </tr>
+        <tr>
+            <td align="center">solvemedia</td>
+            <td align="center">![](../images/image-to-text/module-name/solvemedia.png)</td>
+        </tr>
+        <tr>
+            <td align="center">steam</td>
+            <td align="center">![](../images/image-to-text/module-name/steam.png)</td>
+        </tr>
+        <tr>
+            <td align="center">vk</td>
+            <td align="center">![](../images/image-to-text/module-name/vk.png)</td>
+        </tr>
+        <tr>
+            <td align="center">whatsapp</td>
+            <td align="center">![](../images/image-to-text/module-name/whatsapp.png)</td>
+        </tr>
+        <tr>
+            <td align="center">wikimedia_paddle_ensemble</td>
+            <td align="center">![](../images/image-to-text/module-name/wikimedia.png)</td>
+        </tr>
+        <tr>
+            <td align="center">yandex</td>
+            <td align="center">![](../images/image-to-text/module-name/yandex.png)</td>
+        </tr>        
+        <tr>
+            <td align="center">yandexnew (two-word captcha)</td>
+            <td rowspan="2" align="center">![](../images/image-to-text/module-name/yandexwave.png)</td>
+        </tr>
+        <tr>
+            <td align="center">yandexwave</td>
+        </tr>        
+        <tr>
+            <td align="center">captcha_math</td>
+            <td align="center">![](../images/image-to-text/module-name/captcha_math.png)</td>
+        </tr>
+        <tr>
+            <td align="center">sat</td>
+            <td align="center">![](../images/image-to-text/module-name/sat.png)</td>
+        </tr>
+        <tr>
+            <td align="center">bls_text</td>
+            <td align="center">![](../images/image-to-text/module-name/bls_text.png)</td>
+        </tr>
+        <tr>
+            <td align="center">universal (all other text captchas)</td>
+            <td align="center">![](../images/image-to-text/module-name/universal.png)</td>
+        </tr>
+    </tbody>
+</table>
+
+:::info Info
+
+If you are unable to send a CAPTCHA to the required module, please contact our [support team](https://helpdesk.zennolab.com/en-us/conversation/new). We will help you check the configuration and resolve the issue.
+
+:::

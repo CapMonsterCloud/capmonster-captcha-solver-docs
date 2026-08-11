@@ -1,0 +1,516 @@
+---
+sidebar_position: 0
+sidebar_label: ImageToText
+title: "Автоматическое распознавание и обход простой текстовой капчи — Image-to-Text | API"
+description: "ImageToTextTask для автоматического распознавания текстовых CAPTCHA через API CapMonster Cloud. Описание параметров, примеры запросов и способы получения изображения в формате Base64."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '../../../src/theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/ImageToText/image-to-text" />
+
+# ImageToText 
+
+<PriceBlockWrap>
+  <PriceBlock captchaId="text"/>
+</PriceBlockWrap>
+
+![](../images/image-to-text/text-captcha-2.png)
+
+ImageToText — тип задачи для распознавания текстовых CAPTCHA, представленных в виде изображения. 
+
+:::warning **Внимание!**
+Использование прокси-серверов для данной задачи не требуется.
+:::
+
+
+## Параметры запроса
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+>  ВАЖНО: получайте base64 изображения непосредственно перед созданием задачи, чтобы избежать ошибок при решении (см. ниже пример получения изображения капчи в формате base64).
+</span>
+<br />
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ImageToTextTask**
+
+    ---
+
+    <ParamItem title="body" required type="string" />
+    Изображение CAPTCHA, закодированное в формате Base64. Передавайте значение одной строкой, без переносов.
+
+    ---
+
+    <ParamItem title="capMonsterModule" type="string" />
+    Имя модуля, используемого для распознавания CAPTCHA. <br />
+    Примеры: `yandex`, `special`. <br />
+    Список доступных модулей и альтернативный способ передачи имени модуля см. в разделе [Передача имени модуля](./module-name.mdx).
+
+    ---
+
+    <ParamItem title="recognizingThreshold" type="integer" />
+    Минимальный порог уверенности системы в результате распознавания. Допустимые значения: от `0` до `100`. <br />
+    Если уверенность системы ниже указанного значения, задача завершается с ошибкой `ERROR_CAPTCHA_UNSOLVABLE`, а плата за решение не списывается. <br />
+    Подробнее см. в разделе [Порог уверенности распознавания](./threshold.mdx).
+
+    ---
+
+    <ParamItem title="case" type="boolean" />
+    Определяет, требуется ли учитывать регистр символов при распознавании. Возможные значения: `true`, `false`.
+
+    ---
+
+    <ParamItem title="numeric" type="integer" />
+    Указывает, состоит ли CAPTCHA только из цифр. <br />
+    `0` — CAPTCHA может содержать другие символы; <br />
+    `1` — CAPTCHA содержит только цифры.
+
+    ---
+
+    <ParamItem title="math" type="boolean" />
+Указывает, требуется ли выполнить математическое действие, указанное на изображении. <br />
+`false` — математическое действие не требуется; <br />
+`true` — необходимо вычислить выражение. Например, для `2 + 6` будет возвращено `8`. <br />
+
+**Важно:** для модуля `captcha_math` не используйте параметр `math: true`. 
+</div>
+
+<br />
+
+Base64 — способ представления бинарных данных в текстовом формате.
+
+Ниже приведён пример получения изображения CAPTCHA в формате Base64 через консоль в **Инструментах разработчика**:
+
+```JavaScript
+const captchaUrl = 'https://example.com/captcha.jpg';
+
+function loadAndEncodeCaptchaToBase64(url) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+
+            reader.onloadend = function() {
+                const base64Data = reader.result;                
+                console.log('Base64 Encoded Captcha:', base64Data);
+
+                          };
+        })
+        .catch(error => {
+            console.error('Error occurred while loading or encoding the captcha:', error);
+        });
+}
+
+loadAndEncodeCaptchaToBase64(captchaUrl);
+
+```
+
+
+## Метод создания задачи
+
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+<div className="method-panel">
+	<MethodDescription>
+		**Пример запроса**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "ImageToTextTask",
+    "body": "BASE64_BODY_HERE!"
+  }
+}
+```
+		**Пример ответа**
+		```json
+		{
+		  "errorId":0,
+		  "taskId":407533072
+		}
+		```
+	</MethodDescription>
+</div>
+
+
+## Метод получения результата задачи
+Используйте метод [getTaskResult](/docs/api/methods/get-task-result/), чтобы получить результат распознавания. В зависимости от загрузки сервиса результат обычно возвращается в течение 300 мс – 6 с.
+
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
+	<MethodDescription>
+		**Пример запроса**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Пример ответа**
+```json
+{
+  "errorId": 0,
+  "status": "ready",
+  "solution": {
+    "text": "answer"
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+<br />
+
+|**Свойство**|**Тип**|**Описание**|
+| :-: | :-: | :-: |
+|text|String|Текст решения капчи|
+
+## Как получить параметры для создания задачи
+
+### Вручную
+
+1. Откройте страницу с CAPTCHA в браузере.
+2. Откройте инструменты разработчика.
+
+#### base64
+
+Найдите изображение CAPTCHA в DOM-дереве. Если изображение уже представлено в формате Base64, его значение будет указано в атрибуте элемента:
+
+![base64elements](../images/image-to-text/base64-elements.png)
+
+Если изображение загружается по отдельному URL, откройте вкладку **Network**, найдите соответствующий запрос, нажмите на него правой кнопкой мыши и выберите **Copy image as data URI**. Изображение в формате Base64 будет скопировано в буфер обмена.
+
+![base64network](../images/image-to-text/base64-network.png)
+
+### Автоматически
+
+Изображение CAPTCHA можно получить программно через **браузер** (в том числе headless-браузер, например, с **Playwright**) или непосредственно из **HTTP-запроса**.
+
+Получайте изображение непосредственно перед созданием задачи, так как содержимое CAPTCHA может изменяться.
+
+:::warning **Важно!**
+Примеры ниже демонстрируют общий принцип получения изображения CAPTCHA. Конкретная реализация зависит от структуры сайта, используемых HTML-элементов и селекторов.
+:::
+
+<Tabs className="full-width-tabs filled-tabs request-tabs">
+  <TabItem value="js" label="JavaScript" default className="method-panel">
+    <details>
+      <summary>Показать код (для браузера)</summary>
+      ```js
+      (async () => {
+        const img = document.querySelector('img'); // Пример селектора
+
+        const imageUrl = img.src;
+
+        const response = await fetch(imageUrl);
+
+        if (!response.ok) {
+          throw new Error("Ошибка загрузки изображения");
+        }
+
+        const buffer = await response.arrayBuffer();
+
+        // Преобразуем бинарные данные в base64
+        const base64Image = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+
+        console.log(base64Image); 
+      })();
+      ```
+    </details>
+
+    <details>
+      <summary>Показать код (Node.js)</summary>
+      ```js
+      (async () => {
+        const imageUrl = "https://example/img/.jpg"; // Ссылка на изображение
+
+        const response = await fetch(imageUrl);
+
+        if (!response.ok) {
+          throw new Error("Ошибка загрузки изображения");
+        }
+
+        const buffer = await response.arrayBuffer();
+
+        // Преобразуем данные в base64
+        const base64Image = Buffer.from(buffer).toString("base64");
+
+        console.log(base64Image);
+      })();
+      ```
+    </details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+      ```python
+      import requests
+      import base64
+
+      # Ссылка на изображение
+      image_url = "https://example/img.jpg"
+
+      response = requests.get(image_url)
+
+      if response.status_code == 200:
+          # Преобразуем бинарные данные изображения в base64
+          base64_image = base64.b64encode(response.content).decode('utf-8')
+
+          print(base64_image)
+      else:
+          print("Ошибка загрузки изображения")
+      ```
+    </details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+      ```csharp
+      using System;
+      using System.Net.Http;
+      using System.Threading.Tasks;
+
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              // Ссылка на изображение
+              string imageUrl = "https://example/img.jpg";
+
+              using (HttpClient client = new HttpClient())
+              {
+                  try
+                  {
+                      byte[] imageBytes = await client.GetByteArrayAsync(imageUrl);
+
+                      // Преобразуем бинарные данные изображения в base64
+                      string base64Image = Convert.ToBase64String(imageBytes);
+
+                      Console.WriteLine(base64Image);
+                  }
+                  catch (Exception ex)
+                  {
+                      Console.WriteLine("Ошибка загрузки изображения: " + ex.Message);
+                  }
+              }
+          }
+      }
+      ```
+    </details>
+  </TabItem>
+</Tabs>
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+    ```js
+    // https://github.com/ZennoLab/capmonstercloud-client-js
+
+    import { CapMonsterCloudClientFactory, ClientOptions, ImageToTextRequest, CapMonsterModules } from '@zennolab_com/capmonstercloud-client';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const cmcClient = CapMonsterCloudClientFactory.Create(
+            new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // Укажите ваш API-ключ CapMonster Cloud
+        );
+
+        // При необходимости можно проверить баланс
+        const balance = await cmcClient.getBalance();
+        console.log("Balance:", balance);
+
+        const imageToTextRequest = new ImageToTextRequest({
+            body: 'some base64 body', // Замените на реальное значение
+            // Необязательные параметры
+            CapMonsterModule: CapMonsterModules.YandexWave, // Можно выбрать модуль, например, YandexWave
+            Case: true, 
+            numeric: 1,  
+            recognizingThreshold: 65, 
+            math: false   
+        });
+
+        const result = await cmcClient.Solve(imageToTextRequest);
+        console.log("Solution:", result);
+    });
+    ```
+    </details>
+
+    <details>
+      <summary>Показать код (Node.js)</summary>
+```javascript
+// https://github.com/ZennoLab/capmonstercloud-client-js
+
+import { CapMonsterCloudClientFactory, ClientOptions, ImageToTextRequest, CapMonsterModules } from '@zennolab_com/capmonstercloud-client';
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveImageToText() {
+    const cmcClient = CapMonsterCloudClientFactory.Create(
+        new ClientOptions({ clientKey: API_KEY })
+    );
+
+    // При необходимости можно проверить баланс
+    const balance = await cmcClient.getBalance();
+    console.log("Balance:", balance);
+
+    const imageToTextRequest = new ImageToTextRequest({
+        body: 'some base64 body', // Замените на реальное значение
+        // Необязательные параметры
+        CapMonsterModule: CapMonsterModules.YandexWave, // Можно выбрать модуль, например, YandexWave
+        Case: true,  
+        numeric: 1, 
+        recognizingThreshold: 65,  
+        math: false 
+    });
+
+    const result = await cmcClient.Solve(imageToTextRequest);
+    console.log("Solution:", result);
+}
+
+solveImageToText().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Показать код</summary>
+    ```python
+    # https://github.com/ZennoLab/capmonstercloud-client-python
+
+    import asyncio
+    import base64
+    from capmonstercloudclient import CapMonsterClient, ClientOptions
+    from capmonstercloudclient.requests import ImageToTextRequest
+
+    # Укажите ваш API-ключ CapMonster Cloud
+    client_options = ClientOptions(api_key="YOUR_API_KEY")
+    cap_monster_client = CapMonsterClient(options=client_options)
+
+    # Изображение в формате base64
+    image_base64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgc...wwzqR4U/yZ//Z"  # Замените на реальное значение
+    image_bytes = base64.b64decode(image_base64)
+
+    image_to_text_request = ImageToTextRequest(
+        image_bytes=image_bytes,
+        module_name=None,     # Можно выбрать модуль, например YandexWave
+        # Необязательные параметры
+        threshold=50, 
+        case=True,    
+        numeric=0,   
+        math=False        
+    )
+
+    async def solve_captcha():
+        # При необходимости можно проверить баланс
+        balance = await cap_monster_client.get_balance()
+        print("Balance:", balance)
+
+        solution = await cap_monster_client.solve_captcha(image_to_text_request)
+        return solution
+
+    responses = asyncio.run(solve_captcha())
+    print("Solution:", responses)
+    ```
+    </details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Показать код</summary>
+    ```csharp
+    // https://github.com/ZennoLab/capmonstercloud-client-dotnet
+
+    using System;
+    using System.Threading.Tasks;
+    using Zennolab.CapMonsterCloud.Requests;
+    using Zennolab.CapMonsterCloud;
+
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            var clientOptions = new ClientOptions
+            {
+                ClientKey = "YOUR_API_KEY" // Ваш API-ключ CapMonster Cloud
+            };
+
+            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+            // При необходимости можно проверить баланс 
+            var balance = await cmCloudClient.GetBalanceAsync();
+            Console.WriteLine("Balance: " + balance);
+
+            var imageToTextRequest = new ImageToTextRequest
+            {
+                Body = "/9j/4AAQSkZJRgABAQAAAQABA...hMjIyMjIyMjIyMjIyMj", // Замените на реальное значение
+                // Необязательные параметры
+                CapMonsterModule = "None", // Можно выбрать модуль, например, YandexWave
+                RecognizingThreshold = 70,  
+                CaseSensitive = true, 
+                Numeric = false,  
+                Math = false     
+            };
+
+            var imageToTextResult = await cmCloudClient.SolveAsync(imageToTextRequest);
+
+            Console.WriteLine("Captcha Solved: " + imageToTextResult.Solution.Value);
+        }
+    }
+    ```
+    </details>
+  </TabItem>
+</Tabs>
