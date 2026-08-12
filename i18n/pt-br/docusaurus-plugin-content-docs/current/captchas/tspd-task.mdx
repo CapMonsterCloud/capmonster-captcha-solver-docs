@@ -580,64 +580,74 @@ Dados importantes (chaves de API, configurações de proxy, etc.) devem ser arma
 <details>
       <summary>Mostrar código (Node.js)</summary>
 ```js
-import { gotScraping } from "got-scraping"; // Para realizar requisições HTTP com fingerprint TLS
+import { gotScraping } from "got-scraping";
 import fs from "fs";
 
-const API_KEY = "YOUR_API_KEY"; // Substitua pelo seu API key do CapMonster Cloud
+// =========================================================
+// CONFIGURAÇÃO (recomendado armazenar em arquivo separado ou variáveis de ambiente)
+// =========================================================
+
+const API_KEY = "YOUR_CAPMONSTER_API_KEY"; // Substitua pela sua chave API real do CapMonster Cloud
 const CAPMONSTER_URL = "https://api.capmonster.cloud";
 
-// Substitua pela URL de destino
-const url = "https://example.com";
+const url = "https://example.com"; // Substitua pela URL alvo onde há proteção TSPD
 
-//  Substitua pelo seu proxy
+// Defina as configurações de proxy
 const proxy = {
-  host: "proxyAddress",
-  port: 8080,
-  login: "proxyLogin",
-  password: "proxyPassword",
-  type: "http",
+    host: "your-proxy-address",
+    port: 1234,
+    login: "your-proxy-login",
+    password: "your-proxy-password",
+    type: "http"
 };
 
 const proxyUrl = `${proxy.type}://${proxy.login}:${proxy.password}@${proxy.host}:${proxy.port}`;
 
-// Use um User-Agent válido
+// User-Agent para simular um navegador Chrome real
 const userAgent =
   "userAgentPlaceholder";
+
+// =========================================================
+// FUNÇÕES AUXILIARES
+// =========================================================
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function extractValidTspdCookies(setCookies) {
+  /** Extrair cookies dos cabeçalhos Set-Cookie */
   const cookies = setCookies.map((c) => c.split(";")[0].trim());
 
-  console.log("\nRaw cookies:");
+  console.log("\nCookies recebidos:");
   console.log(cookies);
 
-  // Extrair apenas cookies TS
+  // Extrair todos os cookies começando com "TS"
   const tsCookies = cookies.filter((c) => c.startsWith("TS"));
 
-  // Verificar que TSPD_101_DID está ausente
+  // Verificação de bloqueio - TSPD_101_DID indica bloqueio
   const hasDid = cookies.some((c) => c.startsWith("TSPD_101_DID="));
 
   if (hasDid) {
-    console.log("TSPD_101_DID detected. Request was blocked.");
+    console.log("TSPD_101_DID detectado. A requisição foi bloqueada.");
     return null;
   }
 
+  // Validar formato dos cookies TS
   const validFormat = tsCookies.every((c) => /^[^=]+=[^=]+$/.test(c));
 
   if (!validFormat) {
-    console.log("Invalid TS cookie format.");
+    console.log("Formato inválido de cookies TS.");
     return null;
   }
 
-  console.log("Valid TSPD cookie set detected.");
+  console.log("Conjunto válido de cookies TSPD detectado.");
 
   return tsCookies.join("; ");
 }
 
 function solutionToCookieHeader(solution) {
+  /** Extrair cookies do resultado da solução */
   const domain = Object.keys(solution.domains)[0];
   const cookies = solution.domains[domain].cookies || {};
 
@@ -650,7 +660,12 @@ function solutionToCookieHeader(solution) {
   return result.join("; ");
 }
 
+// =========================================================
+// FUNÇÕES PRINCIPAIS PARA INTERAÇÃO COM CAPMONSTER CLOUD
+// =========================================================
+
 async function createTask(task) {
+  /** Criar tarefa no CapMonster Cloud para resolver TSPD */
   const response = await gotScraping
     .post(`${CAPMONSTER_URL}/createTask`, {
       json: {
@@ -668,6 +683,7 @@ async function createTask(task) {
 }
 
 async function getTaskResult(taskId) {
+  /** Obter resultado da solução TSPD do CapMonster Cloud */
   while (true) {
     await delay(3000);
 
@@ -688,14 +704,20 @@ async function getTaskResult(taskId) {
       return response.solution;
     }
 
-    console.log("Waiting for solution...");
+    console.log("Aguardando solução...");
   }
 }
 
-async function main() {
-  try {
-    console.log("Sending initial request...");
+// =========================================================
+// FUNÇÃO PRINCIPAL
+// =========================================================
 
+async function main() {
+  /** Função principal para bypass da proteção TSPD */
+  try {
+    console.log("Enviando requisição inicial...");
+
+    // Primeira requisição para obter a proteção TSPD
     const response = await gotScraping(url, {
       proxyUrl,
       headers: {
@@ -715,8 +737,6 @@ async function main() {
         "sec-fetch-dest": "document",
 
         "accept-language": "en-US",
-
-        referer: "https://example.com/", // Substitua por um referer válido
       },
     });
 
@@ -730,11 +750,12 @@ async function main() {
 
     if (!tspdCookies) {
       console.log(
-        "Stopping script. No valid TSPD cookies detected. Continuing normal site interaction.",
+        "Interrompendo script. Nenhum cookie TSPD válido detectado. Continuando interação normal com o site.",
       );
       return;
     }
 
+    // Formação da tarefa para o CapMonster Cloud
     const task = {
       type: "CustomTask",
       class: "tspd",
@@ -751,22 +772,25 @@ async function main() {
       proxyPassword: proxy.password,
     };
 
-    console.log("\nCreating CapMonster Cloud task...");
+    console.log("\nCriando tarefa no CapMonster Cloud...");
 
     const taskId = await createTask(task);
 
-    console.log("Task ID:", taskId);
+    console.log("ID da tarefa:", taskId);
 
+    // Obter resultado
     const solution = await getTaskResult(taskId);
 
-    console.log("\nSolution received:");
+    console.log("\nSolução recebida:");
     console.log(JSON.stringify(solution, null, 2));
 
+    // Extrair cookies da solução
     const cookieHeader = solutionToCookieHeader(solution);
 
-    console.log("\nFinal Cookie header:");
+    console.log("\nCabeçalho Cookie final:");
     console.log(cookieHeader);
 
+    // Formar cabeçalhos finais
     const finalHeaders = {
       "sec-ch-ua":
         '"Not:A-Brand";v="99", "Google Chrome";v="150", "Chromium";v="150"',
@@ -790,25 +814,31 @@ async function main() {
 
       priority: "u=0,i",
       "Upgrade-Insecure-Requests": "1",
-      referer: "https://example.com/", // Substitua por um referer válido
     };
 
-    console.log("\nFinal request headers:");
+    console.log("\nCabeçalhos finais da requisição:");
     console.log(JSON.stringify(finalHeaders, null, 2));
 
+    // Requisição final com os cookies obtidos
     const finalResponse = await gotScraping(url, {
       proxyUrl,
       headers: finalHeaders,
       followRedirect: true,
     });
 
-    console.log("\nFinal page length:", finalResponse.body.length);
+    console.log("\nTamanho da página final:", finalResponse.body.length);
 
+    // Salvar página
     fs.writeFileSync("final_page.html", finalResponse.body);
 
-    console.log("Page saved to final_page.html");
+    console.log("Página salva em final_page.html");
+
+    console.log("\n" + "=".repeat(60));
+    console.log("RESULTADO:");
+    console.log(JSON.stringify({ cookies: cookieHeader }, null, 2));
+    console.log("=".repeat(60));
   } catch (err) {
-    console.error("Error:", err.message);
+    console.error("Erro:", err.message);
   }
 }
 
@@ -823,184 +853,252 @@ main();
 ```python
 import asyncio
 import base64
-import re
 import json
+import aiohttp
+from urllib.parse import urlparse
 
-from curl_cffi.requests import AsyncSession # Para realizar requisições HTTP com fingerprint TLS
+# =========================================================
+# CONFIGURAÇÃO (recomendado armazenar em arquivo separado ou variáveis de ambiente)
+# =========================================================
 
-API_KEY = "YOUR_API_KEY"  # Substitua pelo seu API key do CapMonster Cloud
+API_KEY = "YOUR_CAPMONSTER_API_KEY"  # Substitua pela sua chave API real do CapMonster Cloud
+BASE_URL = "https://example.com"  # Substitua pela URL alvo onde há proteção TSPD
 CAPMONSTER_URL = "https://api.capmonster.cloud"
+USER_AGENT = "userAgentPlaceholder"
 
-url = "https://example.com" # Substitua pela URL de destino
-
-# Substitua pelo seu proxy
-proxy = {
-    "host": "proxyAddress",
-    "port": 8080,
-    "login": "proxyLogin",
-    "password": "proxyPassword",
+# Defina as configurações de proxy
+PROXY = {
+    "host": "your-proxy-address",
+    "port": 1234,
+    "login": "your-proxy-login",
+    "password": "your-proxy-password",
     "type": "http"
 }
 
-proxy_url = f'{proxy["type"]}://{proxy["login"]}:{proxy["password"]}@{proxy["host"]}:{proxy["port"]}'
+# =========================================================
+# CLASSE PRINCIPAL
+# =========================================================
 
-# Use um User-Agent válido
-user_agent = "userAgentPlaceholder"
-
-
-def extract_ts_cookies(set_cookies):
-    cookies = [c.split(";")[0].strip() for c in set_cookies]
-
-    print("\nRaw cookies:")
-    print(cookies)
-
-    # Verificar que TSPD_101_DID está ausente
-    has_did = any(c.startswith("TSPD_101_DID=") for c in cookies)
-
-    if has_did:
-        print("TSPD_101_DID detected. Request was blocked.")
-        return None
+class TSPDBypass:
+    """Classe para resolver TSPD usando CapMonster Cloud"""
     
-     # Extrair apenas cookies TS
-    ts = [c for c in cookies if c.startswith("TS")]
+    def __init__(self):
+        self.domain = urlparse(BASE_URL).hostname
 
-    if not ts:
-        return None
+    def build_headers(self, cookies=None):
+        """Construir cabeçalhos HTTP para a requisição"""
+        headers = {
+            "Host": self.domain,
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Language": "en-US",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "sec-ch-ua": '"Google Chrome";v="150", "Not.A/Brand";v="8", "Chromium";v="150"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
+        }
+        if cookies:
+            headers["Cookie"] = cookies
+        return headers
 
-    if not all(re.match(r"^[^=]+=[^=]+$", c) for c in ts):
-        print("Invalid TS cookie format.")
-        return None
+    def build_proxy_url(self):
+        """Construir URL de conexão com o proxy"""
+        if not PROXY.get("host"):
+            return None
+        return f"{PROXY['type']}://{PROXY['login']}:{PROXY['password']}@{PROXY['host']}:{PROXY['port']}"
 
-    print("Valid TSPD cookie set detected.")
-    return "; ".join(ts)
+    @staticmethod
+    def extract_ts_cookies(set_cookie_headers):
+        """Extrair cookies dos cabeçalhos Set-Cookie"""
+        cookies = [line.split(";", 1)[0].strip() for line in set_cookie_headers if "=" in line.split(";", 1)[0]]
+        return "; ".join(cookies)
 
+    def extract_solution_cookies(self, solver_result):
+        """Extrair cookies do resultado da solução do captcha"""
+        solution = solver_result["solution"]
+        domains = solution.get("Domains") or solution.get("domains")
+        cookies_dict = domains[self.domain].get("Cookies") or domains[self.domain].get("cookies")
+        return "; ".join([f"{k}={v}" for k, v in cookies_dict.items()])
 
-def solution_to_cookie_dict(solution):
-    domain = list(solution["domains"].keys())[0]
-    return solution["domains"][domain].get("cookies", {})
+    async def request_page(self, cookies=None):
+        """Executar requisição HTTP para o site alvo"""
+        proxy = self.build_proxy_url()
+        
+        async with aiohttp.ClientSession(
+            connector=aiohttp.TCPConnector(ssl=False),
+            cookie_jar=aiohttp.DummyCookieJar()
+        ) as session:
+            async with session.get(
+                BASE_URL,
+                headers=self.build_headers(cookies),
+                proxy=proxy,
+                allow_redirects=True
+            ) as response:
+                html = await response.text()
+                tspd_cookies = self.extract_ts_cookies(response.headers.getall("Set-Cookie", []))
+                is_tspd = "/TSPD/" in html or "TSPD_101" in html or "tspd" in html.lower()
+                
+                return {
+                    "success": not is_tspd,
+                    "html": html,
+                    "html_base64": base64.b64encode(html.encode()).decode(),
+                    "cookies": tspd_cookies
+                }
 
+    async def create_task(self, html_page_base64, tspd_cookie):
+        """Criar tarefa no CapMonster Cloud para resolver TSPD"""
+        payload = {
+            "clientKey": API_KEY,
+            "task": {
+                "type": "CustomTask",
+                "class": "tspd",
+                "websiteUrl": BASE_URL,
+                "userAgent": USER_AGENT,
+                "metadata": {
+                    "tspdCookie": tspd_cookie,
+                    "htmlPageBase64": html_page_base64
+                },
+                "proxyType": PROXY.get("type"),
+                "proxyAddress": PROXY.get("host"),
+                "proxyPort": PROXY.get("port"),
+                "proxyLogin": PROXY.get("login"),
+                "proxyPassword": PROXY.get("password")
+            }
+        }
+        
+        async with aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar()) as session:
+            async with session.post(
+                f"{CAPMONSTER_URL}/createTask",
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                text = await response.text()
+                try:
+                    data = json.loads(text)
+                except json.JSONDecodeError:
+                    print(f"Erro: Resposta não-JSON recebida: {text}")
+                    raise
+                
+                if data.get("errorId") != 0:
+                    raise Exception(data)
+                
+                return data["taskId"]
 
-def solution_to_cookie_header(solution):
-    domain = list(solution["domains"].keys())[0]
-    cookies = solution["domains"][domain].get("cookies", {})
+    async def get_result(self, task_id):
+        """Obter resultado da solução TSPD do CapMonster Cloud"""
+        async with aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar()) as session:
+            while True:
+                payload = {"clientKey": API_KEY, "taskId": task_id}
+                
+                async with session.post(
+                    f"{CAPMONSTER_URL}/getTaskResult",
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    text = await response.text()
+                    try:
+                        data = json.loads(text)
+                    except json.JSONDecodeError:
+                        print(f"Erro: Resposta não-JSON recebida: {text}")
+                        raise
+                    
+                    if data.get("errorId") != 0:
+                        raise Exception(data)
+                    
+                    if data["status"] == "ready":
+                        return data
+                
+                await asyncio.sleep(5)
 
-    return "; ".join([f"{k}={v}" for k, v in cookies.items()])
-
-
-async def create_task(session, task):
-    r = await session.post(
-        f"{CAPMONSTER_URL}/createTask",
-        json={"clientKey": API_KEY, "task": task},
-    )
-    data = r.json()
-
-    if data["errorId"] != 0:
-        raise Exception(data["errorDescription"])
-
-    return data["taskId"]
-
-
-async def get_result(session, task_id):
-    while True:
-        await asyncio.sleep(3)
-
-        r = await session.post(
-            f"{CAPMONSTER_URL}/getTaskResult",
-            json={"clientKey": API_KEY, "taskId": task_id},
-        )
-        data = r.json()
-
-        if data["errorId"] != 0:
-            raise Exception(data["errorDescription"])
-
-        if data["status"] == "ready":
-            return data["solution"]
-
-        print("Waiting...")
-
-
-async def main():
-    async with AsyncSession(
-    impersonate="chrome124",
-    proxies={
-        "http": proxy_url,
-        "https": proxy_url,
-    },
-    headers={
-        "user-agent": user_agent,
-        "accept-language": "en-US,en;q=0.9",
-        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "upgrade-insecure-requests": "1",
-    },
-) as session:
-
-        print("Step 1: Initial request")
-
-        r = await session.get(url)
-
-        html = r.text
-        html_b64 = base64.b64encode(html.encode()).decode()
-
-        set_cookies = r.headers.get_list("set-cookie")
-        tspd = extract_ts_cookies(set_cookies)
-
-        if not tspd:
-            print("No TS cookies")
-            return
-
-        print("\nTS cookies:")
-        print(tspd)
-
-        task = {
-            "type": "CustomTask",
-            "class": "tspd",
-            "websiteUrl": url,
-            "metadata": {
-                "tspdCookie": tspd,
-                "htmlPageBase64": html_b64,
-            },
-            "userAgent": user_agent,
-            "proxyType": proxy["type"],
-            "proxyAddress": proxy["host"],
-            "proxyPort": proxy["port"],
-            "proxyLogin": proxy["login"],
-            "proxyPassword": proxy["password"],
+    async def bypass(self):
+        """Método principal para resolver TSPD"""
+        print("Enviando requisição inicial...")
+        
+        # Primeira requisição para obter a proteção TSPD
+        first_response = await self.request_page()
+        
+        html = first_response["html"]
+        html_base64 = first_response["html_base64"]
+        tspd_cookies = first_response["cookies"]
+        
+        print("\nCookies recebidos:")
+        print(tspd_cookies)
+        
+        # Verificação de bloqueio
+        if "TSPD_101_DID=" in tspd_cookies:
+            print("TSPD_101_DID detectado. A requisição foi bloqueada.")
+            return {"success": False, "cookies": tspd_cookies, "html": html}
+        
+        # Validar formato dos cookies TS
+        ts_cookies = [c for c in tspd_cookies.split("; ") if c.startswith("TS")]
+        valid_format = all("=" in c for c in ts_cookies)
+        
+        if not valid_format:
+            print("Formato inválido de cookies TS.")
+            return {"success": False, "cookies": tspd_cookies, "html": html}
+        
+        print("Conjunto válido de cookies TSPD detectado.")
+        
+        # Criar tarefa no CapMonster Cloud
+        print("\nCriando tarefa no CapMonster Cloud...")
+        first_solver = await self.create_task(html_base64, tspd_cookies)
+        print("ID da tarefa:", first_solver)
+        
+        # Obter resultado
+        first_result = await self.get_result(first_solver)
+        
+        print("\nSolução recebida:")
+        print(json.dumps(first_result["solution"], indent=2, ensure_ascii=False))
+        
+        # Extrair cookies da solução
+        final_cookies = self.extract_solution_cookies(first_result)
+        
+        print("\nCabeçalho Cookie final:")
+        print(final_cookies)
+        
+        # Construir cabeçalhos finais
+        final_headers = self.build_headers(final_cookies)
+        final_headers["sec-ch-ua"] = '"Google Chrome";v="150", "Not.A/Brand";v="8", "Chromium";v="150"'
+        final_headers["sec-ch-ua-mobile"] = "?0"
+        final_headers["sec-ch-ua-platform"] = '"Windows"'
+        final_headers["Upgrade-Insecure-Requests"] = "1"
+        final_headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
+        final_headers["Accept-Encoding"] = "gzip, deflate, br, zstd"
+        final_headers["Accept-Language"] = "en-US"
+        final_headers["priority"] = "u=0,i"
+        
+        print("\nCabeçalhos finais da requisição:")
+        print(json.dumps(final_headers, indent=2, ensure_ascii=False))
+        
+        # Requisição final com os cookies obtidos
+        final_response = await self.request_page(final_cookies)
+        
+        print("\nTamanho da página final:", len(final_response["html"]))
+        
+        # Salvar página
+        with open("final_page.html", "w", encoding="utf-8") as f:
+            f.write(final_response["html"])
+        print("Página salva em final_page.html")
+        
+        return {
+            "cookies": final_cookies,
+            "html": final_response["html"]
         }
 
-        print("\nStep 2: Create task")
-
-        task_id = await create_task(session, task)
-        print("Task ID:", task_id)
-
-        solution = await get_result(session, task_id)
-
-        print("\nSolution received:")
-        print(json.dumps(solution, indent=2))
-
-        cookies = solution_to_cookie_dict(solution)
-
-        print("\nApplying cookies to session:")
-        for k, v in cookies.items():
-            print(f"{k}={v}")
-            session.cookies.set(k, v)
-
-        cookie_header = solution_to_cookie_header(solution)
-
-        print("\nFinal Cookie header:")
-        print(cookie_header)
-
-        print("\nStep 3: Final request")
-
-        final = await session.get(url)
-
-        print("\nFinal status:", final.status_code)
-        print("Final page length:", len(final.text))
-
-        with open("final.html", "w", encoding="utf-8") as f:
-            f.write(final.text)
-
-        print("Page saved to final.html")
-
+async def main():
+    """Função principal"""
+    bypasser = TSPDBypass()
+    
+    try:
+        result = await bypasser.bypass()
+        print("\n" + "="*60)
+        print("RESULTADO:")
+        print(json.dumps({"cookies": result["cookies"]}, indent=4, ensure_ascii=False))
+        print("="*60)
+    except Exception as err:
+        print("Erro:", str(err))
 
 if __name__ == "__main__":
     asyncio.run(main())
