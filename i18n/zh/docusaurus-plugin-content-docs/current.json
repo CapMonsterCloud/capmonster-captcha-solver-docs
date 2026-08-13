@@ -147,5 +147,17 @@
   "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
     "message": "查看 CapMonster Cloud 浏览器扩展程序中的 CAPTCHA 参数映射。",
     "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的 generated-index 页面描述"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText": {
+    "message": "ImageToText",
+    "description": "The label for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.title": {
+    "message": "ImageToText",
+    "description": "The generated-index page title for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.description": {
+    "message": "文本 CAPTCHA 识别、置信度阈值设置以及自定义模块的使用。",
+    "description": "The generated-index page description for category ImageToText in sidebar tutorialSidebar"
   }
 }

@@ -1,11 +1,13 @@
 ﻿---
+sidebar_position: 2
 sidebar_label: Criando um módulo de usuário
 title: Criando um módulo de usuário
+description: "A criação de um módulo personalizado permite treinar um módulo para um tipo específico de CAPTCHA. Isso permite reconhecer CAPTCHAs não padrão de forma mais rápida e eficiente, além de reduzir a probabilidade de erros."
 ---
 
-import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
 
-<ArticleHead slug="api/user-module" />
+<ArticleHead slug="captchas/ImageToText/user-module" />
 
 # Criando um módulo de usuário
 
@@ -16,7 +18,7 @@ A função de criação de módulo personalizado permite treinar o sistema para 
 
 Acesse a [página de Módulos de treinamento](https://capmonster.cloud/UserModules) ou, no [painel de controle](https://dash.capmonster.cloud/), selecione a seção correspondente no menu localizado à esquerda:
 
-![](./images/user-module/user-module.png)
+![](../images/image-to-text/user-module/user-module.png)
 
 ---
 
@@ -40,7 +42,7 @@ Abaixo, cada etapa é descrita com mais detalhes.
 
 Na página [Módulos de treinamento](https://capmonster.cloud/UserModules), clique no botão **Adicionar módulo** e, na janela que será aberta, especifique os tipos de caracteres presentes no seu CAPTCHA. Depois disso, aparecerá uma dica informando quantos CAPTCHAs você precisa coletar e enviar:
 
-![](./images/user-module/user-module-archive.png)
+![](../images/image-to-text/user-module/user-module-archive.png)
 
 
 #### Formatos de imagem suportados
@@ -70,7 +72,7 @@ Não execute a coleta de captchas em dezenas ou centenas de threads! Poucos site
 
 Primeiro, defina o nome do módulo (apenas caracteres latinos).
 
-![](./images/user-module/user-module-name.png)
+![](../images/image-to-text/user-module/user-module-name.png)
 
 :::warning
 O nome do módulo não deve conter a palavra **captcha**.
@@ -84,7 +86,7 @@ O que você marcar aqui afeta o número de captchas que você precisará fazer u
 
 Você pode escolher uma ou várias opções das sugeridas.
 
-![](./images/user-module/user-module-params.png)
+![](../images/image-to-text/user-module/user-module-params.png)
 
 :::info
 Você deve marcar pelo menos uma das seguintes opções: "Contém caracteres cirílicos", "Contém caracteres latinos", "Contém números".
@@ -94,7 +96,7 @@ Você deve marcar pelo menos uma das seguintes opções: "Contém caracteres cir
 
 Especifique onde as respostas dos captchas estão localizadas.
 
-![](./images/user-module/user-module-markup.png)
+![](../images/image-to-text/user-module/user-module-markup.png)
 
 É bem simples:
 
@@ -117,7 +119,7 @@ captcha3.png:99loe
 
 Depois de especificar o nome do módulo, selecionar os tipos de símbolos e a localização das respostas, você precisa enviar o arquivo zip com os captchas e nos enviar.
 
-![](./images/user-module/user-module-upload.png)
+![](../images/image-to-text/user-module/user-module-upload.png)
 
 #### 2.5. Pagamento
 
@@ -127,7 +129,7 @@ Depois de especificar o nome do módulo, selecionar os tipos de símbolos e a lo
 1. Clique em **Recarga de saldo**
 2. Clique no botão **Recarregar saldo** e use o método de pagamento mais conveniente para você.
 
-![](./images/user-module/user-module-top-up-balance.png)
+![](../images/image-to-text/user-module/user-module-top-up-balance.png)
 
 
 :::note
@@ -142,7 +144,7 @@ Os fundos alocados para o treinamento não são debitados, mas permanecem no sal
 
 #### Validated
 
-![](./images/user-module/validated.png)
+![](../images/image-to-text/user-module/validated.png)
 
 Você recebe esse status após enviar o formulário (desde que você tenha feito tudo corretamente).
 
@@ -152,25 +154,25 @@ Módulos com esse status podem ser excluídos. Se você enviou o módulo, mas pe
 
 #### Paid
 
-![](./images/user-module/paid.png)
+![](../images/image-to-text/user-module/paid.png)
 
 Seu pagamento pelo módulo foi aceito.
 
 #### ValidatedInDepth
 
-![](./images/user-module/ValidatedInDepth.png)
+![](../images/image-to-text/user-module/ValidatedInDepth.png)
 
 Trabalhos preparatórios.
 
 #### Annotated
 
-![](./images/user-module/Annotated.png)
+![](../images/image-to-text/user-module/Annotated.png)
 
 Marcação de captcha concluída. O treinamento está em andamento.
 
 #### Trained
 
-![](./images/user-module/trained.png)
+![](../images/image-to-text/user-module/trained.png)
 
 O módulo está pronto! Agora você pode enviar captchas para ele.
 
@@ -178,8 +180,8 @@ O módulo está pronto! Agora você pode enviar captchas para ele.
 
 Existem várias maneiras de especificar um módulo que resolverá os captchas:
 
-- [Adicione o argumento CapMonsterModule com o nome do módulo ao enviar uma solicitação /createTask](../captchas/image-to-text.mdx) (se você interagir diretamente com nossa API)
-- [Especifique um nome de módulo na chave API](module-name.mdx) (muito prático quando você usa programas de terceiros e não pode modificar as solicitações)
+- [Adicione o argumento CapMonsterModule com o nome do módulo ao enviar uma solicitação /createTask](/docs/captchas/ImageToText/image-to-text/) (se você interagir diretamente com nossa API)
+- [Especifique um nome de módulo na chave API](/docs/captchas/ImageToText/module-name/) (muito prático quando você usa programas de terceiros e não pode modificar as solicitações)
 
 ---
 
@@ -206,7 +208,7 @@ O treinamento leva um dia por módulo.
 <details>
     <summary>Vejo o sinal `Erro` na coluna "Comentário" ao lado do meu módulo. O que devo fazer?</summary>
 
-![](./images/user-module/error.png)
+![](../images/image-to-text/user-module/error.png)
 
 Por favor, aguarde um pouco. Se a situação não mudar dentro de 24 horas, entre em contato com o [suporte](https://helpdesk.zennolab.com/en-us/conversation/new).
 

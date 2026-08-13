@@ -1,12 +1,14 @@
 ﻿---
+sidebar_position: 2
 sidebar_label: 创建用户模块
 title: 创建用户模块
+description: "创建自定义模块可以针对特定类型的 CAPTCHA 进行训练，从而更快速、更高效地识别非标准 CAPTCHA，并降低出错的可能性。"
 ---
 
 
-import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
 
-<ArticleHead slug="api/user-module" />
+<ArticleHead slug="captchas/ImageToText/user-module" />
 
 # 创建用户模块
 
@@ -16,7 +18,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 前往[训练模块](https://capmonster.cloud/UserModules)，或在[控制面板](https://dash.capmonster.cloud/)中，从左侧菜单选择相应的部分：
 
-![](./images/user-module/user-module.png)
+![](../images/image-to-text/user-module/user-module.png)
 
 -----
 ## 工作原理
@@ -38,7 +40,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 在[模块训练页面](https://capmonster.cloud/UserModules)中，点击**添加模块**按钮，然后在弹出的窗口中指定验证码中包含的字符类型。完成后，系统将提示您需要收集并上传多少张验证码：
 
-![](./images/user-module/user-module-archive.png)
+![](../images/image-to-text/user-module/user-module-archive.png)
 
 
 #### 支持的图片格式
@@ -64,7 +66,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 首先，设置模块名称（只能使用拉丁字符）。
 
-![](./images/user-module/user-module-name.png)
+![](../images/image-to-text/user-module/user-module-name.png)
 
 :::warning 警告
 模块名称不能包含单词 **captcha**。
@@ -78,7 +80,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 您可以从建议中选择一个或多个选项。
 
-![](./images/user-module/user-module-params.png)
+![](../images/image-to-text/user-module/user-module-params.png)
 
 :::info 信息
 您至少应标记以下选项之一：“包含 Cyrillic 字符”、“包含 Latin 字符”、包含数字。
@@ -88,7 +90,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 指定验证码答案的位置。
 
-![](./images/user-module/user-module-markup.png)
+![](../images/image-to-text/user-module/user-module-markup.png)
 
 非常简单：
 
@@ -111,7 +113,7 @@ captcha3.png:99loe
 
 在指定了模块名称、选择了符号类型和答案位置后，您需要上传包含验证码的 zip 归档并发送给我们。
 
-![](./images/user-module/user-module-upload.png)
+![](../images/image-to-text/user-module/user-module-upload.png)
 
 #### 2.5.付款
 
@@ -121,7 +123,7 @@ captcha3.png:99loe
 1. 点击 **充值余额**
 2. 点击 **充值** 按钮，并选择您方便的支付方式。
 
-![](./images/user-module/user-module-top-up-balance.png)
+![](../images/image-to-text/user-module/user-module-top-up-balance.png)
 
 :::note 注意
 用于训练的资金不会被扣除，而是保留在余额中。您随时可以将它们用于解决任何验证码。
@@ -133,7 +135,7 @@ captcha3.png:99loe
 
 #### Validated
 
-![](./images/user-module/validated.png)
+![](../images/image-to-text/user-module/validated.png)
 
 在正确提交表单后（假设你已经一切都做对了）你会获得这个状态。
 
@@ -143,25 +145,25 @@ captcha3.png:99loe
 
 #### Paid
 
-![](./images/user-module/paid.png)
+![](../images/image-to-text/user-module/paid.png)
 
 你的模块付款已经成功接受。
 
 #### ValidatedInDepth
 
-![](./images/user-module/ValidatedInDepth.png)
+![](../images/image-to-text/user-module/ValidatedInDepth.png)
 
 准备工作进行中。
 
 #### Annotated
 
-![](./images/user-module/Annotated.png)
+![](../images/image-to-text/user-module/Annotated.png)
 
 验证码标记已完成。训练正在进行中。
 
 #### Trained
 
-![](./images/user-module/trained.png)
+![](../images/image-to-text/user-module/trained.png)
 
 模块已准备就绪！你现在可以向其提交验证码。
 
@@ -169,8 +171,8 @@ captcha3.png:99loe
 
 有几种方法可以指定一个解决验证码的模块：
 
-- [在发送 /createTask 请求时添加 CapMonsterModule 参数及模块名称](../captchas/image-to-text.mdx)（如果您直接与我们的 API 交互）
-- [在 ApiKey 中指定模块名称](module-name.mdx)（当您使用第三方程序且无法修改请求时非常方便）
+- [在发送 /createTask 请求时添加 CapMonsterModule 参数及模块名称](/docs/captchas/ImageToText/image-to-text/)（如果您直接与我们的 API 交互）
+- [在 ApiKey 中指定模块名称](/docs/captchas/ImageToText/module-name/)（当您使用第三方程序且无法修改请求时非常方便）
 -----
 ## 常见问题解答
 <details>
@@ -194,7 +196,7 @@ captcha3.png:99loe
 <details>
 <summary>我的模块在“备注”列中显示了 `错误`：我该怎么办？</summary>
 
-![](./images/user-module/error.png)
+![](../images/image-to-text/user-module/error.png)
 
 请稍候。如果 24 小时内情况仍未发生变化，请联系 [技术支持](https://helpdesk.zennolab.com/zh-cn/conversation/new)。
 

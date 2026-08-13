@@ -147,5 +147,17 @@
   "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
     "message": "Visualize o mapeamento dos parâmetros de CAPTCHA nas extensões de navegador do CapMonster Cloud.",
     "description": "A descrição da página generated-index para a categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText": {
+    "message": "ImageToText",
+    "description": "The label for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.title": {
+    "message": "ImageToText",
+    "description": "The generated-index page title for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.description": {
+    "message": "Reconhecimento de CAPTCHA de texto, configuração do limite de confiança e uso de módulos personalizados.",
+    "description": "The generated-index page description for category ImageToText in sidebar tutorialSidebar"
   }
 }

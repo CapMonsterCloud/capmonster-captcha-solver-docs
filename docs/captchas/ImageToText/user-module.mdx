@@ -1,13 +1,13 @@
 ﻿---
-sidebar_position: 10
+sidebar_position: 2
 sidebar_label: Создание пользовательского модуля
 title: "Создание пользовательского модуля для настройки распознавания капч"
 description: "Создание пользовательского модуля позволяет создавать пользовательские модули, которые будут обучены под один конкретный вид капчи. Это позволит быстрее и эффективнее распознавать нестандартные капчи и снизит вероятность ошибок."
 ---
 
-import { ArticleHead } from '../../src/theme/ArticleHead';
+import { ArticleHead } from '../../../src/theme/ArticleHead';
 
-<ArticleHead slug="api/user-module" />
+<ArticleHead slug="captchas/ImageToText/user-module" />
 
 # Создание пользовательского модуля
 
@@ -17,7 +17,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Перейдите на [страницу обучения модуля](https://capmonster.cloud/UserModules), или в [личном кабинете](https://dash.capmonster.cloud/) выберите соответствующий раздел в меню, расположенном слева:
 
-![](./images/user-module/user-module.png)
+![](../images/image-to-text/user-module/user-module.png)
 
 ---
 
@@ -41,7 +41,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 На странице [Обучение модулей](https://capmonster.cloud/UserModules) нажмите кнопку **Добавить модуль** и в открывшемся окне укажите типы символов, встречающихся в вашей капче. После этого появится подсказка, сколько капч необходимо собрать и загрузить:
 
-![](./images/user-module/user-module-archive.png)
+![](../images/image-to-text/user-module/user-module-archive.png)
 
 #### Поддерживаемые форматы изображений
 
@@ -70,7 +70,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Сначала необходимо задать имя модуля. Оно должно содержать только латинские символы.
 
-![](./images/user-module/user-module-name.png)
+![](../images/image-to-text/user-module/user-module-name.png)
 
 :::warning Внимание!
 В названии модуля нельзя использовать слово **captcha**.
@@ -83,7 +83,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Можно отметить один или несколько вариантов из предложенного списка.
 
-![](./images/user-module/user-module-params.png)
+![](../images/image-to-text/user-module/user-module-params.png)
 
 :::info
 В этом списке обязательно должен быть отмечен один из пунктов (или несколько): "Содержит кириллицу", "Содержит латиницу", "Содержит цифры"
@@ -93,7 +93,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Здесь необходимо выбрать способ хранения ответов на капчи.
 
-![](./images/user-module/user-module-markup.png)
+![](../images/image-to-text/user-module/user-module-markup.png)
 
 Всё довольно просто:
 
@@ -116,7 +116,7 @@ captcha3.png:99loe
 
 После того как вы указали имя модуля, выбрали типы символов и расположение ответов, осталось только загрузить zip-архив с капчами и отправить нам.
 
-![](./images/user-module/user-module-upload.png)
+![](../images/image-to-text/user-module/user-module-upload.png)
 
 #### 2.5. Оплата
 
@@ -126,7 +126,7 @@ captcha3.png:99loe
 1. Нажмите пункт **Пополнение баланса**
 2. Нажмите кнопку **Пополнить баланс** и используйте удобный для вас способ оплаты.
 
-![](./images/user-module/user-module-top-up-balance.png)
+![](../images/image-to-text/user-module/user-module-top-up-balance.png)
 
 :::note
 Средства за обучение не списываются, они остаются на балансе. Вы можете их потратить на распознавание любых капч в любое время.
@@ -140,7 +140,7 @@ captcha3.png:99loe
 
 #### Validated
 
-![](./images/user-module/validated.png)
+![](../images/image-to-text/user-module/validated.png)
 
 Данный статус назначается после того, как вы отправите форму (если всё было сделано правильно).
 
@@ -150,34 +150,34 @@ captcha3.png:99loe
 
 #### Paid
 
-![](./images/user-module/paid.png)
+![](../images/image-to-text/user-module/paid.png)
 
 Оплата за модуль принята.
 
 #### ValidatedInDepth
 
-![](./images/user-module/ValidatedInDepth.png)
+![](../images/image-to-text/user-module/ValidatedInDepth.png)
 
 Подготовительные работы.
 
 #### Annotated
 
-![](./images/user-module/Annotated.png)
+![](../images/image-to-text/user-module/Annotated.png)
 
 Разметка капч произведена. Идёт процесс обучения.
 
 #### Trained
 
-![](./images/user-module/trained.png)
+![](../images/image-to-text/user-module/trained.png)
 
-Модуль готов! Теперь на него можно отправлять капчи.
+Модуль готов к использованию. Теперь его можно указать при отправке CAPTCHA на распознавание.
 
-### 4. Отправка капч на конкретный модуль
+### 4. Отправка CAPTCHA на конкретный модуль
 
 Существует несколько способов указать модуль для распознавания:
 
-- [Добавить аргумент CapMonsterModule с именем необходимого модуля при отправке запроса на /createTask](../captchas/image-to-text.mdx) (если вы взаимодействуете напрямую с нашим API)
-- [Добавить имя модуля в поле ApiKey](module-name.mdx) (очень удобно при использовании чужих программ, когда нет возможности изменить отправляемые запросы)
+- [Передать параметр `CapMonsterModule` с именем нужного модуля при создании задачи](/docs/captchas/ImageToText/image-to-text/) — при прямом взаимодействии с API CapMonster Cloud.
+- [Добавить имя модуля к API-ключу](/docs/captchas/ImageToText/module-name/) — при использовании сторонних программ, в которых нельзя изменить структуру отправляемого запроса.
 
 ---
 
@@ -204,7 +204,7 @@ captcha3.png:99loe
 <details>
     <summary>Напротив моего модуля в колонке “Комментарий” появилась надпись `Ошибка` : Что мне делать?</summary>
 
-![](./images/user-module/error.png)
+![](../images/image-to-text/user-module/error.png)
 
 Пожалуйста, немного подождите. Если в течение 24 часов ситуация не изменится, обратитесь [в поддержку](https://helpdesk.zennolab.com/ru/conversation/new).
 

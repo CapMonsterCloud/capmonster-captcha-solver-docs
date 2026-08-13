@@ -1,13 +1,13 @@
 ﻿---
-sidebar_position: 10
+sidebar_position: 2
 sidebar_label: Creating a user module
 title: "Creating a custom module to configure captcha recognition"
 description: "Creating a custom module allows you to create custom modules that will be trained for one specific type of captcha. This will allow faster and more efficient recognition of non-standard captchas and reduce the probability of errors."
 ---
 
-import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
 
-<ArticleHead slug="api/user-module" />
+<ArticleHead slug="captchas/ImageToText/user-module" />
 
 # Creating a user module
 
@@ -18,7 +18,7 @@ The custom module creation feature allows you to train the system to recognize a
 
 Go to the [Training module page](https://capmonster.cloud/UserModules), or select the corresponding section from the left-hand menu in your [dashboard](https://dash.capmonster.cloud/):
  
-![](./images/user-module/user-module.png)
+![](../images/image-to-text/user-module/user-module.png)
 
 ---
 
@@ -42,7 +42,7 @@ Each step is described in more detail below.
 
 On the [Training module page](https://capmonster.cloud/UserModules), click the **Add Module** button and, in the window that opens, specify the character types that appear in your CAPTCHA. After that, a hint will appear showing how many CAPTCHAs you need to collect and upload:
 
-![](./images/user-module/user-module-archive.png)
+![](../images/image-to-text/user-module/user-module-archive.png)
 
 
 #### Supported image formats
@@ -72,7 +72,7 @@ It is not recommended to collect captchas in tens or hundreds of threads simulta
 
 First, you need to set the module name. It must contain only Latin characters.
 
-![](./images/user-module/user-module-name.png)
+![](../images/image-to-text/user-module/user-module-name.png)
 
 :::warning
 The module name must not contain the word **captcha**.
@@ -85,7 +85,7 @@ The selected options determine the total number of captchas required to train th
 
 You can mark one or several items from the suggested list.
 
-![](./images/user-module/user-module-params.png)
+![](../images/image-to-text/user-module/user-module-params.png)
 
 :::info
 You should mark at least one of the following options: "Contains Cyrillic characters", "Contains Latin characters", "Contains numbers"
@@ -95,7 +95,7 @@ You should mark at least one of the following options: "Contains Cyrillic charac
 
 Specify where captcha answers are located.
 
-![](./images/user-module/user-module-markup.png)
+![](../images/image-to-text/user-module/user-module-markup.png)
 
 It's quite simple: 
 
@@ -118,7 +118,7 @@ captcha3.png:99loe
 
 When you specified the module name, selected symbol types, and location of answers, you need to upload the zip archive with the captchas and send us.
 
-![](./images/user-module/user-module-upload.png)
+![](../images/image-to-text/user-module/user-module-upload.png)
 
 #### 2.5. Payment
 
@@ -128,7 +128,7 @@ When you specified the module name, selected symbol types, and location of answe
 1. Click **Top Up Balance**
 2. Click the **Top Up Balance** button and use the payment method convenient for you.
 
-![](./images/user-module/user-module-top-up-balance.png)
+![](../images/image-to-text/user-module/user-module-top-up-balance.png)
 
 
 :::note
@@ -144,7 +144,7 @@ You can use them to recognize any captchas at any time.
 
 #### Validated
 
-![](./images/user-module/validated.png)
+![](../images/image-to-text/user-module/validated.png)
 
 You get this status after you send the form (given that you have done everything correctly). 
 
@@ -154,25 +154,25 @@ For modules with this status, deletion is available — if you uploaded the wron
 
 #### Paid
 
-![](./images/user-module/paid.png)
+![](../images/image-to-text/user-module/paid.png)
 
 Your payment for the module was accepted.
 
 #### ValidatedInDepth
 
-![](./images/user-module/ValidatedInDepth.png)
+![](../images/image-to-text/user-module/ValidatedInDepth.png)
 
 Preparatory works.
 
 #### Annotated
 
-![](./images/user-module/Annotated.png)
+![](../images/image-to-text/user-module/Annotated.png)
 
 Captcha marking completed. Training is in progress.
 
 #### Trained
 
-![](./images/user-module/trained.png)
+![](../images/image-to-text/user-module/trained.png)
 
 The module is ready! You can now submit captchas to it.
 
@@ -180,8 +180,8 @@ The module is ready! You can now submit captchas to it.
 
 There are several ways to specify a module that will solve the captchas:
 
-- [Add the argument CapMonsterModule with the module name when sending a /createTask request ](../captchas/image-to-text.mdx) (if you interact directly with our API)
-- [Specify a module name in ApiKey](module-name.mdx) (very handy when you use third-party programs and cannot modify the requests)
+- [Add the argument CapMonsterModule with the module name when sending a /createTask request ](/docs/captchas/ImageToText/image-to-text/) (if you interact directly with our API)
+- [Specify a module name in ApiKey](/docs/captchas/ImageToText/module-name/) (very handy when you use third-party programs and cannot modify the requests)
 
 ---
 
@@ -208,7 +208,7 @@ The estimated time for one module to be ready is about one business day.
 <details>
     <summary>I see the `Error` sign in the "Comment" column next to my module. What should I do?</summary>
 
-![](./images/user-module/error.png)
+![](../images/image-to-text/user-module/error.png)
 
 Please wait a little. If the situation does not change within 24 hours, please contact [Support](https://helpdesk.zennolab.com/en-us/conversation/new).
 
