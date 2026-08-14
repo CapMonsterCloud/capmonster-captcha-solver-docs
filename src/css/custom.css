@@ -216,6 +216,14 @@
   margin-right: 12px;
 }
 
+.theme-doc-sidebar-item-link-level-1:nth-child(9) > .menu__link::before {
+  content: '';
+  background: url('/img/18x18_promo.svg');
+  width: 18px;
+  height: 18px;
+  margin-right: 12px;
+}
+
 .navbar__link--active {
   font-weight: bold;
 }
