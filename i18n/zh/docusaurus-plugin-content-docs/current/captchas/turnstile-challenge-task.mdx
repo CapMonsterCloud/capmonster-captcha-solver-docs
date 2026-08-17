@@ -205,18 +205,20 @@ CapMonster Cloud 可以返回解决方案结果为 **token** 或 **cf_clearance 
   Base64 编码的 HTML 页面，显示 403 响应时的 “Just a moment” 页面。<br/>
   获取 `htmlPageBase64` 示例：
 ```js
-var serializer = new XMLSerializer();
-var fullHtml = serializer.serializeToString(document);
-
-var htmlBase64 = btoa(unescape(encodeURIComponent(fullHtml)));
-console.log(htmlBase64);
+fetch('https://example.com')
+  .then(res => res.arrayBuffer())
+  .then(buf => {
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+    console.log(base64);
+  });
 ```
 
 ---
 
   <ParamItem title="userAgent" required type="string" />
-  浏览器 User-Agent。<br />
-  **仅提供当前 Windows UA：** userAgentPlaceholder
+  浏览器 User-Agent。请使用 CapMonster Cloud 当前支持的值：`userAgentPlaceholder`<br />
+
+  可通过以下地址获取最新值：[https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual)。
 
 ---
 
