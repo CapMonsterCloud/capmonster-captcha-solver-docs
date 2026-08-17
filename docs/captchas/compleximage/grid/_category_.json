@@ -4,6 +4,7 @@
   "collapsed": true,
   "link": {
     "type": "generated-index",
+    "slug": "/captchas/compleximage/grid",
     "title": "Grid Modules — Complex Image (click) | API",
     "description": "Используйте Grid Modules — специализированные компоненты для решения капч с сеткой изображений. В ответе вы получите массив значений (true/false), где каждый элемент указывает, соответствует ли изображение в ячейке заданному условию."
   }

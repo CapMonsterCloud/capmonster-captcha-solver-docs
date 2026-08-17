@@ -207,11 +207,12 @@ Calling `window.turnstile.render(el, paramsObj)` loads the captcha on the page. 
   The base64-encoded **"Just a moment"** HTML page returned with status code 403 when accessing a website protected by this mechanism.<br/> 
   Example of obtaining the htmlPageBase64 string: <br/> 
 ```js
-var serializer = new XMLSerializer();
-var fullHtml = serializer.serializeToString(document);
-
-var htmlBase64 = btoa(unescape(encodeURIComponent(fullHtml)));
-console.log(htmlBase64);
+fetch('https://example.com')
+  .then(res => res.arrayBuffer())
+  .then(buf => {
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+    console.log(base64);
+  });
 ```
 
   ---
