@@ -1,79 +1,108 @@
-<p align="center">
-  <img src="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/blob/master/static/img/logo_docs.svg" alt="CapMonster Cloud CAPTCHA Solver Documentation">
-</p>
-
 # CapMonster Cloud API Documentation & CAPTCHA Solver Guides
 
-Welcome to the official documentation repository for **CapMonster Cloud** — the fastest AI-powered CAPTCHA solver and anti-bot bypass infrastructure. 
+<p align="center">
+  <a href="https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read">
+    <img src="https://img.shields.io/badge/CapMonster%20Cloud-Official%20Documentation-00B2FF?style=for-the-badge&logo=googledocs&logoColor=white" alt="CapMonster Cloud Docs" height="40">
+  </a>
+</p>
 
-Here you will find API references, integration guides, and code examples for bypassing reCAPTCHA, Cloudflare Turnstile, DataDome, and more.
+<p align="center">
+  <strong>Comprehensive API documentation, integration guides, and code examples for CapMonster Cloud AI CAPTCHA solver.</strong>
+</p>
 
-**[👉 Get your Free API Key and Start Solving CAPTCHAs](https://dash.capmonster.cloud/Account/SignUp?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
+<p align="center">
+  <a href="https://docs.capmonster.cloud/docs/getting-start/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read"><img src="https://img.shields.io/badge/Docs-Hosted%20Live-brightgreen.svg?style=flat-square" alt="Documentation Status"></a>
+  <a href="https://docusaurus.io/"><img src="https://img.shields.io/badge/Built%20with-Docusaurus%203-3ECC5F?style=flat-square&logo=docusaurus&logoColor=white" alt="Built with Docusaurus 3"></a>
+  <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/stargazers"><img src="https://img.shields.io/github/stars/CapMonsterCloud/capmonster-captcha-solver-docs?style=flat-square&color=yellow" alt="GitHub Stars"></a>
+  <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/network/members"><img src="https://img.shields.io/github/forks/CapMonsterCloud/capmonster-captcha-solver-docs?style=flat-square" alt="GitHub Forks"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square" alt="License: MIT"></a>
+</p>
 
 ---
 
-## 📚 Table of Contents
+Welcome to the official documentation repository for **[CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)** — the high-speed AI-powered CAPTCHA solving infrastructure for developers and automation engineers.
 
-Navigate to our official hosted documentation to get started:
-- 🚀 **[Getting Started & Quick Setup](https://capmonster.cloud/en/captcha-api/)**
-- 🧩 **[CAPTCHA Task Types & API Reference](https://docs.capmonster.cloud/docs/captchas/)**
-- 💻 **[Official SDKs (Python, Node.js, C#, n8n)](https://github.com/orgs/CapMonsterCloud/repositories)**
-- 💳 **[API Methods (createTask, Get Balance, etc.)](https://docs.capmonster.cloud/docs/methods/)**
+Here you will find full API specifications, payload samples, and step-by-step guides for bypassing **Cloudflare Turnstile, reCAPTCHA v2/v3/Enterprise, DataDome, GeeTest, and Amazon WAF**.
 
-*(Looking for a specific integration? Check out our [n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver) or direct [Chrome Extension](https://capmonster.cloud/en/browser-extension-captcha/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)).*
+**[👉 Get your Free API Key & Free Trial Balance on CapMonster Cloud](https://dash.capmonster.cloud/Account/SignUp?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)**
+
+---
+
+## 📚 Documentation Navigation
+
+Explore our live hosted documentation portal:
+
+| Section | Description | Live Link |
+| :--- | :--- | :--- |
+| 🚀 **Getting Started** | Quickstart tutorial, account setup, and balance activation | [Read Guide](https://docs.capmonster.cloud/docs/getting-start/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
+| 🧩 **CAPTCHA Task Types** | reCAPTCHA, Turnstile, GeeTest, DataDome, and WAF specs | [View Tasks](https://docs.capmonster.cloud/docs/captchas/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
+| ⚙️ **API Methods** | `createTask`, `getTaskResult`, `getBalance` reference | [API Reference](https://docs.capmonster.cloud/docs/methods/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
+| 🌐 **Browser Extension** | Zero-code automatic browser captcha solving | [Extension Docs](https://docs.capmonster.cloud/docs/extension/introduction/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
+
+---
+
+## 💻 Official SDKs & Integrations
+
+Accelerate your automation pipeline with our official client libraries:
+
+- 🐍 **[Python SDK (Async / Playwright / Selenium)](https://github.com/ZennoLab/capmonstercloud-client-python)**
+- 🧩 **[n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver)**
+- 📦 **[All SDKs & Repositories](https://github.com/orgs/CapMonsterCloud/repositories)**
 
 ---
 
 ## 🛠 For Contributors & Maintainers
 
-This documentation website is built using [Docusaurus 3](https://docusaurus.io/), a modern static website generator. The instructions below are for developers who want to run or edit this documentation locally.
+This documentation portal is built with **[Docusaurus 3](https://docusaurus.io/)**. Follow the instructions below to preview or contribute to the documentation locally.
 
-### Installation
+### 1. Installation
 
-Install the required dependencies using Yarn or npm:
+Install the project dependencies using Yarn or npm:
 
 ```bash
-yarn
+yarn install
 # or
 npm install
 ```
 
-### Local Development
+### 2. Local Development
 
-To start a local development server with hot-reloading:
+Start a local development server with live reload:
 
 ```bash
+# Start English docs (default)
 yarn start
-```
-This command opens up a browser window. Most changes are reflected in real time, with no need to restart the server. By default, this runs the **English** version.
 
-If you want to start the **Russian** version locally, run:
-
-```bash
+# Start Russian docs
 yarn start -- --locale ru
 ```
 
-### Build for Production
+### 3. Build & Production Preview
+
+Generate static content into the `build` directory:
 
 ```bash
 yarn build
-```
-This command generates static content into the `build` directory, which can be served using any static content hosting service.
-
-After the build, you can view the fully generated site (including both `ru` and `en` locales) by running:
-
-```bash
 yarn serve
 ```
 
-### Directory Structure & Localization
+### 📁 Localization & Directory Structure
 
-- **Russian documentation** is located in the `/docs` directory.
-- **English documentation** is located in `/i18n/en/docusaurus-plugin-content-docs/current/`.
+- **Russian documentation:** located in the `/docs` directory.
+- **English documentation:** located in `/i18n/en/docusaurus-plugin-content-docs/current/`.
 
-Each folder represents a category for the articles. If you need the same article for both the `ru` and `en` versions, you must create a markdown file in both directories with the exact same filename and folder structure.
-
-For more information about markdown syntax and Docusaurus structure, visit the [official Docusaurus docs](https://docusaurus.io/).
+> When adding a new article, create the corresponding markdown file in both directories with identical filenames and category paths.
 
 ---
-**[Get your CapMonster Cloud API Key](https://dash.capmonster.cloud/Account/SignUp?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_readme)**
+
+## ⭐ Star History
+
+If our documentation helps you build reliable scrapers and automation workflows, please consider starring this repository!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=CapMonsterCloud/capmonster-captcha-solver-docs&type=Date)](https://star-history.com/#CapMonsterCloud/capmonster-captcha-solver-docs&Date)
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) © [ZennoLab](https://zennolab.com/) / [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
