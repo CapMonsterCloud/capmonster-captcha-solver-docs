@@ -37,7 +37,7 @@ Explore our live hosted documentation portal:
 | 🚀 **Getting Started** | Quickstart tutorial, account setup, and balance activation | [Read Guide](https://docs.capmonster.cloud/docs/getting-start/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
 | 🧩 **CAPTCHA Task Types** | reCAPTCHA, Turnstile, GeeTest, DataDome, and WAF specs | [View Tasks](https://docs.capmonster.cloud/docs/captchas/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
 | ⚙️ **API Methods** | `createTask`, `getTaskResult`, `getBalance` reference | [API Reference](https://docs.capmonster.cloud/docs/methods/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
-| 🌐 **Browser Extension** | Zero-code automatic browser captcha solving | [Extension Docs](https://docs.capmonster.cloud/docs/extension/introduction/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
+| 🌐 **Browser Extensions** | Chrome and Firefox automatic captcha solving guides | [Extension Docs](https://docs.capmonster.cloud/docs/extension/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read) |
 
 ---
 
