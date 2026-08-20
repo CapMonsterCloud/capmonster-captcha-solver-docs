@@ -15,7 +15,7 @@
   <a href="https://docusaurus.io/"><img src="https://img.shields.io/badge/Built%20with-Docusaurus%203-3ECC5F?style=flat-square&logo=docusaurus&logoColor=white" alt="Built with Docusaurus 3"></a>
   <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/stargazers"><img src="https://img.shields.io/github/stars/CapMonsterCloud/capmonster-captcha-solver-docs?style=flat-square&color=yellow" alt="GitHub Stars"></a>
   <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/network/members"><img src="https://img.shields.io/github/forks/CapMonsterCloud/capmonster-captcha-solver-docs?style=flat-square" alt="GitHub Forks"></a>
-  <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square" alt="License: MIT"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square" alt="License: MIT"></a>
 </p>
 
 ---
@@ -99,4 +99,4 @@ yarn serve
 
 ## 📄 License
 
-[MIT](https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/blob/main/LICENSE) © [ZennoLab](https://zennolab.com/) / [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
+[MIT](./LICENSE) © [ZennoLab](https://zennolab.com/) / [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
