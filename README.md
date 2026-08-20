@@ -15,7 +15,7 @@
   <a href="https://docusaurus.io/"><img src="https://img.shields.io/badge/Built%20with-Docusaurus%203-3ECC5F?style=flat-square&logo=docusaurus&logoColor=white" alt="Built with Docusaurus 3"></a>
   <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/stargazers"><img src="https://img.shields.io/github/stars/CapMonsterCloud/capmonster-captcha-solver-docs?style=flat-square&color=yellow" alt="GitHub Stars"></a>
   <a href="https://github.com/CapMonsterCloud/capmonster-captcha-solver-docs/network/members"><img src="https://img.shields.io/github/forks/CapMonsterCloud/capmonster-captcha-solver-docs?style=flat-square" alt="GitHub Forks"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square" alt="License: MIT"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square" alt="License: MIT"></a>
 </p>
 
 ---
@@ -94,14 +94,6 @@ yarn serve
 - **English documentation:** located in `/i18n/en/docusaurus-plugin-content-docs/current/`.
 
 > When adding a new article, create the corresponding markdown file in both directories with identical filenames and category paths.
-
----
-
-## ⭐ Star History
-
-If our documentation helps you build reliable scrapers and automation workflows, please consider starring this repository!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=CapMonsterCloud/capmonster-captcha-solver-docs&type=Date)](https://star-history.com/#CapMonsterCloud/capmonster-captcha-solver-docs&Date)
 
 ---
 
