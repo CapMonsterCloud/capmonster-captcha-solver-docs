@@ -28,10 +28,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 以下是当前 CapMonster Cloud 服务支持的 Alibaba CAPTCHA 任务类型示例：
 
-<ImagesLayout gap="16px" columns={3}>
-  <ImageWrap title="Slider CAPTCHA">![](./images/alibaba-task/slider.png)</ImageWrap>
-  <ImageWrap title="Puzzle CAPTCHA">![](./images/alibaba-task/puzzle.png)</ImageWrap>
-  <ImageWrap title="Image restoration CAPTCHA">![](./images/alibaba-task/restoration.png)</ImageWrap>
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
+  <ImageWrap title="Puzzle">![](./images/alibaba-task/puzzle.png)</ImageWrap>
+  <ImageWrap title="Image restoration">![](./images/alibaba-task/restoration.png)</ImageWrap>
+  <ImageWrap title="Click">![](./images/alibaba-task/click.png)</ImageWrap>
 </ImagesLayout>
 
 :::warning **注意！**
@@ -116,6 +117,18 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 <ParamItem title="apiGetLib（位于 metadata 中）" type="string" />
 网站使用的验证码 JS 库链接。该值在客户端生成，并可能在每次页面渲染时动态生成。 <br />
 示例：`https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
+
+---
+
+<ParamItem title="punishUrl（位于 metadata 中）" type="string" />
+
+从目标网站获取的验证页面完整 URL。
+
+该参数适用于 Alibaba 返回单独的 `/punish` URL 进行验证的网站。请完整传递该 URL，包括查询参数。 <br />
+
+示例：`https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=`
+
+*有关获取 URL 的说明，请参阅 **如何查找创建任务所需的全部参数** → **[punishUrl](#punishurl)**。*
 
 ---
 
@@ -231,13 +244,13 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     "userAgent": "userAgentPlaceholder",
     "metadata": {
       "sceneId": "your-scene-id",
-      "prefix": "your-prefix",
-      "proxyType": "your-proxy-type",
-      "proxyAddress": "your-proxy-address",
-      "proxyPort": 1234,
-      "proxyLogin": "your-proxy-login",
-      "proxyPassword": "your-proxy-password"
-    }
+      "prefix": "your-prefix"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
@@ -345,6 +358,95 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     </MethodDescription>
   </TabItem>
 </Tabs>
+
+### 使用 `punishUrl` 的方案
+
+在某些受 Alibaba 保护的网站上，验证会通过单独的 `/punish` URL 触发。在这种情况下，请将获取到的 URL 传入 `punishUrl` 参数（位于 `metadata` 中）。
+
+Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="punish-proxyless" label="CustomTask（无代理）" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+      **请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://www.example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    }
+  }
+}
+```
+
+      **响应示例**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+
+  <TabItem value="punish-proxy" label="CustomTask（使用代理）" className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+      **请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://www.example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+      **响应示例**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+</Tabs>
+
+---
 
 ### 返回 cookies 的选项（`cookieRequired`）
 
@@ -459,28 +561,32 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 
 ## 获取任务结果的方法
-使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Alibaba 验证码的解决结果。
 
-如果请求中指定了 `"cookieRequired": true`，响应还会包含按域名分组的 cookies。
-请将 `Domains` 对象中的 cookies 与 CAPTCHA 识别结果一起用于向相应域名发送的后续请求。
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Alibaba CAPTCHA 的解决结果。
 
-<div className="method-panel-full">
-  <MethodItem>
-      ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
-  <MethodDescription>
+<MethodItem>
 
-  **请求示例**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "taskId": 407533077
-  }
-  ```
+```http
+https://api.capmonster.cloud/getTaskResult
+```
 
-  **响应示例**
+</MethodItem>
+<br />
+
+
+<MethodDescription>
+
+**请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533077
+}
+```
+
+**响应示例**
+
 ```json
 {
   "errorId": 0,
@@ -493,9 +599,39 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     }
   }
 }
-  ```
-  </MethodDescription>
-</div>
+```
+
+</MethodDescription>
+
+如果请求中指定了 `"cookieRequired": true`，响应还会包含按域名分组的 cookies。这同样适用于包含 `punishUrl` 的任务。请将 `solution.domains` 对象中的 cookies 与 CAPTCHA 解决结果一起用于向相应域名发送的后续请求。
+
+<MethodDescription>
+**响应示例**
+
+```json
+{
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null,
+  "status": "ready",
+  "solution": {
+    "domains": {
+      "example.com": {
+        "cookies": {
+          "arms_uid": "23906d34-14da-4ddb-b651-b4d72d5376e1",
+          "sca": "ec12103d",
+          "atpsida": "b8cd8cc0185b...1196_1",
+          "cna": "vJsNIxNBKGMCAax0zMDiXVu1",
+          "cbc": "T2gAde24vOm4...wkkwYA=",
+          "x5sec": "7b2274223a...227d",
+          "tfstk": "gPEnRZi0vyuB...ECvCA."
+        }
+      }
+    }
+  }
+}
+```
+</MethodDescription>
 
 ## 如何查找创建任务所需的全部参数
 
@@ -526,6 +662,797 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 2. 查找与加载任务相关的请求（通常通过 **DevTools** → **Network**）。
 
 ![](./images/alibaba-task/prefix.png)<br /> 
+
+---
+
+### `punishUrl`
+
+`punishUrl` 是目标网站触发保护时返回的 Alibaba 验证 URL。
+
+通常可以从响应中包含以下错误的网络请求中获取该 URL：
+
+```text
+FAIL_SYS_USER_VALIDATE
+```
+
+#### 通过 DevTools 获取
+
+1. 打开目标页面，并执行会触发 Alibaba 验证的操作。
+2. 打开 **DevTools** → **Network**。
+3. 找到保护触发时发送的请求。可通过响应中包含的 `FAIL_SYS_USER_VALIDATE` 错误进行定位。
+4. 打开该请求并切换到 **Preview** 选项卡。在响应中找到 `data` 字段，其中包含应作为 `punishUrl` 使用的验证 URL。
+
+![](./images/alibaba-task/punish-url-preview.png)<br />
+
+5. 也可以在 **Response** 选项卡中找到目标 URL。
+
+![](./images/alibaba-task/punish-url-response.png)<br />
+
+6. 完整复制该 URL，并在创建任务时将其传入 `punishUrl` 参数（位于 `metadata` 中）。
+
+最终 URL 必须包含端口（例如 `443`）、`_____tmd_____/punish` 路径，以及 `x5secdata`、`x5step`、`action` 和 `pureCaptcha` 参数。
+
+URL 格式：
+
+```text
+https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=
+```
+<br />
+
+#### 自动获取 `punishUrl`
+
+也可以通过以下方式以编程方式获取 `punishUrl`：
+
+* 通过 HTTP 请求——如果已知 API URL、请求方法、headers 以及其他请求参数；
+* 通过 Playwright——如果需要直接在浏览器中跟踪请求。
+
+在某些情况下，会先返回包含 `x5secdata` 和 `x5step` 的中间 URL，处理该 URL 后，再返回包含 `action` 和 `pureCaptcha` 参数的最终 `punishUrl`。
+
+对于 HTTP 请求，请使用目标网站实际请求的参数。在浏览器场景中，请指定所需页面并执行触发 Alibaba Punish 的操作。
+
+:::warning 重要
+以下示例展示获取 `punishUrl` 的通用方法。请将 URL、headers 和其他值替换为目标网站的实际数据。
+:::
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript (Node.js)" default className="method-panel">
+<details>
+      <summary>显示代码（通过 HTTP 请求）</summary>
+
+```js
+const USER_AGENT =
+  "userAgentPlaceholder";
+
+const TIMEOUT = 30000;
+
+/* ================= 请求设置 ================= */
+// 以下所有值仅作为示例
+// 请指定目标网站实际请求的参数
+// 如有需要，请添加 origin、referer、accept-language 等其他 headers
+
+const REQUEST_CONFIG = {
+  pageUrl: "https://example.com/login",
+
+  url: "https://api.example.com/login?fromSite=example&appName=example-app",
+
+  method: "POST",
+
+  // 请求的 query 参数，例如：login、email、
+  // 电话号码或其他值
+  params: {
+    value: "example"
+  },
+
+  headers: {
+    accept: "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "user-agent": USER_AGENT,
+    origin: "https://example.com",
+    referer: "https://example.com/login",
+  },
+};
+
+/* ================= 通用逻辑 ================= */
+
+function isPunishUrl(url) {
+  return typeof url === "string" && url.includes("_____tmd_____/punish");
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    ["x5secdata", "x5step", "action", "pureCaptcha"].every((name) =>
+      hasParam(url, name),
+    )
+  );
+}
+
+function cookiesToHeader(cookies = {}) {
+  return Object.entries(cookies)
+    .map(([name, value]) => `${name}=${value}`)
+    .join("; ");
+}
+
+function extractFromHtml(html, baseUrl) {
+  const match = html.match(
+    /(?:["']url["']\s*:\s*["']([^"']+)["'])|(https?:\/\/[^\s"'<>]+\/_____tmd_____\/punish\?[^\s"'<>]+)/i,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const value = (match[1] || match[2])
+    .replace(/\\\//g, "/")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x3D;|&#61;/gi, "=");
+
+  try {
+    const url = new URL(value, baseUrl).href;
+    return isPunishUrl(url) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+async function extractPunishUrl(response) {
+  const text = await response.text();
+
+  try {
+    const url = JSON.parse(text)?.data?.url;
+
+    if (isPunishUrl(url)) {
+      return url;
+    }
+  } catch {}
+
+  return extractFromHtml(text, response.url);
+}
+
+async function sendRequest(config) {
+  const url = new URL(config.url);
+
+  for (const [name, value] of Object.entries(config.params || {})) {
+    if (value != null) {
+      url.searchParams.set(name, value);
+    }
+  }
+
+  const headers = {
+    ...(config.headers || {}),
+  };
+
+  const cookie = cookiesToHeader(config.cookies);
+
+  if (cookie) {
+    headers.cookie = cookie;
+  }
+
+  const method = (config.method || "GET").toUpperCase();
+
+  const options = {
+    method,
+    headers,
+    signal: AbortSignal.timeout(TIMEOUT),
+  };
+
+  if (method !== "GET" && method !== "HEAD") {
+    if (config.json != null) {
+      options.body = JSON.stringify(config.json);
+    } else if (config.data != null) {
+      options.body = config.data;
+    }
+  }
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+
+  return response;
+}
+
+async function resolvePunishUrl(response, config, maxSteps = 3) {
+  const visited = new Set();
+
+  for (let step = 0; step < maxSteps; step++) {
+    const punishUrl = await extractPunishUrl(response);
+
+    if (!punishUrl) {
+      throw new Error("响应中未找到 punishUrl");
+    }
+
+    if (visited.has(punishUrl)) {
+      throw new Error("检测到重复的 punishUrl");
+    }
+
+    visited.add(punishUrl);
+
+    if (isFinalPunishUrl(punishUrl)) {
+      return punishUrl;
+    }
+
+    const headers = {
+      accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "user-agent": USER_AGENT,
+      referer: config.pageUrl,
+    };
+
+    const cookie = cookiesToHeader(config.cookies);
+
+    if (cookie) {
+      headers.cookie = cookie;
+    }
+
+    response = await fetch(punishUrl, {
+      headers,
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    }
+  }
+
+  throw new Error("无法获取最终 punishUrl");
+}
+
+async function main() {
+  try {
+    const response = await sendRequest(REQUEST_CONFIG);
+
+    const punishUrl = await resolvePunishUrl(response, REQUEST_CONFIG);
+
+    console.log("最终 punishUrl：");
+    console.log(punishUrl);
+  } catch (error) {
+    console.error("获取 punishUrl 失败：");
+    console.error(error.message);
+  }
+}
+
+main();
+```
+</details>
+
+<details>
+      <summary>显示代码（通过 Playwright）</summary>
+```js
+const { chromium } = require("playwright");
+
+// 使用 Alibaba Punish 的页面
+const PAGE_URL = "https://example.com/";
+
+const TIMEOUT = 180000;
+
+function isPunishUrl(url) {
+  return (
+    typeof url === "string" &&
+    url.includes("_____tmd_____/punish")
+  );
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    hasParam(url, "x5secdata") &&
+    hasParam(url, "x5step") &&
+    hasParam(url, "action") &&
+    hasParam(url, "pureCaptcha")
+  );
+}
+
+function addHttpsPort(url) {
+  if (
+    typeof url !== "string" ||
+    !url.startsWith("https://")
+  ) {
+    return url;
+  }
+
+  if (/^https:\/\/[^/]+:\d+(?:\/|$)/i.test(url)) {
+    return url;
+  }
+
+  return url.replace(
+    /^https:\/\/([^/]+)/i,
+    "https://$1:443"
+  );
+}
+
+function waitForPunishUrl(page) {
+  return new Promise((resolve, reject) => {
+    let finalPunishUrl = null;
+
+    const timer = setTimeout(() => {
+      cleanup();
+
+      reject(
+        new Error(
+          "未找到最终 punishUrl"
+        )
+      );
+    }, TIMEOUT);
+
+    function cleanup() {
+      clearTimeout(timer);
+
+      page.off("request", onRequest);
+      page.off("response", onResponse);
+    }
+
+    function processUrl(url) {
+      if (
+        finalPunishUrl ||
+        !isFinalPunishUrl(url)
+      ) {
+        return;
+      }
+
+      finalPunishUrl =
+        addHttpsPort(url);
+
+      cleanup();
+      resolve(finalPunishUrl);
+    }
+
+    function onRequest(request) {
+      processUrl(
+        request.url()
+      );
+    }
+
+    function onResponse(response) {
+      processUrl(
+        response.url()
+      );
+    }
+
+    page.on("request", onRequest);
+    page.on("response", onResponse);
+  });
+}
+
+async function main() {
+  const browser = await chromium.launch({
+    headless: false,
+  });
+
+  const context =
+    await browser.newContext();
+
+  const page =
+    await context.newPage();
+
+  const punishUrlPromise =
+    waitForPunishUrl(page);
+
+  await page.goto(
+    PAGE_URL,
+    {
+      waitUntil: "domcontentloaded",
+    }
+  );
+
+  console.log(
+    "请在页面上执行触发 Alibaba 验证的操作"
+  );
+
+  try {
+    const punishUrl =
+      await punishUrlPromise;
+
+    console.log(
+      "最终 punishUrl："
+    );
+
+    console.log(punishUrl);
+  } catch (error) {
+    console.error(
+      "获取 punishUrl 失败："
+    );
+
+    console.error(
+      error.message
+    );
+  }
+
+  await browser.close();
+}
+
+main().catch(console.error);
+```
+
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>显示代码（通过 HTTP 请求）</summary>
+```python
+import re
+from urllib.parse import urljoin
+
+import requests
+
+
+USER_AGENT = "userAgentPlaceholder"
+
+TIMEOUT = 30
+
+# ================= 请求设置 =================
+# 以下所有值仅作为示例
+# 请指定目标网站实际请求的参数
+# 如有需要，请添加 origin、referer、accept-language 等其他 headers
+
+REQUEST_CONFIG = {
+    "page_url": "https://example.com/login",
+
+    "url": "https://api.example.com/login?fromSite=example&appName=example-app",
+
+    "method": "POST",
+
+    # 请求的 query 参数，例如：login、email、
+    # 电话号码或其他值
+    "params": {
+        "value": "example",
+    },
+
+    "headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json",
+        "user-agent": USER_AGENT,
+        "origin": "https://example.com",
+        "referer": "https://example.com/login",
+    },
+}
+
+# ================= 通用逻辑 =================
+
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and all(
+            has_param(url, name)
+            for name in (
+                "x5secdata",
+                "x5step",
+                "action",
+                "pureCaptcha",
+            )
+        )
+    )
+
+
+def cookies_to_header(cookies=None):
+    return "; ".join(
+        f"{name}={value}"
+        for name, value in (cookies or {}).items()
+    )
+
+
+def extract_from_html(html, base_url):
+    match = re.search(
+        r'''(?:["']url["']\s*:\s*["']([^"']+)["'])'''
+        r'''|(https?://[^\s"'<>]+/_____tmd_____/punish\?[^\s"'<>]+)''',
+        html,
+        flags=re.IGNORECASE,
+    )
+
+    if not match:
+        return None
+
+    value = (
+        (match.group(1) or match.group(2))
+        .replace("\\/", "/")
+        .replace("&amp;", "&")
+        .replace("&#x3D;", "=")
+        .replace("&#61;", "=")
+    )
+
+    url = urljoin(base_url, value)
+
+    return url if is_punish_url(url) else None
+
+
+def extract_punish_url(response):
+    text = response.text
+
+    try:
+        data = response.json()
+        url = data.get("data", {}).get("url")
+
+        if is_punish_url(url):
+            return url
+    except (ValueError, AttributeError):
+        pass
+
+    return extract_from_html(
+        text,
+        response.url,
+    )
+
+
+def send_request(config):
+    headers = dict(
+        config.get("headers", {})
+    )
+
+    cookie = cookies_to_header(
+        config.get("cookies")
+    )
+
+    if cookie:
+        headers["cookie"] = cookie
+
+    response = requests.request(
+        method=config.get("method", "GET"),
+        url=config["url"],
+        params=config.get("params"),
+        headers=headers,
+        json=config.get("json"),
+        data=config.get("data"),
+        timeout=TIMEOUT,
+    )
+
+    response.raise_for_status()
+
+    return response
+
+
+def resolve_punish_url(
+    response,
+    config,
+    max_steps=3,
+):
+    visited = set()
+
+    for _ in range(max_steps):
+        punish_url = extract_punish_url(
+            response
+        )
+
+        if not punish_url:
+            raise RuntimeError(
+                "响应中未找到 punishUrl"
+            )
+
+        if punish_url in visited:
+            raise RuntimeError(
+                "检测到重复的 punishUrl"
+            )
+
+        visited.add(punish_url)
+
+        if is_final_punish_url(punish_url):
+            return punish_url
+
+        headers = {
+            "accept": (
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,*/*;q=0.8"
+            ),
+            "user-agent": USER_AGENT,
+            "referer": config["page_url"],
+        }
+
+        cookie = cookies_to_header(
+            config.get("cookies")
+        )
+
+        if cookie:
+            headers["cookie"] = cookie
+
+        response = requests.get(
+            punish_url,
+            headers=headers,
+            timeout=TIMEOUT,
+        )
+
+        response.raise_for_status()
+
+    raise RuntimeError(
+        "无法获取最终 punishUrl"
+    )
+
+
+def main():
+    try:
+        response = send_request(
+            REQUEST_CONFIG
+        )
+
+        punish_url = resolve_punish_url(
+            response,
+            REQUEST_CONFIG,
+        )
+
+        print("最终 punishUrl：")
+        print(punish_url)
+
+    except Exception as error:
+        print("获取 punishUrl 失败：")
+        print(error)
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+
+<details>
+      <summary>显示代码（通过 Playwright）</summary>
+```python
+import re
+import time
+from playwright.sync_api import sync_playwright
+
+# 使用 Alibaba Punish 的页面
+PAGE_URL = "https://example.com/"
+
+TIMEOUT = 180
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and has_param(url, "x5secdata")
+        and has_param(url, "x5step")
+        and has_param(url, "action")
+        and has_param(url, "pureCaptcha")
+    )
+
+def find_punish_url(data):
+    if isinstance(data, str):
+        return data if is_final_punish_url(data) else None
+
+    if isinstance(data, dict):
+        for value in data.values():
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    if isinstance(data, list):
+        for value in data:
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    return None
+
+def main():
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(
+            headless=False
+        )
+
+        context = browser.new_context()
+        page = context.new_page()
+
+        final_punish_url = {"value": None}
+
+        def process_url(url):
+            if (
+                not final_punish_url["value"]
+                and is_final_punish_url(url)
+            ):
+                final_punish_url["value"] = url
+
+        def process_response(response):
+            process_url(response.url)
+
+            if final_punish_url["value"]:
+                return
+
+            try:
+                url = find_punish_url(
+                    response.json()
+                )
+
+                if url:
+                    final_punish_url["value"] = url
+            except:
+                pass
+
+        context.on(
+            "request",
+            lambda request: process_url(request.url),
+        )
+
+        context.on(
+            "response",
+            process_response,
+        )
+
+        page.goto(
+            PAGE_URL,
+            wait_until="domcontentloaded",
+        )
+
+        print(
+            "Perform the action on the page "
+            "that triggers Alibaba verification"
+        )
+
+        start = time.time()
+
+        while (
+            not final_punish_url["value"]
+            and time.time() - start < TIMEOUT
+        ):
+            page.wait_for_timeout(500)
+
+        if final_punish_url["value"]:
+            print("最终 punishUrl：")
+            print(final_punish_url["value"])
+        else:
+            print("未找到最终 punishUrl")
+
+        browser.close()
+
+if __name__ == "__main__":
+    main()
+```
+
+</details>
+
+  </TabItem>
+
+</Tabs>
+
+
+
 
 ## 使用包含扩展参数的网站
 

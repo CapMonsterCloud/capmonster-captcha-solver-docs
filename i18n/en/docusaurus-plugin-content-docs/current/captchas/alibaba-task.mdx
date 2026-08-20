@@ -28,10 +28,11 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 Below are examples of Alibaba Captcha task types that are currently supported by the CapMonster Cloud service:
 
-<ImagesLayout gap="16px" columns={3}>
-  <ImageWrap title="Slider CAPTCHA">![](./images/alibaba-task/slider.png)</ImageWrap>
-  <ImageWrap title="Puzzle CAPTCHA">![](./images/alibaba-task/puzzle.png)</ImageWrap>
-  <ImageWrap title="Image restoration CAPTCHA">![](./images/alibaba-task/restoration.png)</ImageWrap>
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
+  <ImageWrap title="Puzzle">![](./images/alibaba-task/puzzle.png)</ImageWrap>
+  <ImageWrap title="Image restoration">![](./images/alibaba-task/restoration.png)</ImageWrap>
+  <ImageWrap title="Click">![](./images/alibaba-task/click.png)</ImageWrap>
 </ImagesLayout>
 
 :::warning **Attention!**
@@ -96,26 +97,38 @@ Example: `/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=`
 ---
 
 <ParamItem title="verifyType (inside metadata)" type="string" />
-The version or type of the captcha verification mechanism. <br />
+The version or type of the CAPTCHA verification mechanism. <br />
 Example: `1.0`
 
 ---
 
 <ParamItem title="region (inside metadata)" type="string" />
-The server or data center region through which the captcha is processed. <br />
+The server or data center region through which the CAPTCHA is processed. <br />
 Example: `sgp`
 
 ---
 
 <ParamItem title="UserCertifyId (inside metadata)" type="string" />
-A unique verification ID associated with the current captcha session. <br />
+A unique verification ID associated with the current CAPTCHA session. <br />
 Example: `0a03e59417757735511105780e2a5e`
 
 ---
 
 <ParamItem title="apiGetLib (inside metadata)" type="string" />
-A link to the captcha JS library used by the website. The value is generated on the client side and may change dynamically on each page render. <br />
+A link to the CAPTCHA JS library used by the website. The value is generated on the client side and may change dynamically on each page render. <br />
 Example: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
+
+---
+
+<ParamItem title="punishUrl (inside metadata)" type="string" />
+
+Full URL of the verification page obtained from the target website.
+
+Use this parameter for websites where Alibaba returns a separate `/punish` URL for verification. Pass the full URL, including its query parameters. <br />
+
+Example: `https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=`
+
+*For instructions on obtaining the URL, see **How to find all required parameters for task creation** → **[punishUrl](#punishurl)**.*
 
 ---
 
@@ -123,12 +136,11 @@ Example: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?
 
 Returns cookies together with the CAPTCHA solution.
 
-Use the value `true` only for websites that use **Alibaba WAF** or **Amazon WAF** and require cookies after the verification has been successfully completed.
+Use `true` only for websites that use **Alibaba WAF** or **Amazon WAF** and require cookies after successful verification.
 
 By default, this parameter is not used.
 
 ---
-
 
 </div>
 
@@ -232,13 +244,13 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
     "userAgent": "userAgentPlaceholder",
     "metadata": {
       "sceneId": "your-scene-id",
-      "prefix": "your-prefix",
-      "proxyType": "your-proxy-type",
-      "proxyAddress": "your-proxy-address",
-      "proxyPort": 1234,
-      "proxyLogin": "your-proxy-login",
-      "proxyPassword": "your-proxy-password"
-    }
+      "prefix": "your-prefix"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
@@ -253,6 +265,8 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
     </MethodDescription>
   </TabItem>
 </Tabs>
+
+---
 
 ### Option with extended parameters (`userId`, `userUserId`, `verifyType`, etc.):
 
@@ -335,21 +349,110 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
   }
 }
 ```
-  **Response example**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533077
-  }
-  ```
-</MethodDescription>
 
+      **Response example**
+      ```json
+      {
+        "errorId": 0,
+        "taskId": 407533077
+      }
+      ```
+    </MethodDescription>
   </TabItem>
 </Tabs>
 
+### Option with `punishUrl`
+
+On some websites protected by Alibaba, verification is triggered through a separate `/punish` URL. In this case, pass the obtained URL in the `punishUrl` parameter (inside `metadata`).
+
+Alibaba Punish may use verification methods such as selecting matching images or a slider.
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="punish-proxyless" label="CustomTask (without proxy)" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+      **Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://www.example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    }
+  }
+}
+```
+
+      **Response example**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+
+  <TabItem value="punish-proxy" label="CustomTask (with proxy)" className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+      **Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://www.example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+      **Response example**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+</Tabs>
+
+---
+
 ### Option with cookie return (`cookieRequired`)
 
-For some websites that use **Alibaba WAF** or **Amazon WAF**, cookies must be obtained after the CAPTCHA has been successfully solved. These cookies are then used in subsequent requests.
+For some websites using **Alibaba WAF** or **Amazon WAF**, cookies must be obtained after the CAPTCHA is successfully solved. These cookies are then used in subsequent requests.
 
 To enable this, add the following parameter to the `metadata` object:
 
@@ -368,7 +471,7 @@ To enable this, add the following parameter to the `metadata` object:
     </MethodItem>
     <MethodDescription>
 
-**Request example**
+  **Request example**
 
 ```json
 {
@@ -393,7 +496,7 @@ To enable this, add the following parameter to the `metadata` object:
 }
 ```
 
-**Response example**
+  **Response example**
 
 ```json
 {
@@ -401,7 +504,6 @@ To enable this, add the following parameter to the `metadata` object:
   "taskId": 407533077
 }
 ```
-
 </MethodDescription>
 
   </TabItem>
@@ -414,7 +516,7 @@ To enable this, add the following parameter to the `metadata` object:
     </MethodItem>
     <MethodDescription>
 
-**Request example**
+  **Request example**
 
 ```json
 {
@@ -443,8 +545,7 @@ To enable this, add the following parameter to the `metadata` object:
   }
 }
 ```
-
-**Response example**
+  **Response example**
 
 ```json
 {
@@ -452,35 +553,34 @@ To enable this, add the following parameter to the `metadata` object:
   "taskId": 407533077
 }
 ```
-
 </MethodDescription>
 
   </TabItem>
 </Tabs>
 
-
 ## Get task result method
 
-Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the Alibaba Captcha solution.
+Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the Alibaba CAPTCHA solution.
 
-If `"cookieRequired": true` was specified in the request, the response additionally contains cookies grouped by domain.
-Use the cookies from the `Domains` object in subsequent requests to the corresponding domain together with the CAPTCHA solution.
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
 
 
-<div className="method-panel-full">
-  <MethodItem>
-    ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
-  <MethodDescription>
+<MethodDescription>
 
-  **Request example**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "taskId": 407533077
-  }
+**Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533077
+}
 ```
 
 **Response example**
@@ -499,8 +599,37 @@ Use the cookies from the `Domains` object in subsequent requests to the correspo
 }
 ```
 
-  </MethodDescription>
-</div>
+</MethodDescription>
+
+If `"cookieRequired": true` was specified in the request, the response additionally contains cookies grouped by domain. This also applies to tasks with `punishUrl`. Use cookies from the `solution.domains` object in subsequent requests to the corresponding domain together with the CAPTCHA solution.
+
+<MethodDescription>
+**Response example**
+
+```json
+{
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null,
+  "status": "ready",
+  "solution": {
+    "domains": {
+      "example.com": {
+        "cookies": {
+          "arms_uid": "23906d34-14da-4ddb-b651-b4d72d5376e1",
+          "sca": "ec12103d",
+          "atpsida": "b8cd8cc0185b...1196_1",
+          "cna": "vJsNIxNBKGMCAax0zMDiXVu1",
+          "cbc": "T2gAde24vOm4...wkkwYA=",
+          "x5sec": "7b2274223a...227d",
+          "tfstk": "gPEnRZi0vyuB...ECvCA."
+        }
+      }
+    }
+  }
+}
+```
+</MethodDescription>
 
 ## How to find all required parameters for task creation
 
@@ -510,18 +639,19 @@ Use the cookies from the `Domains` object in subsequent requests to the correspo
 
 1. Solve the CAPTCHA manually on the website.
 2. Open **DevTools** → **Network** tab.
-3. Find the request sent after successful verification (e.g., verify, check, validate).
-4. In the **Payload** or **Response**, locate the `sceneId` (`CaptchaSceneId` or `sId`) parameter.
+3. Find the request sent after successful verification (for example: verify, check, validate).
+4. In **Payload** or **Response**, locate the `sceneId` (`CaptchaSceneId` or `sId`) parameter.
 
 ![](./images/alibaba-task/sceneId.png)
 
 This parameter can also be found using search across network requests:
 
 1. Open the page with the CAPTCHA, then go to **DevTools** → **Network** tab.
-3. Use search (Ctrl + F) with the keyword `sceneId` or `CaptchaSceneId`.
+3. Search (Ctrl + F) for `sceneId` or `CaptchaSceneId`.
 
 ![](./images/alibaba-task/sceneId1.png)
 
+---
 
 ### `prefix`
 
@@ -530,7 +660,795 @@ This parameter can also be found using search across network requests:
 1. Open the page with the CAPTCHA.
 2. Find the request related to loading the task (usually via **DevTools** → **Network**).
 
-![](./images/alibaba-task/prefix.png) <br /> 
+![](./images/alibaba-task/prefix.png)<br /> 
+
+---
+
+### `punishUrl`
+
+`punishUrl` is the Alibaba verification URL returned when protection is triggered on the target website.
+
+You can usually obtain this URL from a network request whose response contains the following error:
+
+```text
+FAIL_SYS_USER_VALIDATE
+```
+
+#### Obtaining it through DevTools
+
+1. Open the target page and perform the action that triggers Alibaba verification.
+2. Open **DevTools** → **Network**.
+3. Find the request sent when the protection is triggered. You can use the response containing the `FAIL_SYS_USER_VALIDATE` error as a reference.
+4. Open the request and go to the **Preview** tab. In the response, find the `data` field — it contains the verification URL to use as `punishUrl`.
+
+![](./images/alibaba-task/punish-url-preview.png)<br />
+
+5. You can also find the target URL in the **Response** tab.
+
+![](./images/alibaba-task/punish-url-response.png)<br />
+
+6. Copy the full URL and pass it in the `punishUrl` parameter (inside `metadata`) when creating the task.
+
+The resulting URL must contain the port (for example, `443`), the `_____tmd_____/punish` path, and the `x5secdata`, `x5step`, `action`, and `pureCaptcha` parameters. 
+
+URL format:
+
+```text
+https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=
+```
+<br />
+
+#### Automatic retrieval of `punishUrl`
+
+You can also obtain `punishUrl` programmatically in one of the following ways:
+
+* via HTTP requests — if the API URL, method, headers, and other request parameters are known;
+* via Playwright — if you need to track the request directly in the browser.
+
+In some cases, an intermediate URL containing `x5secdata` and `x5step` is returned first, and after it is processed, the final `punishUrl` with the `action` and `pureCaptcha` parameters is returned.
+
+For HTTP requests, use the parameters of the actual request made by the target website. In the browser scenario, specify the required page and perform the action that triggers Alibaba Punish.
+
+:::warning Important
+The examples demonstrate the general approach to obtaining `punishUrl`. Replace URLs, headers, and other values with the current data from the target website.
+:::
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript (Node.js)" default className="method-panel">
+<details>
+      <summary>Show code (via HTTP requests)</summary>
+
+```js
+const USER_AGENT =
+  "userAgentPlaceholder";
+
+const TIMEOUT = 30000;
+
+/* ================= REQUEST SETTINGS ================= */
+// All values below are provided as examples
+// Specify the parameters of the actual request made by the target website
+// Add additional headers such as origin, referer, and accept-language if needed
+
+const REQUEST_CONFIG = {
+  pageUrl: "https://example.com/login",
+
+  url: "https://api.example.com/login?fromSite=example&appName=example-app",
+
+  method: "POST",
+
+  // Request query parameters, for example: login, email,
+  // phone number, or other values
+  params: {
+    value: "example"
+  },
+
+  headers: {
+    accept: "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "user-agent": USER_AGENT,
+    origin: "https://example.com",
+    referer: "https://example.com/login",
+  },
+};
+
+/* ================= GENERAL LOGIC ================= */
+
+function isPunishUrl(url) {
+  return typeof url === "string" && url.includes("_____tmd_____/punish");
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    ["x5secdata", "x5step", "action", "pureCaptcha"].every((name) =>
+      hasParam(url, name),
+    )
+  );
+}
+
+function cookiesToHeader(cookies = {}) {
+  return Object.entries(cookies)
+    .map(([name, value]) => `${name}=${value}`)
+    .join("; ");
+}
+
+function extractFromHtml(html, baseUrl) {
+  const match = html.match(
+    /(?:["']url["']\s*:\s*["']([^"']+)["'])|(https?:\/\/[^\s"'<>]+\/_____tmd_____\/punish\?[^\s"'<>]+)/i,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const value = (match[1] || match[2])
+    .replace(/\\\//g, "/")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x3D;|&#61;/gi, "=");
+
+  try {
+    const url = new URL(value, baseUrl).href;
+    return isPunishUrl(url) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+async function extractPunishUrl(response) {
+  const text = await response.text();
+
+  try {
+    const url = JSON.parse(text)?.data?.url;
+
+    if (isPunishUrl(url)) {
+      return url;
+    }
+  } catch {}
+
+  return extractFromHtml(text, response.url);
+}
+
+async function sendRequest(config) {
+  const url = new URL(config.url);
+
+  for (const [name, value] of Object.entries(config.params || {})) {
+    if (value != null) {
+      url.searchParams.set(name, value);
+    }
+  }
+
+  const headers = {
+    ...(config.headers || {}),
+  };
+
+  const cookie = cookiesToHeader(config.cookies);
+
+  if (cookie) {
+    headers.cookie = cookie;
+  }
+
+  const method = (config.method || "GET").toUpperCase();
+
+  const options = {
+    method,
+    headers,
+    signal: AbortSignal.timeout(TIMEOUT),
+  };
+
+  if (method !== "GET" && method !== "HEAD") {
+    if (config.json != null) {
+      options.body = JSON.stringify(config.json);
+    } else if (config.data != null) {
+      options.body = config.data;
+    }
+  }
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+
+  return response;
+}
+
+async function resolvePunishUrl(response, config, maxSteps = 3) {
+  const visited = new Set();
+
+  for (let step = 0; step < maxSteps; step++) {
+    const punishUrl = await extractPunishUrl(response);
+
+    if (!punishUrl) {
+      throw new Error("punishUrl was not found in the response");
+    }
+
+    if (visited.has(punishUrl)) {
+      throw new Error("A repeated punishUrl was detected");
+    }
+
+    visited.add(punishUrl);
+
+    if (isFinalPunishUrl(punishUrl)) {
+      return punishUrl;
+    }
+
+    const headers = {
+      accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "user-agent": USER_AGENT,
+      referer: config.pageUrl,
+    };
+
+    const cookie = cookiesToHeader(config.cookies);
+
+    if (cookie) {
+      headers.cookie = cookie;
+    }
+
+    response = await fetch(punishUrl, {
+      headers,
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    }
+  }
+
+  throw new Error("Failed to obtain the final punishUrl");
+}
+
+async function main() {
+  try {
+    const response = await sendRequest(REQUEST_CONFIG);
+
+    const punishUrl = await resolvePunishUrl(response, REQUEST_CONFIG);
+
+    console.log("Final punishUrl:");
+    console.log(punishUrl);
+  } catch (error) {
+    console.error("Failed to obtain punishUrl:");
+    console.error(error.message);
+  }
+}
+
+main();
+```
+</details>
+
+<details>
+      <summary>Show code (via Playwright)</summary>
+```js
+const { chromium } = require("playwright");
+
+// Page where Alibaba Punish is used
+const PAGE_URL = "https://example.com/";
+
+const TIMEOUT = 180000;
+
+function isPunishUrl(url) {
+  return (
+    typeof url === "string" &&
+    url.includes("_____tmd_____/punish")
+  );
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    hasParam(url, "x5secdata") &&
+    hasParam(url, "x5step") &&
+    hasParam(url, "action") &&
+    hasParam(url, "pureCaptcha")
+  );
+}
+
+function addHttpsPort(url) {
+  if (
+    typeof url !== "string" ||
+    !url.startsWith("https://")
+  ) {
+    return url;
+  }
+
+  if (/^https:\/\/[^/]+:\d+(?:\/|$)/i.test(url)) {
+    return url;
+  }
+
+  return url.replace(
+    /^https:\/\/([^/]+)/i,
+    "https://$1:443"
+  );
+}
+
+function waitForPunishUrl(page) {
+  return new Promise((resolve, reject) => {
+    let finalPunishUrl = null;
+
+    const timer = setTimeout(() => {
+      cleanup();
+
+      reject(
+        new Error(
+          "Final punishUrl was not found"
+        )
+      );
+    }, TIMEOUT);
+
+    function cleanup() {
+      clearTimeout(timer);
+
+      page.off("request", onRequest);
+      page.off("response", onResponse);
+    }
+
+    function processUrl(url) {
+      if (
+        finalPunishUrl ||
+        !isFinalPunishUrl(url)
+      ) {
+        return;
+      }
+
+      finalPunishUrl =
+        addHttpsPort(url);
+
+      cleanup();
+      resolve(finalPunishUrl);
+    }
+
+    function onRequest(request) {
+      processUrl(
+        request.url()
+      );
+    }
+
+    function onResponse(response) {
+      processUrl(
+        response.url()
+      );
+    }
+
+    page.on("request", onRequest);
+    page.on("response", onResponse);
+  });
+}
+
+async function main() {
+  const browser = await chromium.launch({
+    headless: false,
+  });
+
+  const context =
+    await browser.newContext();
+
+  const page =
+    await context.newPage();
+
+  const punishUrlPromise =
+    waitForPunishUrl(page);
+
+  await page.goto(
+    PAGE_URL,
+    {
+      waitUntil: "domcontentloaded",
+    }
+  );
+
+  console.log(
+    "Perform the action on the page that triggers Alibaba verification"
+  );
+
+  try {
+    const punishUrl =
+      await punishUrlPromise;
+
+    console.log(
+      "Final punishUrl:"
+    );
+
+    console.log(punishUrl);
+  } catch (error) {
+    console.error(
+      "Failed to obtain punishUrl:"
+    );
+
+    console.error(
+      error.message
+    );
+  }
+
+  await browser.close();
+}
+
+main().catch(console.error);
+```
+
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Show code (via HTTP requests)</summary>
+```python
+import re
+from urllib.parse import urljoin
+
+import requests
+
+
+USER_AGENT = "userAgentPlaceholder"
+
+TIMEOUT = 30
+
+# ================= REQUEST SETTINGS =================
+# All values below are provided as examples
+# Specify the parameters of the actual request made by the target website
+# Add additional headers such as origin, referer, and accept-language if needed
+
+REQUEST_CONFIG = {
+    "page_url": "https://example.com/login",
+
+    "url": "https://api.example.com/login?fromSite=example&appName=example-app",
+
+    "method": "POST",
+
+    # Request query parameters, for example: login, email,
+    # phone number, or other values
+    "params": {
+        "value": "example",
+    },
+
+    "headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json",
+        "user-agent": USER_AGENT,
+        "origin": "https://example.com",
+        "referer": "https://example.com/login",
+    },
+}
+
+# ================= GENERAL LOGIC =================
+
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and all(
+            has_param(url, name)
+            for name in (
+                "x5secdata",
+                "x5step",
+                "action",
+                "pureCaptcha",
+            )
+        )
+    )
+
+
+def cookies_to_header(cookies=None):
+    return "; ".join(
+        f"{name}={value}"
+        for name, value in (cookies or {}).items()
+    )
+
+
+def extract_from_html(html, base_url):
+    match = re.search(
+        r'''(?:["']url["']\s*:\s*["']([^"']+)["'])'''
+        r'''|(https?://[^\s"'<>]+/_____tmd_____/punish\?[^\s"'<>]+)''',
+        html,
+        flags=re.IGNORECASE,
+    )
+
+    if not match:
+        return None
+
+    value = (
+        (match.group(1) or match.group(2))
+        .replace("\\/", "/")
+        .replace("&amp;", "&")
+        .replace("&#x3D;", "=")
+        .replace("&#61;", "=")
+    )
+
+    url = urljoin(base_url, value)
+
+    return url if is_punish_url(url) else None
+
+
+def extract_punish_url(response):
+    text = response.text
+
+    try:
+        data = response.json()
+        url = data.get("data", {}).get("url")
+
+        if is_punish_url(url):
+            return url
+    except (ValueError, AttributeError):
+        pass
+
+    return extract_from_html(
+        text,
+        response.url,
+    )
+
+
+def send_request(config):
+    headers = dict(
+        config.get("headers", {})
+    )
+
+    cookie = cookies_to_header(
+        config.get("cookies")
+    )
+
+    if cookie:
+        headers["cookie"] = cookie
+
+    response = requests.request(
+        method=config.get("method", "GET"),
+        url=config["url"],
+        params=config.get("params"),
+        headers=headers,
+        json=config.get("json"),
+        data=config.get("data"),
+        timeout=TIMEOUT,
+    )
+
+    response.raise_for_status()
+
+    return response
+
+
+def resolve_punish_url(
+    response,
+    config,
+    max_steps=3,
+):
+    visited = set()
+
+    for _ in range(max_steps):
+        punish_url = extract_punish_url(
+            response
+        )
+
+        if not punish_url:
+            raise RuntimeError(
+                "punishUrl was not found in the response"
+            )
+
+        if punish_url in visited:
+            raise RuntimeError(
+                "A repeated punishUrl was detected"
+            )
+
+        visited.add(punish_url)
+
+        if is_final_punish_url(punish_url):
+            return punish_url
+
+        headers = {
+            "accept": (
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,*/*;q=0.8"
+            ),
+            "user-agent": USER_AGENT,
+            "referer": config["page_url"],
+        }
+
+        cookie = cookies_to_header(
+            config.get("cookies")
+        )
+
+        if cookie:
+            headers["cookie"] = cookie
+
+        response = requests.get(
+            punish_url,
+            headers=headers,
+            timeout=TIMEOUT,
+        )
+
+        response.raise_for_status()
+
+    raise RuntimeError(
+        "Failed to obtain the final punishUrl"
+    )
+
+
+def main():
+    try:
+        response = send_request(
+            REQUEST_CONFIG
+        )
+
+        punish_url = resolve_punish_url(
+            response,
+            REQUEST_CONFIG,
+        )
+
+        print("Final punishUrl:")
+        print(punish_url)
+
+    except Exception as error:
+        print("Failed to obtain punishUrl:")
+        print(error)
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+
+<details>
+      <summary>Show code (via Playwright)</summary>
+```python
+import re
+import time
+from playwright.sync_api import sync_playwright
+
+# Page where Alibaba Punish is used
+PAGE_URL = "https://example.com/"
+
+TIMEOUT = 180
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and has_param(url, "x5secdata")
+        and has_param(url, "x5step")
+        and has_param(url, "action")
+        and has_param(url, "pureCaptcha")
+    )
+
+def find_punish_url(data):
+    if isinstance(data, str):
+        return data if is_final_punish_url(data) else None
+
+    if isinstance(data, dict):
+        for value in data.values():
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    if isinstance(data, list):
+        for value in data:
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    return None
+
+def main():
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(
+            headless=False
+        )
+
+        context = browser.new_context()
+        page = context.new_page()
+
+        final_punish_url = {"value": None}
+
+        def process_url(url):
+            if (
+                not final_punish_url["value"]
+                and is_final_punish_url(url)
+            ):
+                final_punish_url["value"] = url
+
+        def process_response(response):
+            process_url(response.url)
+
+            if final_punish_url["value"]:
+                return
+
+            try:
+                url = find_punish_url(
+                    response.json()
+                )
+
+                if url:
+                    final_punish_url["value"] = url
+            except:
+                pass
+
+        context.on(
+            "request",
+            lambda request: process_url(request.url),
+        )
+
+        context.on(
+            "response",
+            process_response,
+        )
+
+        page.goto(
+            PAGE_URL,
+            wait_until="domcontentloaded",
+        )
+
+        print(
+            "Perform the action on the page "
+            "that triggers Alibaba verification"
+        )
+
+        start = time.time()
+
+        while (
+            not final_punish_url["value"]
+            and time.time() - start < TIMEOUT
+        ):
+            page.wait_for_timeout(500)
+
+        if final_punish_url["value"]:
+            print("Final punishUrl:")
+            print(final_punish_url["value"])
+        else:
+            print("Final punishUrl was not found")
+
+        browser.close()
+
+if __name__ == "__main__":
+    main()
+```
+
+</details>
+
+  </TabItem>
+
+</Tabs>
 
 
 ## Working with websites that include extended parameters

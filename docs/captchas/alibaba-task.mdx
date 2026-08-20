@@ -28,10 +28,11 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 Ниже представлены примеры типов заданий Alibaba Captcha, которые на данный момент поддерживаются сервисом CapMonster Cloud:
 
-<ImagesLayout gap="16px" columns={3}>
-  <ImageWrap title="Slider CAPTCHA">![](./images/alibaba-task/slider.png)</ImageWrap>
-  <ImageWrap title="Puzzle CAPTCHA">![](./images/alibaba-task/puzzle.png)</ImageWrap>
-  <ImageWrap title="Image restoration CAPTCHA">![](./images/alibaba-task/restoration.png)</ImageWrap>
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
+  <ImageWrap title="Puzzle">![](./images/alibaba-task/puzzle.png)</ImageWrap>
+  <ImageWrap title="Image restoration">![](./images/alibaba-task/restoration.png)</ImageWrap>
+  <ImageWrap title="Click">![](./images/alibaba-task/click.png)</ImageWrap>
 </ImagesLayout>
 
 :::warning **Внимание!**
@@ -116,6 +117,18 @@ CapMonster Cloud по умолчанию работает через встро�
 <ParamItem title="apiGetLib (внутри metadata)" type="string" />
 Ссылка на JS-библиотеку капчи, используемую сайтом. Значение формируется на стороне клиента и может генерироваться динамически при каждом рендеринге страницы. <br />
 Пример: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
+
+---
+
+<ParamItem title="punishUrl (внутри metadata)" type="string" />
+
+Полная ссылка на страницу проверки, полученная от целевого сайта.
+
+Параметр используется для сайтов, где Alibaba возвращает отдельную ссылку `/punish` для прохождения проверки. Передавайте ссылку полностью, включая параметры запроса. <br />
+
+Пример: `https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=`
+
+*Инструкции по получению ссылки см. в разделе **Как найти все нужные параметры для создания задачи** → **[punishUrl](#punishurl)**.*
 
 ---
 
@@ -243,13 +256,13 @@ https://ru.api.capmonster.cloud/createTask
     "userAgent": "userAgentPlaceholder",
     "metadata": {
       "sceneId": "your-scene-id",
-      "prefix": "your-prefix",
-      "proxyType": "your-proxy-type",
-      "proxyAddress": "your-proxy-address",
-      "proxyPort": 1234,
-      "proxyLogin": "your-proxy-login",
-      "proxyPassword": "your-proxy-password"
-    }
+      "prefix": "your-prefix"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
@@ -357,6 +370,85 @@ https://ru.api.capmonster.cloud/createTask
     </MethodDescription>
   </TabItem>
 </Tabs>
+
+### Вариант с `punishUrl`
+
+На некоторых сайтах с защитой Alibaba проверка вызывается через отдельную ссылку `/punish`. В этом случае передайте полученный URL в параметре `punishUrl` (внутри `metadata`).
+
+Внутри Alibaba Punish могут использоваться такие варианты проверок, как выбор подходящих изображений или слайдер.
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="punish-proxyless" label="CustomTask (без прокси)" default className="method-panel">
+    <MethodDescription>
+
+      **Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://www.example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    }
+  }
+}
+```
+
+      **Пример ответа**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+
+  <TabItem value="punish-proxy" label="CustomTask (с прокси)" className="method-panel">
+    <MethodDescription>
+
+      **Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://www.example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+      **Пример ответа**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+</Tabs>
+
+---
 
 ### Вариант с возвратом cookies (`cookieRequired`)
 
@@ -466,8 +558,6 @@ https://ru.api.capmonster.cloud/createTask
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Alibaba CAPTCHA.
 
-Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам. Используйте cookies из объекта `Domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
-
 <MethodItem>
 
 ```http
@@ -518,6 +608,36 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 
+Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам. Это также относится к задачам с `punishUrl`. Используйте cookies из объекта `solution.domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
+
+<MethodDescription>
+
+**Пример ответа**
+```json
+{
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null,
+  "status": "ready",
+  "solution": {
+    "domains": {
+      "example.com": {
+        "cookies": {
+          "arms_uid": "23906d34-14da-4ddb-b651-b4d72d5376e1",
+          "sca": "ec12103d",
+          "atpsida": "b8cd8cc0185b...1196_1",
+          "cna": "vJsNIxNBKGMCAax0zMDiXVu1",
+          "cbc": "T2gAde24vOm4...wkkwYA=",
+          "x5sec": "7b2274223a...227d",
+          "tfstk": "gPEnRZi0vyuB...ECvCA."
+        }
+      }
+    }
+  }
+}
+```
+</MethodDescription>
+
 
 ## Как найти все нужные параметры для создания задачи
 
@@ -539,6 +659,7 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 ![](./images/alibaba-task/sceneId1.png)
 
+---
 
 ### `prefix`
 
@@ -548,6 +669,796 @@ https://ru.api.capmonster.cloud/getTaskResult
 2. Найдите запрос, связанный с загрузкой задания (обычно через **DevTools** → **Network**).
 
 ![](./images/alibaba-task/prefix.png)<br /> 
+
+---
+
+### `punishUrl`
+
+`punishUrl` — это URL проверки Alibaba, который возвращается при срабатывании защиты на целевом сайте.
+
+Обычно такой URL можно получить из сетевого запроса, в ответе которого присутствует ошибка:
+
+```text
+FAIL_SYS_USER_VALIDATE
+```
+
+#### Получение через DevTools
+
+1. Откройте целевую страницу и выполните действие, которое вызывает проверку Alibaba.
+2. Откройте **DevTools** → **Network**.
+3. Найдите запрос, отправленный в момент срабатывания защиты. Для поиска можно ориентироваться на ответ с ошибкой `FAIL_SYS_USER_VALIDATE`.
+4. Откройте найденный запрос и перейдите на вкладку **Preview**. В ответе найдите поле `data` — оно содержит URL проверки, который необходимо использовать как `punishUrl`.
+
+![](./images/alibaba-task/punish-url-preview.png)<br />
+
+5. Также целевой URL можно найти во вкладке **Response**.
+
+![](./images/alibaba-task/punish-url-response.png)<br />
+
+6. Скопируйте URL полностью и передайте его в параметре `punishUrl` (внутри `metadata`) при создании задачи.
+
+Полученный URL должен содержать порт (например, `443`), путь `_____tmd_____/punish`, а также параметры `x5secdata`, `x5step`, `action` и `pureCaptcha`. 
+
+Формат ссылки:
+
+```text
+https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=
+```
+<br />
+
+#### Автоматическое получение `punishUrl`
+
+`punishUrl` также можно получить программно одним из следующих способов:
+
+* через HTTP-запросы — если известны URL API, метод, header и другие параметры запроса;
+* через Playwright — если необходимо отследить запрос непосредственно в браузере.
+
+В некоторых случаях сначала возвращается промежуточный URL с `x5secdata` и `x5step`, а после его обработки — итоговый `punishUrl` с параметрами `action` и `pureCaptcha`.
+
+Для HTTP-запросов используйте параметры фактического запроса целевого сайта. В браузерном сценарии укажите нужную страницу и выполните действие, вызывающее Alibaba Punish.
+
+:::warning Важно
+Примеры показывают общий принцип получения `punishUrl`. Замените URL, headers и другие значения на актуальные данные целевого сайта.
+:::
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript (Node.js)" default className="method-panel">
+<details>
+      <summary>Показать код (через HTTP-запросы)</summary>
+
+```js
+const USER_AGENT =
+  "userAgentPlaceholder";
+
+const TIMEOUT = 30000;
+
+/* ================= НАСТРОЙКИ ЗАПРОСА ================= */
+// Все значения ниже приведены как пример
+// Укажите параметры фактического запроса целевого сайта
+// При необходимости добавьте дополнительные headers, например origin, referer и accept-language
+
+const REQUEST_CONFIG = {
+  pageUrl: "https://example.com/login",
+
+  url: "https://api.example.com/login?fromSite=example&appName=example-app",
+
+  method: "POST",
+
+  // Query-параметры запроса, например: логин, email,
+  // номер телефона или другие значения
+  params: {
+    value: "example"
+  },
+
+  headers: {
+    accept: "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "user-agent": USER_AGENT,
+    origin: "https://example.com",
+    referer: "https://example.com/login",
+  },
+};
+
+/* ================= ОБЩАЯ ЛОГИКА ================= */
+
+function isPunishUrl(url) {
+  return typeof url === "string" && url.includes("_____tmd_____/punish");
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    ["x5secdata", "x5step", "action", "pureCaptcha"].every((name) =>
+      hasParam(url, name),
+    )
+  );
+}
+
+function cookiesToHeader(cookies = {}) {
+  return Object.entries(cookies)
+    .map(([name, value]) => `${name}=${value}`)
+    .join("; ");
+}
+
+function extractFromHtml(html, baseUrl) {
+  const match = html.match(
+    /(?:["']url["']\s*:\s*["']([^"']+)["'])|(https?:\/\/[^\s"'<>]+\/_____tmd_____\/punish\?[^\s"'<>]+)/i,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const value = (match[1] || match[2])
+    .replace(/\\\//g, "/")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x3D;|&#61;/gi, "=");
+
+  try {
+    const url = new URL(value, baseUrl).href;
+    return isPunishUrl(url) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+async function extractPunishUrl(response) {
+  const text = await response.text();
+
+  try {
+    const url = JSON.parse(text)?.data?.url;
+
+    if (isPunishUrl(url)) {
+      return url;
+    }
+  } catch {}
+
+  return extractFromHtml(text, response.url);
+}
+
+async function sendRequest(config) {
+  const url = new URL(config.url);
+
+  for (const [name, value] of Object.entries(config.params || {})) {
+    if (value != null) {
+      url.searchParams.set(name, value);
+    }
+  }
+
+  const headers = {
+    ...(config.headers || {}),
+  };
+
+  const cookie = cookiesToHeader(config.cookies);
+
+  if (cookie) {
+    headers.cookie = cookie;
+  }
+
+  const method = (config.method || "GET").toUpperCase();
+
+  const options = {
+    method,
+    headers,
+    signal: AbortSignal.timeout(TIMEOUT),
+  };
+
+  if (method !== "GET" && method !== "HEAD") {
+    if (config.json != null) {
+      options.body = JSON.stringify(config.json);
+    } else if (config.data != null) {
+      options.body = config.data;
+    }
+  }
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+
+  return response;
+}
+
+async function resolvePunishUrl(response, config, maxSteps = 3) {
+  const visited = new Set();
+
+  for (let step = 0; step < maxSteps; step++) {
+    const punishUrl = await extractPunishUrl(response);
+
+    if (!punishUrl) {
+      throw new Error("punishUrl не найден в ответе");
+    }
+
+    if (visited.has(punishUrl)) {
+      throw new Error("Обнаружен повторяющийся punishUrl");
+    }
+
+    visited.add(punishUrl);
+
+    if (isFinalPunishUrl(punishUrl)) {
+      return punishUrl;
+    }
+
+    const headers = {
+      accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "user-agent": USER_AGENT,
+      referer: config.pageUrl,
+    };
+
+    const cookie = cookiesToHeader(config.cookies);
+
+    if (cookie) {
+      headers.cookie = cookie;
+    }
+
+    response = await fetch(punishUrl, {
+      headers,
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    }
+  }
+
+  throw new Error("Не удалось получить итоговый punishUrl");
+}
+
+async function main() {
+  try {
+    const response = await sendRequest(REQUEST_CONFIG);
+
+    const punishUrl = await resolvePunishUrl(response, REQUEST_CONFIG);
+
+    console.log("Итоговый punishUrl:");
+    console.log(punishUrl);
+  } catch (error) {
+    console.error("Не удалось получить punishUrl:");
+    console.error(error.message);
+  }
+}
+
+main();
+```
+</details>
+
+<details>
+      <summary>Показать код (через Playwright)</summary>
+```js
+const { chromium } = require("playwright");
+
+// Страница, на которой используется Alibaba Punish
+const PAGE_URL = "https://example.com/";
+
+const TIMEOUT = 180000;
+
+function isPunishUrl(url) {
+  return (
+    typeof url === "string" &&
+    url.includes("_____tmd_____/punish")
+  );
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    hasParam(url, "x5secdata") &&
+    hasParam(url, "x5step") &&
+    hasParam(url, "action") &&
+    hasParam(url, "pureCaptcha")
+  );
+}
+
+function addHttpsPort(url) {
+  if (
+    typeof url !== "string" ||
+    !url.startsWith("https://")
+  ) {
+    return url;
+  }
+
+  if (/^https:\/\/[^/]+:\d+(?:\/|$)/i.test(url)) {
+    return url;
+  }
+
+  return url.replace(
+    /^https:\/\/([^/]+)/i,
+    "https://$1:443"
+  );
+}
+
+function waitForPunishUrl(page) {
+  return new Promise((resolve, reject) => {
+    let finalPunishUrl = null;
+
+    const timer = setTimeout(() => {
+      cleanup();
+
+      reject(
+        new Error(
+          "Итоговый punishUrl не найден"
+        )
+      );
+    }, TIMEOUT);
+
+    function cleanup() {
+      clearTimeout(timer);
+
+      page.off("request", onRequest);
+      page.off("response", onResponse);
+    }
+
+    function processUrl(url) {
+      if (
+        finalPunishUrl ||
+        !isFinalPunishUrl(url)
+      ) {
+        return;
+      }
+
+      finalPunishUrl =
+        addHttpsPort(url);
+
+      cleanup();
+      resolve(finalPunishUrl);
+    }
+
+    function onRequest(request) {
+      processUrl(
+        request.url()
+      );
+    }
+
+    function onResponse(response) {
+      processUrl(
+        response.url()
+      );
+    }
+
+    page.on("request", onRequest);
+    page.on("response", onResponse);
+  });
+}
+
+async function main() {
+  const browser = await chromium.launch({
+    headless: false,
+  });
+
+  const context =
+    await browser.newContext();
+
+  const page =
+    await context.newPage();
+
+  const punishUrlPromise =
+    waitForPunishUrl(page);
+
+  await page.goto(
+    PAGE_URL,
+    {
+      waitUntil: "domcontentloaded",
+    }
+  );
+
+  console.log(
+    "Выполните действие на странице, которое вызывает проверку Alibaba"
+  );
+
+  try {
+    const punishUrl =
+      await punishUrlPromise;
+
+    console.log(
+      "Итоговый punishUrl:"
+    );
+
+    console.log(punishUrl);
+  } catch (error) {
+    console.error(
+      "Не удалось получить punishUrl:"
+    );
+
+    console.error(
+      error.message
+    );
+  }
+
+  await browser.close();
+}
+
+main().catch(console.error);
+```
+
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Показать код (через HTTP-запросы)</summary>
+```python
+import re
+from urllib.parse import urljoin
+
+import requests
+
+
+USER_AGENT = "userAgentPlaceholder"
+
+TIMEOUT = 30
+
+# ================= НАСТРОЙКИ ЗАПРОСА =================
+# Все значения ниже приведены как пример
+# Укажите параметры фактического запроса целевого сайта
+# При необходимости добавьте дополнительные headers, например origin, referer и accept-language
+
+REQUEST_CONFIG = {
+    "page_url": "https://example.com/login",
+
+    "url": "https://api.example.com/login?fromSite=example&appName=example-app",
+
+    "method": "POST",
+
+    # Query-параметры запроса, например: логин, email,
+    # номер телефона или другие значения
+    "params": {
+        "value": "example",
+    },
+
+    "headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json",
+        "user-agent": USER_AGENT,
+        "origin": "https://example.com",
+        "referer": "https://example.com/login",
+    },
+}
+
+# ================= ОБЩАЯ ЛОГИКА =================
+
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and all(
+            has_param(url, name)
+            for name in (
+                "x5secdata",
+                "x5step",
+                "action",
+                "pureCaptcha",
+            )
+        )
+    )
+
+
+def cookies_to_header(cookies=None):
+    return "; ".join(
+        f"{name}={value}"
+        for name, value in (cookies or {}).items()
+    )
+
+
+def extract_from_html(html, base_url):
+    match = re.search(
+        r'''(?:["']url["']\s*:\s*["']([^"']+)["'])'''
+        r'''|(https?://[^\s"'<>]+/_____tmd_____/punish\?[^\s"'<>]+)''',
+        html,
+        flags=re.IGNORECASE,
+    )
+
+    if not match:
+        return None
+
+    value = (
+        (match.group(1) or match.group(2))
+        .replace("\\/", "/")
+        .replace("&amp;", "&")
+        .replace("&#x3D;", "=")
+        .replace("&#61;", "=")
+    )
+
+    url = urljoin(base_url, value)
+
+    return url if is_punish_url(url) else None
+
+
+def extract_punish_url(response):
+    text = response.text
+
+    try:
+        data = response.json()
+        url = data.get("data", {}).get("url")
+
+        if is_punish_url(url):
+            return url
+    except (ValueError, AttributeError):
+        pass
+
+    return extract_from_html(
+        text,
+        response.url,
+    )
+
+
+def send_request(config):
+    headers = dict(
+        config.get("headers", {})
+    )
+
+    cookie = cookies_to_header(
+        config.get("cookies")
+    )
+
+    if cookie:
+        headers["cookie"] = cookie
+
+    response = requests.request(
+        method=config.get("method", "GET"),
+        url=config["url"],
+        params=config.get("params"),
+        headers=headers,
+        json=config.get("json"),
+        data=config.get("data"),
+        timeout=TIMEOUT,
+    )
+
+    response.raise_for_status()
+
+    return response
+
+
+def resolve_punish_url(
+    response,
+    config,
+    max_steps=3,
+):
+    visited = set()
+
+    for _ in range(max_steps):
+        punish_url = extract_punish_url(
+            response
+        )
+
+        if not punish_url:
+            raise RuntimeError(
+                "punishUrl не найден в ответе"
+            )
+
+        if punish_url in visited:
+            raise RuntimeError(
+                "Обнаружен повторяющийся punishUrl"
+            )
+
+        visited.add(punish_url)
+
+        if is_final_punish_url(punish_url):
+            return punish_url
+
+        headers = {
+            "accept": (
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,*/*;q=0.8"
+            ),
+            "user-agent": USER_AGENT,
+            "referer": config["page_url"],
+        }
+
+        cookie = cookies_to_header(
+            config.get("cookies")
+        )
+
+        if cookie:
+            headers["cookie"] = cookie
+
+        response = requests.get(
+            punish_url,
+            headers=headers,
+            timeout=TIMEOUT,
+        )
+
+        response.raise_for_status()
+
+    raise RuntimeError(
+        "Не удалось получить итоговый punishUrl"
+    )
+
+
+def main():
+    try:
+        response = send_request(
+            REQUEST_CONFIG
+        )
+
+        punish_url = resolve_punish_url(
+            response,
+            REQUEST_CONFIG,
+        )
+
+        print("Итоговый punishUrl:")
+        print(punish_url)
+
+    except Exception as error:
+        print("Не удалось получить punishUrl:")
+        print(error)
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+
+<details>
+      <summary>Показать код (через Playwright)</summary>
+```python
+import re
+import time
+from playwright.sync_api import sync_playwright
+
+# Страница, на которой используется Alibaba Punish
+PAGE_URL = "https://example.com/"
+
+TIMEOUT = 180
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and has_param(url, "x5secdata")
+        and has_param(url, "x5step")
+        and has_param(url, "action")
+        and has_param(url, "pureCaptcha")
+    )
+
+def find_punish_url(data):
+    if isinstance(data, str):
+        return data if is_final_punish_url(data) else None
+
+    if isinstance(data, dict):
+        for value in data.values():
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    if isinstance(data, list):
+        for value in data:
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    return None
+
+def main():
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(
+            headless=False
+        )
+
+        context = browser.new_context()
+        page = context.new_page()
+
+        final_punish_url = {"value": None}
+
+        def process_url(url):
+            if (
+                not final_punish_url["value"]
+                and is_final_punish_url(url)
+            ):
+                final_punish_url["value"] = url
+
+        def process_response(response):
+            process_url(response.url)
+
+            if final_punish_url["value"]:
+                return
+
+            try:
+                url = find_punish_url(
+                    response.json()
+                )
+
+                if url:
+                    final_punish_url["value"] = url
+            except:
+                pass
+
+        context.on(
+            "request",
+            lambda request: process_url(request.url),
+        )
+
+        context.on(
+            "response",
+            process_response,
+        )
+
+        page.goto(
+            PAGE_URL,
+            wait_until="domcontentloaded",
+        )
+
+        print(
+            "Выполните действие на странице, "
+            "которое вызывает проверку Alibaba"
+        )
+
+        start = time.time()
+
+        while (
+            not final_punish_url["value"]
+            and time.time() - start < TIMEOUT
+        ):
+            page.wait_for_timeout(500)
+
+        if final_punish_url["value"]:
+            print("Итоговый punishUrl:")
+            print(final_punish_url["value"])
+        else:
+            print("Итоговый punishUrl не найден")
+
+        browser.close()
+
+if __name__ == "__main__":
+    main()
+```
+
+</details>
+
+  </TabItem>
+
+</Tabs>
+
+---
 
 ## Работа с сайтами, содержащими расширенные параметры
 
