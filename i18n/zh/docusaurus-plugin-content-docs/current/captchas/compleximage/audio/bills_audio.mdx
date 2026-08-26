@@ -170,4 +170,191 @@ console.log("文件已成功转换为 Base64，并保存为 output.txt");
 
 6. 将生成的 Base64 字符串用于 CapMonster Cloud 的任务请求中。
 
+## 使用 SDK 库
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // ComplexImageTaskRecognitionRequest 不需要代理
+  const billsAudioRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_audio_base64"],
+    metaData: {
+      Task: "bills_audio",
+      PayloadType: "Audio",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(billsAudioRequest);
+  console.log("Solution:", result.solution);
+});
+```
+  </details>
+
+    <details>
+      <summary>显示代码（Node.js）</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+async function solveBillsAudio() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+  // ComplexImageTaskRecognitionRequest 不需要代理
+  const billsAudioRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_audio_base64"],
+    metaData: {
+      Task: "bills_audio",
+      PayloadType: "Audio",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(billsAudioRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveBillsAudio().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # 指定您的 CapMonster Cloud API 密钥
+
+
+async def solve_bills_audio():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # RecognitionComplexImageTaskRequest 不需要代理
+    bills_audio_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "your_audio_base64"
+        ],
+        metadata={
+            "Task": "bills_audio",
+            "PayloadType": "Audio",
+        },
+    )
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(bills_audio_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_bills_audio())
+```
+    </details>
+
+  {/* </TabItem> */}
+
+  {/* <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver 
+
+using System; 
+using System.Threading.Tasks; 
+using Newtonsoft.Json; 
+using Zennolab.CapMonsterCloud; 
+using Zennolab.CapMonsterCloud.Requests; 
+
+class Program 
+{ 
+    static async Task Main(string[] args) 
+    { 
+        const string API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥 
+
+        var clientOptions = new ClientOptions 
+        { 
+            ClientKey = API_KEY 
+        }; 
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions); 
+
+        // RecognitionComplexImageTaskRequest 不需要代理 
+        var billsAudioRequest = new RecognitionComplexImageTaskRequest 
+        { 
+            ImagesBase64 = new[] 
+            { 
+                "your_audio_base64" 
+            }, 
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata 
+            { 
+                Task = "bills_audio", 
+                PayloadType = "Audio" 
+            } 
+        }; 
+
+        // 如有需要，可以检查余额 
+        var balance = await cmCloudClient.GetBalanceAsync(); 
+        Console.WriteLine("Balance: " + balance); 
+
+        var result = await cmCloudClient.SolveAsync(billsAudioRequest); 
+
+        Console.WriteLine("Solution:"); 
+        Console.WriteLine( 
+            JsonConvert.SerializeObject( 
+                result.Solution, 
+                Formatting.Indented 
+            ) 
+        ); 
+    } 
+} 
+```  
+</details> */} 
+  </TabItem> 
+
+</Tabs>
 

@@ -605,3 +605,192 @@ if __name__ == "__main__":
 </details>
   </TabItem>
     </Tabs>
+
+## Use the SDK library
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Show code (for browser)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Proxies are not required for ComplexImageTaskRecognitionRequest
+  const portugalTextFindIconRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_image_base64"],
+    metaData: {
+      Task: "portugal_text_find_icon",
+      TaskArgument: "Encontre o(a) avi\u00E3o.",
+    },
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(portugalTextFindIconRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>Show code (Node.js)</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+async function solvePortugalTextFindIcon() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Proxies are not required for ComplexImageTaskRecognitionRequest
+  const portugalTextFindIconRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_image_base64"],
+    metaData: {
+      Task: "portugal_text_find_icon",
+      TaskArgument: "Encontre o(a) avi\u00E3o.",
+    },
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(portugalTextFindIconRequest);
+  console.log("Solution:", result.solution);
+}
+
+solvePortugalTextFindIcon().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Show code</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # Specify your CapMonster Cloud API key
+
+
+async def solve_portugal_text_find_icon():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Proxies are not required for RecognitionComplexImageTaskRequest
+    portugal_text_find_icon_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "your_image_base64",
+        ],
+        metadata={
+            "Task": "portugal_text_find_icon",
+            "TaskArgument": "Encontre o(a) avi\\u00E3o.",
+        },
+    )
+
+    # You can check your balance if necessary
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(portugal_text_find_icon_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_portugal_text_find_icon())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Show code</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Proxies are not required for RecognitionComplexImageTaskRequest
+        var portugalTextFindIconRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "your_image_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "portugal_text_find_icon",
+                TaskArgument = "Encontre o(a) avi\u00E3o."
+            }
+        };
+
+        // You can check your balance if necessary
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(portugalTextFindIconRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>
