@@ -740,3 +740,269 @@ class Program
 </details>
   </TabItem>
 </Tabs>
+
+## 使用 SDK 库
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FunCaptchaRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let funCaptchaRequest = new FunCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-funcaptcha",
+    websitePublicKey: "your-website-public-key",
+    funcaptchaApiJSSubdomain: "your-funcaptcha-api-subdomain",
+    data: '{"blob":"your-blob-value"}',
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  funCaptchaRequest = new FunCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-funcaptcha",
+    websitePublicKey: "your-website-public-key",
+    funcaptchaApiJSSubdomain: "your-funcaptcha-api-subdomain",
+    data: '{"blob":"your-blob-value"}',
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(funCaptchaRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>显示代码（Node.js）</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FunCaptchaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
+
+async function solveFunCaptcha() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let funCaptchaRequest = new FunCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-funcaptcha",
+    websitePublicKey: "your-website-public-key",
+    funcaptchaApiJSSubdomain: "your-funcaptcha-api-subdomain",
+    data: '{"blob":"your-blob-value"}',
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  funCaptchaRequest = new FunCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-funcaptcha",
+    websitePublicKey: "your-website-public-key",
+    funcaptchaApiJSSubdomain: "your-funcaptcha-api-subdomain",
+    data: '{"blob":"your-blob-value"}',
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(funCaptchaRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveFunCaptcha().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="Python" default className="method-panel">
+<details>
+      <summary>显示代码</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import FuncaptchaRequest
+# 如果您计划使用自己的代理，请导入 ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
+
+
+async def solve_funcaptcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # 不使用代理的基础示例
+    # CapMonster Cloud 会自动使用自己的代理
+    funcaptcha_request = FuncaptchaRequest(
+        websiteUrl="https://yourwebsite.com/page-with-funcaptcha",
+        websitePublicKey="your-website-public-key",
+        funcaptchaApiJSSubdomain="your-funcaptcha-api-subdomain",
+        data='{"blob":"your-blob-value"}',
+        userAgent="userAgentPlaceholder",
+    )
+
+    # 使用您自己的代理的示例
+    # 如果您想使用自己的代理，请取消注释此代码块
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    funcaptcha_request = FuncaptchaRequest(
+        websiteUrl="https://yourwebsite.com/page-with-funcaptcha",
+        websitePublicKey="your-website-public-key",
+        funcaptchaApiJSSubdomain="your-funcaptcha-api-subdomain",
+        data='{"blob":"your-blob-value"}',
+        userAgent="userAgentPlaceholder",
+        proxy=proxy,
+    )
+    """
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(funcaptcha_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_funcaptcha())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp1" label="C#" className="method-panel">
+
+<details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // 请指定您的 CapMonster Cloud API 密钥
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // 不使用代理的基础示例
+        // CapMonster Cloud 会自动使用自己的代理
+        var funcaptchaRequest = new FunCaptchaRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-funcaptcha",
+            WebsiteKey = "your-website-public-key",
+            Subdomain = "your-funcaptcha-api-subdomain",
+            Data = "{\"blob\":\"your-blob-value\"}",
+            UserAgent = "userAgentPlaceholder"
+        };
+
+        // 使用您自己的代理的示例
+        // 如果您想使用自己的代理，请取消注释此代码块
+        /*
+        funcaptchaRequest = new FunCaptchaRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-funcaptcha",
+            WebsiteKey = "your-website-public-key",
+            Subdomain = "your-funcaptcha-api-subdomain",
+            Data = "{\"blob\":\"your-blob-value\"}",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var funcaptchaResult =
+            await cmCloudClient.SolveAsync(funcaptchaRequest);
+
+        Console.WriteLine("Solution: " + funcaptchaResult.Solution.Value);
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

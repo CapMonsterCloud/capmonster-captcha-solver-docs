@@ -342,140 +342,225 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
 <details>
-      <summary>Mostrar Código (para navegador)</summary>
-  ```js
-  // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+      <summary>Mostrar código (para navegador)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImpervaRequest } from '@zennolab_com/capmonstercloud-client';
-
-const API_KEY = "YOUR_API_KEY"; // Insira sua chave de API do CapMonster Cloud
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImpervaRequest
+} from "@zennolab_com/capmonstercloud-client";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    // Configuração da tarefa Imperva (Incapsula)
-    const impervaRequest = new ImpervaRequest({
-        websiteURL: "https://example.com/", // URL da sua página protegida pelo Imperva
-        // Substitua pelos seus próprios valores
-        metadata: {
-            incapsulaScriptUrl: "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-            incapsulaCookies: "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;"
-        },
-        proxy
-    });
+  // O Imperva (Incapsula) só pode ser resolvido usando seu próprio proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    const result = await cmcClient.Solve(impervaRequest);
-    console.log("Solution:", result.solution);
+  const impervaRequest = new ImpervaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-imperva",
+    metadata: {
+      incapsulaScriptUrl:
+        "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+      incapsulaCookies:
+        "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; " +
+        "visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+    },
+    proxy,
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(impervaRequest);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
 <details>
-      <summary>Mostrar Código (Node.js)</summary>
-```javascript
+      <summary>Mostrar código (Node.js)</summary>
+```JavaScript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImpervaRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImpervaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-async function main() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // Insira sua chave de API do CapMonster Cloud
-    );
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await cmcClient.getBalance();
-    console.log('Balance:', balance);
+async function solveImperva() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: '123.45.67.89',
-        proxyPort: 8080,
-        proxyLogin: 'username',
-        proxyPassword: 'password'
-    };
+  // O Imperva (Incapsula) só pode ser resolvido usando seu próprio proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    // Configuração da tarefa Imperva (Incapsula)
-    const impervaRequest = new ImpervaRequest({
-        websiteURL: 'https://example.com/', // URL da sua página protegida pelo Imperva
-        // Substitua pelos seus próprios valores
-        metadata: {
-            incapsulaScriptUrl: '_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3',
-            incapsulaCookies: 'incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;',
-        },
-        proxy,
-    });
+  const impervaRequest = new ImpervaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-imperva",
+    metadata: {
+      incapsulaScriptUrl:
+        "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+      incapsulaCookies:
+        "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; " +
+        "visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+    },
+    proxy,
+  });
 
-    const result = await cmcClient.Solve(impervaRequest);
-    console.log('Solution:', result.solution);
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(impervaRequest);
+  console.log("Solution:", result.solution);
 }
 
-main().catch(console.error);
+solveImperva().catch(console.error);
 ```
 </details>
+
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
 <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import ImpervaCustomTaskRequest
-from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # Insira sua chave de API do CapMonster Cloud
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
 
-async def solve_imperva_captcha():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
 
-    # Configuração do seu próprio proxy
+async def main():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # O Imperva (Incapsula) só pode ser resolvido usando seu próprio proxy
     proxy = ProxyInfo(
         proxyType="http",
         proxyAddress="123.45.67.89",
         proxyPort=8080,
         proxyLogin="username",
-        proxyPassword="password"
+        proxyPassword="password",
     )
 
-    # Configuração da tarefa Imperva (Incapsula)
     imperva_request = ImpervaCustomTaskRequest(
-        websiteUrl="https://example.com",
-        # Substitua pelos seus próprios valores
+        websiteUrl="https://yourwebsite.com/page-with-imperva",
         metadata={
-            "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-            "incapsulaCookie": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",
-            "reese84UrlEndpoint": "Built-with-the-For-hopence-Hurleysurfecting-the-"
+            "incapsulaScriptUrl": (
+                "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef"
+            ),
+            "incapsulaCookies": (
+                "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; "
+                "visid_incap_5678901=testVisitorValue1234567890abcdef==;"
+            ),
         },
-        proxy=proxy
+        proxy=proxy,
     )
 
     # Se necessário, você pode verificar o saldo
-    balance = await cap_monster_client.get_balance()
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(imperva_request)
+    result = await client.solve_captcha(imperva_request)
     print("Solution:", result)
 
-asyncio.run(solve_imperva_captcha())
+
+asyncio.run(main())
+```
+</details>
+  </TabItem>
+
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // O Imperva (Incapsula) só pode ser resolvido usando seu próprio proxy
+        var impervaRequest = new ImpervaCustomTaskRequest(
+            "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+            "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; " +
+            "visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+            "Built-with-the-Example-Test-Value-"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-imperva",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var impervaResult =
+            await cmCloudClient.SolveAsync(impervaRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                impervaResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
 ```
 </details>
   </TabItem>

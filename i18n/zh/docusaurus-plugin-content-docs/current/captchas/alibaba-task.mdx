@@ -2085,3 +2085,281 @@ if __name__ == "__main__":
 </details>
   </TabItem>
   </Tabs>
+
+## 使用 SDK 库
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js1" label="JavaScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
+  ```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AlibabaRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // 请填写您的 CapMonster Cloud API 密钥
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // 不使用代理的基本示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+  });
+
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消此代码块的注释
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+    proxy,
+  });
+  */
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(alibabaRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>显示代码（Node.js）</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AlibabaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // 请填写您的 CapMonster Cloud API 密钥
+
+async function solveAlibaba() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // 不使用代理的基本示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+  });
+
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消此代码块的注释
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+    proxy,
+  });
+  */
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(alibabaRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveAlibaba().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="Python" default className="method-panel">
+<details>
+      <summary>显示代码</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import AlibabaCustomTaskRequest
+# 如果您计划使用自己的代理，请导入 ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # 请填写您的 CapMonster Cloud API 密钥
+
+
+async def solve_alibaba():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # 不使用代理的基本示例
+    # CapMonster Cloud 会自动使用自己的代理
+    alibaba_request = AlibabaCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-alibaba",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "sceneId": "your-scene-id",
+            "prefix": "your-prefix",
+        },
+    )
+
+    # 使用您自己的代理的示例
+    # 如果您想使用自己的代理，请取消此代码块的注释
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    alibaba_request = AlibabaCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-alibaba",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "sceneId": "your-scene-id",
+            "prefix": "your-prefix",
+        },
+        proxy=proxy,
+    )
+    """
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(alibaba_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_alibaba())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp1" label="C#" className="method-panel">
+
+<details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // 请填写您的 CapMonster Cloud API 密钥
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // 不使用代理的基本示例
+        // CapMonster Cloud 会自动使用自己的代理
+        var alibabaRequest = new AlibabaCustomTaskRequest(
+            "your-scene-id",
+            "your-prefix"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-alibaba",
+            UserAgent = "userAgentPlaceholder"
+        };
+
+        // 使用您自己的代理的示例
+        // 如果您想使用自己的代理，请取消此代码块的注释
+        /*
+        alibabaRequest = new AlibabaCustomTaskRequest(
+            "your-scene-id",
+            "your-prefix"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-alibaba",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var alibabaResult = await cmCloudClient.SolveAsync(alibabaRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                alibabaResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

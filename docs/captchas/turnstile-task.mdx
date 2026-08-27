@@ -504,61 +504,60 @@ https://ru.api.capmonster.cloud/getTaskResult
 ## Используйте библиотеку SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
 
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { 
-    CapMonsterCloudClientFactory, 
-    ClientOptions, 
-    TurnstileRequest 
-} from '@zennolab_com/capmonstercloud-client';
-
-const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TurnstileRequest
+} from "@zennolab_com/capmonstercloud-client";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
 
-    // Базовый пример без прокси
-    // CapMonster Cloud автоматически использует свои прокси
-    let turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://yourwebsite.com/page-with-turnstile", // URL страницы с капчей
-        websiteKey: "your-website-key"        // Замените на корректное значение
-    });
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-    // Пример использования вашего собственного прокси
-    // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    /*
-    const proxy = {
-        proxyType: "https",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-turnstile",
+    websiteKey: "your-website-key",
+  });
 
-    turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://yourwebsite.com/page-with-turnstile",
-        websiteKey: "your-website-key",
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "https",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    // При необходимости можно проверить баланс 
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-turnstile",
+    websiteKey: "your-website-key",
+    proxy,
+  });
+  */
 
-    const result = await client.Solve(turnstileRequest);
-    console.log("Solution:", result);
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(turnstileRequest);
+  console.log("Solution:", result.solution);
 });
-````
+```
 
 </details>
 
@@ -568,52 +567,54 @@ document.addEventListener("DOMContentLoaded", async () => {
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, TurnstileRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TurnstileRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
 const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
 async function solveTurnstile() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Базовый пример без прокси
-    // CapMonster Cloud автоматически использует свои прокси
-    let turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://yourwebsite.com/page-with-turnstile", // URL страницы с капчей
-        websiteKey: "your-website-key"        // Замените на корректное значение
-    });
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-turnstile",
+    websiteKey: "your-website-key",
+  });
 
-    // Пример использования вашего собственного прокси
-    // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "https",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    /*
-    const proxy = {
-        proxyType: "https",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-turnstile",
+    websiteKey: "your-website-key",
+    proxy,
+  });
+  */
 
-    turnstileRequest = new TurnstileRequest({
-        websiteURL: "https://yourwebsite.com/page-with-turnstile",
-        websiteKey: "your-website-key",
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    // При необходимости можно проверить баланс 
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
-
-    const result = await client.Solve(turnstileRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(turnstileRequest);
+  console.log("Solution:", result.solution);
 }
 
-solveTurnstile().catch(err => console.error("Ошибка:", err));
-````
+solveTurnstile().catch(console.error);
+```
 
 </details>
 
@@ -628,48 +629,55 @@ solveTurnstile().catch(err => console.error("Ошибка:", err));
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import TurnstileRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Раскомментируйте, если планируете использовать прокси
+# Импортируйте ProxyInfo, если планируете использовать собственный прокси
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
 API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
 
-async def solve_turnstile_token():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
+
+async def solve_turnstile():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
     # Базовый пример без прокси
-    # CapMonster Cloud автоматически использует свои прокси
+    # CapMonster Cloud автоматически использует собственные прокси
     turnstile_request = TurnstileRequest(
         websiteURL="https://yourwebsite.com/page-with-turnstile",
         websiteKey="your-website-key",
     )
 
-    # Пример использования вашего собственного прокси
-    # Раскомментируйте данный блок, если вы хотите использовать собственный прокси
-    #
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-    #
-    # turnstile_request = TurnstileRequest(
-    #     websiteURL="https://yourwebsite.com/page-with-turnstile",
-    #     websiteKey="your-website-key",
-    #     proxy=proxy
-    # )
+    # Пример с использованием вашего прокси
+    # Раскомментируйте этот блок, если хотите использовать свой прокси
+    """
+    proxy = ProxyInfo(
+        proxyType="https",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # При необходимости можно проверить баланс 
-    balance = await cap_monster_client.get_balance()
+    turnstile_request = TurnstileRequest(
+        websiteURL="https://yourwebsite.com/page-with-turnstile",
+        websiteKey="your-website-key",
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+    )
+    """
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(turnstile_request)
+    result = await client.solve_captcha(turnstile_request)
     print("Solution:", result)
 
-asyncio.run(solve_turnstile_token())
+
+asyncio.run(solve_turnstile())
 ```
 
 </details>
@@ -693,7 +701,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // Ваш API-ключ от CapMonster Cloud
+        // Укажите ваш API-ключ CapMonster Cloud
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -702,38 +710,36 @@ class Program
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
         // Базовый пример без прокси
-        // CapMonster Cloud автоматически использует свои прокси
+        // CapMonster Cloud автоматически использует собственные прокси
         var turnstileRequest = new TurnstileRequest
         {
-            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile", // URL страницы с капчей
-            WebsiteKey = "your-website-key"       // Замените на корректное значение
+            WebsiteUrl = "https://yourwebsite.com/page-with-turnstile",
+            WebsiteKey = "your-website-key"
         };
 
-        // Пример использования вашего собственного прокси
-        // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
-
+        // Пример с использованием вашего прокси
+        // Раскомментируйте этот блок, если хотите использовать свой прокси
         /*
-        var turnstileRequest = new TurnstileRequest
+        turnstileRequest = new TurnstileRequest
         {
             WebsiteUrl = "https://yourwebsite.com/page-with-turnstile",
             WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
-                "123.45.67.89", 
+                "123.45.67.89",
                 8080,
-                ProxyType.Http, 
+                ProxyType.Http,
                 "username",
                 "password"
             )
         };
         */
 
-        // При необходимости можно проверить баланс 
+        // При необходимости можно проверить баланс
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
         var turnstileResult = await cmCloudClient.SolveAsync(turnstileRequest);
-
         Console.WriteLine("Solution: " + turnstileResult.Solution.Value);
     }
 }

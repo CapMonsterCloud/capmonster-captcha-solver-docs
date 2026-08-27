@@ -314,162 +314,191 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 ## Usar biblioteca SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>Mostrar Código (para navegador)</summary>
+      <summary>Mostrar código (para navegador)</summary>
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImageToTextRequest, CapMonsterModules } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImageToTextRequest,
+  // Importe CapMonsterModules se precisar de um módulo específico
+  CapMonsterModules
+} from "@zennolab_com/capmonstercloud-client";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // Insira sua chave de API do CapMonster Cloud
-    );
+document.addEventListener("DOMContentLoaded", async () => {
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
-    const imageToTextRequest = new ImageToTextRequest({
-        body: 'some base64 body', // Substitua pelo valor real
-        // Parâmetros opcionais
-        CapMonsterModule: CapMonsterModules.YandexWave, // É possível escolher um módulo, por exemplo, YandexWave
-        Case: true,
-        numeric: 1,
-        recognizingThreshold: 65,
-        math: false
-    });
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-        const result = await cmcClient.Solve(imageToTextRequest);
-        console.log("Solution:", result);
-    });
-    ```
-</details>
+  // Não é necessário usar proxy para ImageToTextRequest
+  const imageToTextRequest = new ImageToTextRequest({
+    body: "your_image_base64",
 
-<details>
-      <summary>Mostrar Código (Node.js)</summary>
+    // Especifique parâmetros adicionais, se necessário
+    CapMonsterModule: CapMonsterModules.Yandex,
+    recognizingThreshold: 80,
+    Case: true,
+    numeric: 0,
+    math: false,
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(imageToTextRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>Mostrar código (Node.js)</summary>
 ```javascript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImageToTextRequest, CapMonsterModules } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImageToTextRequest,
+  // Importe CapMonsterModules se precisar de um módulo específico
+  CapMonsterModules,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY"; // Insira sua chave de API do CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
 async function solveImageToText() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  // Não é necessário usar proxy para ImageToTextRequest
+  const imageToTextRequest = new ImageToTextRequest({
+    body: "your_image_base64",
+    // Especifique parâmetros adicionais, se necessário
+    CapMonsterModule: CapMonsterModules.Yandex,
+    recognizingThreshold: 80,
+    Case: true,
+    numeric: 0,
+    math: false,
+  });
 
-    const imageToTextRequest = new ImageToTextRequest({
-        body: 'some base64 body', // Substitua pelo valor real
-        // Parâmetros opcionais
-        CapMonsterModule: CapMonsterModules.YandexWave, // É possível escolher um módulo, por exemplo, YandexWave
-        Case: true,
-        numeric: 1,
-        recognizingThreshold: 65,
-        math: false
-    });
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const result = await cmcClient.Solve(imageToTextRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(imageToTextRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveImageToText().catch(console.error);
 ```
 </details>
+
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
 import base64
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import ImageToTextRequest
+# Importe TextModules se precisar de um módulo específico
+from capmonstercloudclient.requests.enums import TextModules
 
-# Insira sua chave de API do CapMonster Cloud
-client_options = ClientOptions(api_key="YOUR_API_KEY")
-cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
 
-# Imagem em formato base64
-image_base64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgc...wwzqR4U/yZ//Z"  # Substitua pelo valor real
-image_bytes = base64.b64decode(image_base64)
 
-image_to_text_request = ImageToTextRequest(
-    image_bytes=image_bytes,
-    module_name=None,     # Você pode escolher um módulo, por exemplo YandexWave
-    # Parâmetros opcionais
-    threshold=50,     
-    case=True,     
-    numeric=0,    
-    math=False         
-)
+async def solve_image_to_text():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-async def solve_captcha():
+    # Não é necessário usar proxy para ImageToTextRequest
+    base64_body = "your_image_base64"
+
+    image_to_text_request = ImageToTextRequest(
+        image_bytes=base64.b64decode(base64_body),
+
+        # Especifique parâmetros adicionais, se necessário
+        module_name=TextModules.yandex_captcha.value,
+        threshold=80,
+        case=True,
+        numeric=0,
+        math=False,
+    )
+
     # Se necessário, você pode verificar o saldo
-    balance = await cap_monster_client.get_balance()
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    solution = await cap_monster_client.solve_captcha(image_to_text_request)
-    return solution
+    result = await client.solve_captcha(image_to_text_request)
+    print("Solution:", result)
 
-responses = asyncio.run(solve_captcha())
-print("Solution:", responses)
+
+asyncio.run(solve_image_to_text())
 ```
-</details>
+    </details>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
-    ```csharp
-    // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud.Requests;
-    using Zennolab.CapMonsterCloud;
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            var clientOptions = new ClientOptions
-            {
-                ClientKey = "YOUR_API_KEY" // Insira sua chave de API do CapMonster Cloud
-            };
+            ClientKey = "YOUR_API_KEY"
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-            // Se necessário, você pode verificar o saldo
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
+        // Não é necessário usar proxy para ImageToTextRequest
+        var imageToTextRequest = new ImageToTextRequest
+        {
+            Body = "your_image_base64",
 
-            var imageToTextRequest = new ImageToTextRequest
-            {
-                Body = "/9j/4AAQSkZJRgABAQAAAQABA...wwzqR4U/yZ//Z", // Substitua pelo valor real
-                // Parâmetros opcionais
-                CapMonsterModule = "None",  // É possível escolher um módulo, por exemplo, YandexWave
-                RecognizingThreshold = 70, 
-                CaseSensitive = true,
-                Numeric = false, 
-                Math = false
-            };
+            // Especifique parâmetros adicionais, se necessário
+            CapMonsterModule = "Yandex",
+            RecognizingThreshold = 80,
+            CaseSensitive = true,
+            Numeric = false,
+            Math = false
+        };
 
-            var imageToTextResult = await cmCloudClient.SolveAsync(imageToTextRequest);
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
-            Console.WriteLine("Captcha Solved: " + imageToTextResult.Solution.Value);
-        }
+        var imageToTextResult =
+            await cmCloudClient.SolveAsync(imageToTextRequest);
+
+        Console.WriteLine("Solution: " + imageToTextResult.Solution.Value);
     }
-    ```
+}
+```
     </details>
   </TabItem>
 </Tabs>

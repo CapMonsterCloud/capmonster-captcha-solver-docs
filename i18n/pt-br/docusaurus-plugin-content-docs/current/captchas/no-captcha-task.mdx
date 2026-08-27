@@ -442,176 +442,183 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 ## Usar biblioteca SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>Mostrar Código (para navegador)</summary>
+      <summary>Mostrar código (para navegador)</summary>
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV2Request } 
-  from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV2Request
+} from "@zennolab_com/capmonstercloud-client";
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-  const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
-  const cmcClient = CapMonsterCloudClientFactory.Create(
+  const client = CapMonsterCloudClientFactory.Create(
     new ClientOptions({ clientKey: API_KEY })
   );
 
-  // Se necessário, você pode verificar o saldo
-  const balance = await cmcClient.getBalance();
-  console.log("Balance:", balance);
-
   // Exemplo básico sem proxy
   // O CapMonster Cloud usa automaticamente seus próprios proxies
-  let recaptchaV2Request = new RecaptchaV2Request({
+  let recaptcha2Request = new RecaptchaV2Request({
     websiteURL: "https://yourwebsite.com/page-with-recaptcha",
-    websiteKey: "your-website-key"
+    websiteKey: "your-website-key",
   });
 
-  // Exemplo de uso do seu próprio proxy
-  // Descomente este bloco se quiser usar um proxy personalizado
-
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
   /*
   const proxy = {
-      proxyType: "http",
-      proxyAddress: "123.45.67.89",
-      proxyPort: 1234,
-      proxyLogin: "username",
-      proxyPassword: "password"
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
   };
 
-  recaptchaV2Request = new RecaptchaV2Request({
-      websiteURL: "https://yourwebsite.com/page-with-recaptcha",
-      websiteKey: "your-website-key",
-      proxy,
-      userAgent: "userAgentPlaceholder"
+  recaptcha2Request = new RecaptchaV2Request({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    proxy,
   });
   */
 
-  const result = await cmcClient.Solve(recaptchaV2Request);
-  console.log("Solution:", result);
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha2Request);
+  console.log("Solution:", result.solution);
 });
 ```
-  </details>
+    </details>
 
-  <details>
-      <summary>Mostrar Código (Node.js)</summary>
+    <details>
+      <summary>Mostrar código (Node.js)</summary>
 ```javascript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV2Request } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV2Request,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
 async function solveRecaptchaV2() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Exemplo básico sem proxy
-    // O CapMonster Cloud usa automaticamente seus próprios proxies
-    let recaptcha2Request = new RecaptchaV2Request({
-        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
-        websiteKey: "your-website-key"
-    });
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let recaptcha2Request = new RecaptchaV2Request({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+  });
 
-    // Exemplo de uso do seu próprio proxy
-    // Descomente este bloco se quiser usar um proxy personalizado
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 1234,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  recaptcha2Request = new RecaptchaV2Request({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    proxy,
+  });
+  */
 
-    recaptcha2Request = new RecaptchaV2Request({
-        websiteURL: "https://yourwebsite.com/page-with-recaptcha",
-        websiteKey: "your-website-key",
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
-
-    const result = await client.Solve(recaptcha2Request);
-    console.log("Solution:", result);
+  const result = await client.Solve(recaptcha2Request);
+  console.log("Solution:", result.solution);
 }
 
 solveRecaptchaV2().catch(console.error);
 ```
-</details>
+    </details>
 
     <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/javascript-recaptcha-v2"/>
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import RecaptchaV2Request
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Descomente se planeja usar um proxy
+# Importe ProxyInfo se pretende usar seu próprio proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # Insira sua chave de API do CapMonster Cloud
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
 
 async def solve_recaptcha_v2():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
     # Exemplo básico sem proxy
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     recaptcha2_request = RecaptchaV2Request(
         websiteUrl="https://yourwebsite.com/page-with-recaptcha",
-        websiteKey="your-website-key"
+        websiteKey="your-website-key",
     )
 
-    # Exemplo de uso do seu próprio proxy
-    # Descomente este bloco se quiser usar um proxy personalizado
+    # Exemplo usando seu proxy
+    # Descomente este bloco se quiser usar seu próprio proxy
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=1234,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-
-    # recaptcha2_request = RecaptchaV2Request(
-    #     websiteUrl="https://yourwebsite.com/page-with-recaptcha",
-    #     websiteKey="your-website-key",
-    #     proxy=proxy,
-    #     userAgent="userAgentPlaceholder"
-    # )
+    recaptcha2_request = RecaptchaV2Request(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        proxy=proxy,
+    )
+    """
 
     # Se necessário, você pode verificar o saldo
-    balance = await cap_monster_client.get_balance()
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(recaptcha2_request)
+    result = await client.solve_captcha(recaptcha2_request)
     print("Solution:", result)
 
+
 asyncio.run(solve_recaptcha_v2())
-    ```
+```
     </details>
 
     <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/python-recaptcha-v2"/>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
-  
-<details>
-      <summary>Mostrar Código</summary>
+  <details>
+      <summary>Mostrar código</summary>
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
@@ -624,7 +631,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // Insira sua chave de API do CapMonster Cloud
+        // Informe sua chave de API do CapMonster Cloud
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -634,27 +641,25 @@ class Program
 
         // Exemplo básico sem proxy
         // O CapMonster Cloud usa automaticamente seus próprios proxies
-
         var recaptchaV2Request = new RecaptchaV2Request
         {
-            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha", // URL da página com a captcha
-            WebsiteKey = "your-website-key"  // Substitua por um valor válido
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key"
         };
 
-        // Exemplo de uso do seu próprio proxy
-        // Descomente este bloco se quiser usar um proxy personalizado
-
+        // Exemplo usando seu proxy
+        // Descomente este bloco se quiser usar seu próprio proxy
         /*
-        var recaptchaV2Request = new RecaptchaV2Request
+        recaptchaV2Request = new RecaptchaV2Request
         {
             WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
             WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
-                "123.45.67.89",        
-                1234,              
-                ProxyType.Http,   
-                "username", 
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
                 "password"
             )
         };
@@ -665,7 +670,6 @@ class Program
         Console.WriteLine("Balance: " + balance);
 
         var recaptchaV2Result = await cmCloudClient.SolveAsync(recaptchaV2Request);
-
         Console.WriteLine("Solution: " + recaptchaV2Result.Solution.Value);
     }
 }

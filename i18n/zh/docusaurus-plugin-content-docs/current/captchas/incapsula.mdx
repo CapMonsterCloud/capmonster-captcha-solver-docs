@@ -336,90 +336,105 @@ Error 16 - 此错误与使用不符合要求地理位置的代理服务器有关
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
 <details>
-      <summary>显示代码（用于浏览器）</summary>
+      <summary>显示代码（浏览器）</summary>
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImpervaRequest } from '@zennolab_com/capmonstercloud-client';
-
-const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImpervaRequest
+} from "@zennolab_com/capmonstercloud-client";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
 
-    // 如有必要，可以检查余额
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    // 配置 Imperva（Incapsula）任务
-    const impervaRequest = new ImpervaRequest({
-        websiteURL: "https://example.com/", // 受 Imperva 保护的页面 URL
-        // 替换为您自己的值
-        metadata: {
-            incapsulaScriptUrl: "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-            incapsulaCookies: "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;"
-        },
-        proxy
-    });
+  // Imperva（Incapsula）只能使用您自己的代理进行解决
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    const result = await cmcClient.Solve(impervaRequest);
-    console.log("Solution:", result.solution);
+  const impervaRequest = new ImpervaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-imperva",
+    metadata: {
+      incapsulaScriptUrl:
+        "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+      incapsulaCookies:
+        "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; " +
+        "visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+    },
+    proxy,
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(impervaRequest);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
 <details>
-      <summary>显示代码 (Node.js)</summary>
-```javascript
+      <summary>显示代码（Node.js）</summary>
+```JavaScript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImpervaRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImpervaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-async function main() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // 输入您的 CapMonster Cloud API 密钥
-    );
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-    // 如有必要，可以检查余额
-    const balance = await cmcClient.getBalance();
-    console.log('Balance:', balance);
+async function solveImperva() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: '123.45.67.89',
-        proxyPort: 8080,
-        proxyLogin: 'username',
-        proxyPassword: 'password'
-    };
+  // Imperva（Incapsula）只能使用您自己的代理进行解决
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    // Imperva（Incapsula）任务配置
-    const impervaRequest = new ImpervaRequest({
-        websiteURL: 'https://example.com/', // 受 Imperva 保护的页面 URL
-        // 替换为您自己的值
-        metadata: {
-            incapsulaScriptUrl: '_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3',
-            incapsulaCookies: 'incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;',
-        },
-        proxy,
-    });
+  const impervaRequest = new ImpervaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-imperva",
+    metadata: {
+      incapsulaScriptUrl:
+        "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+      incapsulaCookies:
+        "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; " +
+        "visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+    },
+    proxy,
+  });
 
-    const result = await cmcClient.Solve(impervaRequest);
-    console.log('Solution:', result.solution);
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(impervaRequest);
+  console.log("Solution:", result.solution);
 }
 
-main().catch(console.error);
+solveImperva().catch(console.error);
 ```
 </details>
 
@@ -432,48 +447,116 @@ main().catch(console.error);
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import ImpervaCustomTaskRequest
-from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # 输入您的 CapMonster Cloud API 密钥
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
 
-async def solve_imperva_captcha():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
 
-    # 配置您自己的代理
+async def main():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Imperva（Incapsula）只能使用您自己的代理进行解决
     proxy = ProxyInfo(
         proxyType="http",
         proxyAddress="123.45.67.89",
         proxyPort=8080,
         proxyLogin="username",
-        proxyPassword="password"
+        proxyPassword="password",
     )
 
-    # Imperva（Incapsula）任务配置
     imperva_request = ImpervaCustomTaskRequest(
-        websiteUrl="https://example.com", # 包含 Imperva 的页面 URL
-        # 替换为您自己的值
+        websiteUrl="https://yourwebsite.com/page-with-imperva",
         metadata={
-            "incapsulaScriptUrl": "_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3",
-            "incapsulaCookie": "incap_ses_1166_2930313=br7iX33ZNCtf3HlpEXcuEDzz72cAAAAA0suDnBGrq/iA0J4oERYzjQ==; visid_incap_2930313=P3hgPVm9S8Oond1L0sXhZqfK72cAAAAAQUIPAAAAAABoMSY9xZ34RvRseJRiY6s+;",
-            "reese84UrlEndpoint": "Built-with-the-For-hopence-Hurleysurfecting-the-"
+            "incapsulaScriptUrl": (
+                "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef"
+            ),
+            "incapsulaCookies": (
+                "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; "
+                "visid_incap_5678901=testVisitorValue1234567890abcdef==;"
+            ),
         },
-        proxy=proxy
+        proxy=proxy,
     )
 
-    # 如有必要，可以检查余额
-    balance = await cap_monster_client.get_balance()
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(imperva_request)
+    result = await client.solve_captcha(imperva_request)
     print("Solution:", result)
 
-asyncio.run(solve_imperva_captcha())
+
+asyncio.run(main())
+```
+</details>
+  </TabItem>
+
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // 请指定您的 CapMonster Cloud API 密钥
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Imperva（Incapsula）只能使用您自己的代理进行解决
+        var impervaRequest = new ImpervaCustomTaskRequest(
+            "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+            "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; " +
+            "visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+            "Built-with-the-Example-Test-Value-"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-imperva",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var impervaResult =
+            await cmCloudClient.SolveAsync(impervaRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                impervaResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
 ```
 </details>
   </TabItem>
 
 </Tabs>
-

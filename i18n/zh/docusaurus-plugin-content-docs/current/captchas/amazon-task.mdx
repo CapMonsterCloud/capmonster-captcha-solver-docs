@@ -712,193 +712,218 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
 <details>
-      <summary>显示代码（用于浏览器）</summary>
+      <summary>显示代码（浏览器）</summary>
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, AmazonRequest } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AmazonRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
+document.addEventListener("DOMContentLoaded", async () => {
 
-  document.addEventListener("DOMContentLoaded", async () => {
-      const client = CapMonsterCloudClientFactory.Create(
-          new ClientOptions({ clientKey: API_KEY })
-      );
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-      // 基本示例，无需代理
-      // CapMonster Cloud 会自动使用其代理
-      let amazonRequest = new AmazonRequest({
-          websiteURL: "https://example.com", // 受 AWS WAF 保护的页面 URL
-          websiteKey: "websiteKey",
-          // 替换为您自己的值
-          challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-          captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-          context: "qoJYgnKsc...aormh/dYYK+Y=",
-          iv: "CgAAXFFFFSAAABVk",
-          cookieSolution: false
-      });
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
-      /*
-      const proxy = {
-          proxyType: "http",
-          proxyAddress: "123.45.67.89",
-          proxyPort: 8080,
-          proxyLogin: "username",
-          proxyPassword: "password"
-      };
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let amazonRequest = new AmazonRequest({
+    websiteURL: "https://yourwebsite.com/page-with-aws-waf",
+    websiteKey: "your-website-key",
+    challengeScript: "your-challenge-script-url",
+    captchaScript: "your-captcha-script-url",
+    context: "your-context",
+    iv: "your-iv",
+    // 设置为 false 以获取 existingToken 和 captchaVoucher
+    // 设置为 true 以获取 cookies
+    cookieSolution: false,
+  });
 
-      amazonRequest = new AmazonRequest({
-          websiteURL: "https://example.com",
-          websiteKey: "websiteKey",
-          // 替换为您自己的值
-          challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-          captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-          context: "qoJYgnKsc...aormh/dYYK+Y=",
-          iv: "CgAAXFFFFSAAABVk",
-          proxy,
-          userAgent: "userAgentPlaceholder",
-          cookieSolution: false
-      });
-      */
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    // 如有必要，可以检查余额
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  amazonRequest = new AmazonRequest({
+    websiteURL: "https://yourwebsite.com/page-with-aws-waf",
+    websiteKey: "your-website-key",
+    challengeScript: "your-challenge-script-url",
+    captchaScript: "your-captcha-script-url",
+    context: "your-context",
+    iv: "your-iv",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+    // 设置为 false 以获取 existingToken 和 captchaVoucher
+    // 设置为 true 以获取 cookies
+    cookieSolution: false,
+  });
+  */
 
-    const result = await client.Solve(amazonRequest);
-    console.log("Solution:", result);
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(amazonRequest);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
 <details>
-      <summary>显示代码 (Node.js)</summary>
+      <summary>显示代码（Node.js）</summary>
 ```javascript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, AmazonRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AmazonRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
 async function solveAwsWaf() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
-    let amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com",               // 受 AWS WAF 保护的页面 URL
-        websiteKey: "websiteKey",
-        // 替换为您自己的值
-        challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        context: "qoJYgnKsc...aormh/dYYK+Y=",
-        iv: "CgAAXFFFFSAAABVk",
-        cookieSolution: false
-    });
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let amazonRequest = new AmazonRequest({
+    websiteURL: "https://yourwebsite.com/page-with-aws-waf",
+    websiteKey: "your-website-key",
+    challengeScript: "your-challenge-script-url",
+    captchaScript: "your-captcha-script-url",
+    context: "your-context",
+    iv: "your-iv",
+    // 设置为 false 以获取 existingToken 和 captchaVoucher
+    // 设置为 true 以获取 cookies
+    cookieSolution: false,
+  });
 
-    // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  amazonRequest = new AmazonRequest({
+    websiteURL: "https://yourwebsite.com/page-with-aws-waf",
+    websiteKey: "your-website-key",
+    challengeScript: "your-challenge-script-url",
+    captchaScript: "your-captcha-script-url",
+    context: "your-context",
+    iv: "your-iv",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+    // 设置为 false 以获取 existingToken 和 captchaVoucher
+    // 设置为 true 以获取 cookies
+    cookieSolution: false,
+  });
+  */
 
-    amazonRequest = new AmazonRequest({
-        websiteURL: "https://example.com", // 受 AWS WAF 保护的页面 URL
-        websiteKey: "websiteKey",
-        // 替换为您自己的值
-        challengeScript: "https://41bcdd4fb3cb.610cd090.us-east-1.token.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/challenge.js",
-        captchaScript: "https://41bcdd4fb3cb.610cd090.us-east-1.captcha.awswaf.com/41bcdd4fb3cb/0d21de737ccb/cd77baa6c832/captcha.js",
-        context: "qoJYgnKsc...aormh/dYYK+Y=",
-        iv: "CgAAXFFFFSAAABVk",
-        proxy,
-        userAgent: "userAgentPlaceholder",
-        cookieSolution: false
-    });
-    */
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    // 如有必要，可以检查余额
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
-
-    const result = await client.Solve(amazonRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(amazonRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveAwsWaf().catch(console.error);
 ```
 </details>
+
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
-<details>
+  <details>
       <summary>显示代码</summary>
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import AmazonWafRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # 如果计划使用代理，请取消注释
+# 如果您计划使用自己的代理，请导入 ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # 输入您的 CapMonster Cloud API 密钥
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
 
-async def solve_amazon_waf_captcha():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
 
-    # 基本示例，无需代理
-    # CapMonster Cloud 会自动使用它们的代理
-    amazon_waf_request = AmazonWafRequest(
-        websiteUrl="https://example.com",  # 受 AWS WAF 保护的页面 URL
-        challengeScript="https://example.com/path/to/challenge.js",
-        captchaScript="https://example.com/path/to/captcha.js",
-        websiteKey="your_website_key",
-        context="your_context_value",
-        iv="your_iv_value",
-        cookieSolution=False
+async def solve_aws_waf():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # 不使用代理的基础示例
+    # CapMonster Cloud 会自动使用自己的代理
+    amazon_request = AmazonWafRequest(
+        websiteUrl="https://yourwebsite.com/page-with-aws-waf",
+        websiteKey="your-website-key",
+        challengeScript="your-challenge-script-url",
+        captchaScript="your-captcha-script-url",
+        context="your-context",
+        iv="your-iv",
+        # 设置为 False 以获取 ExistingToken 和 CaptchaVoucher。
+        # 设置为 True 以获取 Cookies。
+        cookieSolution=False,
     )
 
     # 使用您自己的代理的示例
-    # 如果想使用自己的代理，请取消注释以下代码块
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-    #
-    # amazon_waf_request = AmazonWafRequest(
-    #     websiteUrl="https://example.com",  # 受 AWS WAF 保护的页面 URL
-    #     challengeScript="https://example.com/path/to/challenge.js", 
-    #     captchaScript="https://example.com/path/to/captcha.js",
-    #     websiteKey="your_website_key",
-    #     context="your_context_value",
-    #     iv="your_iv_value",
-    #     cookieSolution=False,
-    #     proxy=proxy
-    # )
+    # 如果您想使用自己的代理，请取消注释此代码块
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # 如有必要，可以检查余额
-    balance = await cap_monster_client.get_balance()
+    amazon_request = AmazonWafRequest(
+        websiteUrl="https://yourwebsite.com/page-with-aws-waf",
+        websiteKey="your-website-key",
+        challengeScript="your-challenge-script-url",
+        captchaScript="your-captcha-script-url",
+        context="your-context",
+        iv="your-iv",
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+        # 设置为 False 以获取 ExistingToken 和 CaptchaVoucher。
+        # 设置为 True 以获取 Cookies。
+        cookieSolution=False,
+    )
+    """
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(amazon_waf_request)
+    result = await client.solve_captcha(amazon_request)
     print("Solution:", result)
 
-asyncio.run(solve_amazon_waf_captcha())
+
+asyncio.run(solve_aws_waf())
 ```
 </details>
   </TabItem>
@@ -918,7 +943,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // 输入您的 CapMonster Cloud API 密钥
+        // 请指定您的 CapMonster Cloud API 密钥
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -926,52 +951,60 @@ class Program
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-        // 基本示例，无需代理
-        // CapMonster Cloud 会自动使用它们的代理
-
+        // 不使用代理的基础示例
+        // CapMonster Cloud 会自动使用自己的代理
         var amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com", // 受 AWS WAF 保护的页面 URL
-            WebsiteKey = "website_key", 
-            ChallengeScript = "URL_of_challenge.js",       
-            CaptchaScript = "URL_of_captcha.js",
-            Context = "context_value",    
-            Iv = "iv_value",                                   
+            WebsiteUrl = "https://yourwebsite.com/page-with-aws-waf",
+            WebsiteKey = "your-website-key",
+            ChallengeScript = "your-challenge-script-url",
+            CaptchaScript = "your-captcha-script-url",
+            Context = "your-context",
+            Iv = "your-iv",
+
+            // 设置为 false 以获取 ExistingToken 和 CaptchaVoucher。
+            // 设置为 true 以获取 Cookies。
             CookieSolution = false
         };
 
         // 使用您自己的代理的示例
-        // 如果想使用自己的代理，请取消注释以下代码块
-
+        // 如果您想使用自己的代理，请取消注释此代码块
         /*
-        var amazonWafRequest = new AmazonWafRequest
+        amazonWafRequest = new AmazonWafRequest
         {
-            WebsiteUrl = "https://example.com",  // 受 AWS WAF 保护的页面 URL
-            WebsiteKey = "website_key",
-            ChallengeScript = "URL_of_challenge.js",
-            CaptchaScript = "URL_of_captcha.js",
-            Context = "context_value",
-            Iv = "iv_value",
+            WebsiteUrl = "https://yourwebsite.com/page-with-aws-waf",
+            WebsiteKey = "your-website-key",
+            ChallengeScript = "your-challenge-script-url",
+            CaptchaScript = "your-captcha-script-url",
+            Context = "your-context",
+            Iv = "your-iv",
+
+            // 设置为 false 以获取 ExistingToken 和 CaptchaVoucher。
+            // 设置为 true 以获取 Cookies。
             CookieSolution = false,
 
             Proxy = new ProxyContainer(
-                "123.45.67.89", 
-                8080,    
+                "123.45.67.89",
+                8080,
                 ProxyType.Http,
-                "username", 
-                "password"    
+                "username",
+                "password"
             )
         };
         */
 
-        // 如有必要，可以检查余额
+        // 如有需要，可以检查余额
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
         var amazonWafResult = await cmCloudClient.SolveAsync(amazonWafRequest);
 
+        // 对于 CookieSolution = false
         Console.WriteLine("ExistingToken: " + amazonWafResult.Solution.ExistingToken);
         Console.WriteLine("CaptchaVoucher: " + amazonWafResult.Solution.CaptchaVoucher);
+
+        // 对于 CookieSolution = true，请使用：
+        // Console.WriteLine("Cookies: " + amazonWafResult.Solution.Cookies);
     }
 }
 ```

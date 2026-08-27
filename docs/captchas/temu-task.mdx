@@ -382,7 +382,7 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
 <details>
       <summary>Показать код (для браузера)</summary>
   ```js
@@ -398,7 +398,7 @@ https://ru.api.capmonster.cloud/getTaskResult
       );
 
       // Базовый пример без прокси
-      // CapMonster Cloud автоматически использует свои прокси
+      // CapMonster Cloud автоматически использует собственные прокси
       let temuRequest = new TemuRequest({
           class: "Temu",
           websiteURL: "https://www.example.com/bgn_verification.html?verifyCode=",  // URL страницы с Temu
@@ -456,7 +456,7 @@ https://ru.api.capmonster.cloud/getTaskResult
           );
 
           // Базовый пример без прокси
-          // CapMonster Cloud автоматически использует свои прокси
+          // CapMonster Cloud автоматически использует собственные прокси
           let temuRequest = new TemuRequest({
               class: "Temu",
               websiteURL: "https://www.example.com/bgn_verification.html?verifyCode=",  // URL страницы с Temu
@@ -522,7 +522,7 @@ async def solve_temu_captcha():
     cap_monster_client = CapMonsterClient(options=client_options)
 
     # Базовый пример без прокси
-    # CapMonster Cloud автоматически использует свои прокси
+    # CapMonster Cloud автоматически использует собственные прокси
     temu_request = TemuCustomTaskRequest(
         websiteUrl="https://www.example.com/bgn_verification.html?verifyCode=",  # URL страницы с Temu
         userAgent="userAgentPlaceholder",                                        # Используйте актуальный UserAgent
@@ -586,7 +586,7 @@ class Program
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
         // Базовый пример без прокси
-        // CapMonster Cloud автоматически использует свои прокси
+        // CapMonster Cloud автоматически использует собственные прокси
         var temuRequest = new TemuCustomTaskRequest(
             "region=141; language=en; currency=EUR; api_uid=CnBpI2fwFW2BogBITHVYAg==; timezone=Europe%2FMoscow; _nano_fp=XpmYXqmJnqX8npXblT_T6~7rkpA2LDnz2BPFuT5m; privacy_setting_detail=%7B%22firstPAds%22%3A0%2C%22adj%22%3A0%2C%22fbsAnlys%22%3A0%2C%22fbEvt%22%3A0%2C%22ggAds%22%3A0%2C%22fbAds%22%3A0%2C%22ttAds%22%3A0%2C%22scAds%22%3A0%2C%22ptAds%22%3A0%2C%22bgAds%22%3A0%2C%22tblAds%22%3A0%2C%22obAds%22%3A0%2C%22vgAds%22%3A0%2C%22idAds%22%3A0%2C%22opAds%22%3A0%2C%22stAds%22%3A0%2C%22pmAds%22%3A0%7D; webp=1; _bee=pgoBlKp038lBhEyoQ4yXnuNrw1X5va2U; verifyAuthToken=QkZmx2TJFbSuuRVD_MKJmA0b84fe3df183da8ab"
         )

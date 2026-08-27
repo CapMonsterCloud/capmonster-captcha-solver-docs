@@ -12,7 +12,6 @@ import MethodItem from '@theme/MethodItem';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
-import BlogLink from '@theme/BlogLink';
 import { ArticleHead } from '../../src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/recaptcha-v3-enterprise-task" />
@@ -353,4 +352,176 @@ class Program
 ```
     </details>
   </TabItem>
+</Tabs>
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3EnterpriseRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Для RecaptchaV3EnterpriseRequest прокси не требуются
+  const recaptcha3EnterpriseRequest = new RecaptchaV3EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha3EnterpriseRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Показать код (Node.js)</summary>
+
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3EnterpriseRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveRecaptchaV3Enterprise() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Для RecaptchaV3EnterpriseRequest прокси не требуются
+  const recaptcha3EnterpriseRequest = new RecaptchaV3EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha3EnterpriseRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveRecaptchaV3Enterprise().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+
+  <details>
+      <summary>Показать код</summary>
+
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecaptchaV3EnterpriseRequest
+
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+
+
+async def solve_recaptcha_v3_enterprise():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Для RecaptchaV3EnterpriseRequest прокси не требуются
+    recaptcha3_enterprise_request = RecaptchaV3EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        minScore=0.7,
+        pageAction="your-page-action",
+    )
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(recaptcha3_enterprise_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_recaptcha_v3_enterprise())
+```
+</details>
+
+  </TabItem>
+
+  {/* <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>Показать код</summary>
+
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using Zennolab.CapMonsterCloud.Requests;
+using Zennolab.CapMonsterCloud;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"  // Ваш API-ключ CapMonster Cloud
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",  // URL вашей страницы с капчей
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
+        };
+
+        var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);
+
+        Console.WriteLine("Solution: " + recaptchaV3Result.Solution.Value);
+    }
+}
+```
+
+</details> */}
+{/* 
+
+  </TabItem> */}
 </Tabs>

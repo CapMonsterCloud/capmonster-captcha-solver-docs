@@ -401,3 +401,208 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
 })();
 ```
 </details>
+
+## 使用 SDK 库
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FriendlyRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // 请填写您的 CapMonster Cloud API 密钥
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  const friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(friendlyRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>显示代码（Node.js）</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FriendlyRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // 请填写您的 CapMonster Cloud API 密钥
+
+async function solveFriendlyCaptcha() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  const friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(friendlyRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveFriendlyCaptcha().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" default className="method-panel">
+<details>
+      <summary>显示代码</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import FriendlyCustomTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # 请填写您的 CapMonster Cloud API 密钥
+
+
+async def solve_friendly_captcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    friendly_request = FriendlyCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
+        websiteKey="your-website-key",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "your-api-get-lib-url",
+        },
+    )
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(friendly_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_friendly_captcha())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // 请填写您的 CapMonster Cloud API 密钥
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // 不使用代理的基本示例
+        // CapMonster Cloud 会自动使用自己的代理
+        var friendlyRequest = new FriendlyCustomTaskRequest(
+            "your-api-get-lib-url"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-friendly-captcha",
+            WebsiteKey = "your-website-key",
+            UserAgent = "userAgentPlaceholder"
+        };
+
+        // 使用您自己的代理的示例
+        // 如果您想使用自己的代理，请取消此代码块的注释
+        /*
+        friendlyRequest = new FriendlyCustomTaskRequest(
+            "your-api-get-lib-url"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-friendly-captcha",
+            WebsiteKey = "your-website-key",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var friendlyResult =
+            await cmCloudClient.SolveAsync(friendlyRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                friendlyResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

@@ -868,94 +868,103 @@ asyncio.run(main())
 ## Используйте библиотеку SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import { CapMonsterCloudClientFactory, ClientOptions, DataDomeRequest } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  DataDomeRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+document.addEventListener("DOMContentLoaded", async () => {
 
-    document.addEventListener("DOMContentLoaded", async () => {
-        const client = CapMonsterCloudClientFactory.Create(
-            new ClientOptions({ clientKey: API_KEY })
-        );
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-        // При необходимости можно проверить баланс 
-        const balance = await client.getBalance();
-        console.log("Balance:", balance);
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-        // DataDome решается только с вашими прокси
-        const proxy = {
-            proxyType: "http",
-            proxyAddress: "123.45.67.89",
-            proxyPort: 8080,
-            proxyLogin: "username",
-            proxyPassword: "password"
-        };
+  // DataDome решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-        const datadomeRequest = new DataDomeRequest({
-            _class: 'DataDome',
-            websiteURL: "https://example.com/", // URL страницы с капчей
-            userAgent: "userAgentPlaceholder",
-            proxy,
-            metadata: {
-                captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-                datadomeCookie: "datadome=cookie-value"
-            }
-        });
+  const datadomeRequest = new DataDomeRequest({
+    websiteURL: "https://yourwebsite.com/page-with-datadome",
+    userAgent: "userAgentPlaceholder",
+    proxy,
+    metadata: {
+      captchaUrl: "your-captcha-url",
+      datadomeVersion: "new",
+      datadomeCookie: "your-datadome-cookie",
+    },
+  });
 
-        const result = await client.Solve(datadomeRequest);
-        console.log("Solution:", result);
-    });
-    ```
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(datadomeRequest);
+  console.log("Solution:", result.solution);
+});
+```
     </details>
 
     <details>
       <summary>Показать код (Node.js)</summary>
-      ```JavaScript
-      // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-      import { CapMonsterCloudClientFactory, ClientOptions, DataDomeRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  DataDomeRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-      const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      async function solveDataDome() {
-          const client = CapMonsterCloudClientFactory.Create(
-              new ClientOptions({ clientKey: API_KEY })
-          );
+async function solveDataDome() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-          // При необходимости можно проверить баланс 
-          const balance = await client.getBalance();
-          console.log("Balance:", balance);
+  // DataDome решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-          // DataDome решается только с вашими прокси
-          const proxy = {
-              proxyType: "http",
-              proxyAddress: "123.45.67.89",
-              proxyPort: 8080,
-              proxyLogin: "username",
-              proxyPassword: "password"
-          };
+  const datadomeRequest = new DataDomeRequest({
+    websiteURL: "https://yourwebsite.com/page-with-datadome",
+    userAgent: "userAgentPlaceholder",
+    proxy,
+    metadata: {
+      captchaUrl: "your-captcha-url",
+      datadomeVersion: "new",
+      datadomeCookie: "your-datadome-cookie",
+    },
+  });
 
-          const datadomeRequest = new DataDomeRequest({
-              _class: 'DataDome',
-              websiteURL: "https://example.com/", // URL страницы с капчей
-              userAgent: "userAgentPlaceholder",
-              proxy,
-              metadata: {
-                  captchaUrl: "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm",
-                  datadomeCookie: "datadome=cookie-value"
-              }
-          });
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-          const result = await client.Solve(datadomeRequest);
-          console.log("Solution:", result);
-      }
+  const result = await client.Solve(datadomeRequest);
+  console.log("Solution:", result.solution);
+}
 
-      solveDataDome().catch(console.error);
+solveDataDome().catch(console.error);
 ```
 
 </details>
@@ -965,81 +974,106 @@ asyncio.run(main())
   <TabItem value="python" label="Python" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```python
-    # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import DataDomeCustomTaskRequest
-    from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo
+import asyncio
 
-    API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import DataDomeCustomTaskRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-    async def solve_datadome_captcha():
-        client_options = ClientOptions(api_key=API_KEY)
-        cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
 
-        # DataDome решается только с вашими прокси
-        proxy = ProxyInfo(
-            proxyType="http",
-            proxyAddress="123.45.67.89",
-            proxyPort=8080,
-            proxyLogin="username",
-            proxyPassword="password"
-        )
 
-        # Создаём задачу DataDome
-        datadome_request = DataDomeCustomTaskRequest(
-            websiteUrl="https://example.com",  # URL страницы с капчей
-            metadata={
-                "datadomeCookie": "datadome=cookie-value", 
-                "captchaUrl": "https://geo.captcha-delivery.com/interstitial/?initialCid=AHrlqAAAAAMA9UvsL58YLqIAXNLFPg%3D%3D&hash=C0705ACD75EBF650A07FF8291D3528&cid=7sfa5xUfDrR4bQTp1c2mhtiD7jj9TXExcQypjdNAxKVFyIi1S9tE0~_mqLa2EFpOuzxKcZloPllsNHjNnqzD9HmBA4hEv7SsEyPYEidCBvjZEaDyfRyzefFfolv0lAHM&referer=https%3A%2F%2Fwww.example.com.au%2F&s=6522&b=978936&dm=cm"
-            },
-            proxy=proxy,
-            userAgent="userAgentPlaceholder"
-        )
+async def solve_datadome():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-        # При необходимости можно проверить баланс 
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    # DataDome решается только с использованием вашего прокси
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-        result = await cap_monster_client.solve_captcha(datadome_request)
-        print("Solution:", result)
+    datadome_request = DataDomeCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-datadome",
+        userAgent="userAgentPlaceholder",
+        proxy=proxy,
+        metadata={
+            "captchaUrl": "your-captcha-url",
+            "datadomeVersion": "new",
+            "datadomeCookie": "your-datadome-cookie",
+        },
+    )
 
-    asyncio.run(solve_datadome_captcha())
-    ```
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(datadome_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_datadome())
+```
     </details>
   </TabItem>
   
-	{/* <TabItem value="csharp" label="C#" className="method-panel">
-		```csharp
-		// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+	<TabItem value="csharp" label="C#" className="method-panel">
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-		using Zennolab.CapMonsterCloud.Requests;
-		using Zennolab.CapMonsterCloud;
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-		class Program
-		{
-			static async Task MainDatadome(string[] args)
-			{
-				var clientOptions = new ClientOptions
-				{
-					ClientKey = "your_api_key" // Replace with your CapMonster Cloud API key
-				};
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
 
-				var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-				var DataDomeRequest = new DataDomeCustomTaskRequest(datadomeCookie: "datadome=6BvxqELMoorFNoo7GT1...JyfP_mhz", captchaUrl: "https://example.com", htmlPageBase64: "PGh0bWw+PGhlYWQ+PHRpdGxlPmJs...N0E5QTA1")
-				{
-					WebsiteUrl = "https://example.com",
-					UserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5.1 Mobile/21F90 Safari/604.1", // Use the current userAgent
-				};
+        // DataDome решается только с использованием вашего прокси
+        var datadomeRequest = new DataDomeCustomTaskRequest(
+            "your-datadome-cookie",
+            "your-captcha-url",
+            "new"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-datadome",
+            UserAgent = "userAgentPlaceholder",
 
-				var DataDomeResult = await cmCloudClient.SolveAsync(DataDomeRequest);
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
 
-				Console.WriteLine("Captcha Solution: " + JsonSerializer.Serialize(DataDomeResult.Solution));
-			}
-		}
-		```
-	</TabItem> */}
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var datadomeResult =
+            await cmCloudClient.SolveAsync(datadomeRequest);
+
+        Console.WriteLine("Solution: " + datadomeResult.Solution);
+    }
+}
+```
+	</TabItem>
 </Tabs>

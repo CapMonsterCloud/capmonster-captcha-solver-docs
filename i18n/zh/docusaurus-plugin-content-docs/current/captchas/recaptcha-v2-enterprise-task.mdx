@@ -609,118 +609,114 @@ Object.defineProperty(window, 'grecaptcha', {
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>显示代码（用于浏览器）</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import {
-      CapMonsterCloudClientFactory,
-      ClientOptions,
-      RecaptchaV2EnterpriseRequest
-    } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV2EnterpriseRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-      const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-      const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-      );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-      // 基本示例，无需代理
-      // CapMonster Cloud 会自动使用它们的代理
-      let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // 包含验证码的页面 URL
-        websiteKey: "your-website-key",             // 替换为正确的值
-        enterprisePayload: {
-          s: "your-value",   // 可选的 enterprise 参数
-        }
-      });
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+  });
 
-      // 使用您自己的代理的示例
-      // 如果想使用自己的代理，请取消注释以下代码块
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-      /*
-      const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-      };
+  recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+    proxy,
+  });
+  */
 
-      recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "your-website-key",
-        enterprisePayload: { s: "your-value" },
-        proxy,
-        userAgent: "userAgentPlaceholder"
-      });
-      */
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-      // 如有必要，可以检查余额 
-      const balance = await client.getBalance();
-      console.log("Balance:", balance);
-
-      const result = await client.Solve(recaptchaV2EnterpriseRequest);
-      console.log("Solution:", result);
-    });
-    ```
+  const result = await client.Solve(recaptcha2EnterpriseRequest);
+  console.log("Solution:", result.solution);
+});
+```
     </details>
 
     <details>
-      <summary>显示代码 (Node.js)</summary>
+      <summary>显示代码（Node.js）</summary>
 ```javascript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV2EnterpriseRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV2EnterpriseRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY";  // 输入您的 CapMonster Cloud API 密钥
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
 async function solveRecaptchaV2Enterprise() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
-          let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-              websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // 包含验证码的页面 URL
-              websiteKey: "your-website-key", // 替换为正确的值
-              enterprisePayload: {
-                  s: "your-value", // 可选的 enterprise 参数
-              }
-          });
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+  });
 
-    // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+    proxy,
+  });
+  */
 
-    recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "your-website-key",
-        enterprisePayload: { s: "your-value" },
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    // 如有必要，可以检查余额 
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
-
-    const result = await client.Solve(recaptchaV2EnterpriseRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(recaptcha2EnterpriseRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveRecaptchaV2Enterprise().catch(console.error);
@@ -738,56 +734,57 @@ solveRecaptchaV2Enterprise().catch(console.error);
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import RecaptchaV2EnterpriseRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # 如果计划使用代理，请取消注释
+# 如果您计划使用自己的代理，请导入 ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # 输入您的 CapMonster Cloud API 密钥
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
+
 
 async def solve_recaptcha_v2_enterprise():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-    # 基本示例，无需代理
-    # CapMonster Cloud 会自动使用它们的代理
-    recaptcha2request = RecaptchaV2EnterpriseRequest(
-        websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
+    # 不使用代理的基础示例
+    # CapMonster Cloud 会自动使用自己的代理
+    recaptcha2_enterprise_request = RecaptchaV2EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
         websiteKey="your-website-key",
-        enterprisePayload={
-            "s": "your-value"
-        }
+        pageAction="your-page-action",
     )
 
     # 使用您自己的代理的示例
-    # 如果想使用自己的代理，请取消注释以下代码块
+    # 如果您想使用自己的代理，请取消注释此代码块
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
+    recaptcha2_enterprise_request = RecaptchaV2EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        pageAction="your-page-action",
+        proxy=proxy,
+    )
+    """
 
-    # recaptcha2request = RecaptchaV2EnterpriseRequest(
-    #     websiteUrl="https://mydomain.com/page-with-recaptcha-enterprise",
-    #     websiteKey="your-website-key",
-    #     enterprisePayload={
-            # "s": "your-value"
-    #     },
-    #     proxy=proxy,
-    #     userAgent="userAgentPlaceholder"
-    # )
-
-    # 如有必要，可以检查余额 
-    balance = await cap_monster_client.get_balance()
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(recaptcha2request)
+    result = await client.solve_captcha(recaptcha2_enterprise_request)
     print("Solution:", result)
 
+
 asyncio.run(solve_recaptcha_v2_enterprise())
-    ```
+```
     </details>
 
     <BlogLink url="https://capmonster.cloud/zh/blog/re-1/python-recaptcha-v2"/>
@@ -800,7 +797,6 @@ asyncio.run(solve_recaptcha_v2_enterprise())
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Zennolab.CapMonsterCloud;
 using Zennolab.CapMonsterCloud.Requests;
@@ -809,7 +805,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // 输入您的 CapMonster Cloud API 密钥
+        // 请指定您的 CapMonster Cloud API 密钥
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -817,33 +813,23 @@ class Program
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-        // 如有必要，可以检查余额 
-        var balance = await cmCloudClient.GetBalanceAsync();
-        Console.WriteLine("Balance: " + balance);
-
-        // 基本示例，无需代理
-        // CapMonster Cloud 会自动使用它们的代理
+        // 不使用代理的基础示例
+        // CapMonster Cloud 会自动使用自己的代理
         var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
         {
-            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise", // 包含 CAPTCHA 的页面 URL
-            WebsiteKey = "your-website-key", // 替换为正确的值
-            EnterprisePayload = JsonSerializer.Serialize(new
-            {
-                s = "your-value"
-            })
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key",
+            PageAction = "your-page-action"
         };
 
         // 使用您自己的代理的示例
-        // 如果想使用自己的代理，请取消注释以下代码块
+        // 如果您想使用自己的代理，请取消注释此代码块
         /*
-        var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
         {
-            WebsiteUrl = "https://mydomain.com/page-with-recaptcha-enterprise",
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
             WebsiteKey = "your-website-key",
-            EnterprisePayload = JsonSerializer.Serialize(new
-            {
-                s = "your-value"
-            }),
+            PageAction = "your-page-action",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89",
@@ -854,6 +840,10 @@ class Program
             )
         };
         */
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
         var recaptchaV2EnterpriseResult =
             await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
