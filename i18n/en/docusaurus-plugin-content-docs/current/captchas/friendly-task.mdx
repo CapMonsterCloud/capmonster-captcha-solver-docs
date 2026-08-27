@@ -413,7 +413,8 @@ You can automate the process of detecting the Friendly Captcha version in the br
 
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>Show code (for browser)</summary>
+      <summary>Show code (browser)</summary>
+
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
@@ -431,7 +432,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     new ClientOptions({ clientKey: API_KEY })
   );
 
-  const friendlyRequest = new FriendlyRequest({
+  // Basic example without a proxy
+  // CapMonster Cloud automatically uses its own proxies
+  let friendlyRequest = new FriendlyRequest({
     websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
     websiteKey: "your-website-key",
     userAgent: "userAgentPlaceholder",
@@ -440,7 +443,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
   });
 
-  // You can check your balance if necessary
+  // Example using your own proxy
+  // Uncomment this block if you want to use your own proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+  */
+
+  // You can check the balance if needed
   const balance = await client.getBalance();
   console.log("Balance:", balance);
 
@@ -448,11 +473,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("Solution:", result.solution);
 });
 ```
+
 </details>
 
 <details>
       <summary>Show code (Node.js)</summary>
-```JavaScript
+
+```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
 const {
@@ -468,7 +495,9 @@ async function solveFriendlyCaptcha() {
     new ClientOptions({ clientKey: API_KEY }),
   );
 
-  const friendlyRequest = new FriendlyRequest({
+  // Basic example without a proxy
+  // CapMonster Cloud automatically uses its own proxies
+  let friendlyRequest = new FriendlyRequest({
     websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
     websiteKey: "your-website-key",
     userAgent: "userAgentPlaceholder",
@@ -477,7 +506,29 @@ async function solveFriendlyCaptcha() {
     },
   });
 
-  // You can check your balance if necessary
+  // Example using your own proxy
+  // Uncomment this block if you want to use your own proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+  */
+
+  // You can check the balance if needed
   const balance = await client.getBalance();
   console.log("Balance:", balance);
 
@@ -491,9 +542,10 @@ solveFriendlyCaptcha().catch(console.error);
 </details>
   </TabItem>
 
-  <TabItem value="python" label="Python" default className="method-panel">
-<details>
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
       <summary>Show code</summary>
+
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
@@ -501,6 +553,8 @@ import asyncio
 
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import FriendlyCustomTaskRequest
+# Import ProxyInfo if you plan to use your own proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
 API_KEY = "YOUR_API_KEY"  # Specify your CapMonster Cloud API key
 
@@ -510,6 +564,8 @@ async def solve_friendly_captcha():
         options=ClientOptions(api_key=API_KEY)
     )
 
+    # Basic example without a proxy
+    # CapMonster Cloud automatically uses its own proxies
     friendly_request = FriendlyCustomTaskRequest(
         websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
         websiteKey="your-website-key",
@@ -519,7 +575,29 @@ async def solve_friendly_captcha():
         },
     )
 
-    # You can check your balance if necessary
+    # Example using your own proxy
+    # Uncomment this block if you want to use your own proxy
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    friendly_request = FriendlyCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
+        websiteKey="your-website-key",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "your-api-get-lib-url",
+        },
+        proxy=proxy,
+    )
+    """
+
+    # You can check the balance if needed
     balance = await client.get_balance()
     print("Balance:", balance)
 
@@ -529,13 +607,14 @@ async def solve_friendly_captcha():
 
 asyncio.run(solve_friendly_captcha())
 ```
+
 </details>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
-
-<details>
+  <details>
       <summary>Show code</summary>
+
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
@@ -557,7 +636,7 @@ class Program
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-        // Basic example without proxy
+        // Basic example without a proxy
         // CapMonster Cloud automatically uses its own proxies
         var friendlyRequest = new FriendlyCustomTaskRequest(
             "your-api-get-lib-url"
@@ -568,7 +647,7 @@ class Program
             UserAgent = "userAgentPlaceholder"
         };
 
-        // Example using your proxy
+        // Example using your own proxy
         // Uncomment this block if you want to use your own proxy
         /*
         friendlyRequest = new FriendlyCustomTaskRequest(
@@ -589,7 +668,7 @@ class Program
         };
         */
 
-        // You can check your balance if necessary
+        // You can check the balance if needed
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
@@ -606,8 +685,8 @@ class Program
     }
 }
 ```
-</details>
 
+</details>
   </TabItem>
 
 </Tabs>

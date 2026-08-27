@@ -409,6 +409,7 @@ https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.14/widget.module.min.js
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>显示代码（浏览器）</summary>
+
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
@@ -426,7 +427,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     new ClientOptions({ clientKey: API_KEY })
   );
 
-  const friendlyRequest = new FriendlyRequest({
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let friendlyRequest = new FriendlyRequest({
     websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
     websiteKey: "your-website-key",
     userAgent: "userAgentPlaceholder",
@@ -434,6 +437,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       apiGetLib: "your-api-get-lib-url",
     },
   });
+
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消下面代码块的注释
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+  */
 
   // 如有需要，可以检查余额
   const balance = await client.getBalance();
@@ -443,11 +468,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("Solution:", result.solution);
 });
 ```
+
 </details>
 
 <details>
       <summary>显示代码（Node.js）</summary>
-```JavaScript
+
+```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
 const {
@@ -463,7 +490,9 @@ async function solveFriendlyCaptcha() {
     new ClientOptions({ clientKey: API_KEY }),
   );
 
-  const friendlyRequest = new FriendlyRequest({
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let friendlyRequest = new FriendlyRequest({
     websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
     websiteKey: "your-website-key",
     userAgent: "userAgentPlaceholder",
@@ -471,6 +500,28 @@ async function solveFriendlyCaptcha() {
       apiGetLib: "your-api-get-lib-url",
     },
   });
+
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消下面代码块的注释
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+  */
 
   // 如有需要，可以检查余额
   const balance = await client.getBalance();
@@ -486,9 +537,10 @@ solveFriendlyCaptcha().catch(console.error);
 </details>
   </TabItem>
 
-  <TabItem value="python" label="Python" default className="method-panel">
-<details>
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
       <summary>显示代码</summary>
+
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
@@ -496,6 +548,8 @@ import asyncio
 
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import FriendlyCustomTaskRequest
+# 如果您计划使用自己的代理，请导入 ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
 API_KEY = "YOUR_API_KEY"  # 请填写您的 CapMonster Cloud API 密钥
 
@@ -505,6 +559,8 @@ async def solve_friendly_captcha():
         options=ClientOptions(api_key=API_KEY)
     )
 
+    # 不使用代理的基础示例
+    # CapMonster Cloud 会自动使用自己的代理
     friendly_request = FriendlyCustomTaskRequest(
         websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
         websiteKey="your-website-key",
@@ -513,6 +569,28 @@ async def solve_friendly_captcha():
             "apiGetLib": "your-api-get-lib-url",
         },
     )
+
+    # 使用您自己的代理的示例
+    # 如果您想使用自己的代理，请取消下面代码块的注释
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    friendly_request = FriendlyCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
+        websiteKey="your-website-key",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "your-api-get-lib-url",
+        },
+        proxy=proxy,
+    )
+    """
 
     # 如有需要，可以检查余额
     balance = await client.get_balance()
@@ -524,13 +602,14 @@ async def solve_friendly_captcha():
 
 asyncio.run(solve_friendly_captcha())
 ```
+
 </details>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
-
-<details>
+  <details>
       <summary>显示代码</summary>
+
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
@@ -552,7 +631,7 @@ class Program
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-        // 不使用代理的基本示例
+        // 不使用代理的基础示例
         // CapMonster Cloud 会自动使用自己的代理
         var friendlyRequest = new FriendlyCustomTaskRequest(
             "your-api-get-lib-url"
@@ -564,7 +643,7 @@ class Program
         };
 
         // 使用您自己的代理的示例
-        // 如果您想使用自己的代理，请取消此代码块的注释
+        // 如果您想使用自己的代理，请取消下面代码块的注释
         /*
         friendlyRequest = new FriendlyCustomTaskRequest(
             "your-api-get-lib-url"
@@ -601,8 +680,8 @@ class Program
     }
 }
 ```
-</details>
 
+</details>
   </TabItem>
 
 </Tabs>
