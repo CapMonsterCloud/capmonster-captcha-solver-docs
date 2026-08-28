@@ -53,10 +53,11 @@
 // }
 
 import React from 'react';
-import { Redirect } from '@docusaurus/router';
+import { Redirect, useLocation } from '@docusaurus/router';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export default function Home() {
+  const location = useLocation();
   const gettingStartUrl = useBaseUrl('/docs/getting-start/');
-  return <Redirect to={gettingStartUrl} />;
+  return <Redirect to={`${gettingStartUrl}${location.search}${location.hash}`} />;
 }

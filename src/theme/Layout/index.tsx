@@ -4,6 +4,7 @@ import { PageMetadata, ErrorCauseBoundary } from '@docusaurus/theme-common';
 import BadTokenBlock from '../BadTokenBlock/index.js';
 import { useKayakaoInit } from './useKayakoInit.ts';
 import { useReplaceUserAgent } from './useReplaceUserAgent.ts';
+import { ThemeFromUrl } from './useThemeFromUrl.ts';
 
 interface LayoutProps {
   title?: string;
@@ -21,6 +22,7 @@ export default function CustomLayout(props: LayoutProps) {
 
   return (
     <LayoutOriginal {...rest}>
+      <ThemeFromUrl />
       <ErrorCauseBoundary onError={(error: Error) => error}>
         <>
           <PageMetadata title={title} description={description} />
