@@ -313,69 +313,87 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
 ## 使用 SDK 库
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>显示代码（用于浏览器）</summary>
+      <summary>显示代码（浏览器）</summary>
 ```js
-// https://github.com/ZennoLab/capmonstercloud-client-js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImageToTextRequest, CapMonsterModules } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImageToTextRequest,
+  // 如果需要特定模块，请导入 CapMonsterModules
+  CapMonsterModules
+} from "@zennolab_com/capmonstercloud-client";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // 输入您的 CapMonster Cloud API 密钥
-    );
+document.addEventListener("DOMContentLoaded", async () => {
 
-    // 如有必要，可以检查余额
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-    const imageToTextRequest = new ImageToTextRequest({
-        body: 'some base64 body', // 替换为实际值
-        // 可选参数
-        CapMonsterModule: CapMonsterModules.YandexWave, // 可以选择模块，例如 YandexWave
-        Case: true, 
-        numeric: 1,  
-        recognizingThreshold: 65, 
-        math: false   
-    });
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    const result = await cmcClient.Solve(imageToTextRequest);
-    console.log("Solution:", result);
+  // ImageToTextRequest 不需要代理
+  const imageToTextRequest = new ImageToTextRequest({
+    body: "your_image_base64",
+
+    // 如有需要，请指定其他参数
+    CapMonsterModule: CapMonsterModules.Yandex,
+    recognizingThreshold: 80,
+    Case: true,
+    numeric: 0,
+    math: false,
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(imageToTextRequest);
+  console.log("Solution:", result.solution);
 });
 ```
-</details>
+    </details>
 
-<details>
-      <summary>显示代码 (Node.js)</summary>
+    <details>
+      <summary>显示代码（Node.js）</summary>
 ```javascript
-// https://github.com/ZennoLab/capmonstercloud-client-js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ImageToTextRequest, CapMonsterModules } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ImageToTextRequest,
+  // 如果需要特定模块，请导入 CapMonsterModules
+  CapMonsterModules,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
 async function solveImageToText() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // 如有必要，可以检查余额
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  // ImageToTextRequest 不需要代理
+  const imageToTextRequest = new ImageToTextRequest({
+    body: "your_image_base64",
+    // 如有需要，请指定其他参数
+    CapMonsterModule: CapMonsterModules.Yandex,
+    recognizingThreshold: 80,
+    Case: true,
+    numeric: 0,
+    math: false,
+  });
 
-    const imageToTextRequest = new ImageToTextRequest({
-        body: 'some base64 body', // 替换为实际值
-        // 可选参数
-        CapMonsterModule: CapMonsterModules.YandexWave, // 可以选择模块，例如 YandexWave
-        Case: true,  
-        numeric: 1, 
-        recognizingThreshold: 65,  
-        math: false 
-    });
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const result = await cmcClient.Solve(imageToTextRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(imageToTextRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveImageToText().catch(console.error);
@@ -387,89 +405,99 @@ solveImageToText().catch(console.error);
   <TabItem value="python" label="Python" className="method-panel">
   <details>
       <summary>显示代码</summary>
-    ```python
-    # https://github.com/ZennoLab/capmonstercloud-client-python
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    import base64
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import ImageToTextRequest
+import asyncio
+import base64
 
-    # 输入您的 CapMonster Cloud API 密钥
-    client_options = ClientOptions(api_key="YOUR_API_KEY")
-    cap_monster_client = CapMonsterClient(options=client_options)
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import ImageToTextRequest
+# 如果需要特定模块，请导入 TextModules
+from capmonstercloudclient.requests.enums import TextModules
 
-    # base64 格式的图片
-    image_base64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgc...wwzqR4U/yZ//Z"  # 替换为真实值
-    image_bytes = base64.b64decode(image_base64)
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
 
-    image_to_text_request = ImageToTextRequest(
-        image_bytes=image_bytes,
-        module_name=None,     # 可以选择模块，例如 YandexWave
-        # 可选参数
-        threshold=50, 
-        case=True,    
-        numeric=0,   
-        math=False        
+
+async def solve_image_to_text():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
     )
 
-    async def solve_captcha():
-        # 如有必要，可以检查余额
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    # ImageToTextRequest 不需要代理
+    base64_body = "your_image_base64"
 
-        solution = await cap_monster_client.solve_captcha(image_to_text_request)
-        return solution
+    image_to_text_request = ImageToTextRequest(
+        image_bytes=base64.b64decode(base64_body),
 
-    responses = asyncio.run(solve_captcha())
-    print("Solution:", responses)
-    ```
-</details>
+        # 如有需要，请指定其他参数
+        module_name=TextModules.yandex_captcha.value,
+        threshold=80,
+        case=True,
+        numeric=0,
+        math=False,
+    )
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(image_to_text_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_image_to_text())
+```
+    </details>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
       <summary>显示代码</summary>
-    ```csharp
-    // https://github.com/ZennoLab/capmonstercloud-client-dotnet
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud.Requests;
-    using Zennolab.CapMonsterCloud;
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // 请指定您的 CapMonster Cloud API 密钥
+        var clientOptions = new ClientOptions
         {
-            var clientOptions = new ClientOptions
-            {
-                ClientKey = "YOUR_API_KEY" // 输入您的 CapMonster Cloud API 密钥
-            };
+            ClientKey = "YOUR_API_KEY"
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-            // 如有必要，可以检查余额 
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
+        // ImageToTextRequest 不需要代理
+        var imageToTextRequest = new ImageToTextRequest
+        {
+            Body = "your_image_base64",
 
-            var imageToTextRequest = new ImageToTextRequest
-            {
-                Body = "/9j/4AAQSkZJRgABAQAAAQABA...hMjIyMjIyMjIyMjIyMj", // 替换为实际值
-                // 可选参数
-                CapMonsterModule = "None", // 可以选择模块，例如 YandexWave
-                RecognizingThreshold = 70,  
-                CaseSensitive = true, 
-                Numeric = false,  
-                Math = false     
-            };
+            // 如有需要，请指定其他参数
+            CapMonsterModule = "Yandex",
+            RecognizingThreshold = 80,
+            CaseSensitive = true,
+            Numeric = false,
+            Math = false
+        };
 
-            var imageToTextResult = await cmCloudClient.SolveAsync(imageToTextRequest);
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
-            Console.WriteLine("Captcha Solved: " + imageToTextResult.Solution.Value);
-        }
+        var imageToTextResult =
+            await cmCloudClient.SolveAsync(imageToTextRequest);
+
+        Console.WriteLine("Solution: " + imageToTextResult.Solution.Value);
     }
-    ```
+}
+```
     </details>
   </TabItem>
 </Tabs>

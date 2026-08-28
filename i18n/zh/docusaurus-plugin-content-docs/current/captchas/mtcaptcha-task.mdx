@@ -230,116 +230,125 @@ https://api.capmonster.cloud/getTaskResult
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-      <summary>显示代码（用于浏览器）</summary>
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
 ```js
-// https://github.com/ZennoLab/capmonstercloud-client-js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, MTCaptchaRequest } from '@zennolab_com/capmonstercloud-client';
-
-const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  MTCaptchaRequest
+} from "@zennolab_com/capmonstercloud-client";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
-    let mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",       // 包含 MTCaptcha 的页面 URL
-        websiteKey: "MTPublic-abCDEFJAB",   // 替换为正确的值
-        isInvisible: false,   // 如果使用 Invisible MTCaptcha，则为 true
-        pageAction: "login"  // 替换为正确的值
-    });
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-    // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",
-        websiteKey: "MTPublic-abCDEFJAB",  // 替换为正确的值
-        isInvisible: false,  // 如果使用 Invisible MTCaptcha，则为 true
-        pageAction: "login", // 替换为正确的值
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let mtcaptchaRequest = new MTCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-mtcaptcha",
+    websiteKey: "your-website-key",
+    isInvisible: false,
+    pageAction: "login",
+  });
 
-    // 如有必要，可以检查余额
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    const result = await client.Solve(mtcaptchaRequest);
-    console.log("Solution:", result);
+  mtcaptchaRequest = new MTCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-mtcaptcha",
+    websiteKey: "your-website-key",
+    isInvisible: false,
+    pageAction: "login",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(mtcaptchaRequest);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
 <details>
-      <summary>显示代码 (Node.js)</summary>
-```javascript
-// https://github.com/ZennoLab/capmonstercloud-client-js
+      <summary>显示代码（Node.js）</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, MTCaptchaRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  MTCaptchaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
 async function solveMTCaptcha() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // 基本示例，无需代理
-    // CapMonster Cloud 会自动使用它们的代理
-    let mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",      // 包含 MTCaptcha 的页面 URL
-        websiteKey: "MTPublic-abCDEFJAB",    // 替换为正确的值
-        isInvisible: false,     // 如果使用 Invisible MTCaptcha，则为 true
-        pageAction: "login"  // 替换为正确的值
-    });
+  // 不使用代理的基础示例
+  // CapMonster Cloud 会自动使用自己的代理
+  let mtcaptchaRequest = new MTCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-mtcaptcha",
+    websiteKey: "your-website-key",
+    isInvisible: false,
+    pageAction: "login",
+  });
 
-    // 使用您自己的代理的示例
-    // 如果想使用自己的代理，请取消注释以下代码块
+  // 使用您自己的代理的示例
+  // 如果您想使用自己的代理，请取消注释此代码块
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  mtcaptchaRequest = new MTCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-mtcaptcha",
+    websiteKey: "your-website-key",
+    isInvisible: false,
+    pageAction: "login",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
 
-    mtcaptchaRequest = new MTCaptchaRequest({
-        websiteURL: "https://www.example.com",
-        websiteKey: "MTPublic-abCDEFJAB", // 替换为正确的值
-        isInvisible: false,   // 如果使用 Invisible MTCaptcha，则为 true
-        pageAction: "login",  // 替换为正确的值
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    // 如有必要，可以检查余额
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
-
-    const result = await client.Solve(mtcaptchaRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(mtcaptchaRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveMTCaptcha().catch(console.error);
 ```
+
 </details>
   </TabItem>
 
@@ -347,64 +356,72 @@ solveMTCaptcha().catch(console.error);
 <details>
       <summary>显示代码</summary>
 ```python
-# https://github.com/ZennoLab/capmonstercloud-client-python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import MTCaptchaRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # 如果计划使用代理，请取消注释
+# 如果您计划使用自己的代理，请导入 ProxyInfo
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # 输入您的 CapMonster Cloud API 密钥
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
 
-async def solve_mt_captcha():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
 
-    # 基本示例，无需代理
-    # CapMonster Cloud 会自动使用它们的代理
+async def solve_mtcaptcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # 不使用代理的基础示例
+    # CapMonster Cloud 会自动使用自己的代理
     mtcaptcha_request = MTCaptchaRequest(
-        websiteUrl="https://www.example.com",  # 包含验证码的页面 URL
-        websiteKey="MTPublic-abCDEFJAB",  # 替换为正确的值
-        isInvisible=False,       # 如果验证码为隐形验证码，则为 True
-        pageAction="login"    # 替换为正确的值
+        websiteUrl="https://yourwebsite.com/page-with-mtcaptcha",
+        websiteKey="your-website-key",
+        isInvisible=False,
+        pageAction="login",
     )
 
     # 使用您自己的代理的示例
-    # 如果想使用自己的代理，请取消注释以下代码块
+    # 如果您想使用自己的代理，请取消注释此代码块
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-    #
-    # mtcaptcha_request = MTCaptchaRequest(
-    #     websiteUrl="https://www.example.com",  # 包含验证码的页面 URL
-    #     websiteKey="MTPublic-abCDEFJAB",  # 替换为正确的值
-    #     isInvisible=False,    # 如果验证码为隐形验证码，则为 True
-    #     pageAction="login", # 替换为正确的值
-    #     proxy=proxy
-    # )
+    mtcaptcha_request = MTCaptchaRequest(
+        websiteUrl="https://yourwebsite.com/page-with-mtcaptcha",
+        websiteKey="your-website-key",
+        isInvisible=False,
+        pageAction="login",
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+    )
+    """
 
-    # 如有必要，可以检查余额
-    balance = await cap_monster_client.get_balance()
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
     print("Balance:", balance)
-  
-    result = await cap_monster_client.solve_captcha(mtcaptcha_request)
+
+    result = await client.solve_captcha(mtcaptcha_request)
     print("Solution:", result)
 
-asyncio.run(solve_mt_captcha())
+
+asyncio.run(solve_mtcaptcha())
 ```
 </details>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
+
 <details>
       <summary>显示代码</summary>
 ```csharp
-// https://github.com/ZennoLab/capmonstercloud-client-dotnet
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
 using System;
 using System.Threading.Tasks;
@@ -415,7 +432,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // 输入您的 CapMonster Cloud API 密钥
+        // 请指定您的 CapMonster Cloud API 密钥
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -423,51 +440,49 @@ class Program
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-        // 基本示例，无需代理
-        // CapMonster Cloud 会自动使用它们的代理
+        // 不使用代理的基础示例
+        // CapMonster Cloud 会自动使用自己的代理
         var mtcaptchaRequest = new MTCaptchaTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",  // 包含验证码的页面 URL
-            WebsiteKey = "MTPublic-tqNCRE0GS",  // 替换为正确的值
-            Invisible = false,   // 如果验证码为隐形验证码，则为 true
-            PageAction = "login", // 替换为正确的值
+            WebsiteUrl = "https://yourwebsite.com/page-with-mtcaptcha",
+            WebsiteKey = "your-website-key",
+            Invisible = false,
+            PageAction = "login",
             UserAgent = "userAgentPlaceholder"
         };
 
         // 使用您自己的代理的示例
-        // 如果想使用自己的代理，请取消注释以下代码块
-        
+        // 如果您想使用自己的代理，请取消注释此代码块
         /*
         mtcaptchaRequest = new MTCaptchaTaskRequest
         {
-            WebsiteUrl = "https://www.example.com", // 包含验证码的页面 URL
-            WebsiteKey = "MTPublic-tqNCRE0GS",   // 替换为正确的值
-            Invisible = false,   // 如果验证码为隐形验证码，则为 true
-            PageAction = "login", // 替换为正确的值
+            WebsiteUrl = "https://yourwebsite.com/page-with-mtcaptcha",
+            WebsiteKey = "your-website-key",
+            Invisible = false,
+            PageAction = "login",
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(
                 "123.45.67.89",
-                8080,  
-                ProxyType.Http,  
-                "username",    
-                "password"  
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
             )
         };
         */
 
-        // 如有必要，可以检查余额
+        // 如有需要，可以检查余额
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
         var mtcaptchaResult = await cmCloudClient.SolveAsync(mtcaptchaRequest);
-
-        Console.WriteLine("MTCaptcha Solution: " + mtcaptchaResult.Solution.Value);
+        Console.WriteLine("Solution: " + mtcaptchaResult.Solution.Value);
     }
 }
 ```
 </details>
+
   </TabItem>
 
 </Tabs>
-

@@ -976,3 +976,443 @@ except Exception as e:
   </TabItem>
 
 </Tabs>
+
+## Usar biblioteca SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type1">
+  <TabItem value="nodejs" label="JavaScript (no navegador)" className="method-panel">
+
+<details>
+<summary>Geração do parâmetro X-HD</summary>
+
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  HuntRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Para resolver HUNT, é necessário usar seu próprio proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const huntRequest = new HuntRequest({
+    websiteURL: "https://yourwebsite.com/page-with-hunt",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(huntRequest);
+  console.log("Solution:", result.solution);
+});
+```
+
+</details>
+
+<details>
+<summary>Resolução da CAPTCHA</summary>
+
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  HuntRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Para resolver HUNT, é necessário usar seu próprio proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const huntRequest = new HuntRequest({
+    websiteURL: "https://yourwebsite.com/page-with-hunt",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+      data: "your-site-meta-token",
+    },
+    proxy,
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(huntRequest);
+  console.log("Solution:", result.solution);
+});
+```
+
+</details>
+</TabItem>
+
+<TabItem value="nodejs1" label="Node.js" className="method-panel">
+
+<details>
+<summary>Geração do parâmetro X-HD</summary>
+
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  HuntRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveHunt() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Para resolver HUNT, é necessário usar seu próprio proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const huntRequest = new HuntRequest({
+    websiteURL: "https://yourwebsite.com/page-with-hunt",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(huntRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveHunt().catch(console.error);
+```
+
+</details>
+
+<details>
+<summary>Resolução da CAPTCHA</summary>
+
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  HuntRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveHunt() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Para resolver HUNT, é necessário usar seu próprio proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const huntRequest = new HuntRequest({
+    websiteURL: "https://yourwebsite.com/page-with-hunt",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+      data: "your-site-meta-token",
+    },
+    proxy,
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(huntRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveHunt().catch(console.error);
+```
+
+</details>
+</TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+
+<details>
+<summary>Geração do parâmetro X-HD</summary>
+
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import HuntCustomTaskRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_hunt():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Para resolver HUNT, é necessário usar seu próprio proxy
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    hunt_request = HuntCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-hunt",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+        },
+        proxy=proxy,
+    )
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(hunt_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_hunt())
+```
+
+</details>
+
+<details>
+<summary>Resolução da CAPTCHA</summary>
+
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import HuntCustomTaskRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_hunt():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Para resolver HUNT, é necessário usar seu próprio proxy
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    hunt_request = HuntCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-hunt",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+            "data": "your-site-meta-token",
+        },
+        proxy=proxy,
+    )
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(hunt_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_hunt())
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+<summary>Geração do parâmetro X-HD</summary>
+
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Para resolver HUNT, é necessário usar seu próprio proxy
+        var huntRequest = new HuntCustomTaskRequest(
+            "https://example.com/hd-api/external/apps/<app-hash>/api.js"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-hunt",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var huntResult = await cmCloudClient.SolveAsync(huntRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                huntResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+
+</details>
+
+<details>
+<summary>Resolução da CAPTCHA</summary>
+
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Para resolver HUNT, é necessário usar seu próprio proxy
+        var huntRequest = new HuntCustomTaskRequest(
+            "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+            "your-site-meta-token"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-hunt",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var huntResult = await cmCloudClient.SolveAsync(huntRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                huntResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+
+</details>
+  </TabItem>
+</Tabs>

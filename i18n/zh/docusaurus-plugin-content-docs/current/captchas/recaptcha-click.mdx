@@ -135,8 +135,7 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
     ],
     "metadata": {
       "Task": "Click on traffic lights",
-      "Grid": "3x3",
-      "TaskDefinition": "/m/015qff"
+      "Grid": "3x3"
     },
     "userAgent": "userAgentPlaceholder",
     "websiteUrl": "https://mydomain.com/page-with-recaptcha"
@@ -528,163 +527,204 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 ## 使用 SDK 库
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>显示代码（用于浏览器）</summary>
-    ```js
-    // https://github.com/ZennoLab/capmonstercloud-client-js
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import {
-      CapMonsterCloudClientFactory,
-      ClientOptions,
-      RecaptchaV3ProxylessRequest
-    } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageRecaptchaRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-      const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // 输入您的 CapMonster Cloud API 密钥
-      );
+  const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-      // 如有必要，可以检查余额
-      const balance = await cmcClient.getBalance();
-      console.log("Balance:", balance);
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-      const complexImageRecaptchaRequest = new ComplexImageRecaptchaRequest({
-          imageUrls: ['https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg'], // 替换为实际值
-          metaData: {
-              Grid: '3x3',
-              Task: 'Please click each image containing a mountain',
-              TaskDefinition: '/m/015qff'
-          },
-          websiteURL: 'https://mydomain.com/page-with-recaptcha' // 包含验证码的页面 URL
-      });
+  // ComplexImageRecaptchaRequest 不需要代理
+  const complexImageRequest = new ComplexImageRecaptchaRequest({
+    imageUrls: [
+      "your-image-url",
+    ],
+    // 替换为您自己的值
+    metaData: {
+      Task: "Select all images with a fire hydrant",
+      Grid: "3x3",
+    },
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+  });
 
-      const solution = await cmcClient.Solve(recaptchaV3Request);
-      console.log('Solution:', solution);
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    });
-    ```
+  const result = await client.Solve(complexImageRequest);
+  console.log("Solution:", result.solution);
+});
+```
     </details>
 
-    <details>
-      <summary>显示代码 (Node.js)</summary>
+
+<details>
+      <summary>显示代码（Node.js）</summary>
 ```javascript
-// https://github.com/ZennoLab/capmonstercloud-client-js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV3ProxylessRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageRecaptchaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY"; // 输入您的 CapMonster Cloud API 密钥
+const API_KEY = "YOUR_API_KEY"; // 请指定您的 CapMonster Cloud API 密钥
 
-async function solveRecaptchaV3() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+async function solveComplexImageRecaptcha() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // 如有必要，可以检查余额
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  // ComplexImageRecaptchaRequest 不需要代理
+  const complexImageRequest = new ComplexImageRecaptchaRequest({
+    imageUrls: [
+      "your-image-url",
+    ],
+    // 替换为您自己的值
+    metaData: {
+      Task: "Select all images with a fire hydrant",
+      Grid: "3x3",
+    },
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+  });
 
-    const complexImageRecaptchaRequest = new ComplexImageRecaptchaRequest({
-        imageUrls: ['https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg'], // 替换为实际值
-        metaData: {
-            Grid: '3x3',
-            Task: 'Please click each image containing a mountain',
-            TaskDefinition: '/m/015qff'
-        },
-        websiteURL: 'https://mydomain.com/page-with-recaptcha' // 包含验证码的页面 URL
-    });
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const solution = await cmcClient.Solve(recaptchaV3Request);
-    console.log("Solution:", solution);
+  const result = await client.Solve(complexImageRequest);
+  console.log("Solution:", result.solution);
 }
 
-solveRecaptchaV3().catch(console.error);
+solveComplexImageRecaptcha().catch(console.error);
 ```
 </details>
-	
+
   </TabItem>
-  
+
   <TabItem value="python" label="Python" className="method-panel">
   <details>
       <summary>显示代码</summary>
-    ```python
-    # https://github.com/Zennolab/capmonstercloud-client-python
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import RecaptchaV3ProxylessRequest
+import asyncio
 
-    client_options = ClientOptions(api_key="YOUR_API_KEY")  # 输入您的 CapMonster Cloud API 密钥
-    cap_monster_client = CapMonsterClient(options=client_options)
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecaptchaComplexImageTaskRequest
 
-    complex_image_recaptcha_request = RecaptchaComplexImageTaskRequest(
-        imagesUrls=["https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"],  # 替换为实际值
-        metadata={
-            "Task": "Click on traffic lights",
-            "Grid": "3x3",
-            "TaskDefinition": "/m/015qff",
-        }
+API_KEY = "YOUR_API_KEY"  # 请指定您的 CapMonster Cloud API 密钥
+
+
+async def solve_complex_image_recaptcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
     )
 
-    async def solve_captcha():
-        # 如有需要，可以检查余额
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    # RecaptchaComplexImageTaskRequest 不需要代理
+    complex_image_request = RecaptchaComplexImageTaskRequest(
+        imagesUrls=[
+            "your-image-url"
+        ],
+        # 替换为您自己的值
+        metadata={
+            "Task": "Select all squares with mountains or hills",
+            "Grid": "3x3",
+        },
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+    )
 
-        solution = await cap_monster_client.solve_captcha(complex_image_recaptcha_request)
-        return solution
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
 
-    responses = asyncio.run(solve_captcha())
-    print(responses)
-    ```
-	</details>
+    result = await client.solve_captcha(complex_image_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_complex_image_recaptcha())
+```
+    </details>
+
   </TabItem>
-  
+
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
       <summary>显示代码</summary>
-    ```csharp
-    // https://github.com/ZennoLab/capmonstercloud-client-dotnet
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud.Requests;
-    using Zennolab.CapMonsterCloud;
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // 请指定您的 CapMonster Cloud API 密钥
+        var clientOptions = new ClientOptions
         {
-            var clientOptions = new ClientOptions
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // RecaptchaComplexImageTaskRequest 不需要代理
+        var complexImageRequest = new RecaptchaComplexImageTaskRequest
+        {
+            ImageUrls = new[]
             {
-                ClientKey = "YOUR_API_KEY"  // 输入您的 CapMonster Cloud API 密钥
-            };
+                "your-image-url"
+            },
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
-
-            // 如有必要，可以检查余额
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
-
-            var complexImageRecaptchaRequest = new RecaptchaComplexImageTaskRequest
+            // 替换为您自己的值
+            Metadata = new RecaptchaComplexImageTaskRequest.RecaptchaMetadata
             {
-                ImageUrls = new[] { "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg" }, // 替换为实际值
-                Metadata = new RecaptchaComplexImageTaskRequest.RecaptchaMetadata
-                {
-                    Task = "Click on traffic lights",
-                    Grid = RecaptchaComplexImageTaskRequest.RecaptchaMetadata.GridSize.Grid3x3,
-                    TaskDefinition = "/m/015qff"
-                }
-            };
+                Task = "Select all squares with mountains or hills",
+                Grid = RecaptchaComplexImageTaskRequest
+                    .RecaptchaMetadata
+                    .GridSize
+                    .Grid3x3
+            },
 
-            var complexImageRecaptchaResult = await cmCloudClient.SolveAsync(complexImageRecaptchaRequest);
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha"
+        };
 
-            Console.WriteLine("Captcha Solution: " + string.Join(", ", complexImageRecaptchaResult.Solution.Answer));
-        }
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var complexImageResult =
+            await cmCloudClient.SolveAsync(complexImageRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                complexImageResult.Solution,
+                Formatting.Indented
+            )
+        );
     }
-    ```
+}
+```
     </details>
-	
+
   </TabItem>
 </Tabs>

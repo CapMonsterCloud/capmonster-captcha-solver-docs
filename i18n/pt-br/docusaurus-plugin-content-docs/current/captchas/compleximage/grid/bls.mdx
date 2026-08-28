@@ -341,3 +341,226 @@ As imagens nas páginas podem ser representadas tanto como uma URL quanto já co
 
 ![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)
 
+## Usar biblioteca SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Não é necessário usar proxy para ComplexImageTaskRecognitionRequest
+  const blsRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "your_image_1_base64",
+      "your_image_2_base64",
+      "your_image_3_base64",
+      "your_image_4_base64",
+      "your_image_5_base64",
+      "your_image_6_base64",
+      "your_image_7_base64",
+      "your_image_8_base64",
+      "your_image_9_base64",
+    ],
+    metaData: {
+      Task: "bls_3x3",
+      TaskArgument: "123",
+    },
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(blsRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>Mostrar código (Node.js)</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveBls3x3() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+  // Não é necessário usar proxy para ComplexImageTaskRecognitionRequest
+  const blsRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "your_image_1_base64",
+      "your_image_2_base64",
+      "your_image_3_base64",
+      "your_image_4_base64",
+      "your_image_5_base64",
+      "your_image_6_base64",
+      "your_image_7_base64",
+      "your_image_8_base64",
+      "your_image_9_base64",
+    ],
+    metaData: {
+      Task: "bls_3x3",
+      TaskArgument: "123",
+    },
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(blsRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveBls3x3().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_bls_3x3():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Não é necessário usar proxy para RecognitionComplexImageTaskRequest
+    bls_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "your_image_1_base64",
+            "your_image_2_base64",
+            "your_image_3_base64",
+            "your_image_4_base64",
+            "your_image_5_base64",
+            "your_image_6_base64",
+            "your_image_7_base64",
+            "your_image_8_base64",
+            "your_image_9_base64",
+        ],
+        metadata={
+            "Task": "bls_3x3",
+            "TaskArgument": "123",
+        },
+    )
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(bls_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_bls_3x3())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Não é necessário usar proxy para RecognitionComplexImageTaskRequest
+        var blsRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "your_image_1_base64",
+                "your_image_2_base64",
+                "your_image_3_base64",
+                "your_image_4_base64",
+                "your_image_5_base64",
+                "your_image_6_base64",
+                "your_image_7_base64",
+                "your_image_8_base64",
+                "your_image_9_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "bls_3x3",
+                TaskArgument = "123"
+            }
+        };
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(blsRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>

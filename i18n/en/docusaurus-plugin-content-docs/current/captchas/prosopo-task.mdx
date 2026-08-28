@@ -202,103 +202,112 @@ Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
 <details>
       <summary>Show code (for browser)</summary>
-  ```js
-  // https://github.com/ZennoLab/capmonstercloud-client-js
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ProsopoRequest } from '@zennolab_com/capmonstercloud-client';
-
-const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ProsopoRequest
+} from "@zennolab_com/capmonstercloud-client";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
 
-    // Basic example without proxy
-    // CapMonster Cloud automatically uses its own proxies
-    let prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",       // URL of the page with ProCaptcha
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Your ProCaptcha sitekey (public key)
-    });
+  const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
 
-    // Example of using your own proxy
-    // Uncomment this block if you want to use your own proxy
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8000,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",   // URL of the page with ProCaptcha   
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV", // Your ProCaptcha sitekey (public key)
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // Basic example without proxy
+  // CapMonster Cloud automatically uses its own proxies
+  let prosopoRequest = new ProsopoRequest({
+    websiteURL: "https://yourwebsite.com/page-with-procaptcha",
+    websiteKey: "your-website-key",
+  });
 
-    // Optionally, you can check the balance
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  // Example using your proxy
+  // Uncomment this block if you want to use your own proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    const result = await client.Solve(prosopoRequest);
-    console.log("Solution:", result);
+  prosopoRequest = new ProsopoRequest({
+    websiteURL: "https://yourwebsite.com/page-with-procaptcha",
+    websiteKey: "your-website-key",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(prosopoRequest);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
 <details>
       <summary>Show code (Node.js)</summary>
-```javascript
-// https://github.com/ZennoLab/capmonstercloud-client-js
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ProsopoRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ProsopoRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
 const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
 
 async function solveProCaptcha() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Basic example without proxy
-    // CapMonster Cloud automatically uses its own proxies
-    let prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",       // URL of the page with ProCaptcha
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV" // Your ProCaptcha sitekey (public key)
-    });
+  // Basic example without proxy
+  // CapMonster Cloud automatically uses its own proxies
+  let prosopoRequest = new ProsopoRequest({
+    websiteURL: "https://yourwebsite.com/page-with-procaptcha",
+    websiteKey: "your-website-key",
+  });
 
-    // Example of using your own proxy
-    // Uncomment this block if you want to use your own proxy
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8000,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  // Example using your proxy
+  // Uncomment this block if you want to use your own proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    prosopoRequest = new ProsopoRequest({
-        websiteURL: "https://www.example.com",    // URL of the page with ProCaptcha  
-        websiteKey: "5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",  // Your ProCaptcha sitekey (public key)
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  prosopoRequest = new ProsopoRequest({
+    websiteURL: "https://yourwebsite.com/page-with-procaptcha",
+    websiteKey: "your-website-key",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
 
-    // Optionally, you can check the balance
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const result = await client.Solve(prosopoRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(prosopoRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveProCaptcha().catch(console.error);
@@ -311,50 +320,58 @@ solveProCaptcha().catch(console.error);
       <summary>Show code</summary>
 
 ```python
-# https://github.com/ZennoLab/capmonstercloud-client-python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import ProsopoTaskRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Uncomment if you plan to use a proxy
+# Import ProxyInfo if you plan to use your own proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
 API_KEY = "YOUR_API_KEY"  # Specify your CapMonster Cloud API key
 
-async def solve_prosopo_captcha():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
+
+async def solve_procaptcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
     # Basic example without proxy
     # CapMonster Cloud automatically uses its own proxies
     prosopo_request = ProsopoTaskRequest(
-        websiteUrl="https://www.example.com",  # URL of the page with ProCaptcha
-        websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV"  # Your ProCaptcha sitekey (public key)
+        websiteUrl="https://yourwebsite.com/page-with-procaptcha",
+        websiteKey="your-website-key",
     )
 
-    # Example of using your own proxy
+    # Example using your proxy
     # Uncomment this block if you want to use your own proxy
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-    #
-    # prosopo_request = ProsopoTaskRequest(
-    #     websiteUrl="https://www.example.com",  # URL of the page with ProCaptcha
-    #     websiteKey="5EZU3LG31uzq1Mwi8inwqxmfvFDpj7VzwDnZwj4Q3syyxBwV",  # Your ProCaptcha sitekey (public key)
-    #     proxy=proxy
-    # )
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # Optionally, you can check the balance
-    balance = await cap_monster_client.get_balance()
+    prosopo_request = ProsopoTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-procaptcha",
+        websiteKey="your-website-key",
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+    )
+    """
+
+    # You can check your balance if necessary
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(prosopo_request)
+    result = await client.solve_captcha(prosopo_request)
     print("Solution:", result)
 
-asyncio.run(solve_prosopo_captcha())
+
+asyncio.run(solve_procaptcha())
 ```
 </details>
   </TabItem>
@@ -364,7 +381,7 @@ asyncio.run(solve_prosopo_captcha())
       <summary>Show code</summary>
 
 ```csharp
-// https://github.com/ZennoLab/capmonstercloud-client-dotnet
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
 using System;
 using System.Threading.Tasks;
@@ -387,38 +404,34 @@ class Program
         // CapMonster Cloud automatically uses its own proxies
         var prosopoRequest = new ProsopoTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",      // URL of the page with ProCaptcha
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib", // Your ProCaptcha sitekey (public key)
-
-            UserAgent = "userAgentPlaceholder"
+            WebsiteUrl = "https://yourwebsite.com/page-with-procaptcha",
+            WebsiteKey = "your-website-key"
         };
 
-        // Example of using your own proxy
+        // Example using your proxy
         // Uncomment this block if you want to use your own proxy
         /*
         prosopoRequest = new ProsopoTaskRequest
         {
-            WebsiteUrl = "https://www.example.com",  // URL of the page with ProCaptcha
-            WebsiteKey = "5DCKg3w9AvDW92uBzRWrvTiWsu573bTzYmFny8EkXQZxsBib",  // Your ProCaptcha sitekey (public key)
-            UserAgent = "userAgentPlaceholder",
+            WebsiteUrl = "https://yourwebsite.com/page-with-procaptcha",
+            WebsiteKey = "your-website-key",
 
             Proxy = new ProxyContainer(
-                "123.45.67.89",   
-                8080,             
-                ProxyType.Http,  
-                "username", 
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
                 "password"
             )
         };
         */
 
-        // Optionally, you can check the balance
+        // You can check your balance if necessary
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
         var prosopoResult = await cmCloudClient.SolveAsync(prosopoRequest);
-
-        Console.WriteLine("ProCaptcha Solution: " + prosopoResult.Solution.Value);
+        Console.WriteLine("Solution: " + prosopoResult.Solution.Value);
     }
 }
 ```

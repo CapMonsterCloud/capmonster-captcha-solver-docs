@@ -449,11 +449,11 @@ https://authenticate.example.com/api/v1/login
 ## Используйте библиотеку SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
 ```js
-// https://github.com/ZennoLab/capmonstercloud-client-js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
 import { CapMonsterCloudClientFactory, ClientOptions, HCaptchaRequest } from '@zennolab_com/capmonstercloud-client';
 
@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
 
     // Базовый пример без прокси
-    // CapMonster Cloud автоматически использует свои прокси
+    // CapMonster Cloud автоматически использует собственные прокси
     let hcaptchaRequest = new HCaptchaRequest({
         websiteURL: "https://lessons.zennolab.com/captchas/hcaptcha/?level=easy", // URL страницы с hCaptcha
         websiteKey: "472fc7af-86a4-4382-9a49-ca9090474471",
@@ -507,7 +507,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 <details>
       <summary>Показать код (Node.js)</summary>
 ```JavaScript
-  // https://github.com/ZennoLab/capmonstercloud-client-js
+  // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
   import { CapMonsterCloudClientFactory, ClientOptions, HCaptchaRequest } from '@zennolab_com/capmonstercloud-client';
 
@@ -519,7 +519,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
 
       // Базовый пример без прокси
-      // CapMonster Cloud автоматически использует свои прокси
+      // CapMonster Cloud автоматически использует собственные прокси
       let hcaptchaRequest = new HCaptchaRequest({
           websiteURL: "https://lessons.zennolab.com/captchas/hcaptcha/?level=easy", // URL страницы с hCaptcha
           websiteKey: "472fc7af-86a4-4382-9a49-ca9090474471",
@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   <TabItem value="python" label="Python" className="method-panel">
 ```python
-# https://github.com/ZennoLab/capmonstercloud-client-python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
 from capmonstercloudclient import CapMonsterClient, ClientOptions
@@ -580,7 +580,7 @@ async def solve_hcaptcha():
     cap_monster_client = CapMonsterClient(options=client_options)
 
     # Базовый пример без прокси
-    # CapMonster Cloud автоматически использует свои прокси
+    # CapMonster Cloud автоматически использует собственные прокси
     hcaptcha_request = HcaptchaRequest(
         websiteUrl="https://lessons.zennolab.com/captchas/hcaptcha/?level=easy",  # URL страницы с капчей
         websiteKey="472fc7af-86a4-4382-9a49-ca9090474471",
@@ -622,7 +622,7 @@ asyncio.run(solve_hcaptcha())
 
   <TabItem value="csharp" label="C#" className="method-panel">
 ```csharp
-// https://github.com/ZennoLab/capmonstercloud-client-dotnet
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
 using System;
 using System.Threading.Tasks;
@@ -642,7 +642,7 @@ class Program
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
         // Базовый пример без прокси
-        // CapMonster Cloud автоматически использует свои прокси
+        // CapMonster Cloud автоматически использует собственные прокси
         var hcaptchaRequest = new HCaptchaRequest
         {
             WebsiteUrl = "https://lessons.zennolab.com/captchas/hcaptcha/?level=easy", // URL страницы с капчей
