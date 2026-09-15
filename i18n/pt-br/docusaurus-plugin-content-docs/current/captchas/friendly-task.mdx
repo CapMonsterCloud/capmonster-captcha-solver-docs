@@ -1,7 +1,7 @@
 ---
-sidebar_position: 28
+sidebar_position: 27
 sidebar_label: Friendly Captcha
-title: "Reconhecimento Automático e Bypass do Friendly Captcha | API"
+title: "Reconhecimento automático e bypass do Friendly Captcha | API"
 description: "Saiba como contornar o Friendly Captcha usando a API de resolução automática de captchas do CapMonster Cloud!"
 ---
 
@@ -34,7 +34,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da solicitação
 
-<TabItem value="proxy" label="CustomTask (ao usar proxy)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -53,6 +53,8 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
   <ParamItem title="websiteKey" required type="string" />
   Chave do Friendly Captcha (*veja a seção [Como encontrar o valor do sitekey](#como-encontrar-o-valor-do-sitekey)*).
+  <br />
+  Geralmente tem o seguinte formato: `FFMGEMAD2K3JJ35P`
   
   ---
 
@@ -72,8 +74,9 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
   <ParamItem title="userAgent" type="string" />
-  User-Agent do navegador.<br />
-  **Forneça apenas o UA do Windows atual:** userAgentPlaceholder
+  User-Agent do navegador. Use o valor atual compatível com o CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
 ---
 
@@ -107,7 +110,7 @@ Login do proxy.
 <ParamItem title="proxyPassword" required type="string" />
 Senha do proxy.
 
-</TabItem>
+</div>
 
 ## Criar método de tarefa
 
@@ -116,14 +119,14 @@ Use o valor do parâmetro `apiGetLib` em `metadata`, correspondente à versão d
 **Exemplo:**
 
 Para **V1**
-  ```json
+```json
   "apiGetLib": "https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
 ```
 
 Para **V2**
 
 ```json
-"apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
+  "apiGetLib": "https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@X.Y.Z/site.min.js"
 ```
 
 <br />
@@ -136,23 +139,23 @@ Para **V2**
     </MethodItem>
     <MethodDescription>
 
-  **Requisição**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "task": {
-      "type": "CustomTask",
-      "class": "friendly",
-      "websiteKey": "FFMGEMAD2K3JJ35P",
-      "websiteURL": "https://example.com",
-      "userAgent": "userAgentPlaceholder",
-      "metadata": {
-		"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
+  **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "friendly",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
+		}
 	}
-}
-  ```
+      ```
 
-  **Resposta**
+  **Exemplo de resposta**
   ```json
   {
     "errorId": 0,
@@ -171,29 +174,29 @@ Para **V2**
 </MethodItem>
 <MethodDescription>
   
-  **Requisição**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "task": {
-      "type": "CustomTask",
-      "class": "friendly",
-      "websiteKey": "FFMGEMAD2K3JJ35P",
-      "websiteURL": "https://example.com",
-      "userAgent": "userAgentPlaceholder",
-      "metadata": {
-		"apiGetLib":"https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.19/widget.module.min.js"
-	},
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
-    }
-  }
-  ```
+  **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "friendly",
+          "websiteKey": "your-website-key",
+          "websiteURL": "https://yourwebsite.com/page-with-captcha",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+			"apiGetLib":"https://cdn.example.com/package/widget.module.min.js"
+		},
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
+        }
+      }
+      ```
 
-  **Resposta**
+  **Exemplo de resposta**
   ```json
   {
     "errorId": 0,
@@ -214,7 +217,7 @@ O formato do token na resposta depende da versão do captcha usada no site:
 
 **V2**: `"AQQA.8Q2TbgK_..._pknXDweJjKT2qwmroOhHcZsU4dHyu-jaGIPx9k7432p_num13buuTu6n4lVA=="`
 
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
       ```http
     https://api.capmonster.cloud/getTaskResult
@@ -222,15 +225,15 @@ O formato do token na resposta depende da versão do captcha usada no site:
   </MethodItem>
   <MethodDescription>
 
-  **Requisição**
+  **Exemplo de requisição**
   ```json
   {
     "clientKey": "API_KEY",
     "taskId": 407533077
   }
-````
+```
 
-**Resposta**
+**Exemplo de resposta**
 
 ```json
 {
@@ -247,7 +250,7 @@ O formato do token na resposta depende da versão do captcha usada no site:
 ```
 
   </MethodDescription>
-</TabItem>
+</div>
 <br />
 O valor do token obtido deve ser inserido no campo correspondente:
 
@@ -404,3 +407,287 @@ Você pode automatizar o processo de detecção da versão do Friendly Captcha n
 })();
 ```
 </details>
+
+## Usar biblioteca SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
+
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FriendlyRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+  });
+
+  // Exemplo usando seu próprio proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+  */
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(friendlyRequest);
+  console.log("Solution:", result.solution);
+});
+```
+
+</details>
+
+<details>
+      <summary>Mostrar código (Node.js)</summary>
+
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FriendlyRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveFriendlyCaptcha() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+  });
+
+  // Exemplo usando seu próprio proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  friendlyRequest = new FriendlyRequest({
+    websiteURL: "https://yourwebsite.com/page-with-friendly-captcha",
+    websiteKey: "your-website-key",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      apiGetLib: "your-api-get-lib-url",
+    },
+    proxy,
+  });
+  */
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(friendlyRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveFriendlyCaptcha().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import FriendlyCustomTaskRequest
+# Importe ProxyInfo se você pretende usar seu próprio proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_friendly_captcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Exemplo básico sem proxy
+    # O CapMonster Cloud usa automaticamente seus próprios proxies
+    friendly_request = FriendlyCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
+        websiteKey="your-website-key",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "your-api-get-lib-url",
+        },
+    )
+
+    # Exemplo usando seu próprio proxy
+    # Descomente este bloco se quiser usar seu próprio proxy
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    friendly_request = FriendlyCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-friendly-captcha",
+        websiteKey="your-website-key",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "apiGetLib": "your-api-get-lib-url",
+        },
+        proxy=proxy,
+    )
+    """
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(friendly_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_friendly_captcha())
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Exemplo básico sem proxy
+        // O CapMonster Cloud usa automaticamente seus próprios proxies
+        var friendlyRequest = new FriendlyCustomTaskRequest(
+            "your-api-get-lib-url"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-friendly-captcha",
+            WebsiteKey = "your-website-key",
+            UserAgent = "userAgentPlaceholder"
+        };
+
+        // Exemplo usando seu próprio proxy
+        // Descomente este bloco se quiser usar seu próprio proxy
+        /*
+        friendlyRequest = new FriendlyCustomTaskRequest(
+            "your-api-get-lib-url"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-friendly-captcha",
+            WebsiteKey = "your-website-key",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var friendlyResult =
+            await cmCloudClient.SolveAsync(friendlyRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                friendlyResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+
+</details>
+  </TabItem>
+
+</Tabs>

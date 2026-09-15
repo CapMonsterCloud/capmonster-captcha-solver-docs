@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -22,10 +24,18 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 <PriceBlockWrap>
   <PriceBlock  captchaId="rc2e"/>
-  <PriceBlock  captchaId="rc2e-spotify-yahoo"/>
+  {/* <PriceBlock  captchaId="rc2e-spotify-yahoo"/> */}
 </PriceBlockWrap>
 
-![](./images/recaptcha-enterprise/recaptchaV2enterprise.png) ![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png) ![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)
+## Примеры заданий
+
+Ниже представлены примеры вариантов reCAPTCHA v2 Enterprise, поддерживаемых CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_1.png)</ImageWrap>
+  <ImageWrap>![](./images/recaptcha-enterprise/recaptchaV2enterprise_2.png)</ImageWrap>
+</ImagesLayout>
 
 :::warning **Внимание!**
 CapMonster Cloud по умолчанию работает через встроенные прокси — они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
@@ -45,7 +55,7 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
 
 ## Параметры запроса
   
-  <TabItem value="proxy" label="RecaptchaV2EnterpriseTask (при использовании прокси)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV2EnterpriseTask**
 
@@ -57,25 +67,45 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    Ключ-идентификатор reCAPTCHA на целевой странице.
-	<br />`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
-	<br/>или `<iframe title="reCAPTCHA" src="...;k=6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH&amp;...` , где `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` - `websiteKey`
+    Ключ-идентификатор reCAPTCHA на целевой странице.<br />
+	Например, значение `websiteKey` можно найти в HTML-коде страницы:
+
+`<div class="g-recaptcha" data-sitekey="THIS_ONE"></div>`
+
+или в URL атрибута `src` элемента `iframe`:
+
+`<iframe title="reCAPTCHA" src="...;k=6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH&amp;...">`
+
+В данном примере `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` — это значение параметра `websiteKey`.
+
 
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>Значение параметра action, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
+    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
     
     ---
 
-    <ParamItem title="enterprisePayload" type="string" />
-    Некоторые реализации виджета reCAPTCHA Enterprise могут содержать дополнительное поле s в структуре, которая передаётся в метод grecaptcha.enterprise.render вместе с sitekey. Например: `2JvUXHNTnZl1Jb6WEvbDyB...ugQA` из `<pre lang="js" ><code>grecaptcha.enterprise.render("some-div-id", {
-	sitekey: "6Lc_aCMTAAAAABx7u2N0D1XnVbI_v6ZdbM6rYf16" 
-	theme: "dark" 
-	s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA" 
-	});</code></pre>`
+    <ParamItem title="enterprisePayload" type="object" />
+    Объект с дополнительными параметрами reCAPTCHA Enterprise.
+
+    **Параметры объекта:**
+
+    - `s` — `string`, дополнительный параметр reCAPTCHA Enterprise, который может передаваться в `grecaptcha.enterprise.render` вместе с `sitekey`.
+
+    Например:
+
+
+```js
+grecaptcha.enterprise.render("some-div-id", {
+  sitekey: "6Lc_aCMTAAAAABx7u2N0D1XnVbI_v6ZdbM6rYf16",
+  theme: "dark",
+  s: "2JvUXHNTnZl1Jb6WEvbDyB...ugQA"
+});
+```
+
 
     ---
 
@@ -83,12 +113,13 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     <p>Адрес домена с которого загружать reCAPTCHA Enterprise. Например: 
 	<br/>- [www.google.com](http://www.google.com) 
 	<br />- [www.recaptcha.net](http://www.recaptcha.net)</p>
-	<p>Не используйте параметр, если не знаете зачем он нужен.</p>
 
     ---
 
     <ParamItem title="userAgent" type="string" />
-    User-Agent браузера, используемый в эмуляции. Необходимо использовать подпись современного браузера, иначе Google будет возвращать ошибку, требуя обновить браузер.
+    User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
     ---
 
@@ -127,10 +158,10 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-  </TabItem>  
+  </div>
 
 <br />
-Для `enterprisePayload` - необходимо заменять функцию `grecaptcha.enterprise.render` перед её вызовом на свою и забирать значение из её параметров. Функция существует после загрузки скрипта, а рендерится капча обычно сразу или по событию страницы, если капча отрендерится с текущим полем `s` на клиенте, то токен с большой вероятностью принят не будет. Оригинальную функцию можно вызывать без поля `s`.
+Для получения параметра `s` из `enterprisePayload` замените функцию `grecaptcha.enterprise.render` перед её вызовом и извлеките значение из передаваемого объекта параметров. Функция становится доступной после загрузки скрипта, а CAPTCHA обычно рендерится сразу или по событию страницы, поэтому перехват необходимо выполнить заранее. Оригинальную функцию можно вызывать без поля `s`.
 
 `apiDomain` – это домен, на котором размещается API-интерфейс для взаимодействия с reCAPTCHA, используется для верификации прохождения капчи пользователем.
 
@@ -179,29 +210,45 @@ Object.defineProperty(window, 'grecaptcha', {
 
 ## Метод создания задачи
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    "websiteKey": "your-website-key",
     "enterprisePayload": {
-      "s": "SOME_ADDITIONAL_TOKEN"
+      "s": "your-value"
     }
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 			```json
 			{
 			  "errorId":0,
@@ -212,33 +259,28 @@ Object.defineProperty(window, 'grecaptcha', {
 	</TabItem>
 
 	<TabItem value="proxy" label="RecaptchaV2EnterpriseTask (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
-    "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
+    "websiteKey": "your-website-key",
     "enterprisePayload": {
-      "s": "SOME_ADDITIONAL_TOKEN"
+      "s": "your-value"
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere",
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password",
     "userAgent": "userAgentPlaceholder"
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 ```json
 {
   "errorId":0,
@@ -253,21 +295,37 @@ Object.defineProperty(window, 'grecaptcha', {
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) чтобы получить решение ReCaptcha2. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 80 с.
 
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTask (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -278,7 +336,7 @@ Object.defineProperty(window, 'grecaptcha', {
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 <br />
 
@@ -297,11 +355,11 @@ Object.defineProperty(window, 'grecaptcha', {
 
 Публичный ключ сайта (sitekey). Найти websiteKey можно в **Элементах**:
 
-![sitekeyEntpr](images\recaptcha-enterprise\sitekey-elements-entpr.png)
+![sitekeyEntpr](images/recaptcha-enterprise/sitekey-elements-entpr.png)
 
 Или в **Запросах**:
 
-![sitekeyEntpr1](images\recaptcha-enterprise\sitekey-network-entpr.png)
+![sitekeyEntpr1](images/recaptcha-enterprise/sitekey-network-entpr.png)
 
 ### Автоматически
 
@@ -582,121 +640,117 @@ Object.defineProperty(window, 'grecaptcha', {
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import {
-      CapMonsterCloudClientFactory,
-      ClientOptions,
-      RecaptchaV2EnterpriseRequest
-    } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV2EnterpriseRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-      const API_KEY = "YOUR_API_KEY";  // Укажите ваш API-ключ CapMonster Cloud
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-      );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-      // Базовый пример без прокси
-      // CapMonster Cloud автоматически использует свои прокси
-      let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",             // Замените на корректное значение
-        enterprisePayload: {
-          s: "SOME_ADDITIONAL_TOKEN",   // Опциональный enterprise параметр
-        }
-      });
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+  });
 
-      // Пример использования вашего собственного прокси
-      // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-      /*
-      const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-      };
+  recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+    proxy,
+  });
+  */
 
-      recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-        websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-        websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-        enterprisePayload: { s: "SOME_ADDITIONAL_TOKEN" },
-        proxy,
-        userAgent: "userAgentPlaceholder"
-      });
-      */
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-      // При необходимости можно проверить баланс 
-      const balance = await client.getBalance();
-      console.log("Balance:", balance);
-
-      const result = await client.Solve(recaptchaV2EnterpriseRequest);
-      console.log("Solution:", result);
-    });
-    ```
+  const result = await client.Solve(recaptcha2EnterpriseRequest);
+  console.log("Solution:", result.solution);
+});
+```
     </details>
 
     <details>
       <summary>Показать код (Node.js)</summary>
-      ```javascript
-      // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-      import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV2EnterpriseRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV2EnterpriseRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-      const API_KEY = "YOUR_API_KEY";  // Укажите ваш API-ключ CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      async function solveRecaptchaV2Enterprise() {
-          const client = CapMonsterCloudClientFactory.Create(
-              new ClientOptions({ clientKey: API_KEY })
-          );
+async function solveRecaptchaV2Enterprise() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-          // Базовый пример без прокси
-          // CapMonster Cloud автоматически использует свои прокси
-          let recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-              websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise", // URL страницы с капчей
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd", // Замените на корректное значение
-              enterprisePayload: {
-                  s: "SOME_ADDITIONAL_TOKEN", // Опциональный enterprise параметр
-              }
-          });
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+  });
 
-          // Пример использования вашего собственного прокси
-          // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-          /*
-          const proxy = {
-              proxyType: "http",
-              proxyAddress: "123.45.67.89",
-              proxyPort: 8080,
-              proxyLogin: "username",
-              proxyPassword: "password"
-          };
+  recaptcha2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    pageAction: "your-page-action",
+    proxy,
+  });
+  */
 
-          recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest({
-              websiteURL: "https://mydomain.com/page-with-recaptcha-enterprise",
-              websiteKey: "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd",
-              enterprisePayload: { s: "SOME_ADDITIONAL_TOKEN" },
-              proxy,
-              userAgent: "userAgentPlaceholder"
-          });
-          */
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-          // При необходимости можно проверить баланс 
-          const balance = await client.getBalance();
-          console.log("Balance:", balance);
+  const result = await client.Solve(recaptcha2EnterpriseRequest);
+  console.log("Solution:", result.solution);
+}
 
-          const result = await client.Solve(recaptchaV2EnterpriseRequest);
-          console.log("Solution:", result);
-      }
-
-      solveRecaptchaV2Enterprise().catch(console.error);
+solveRecaptchaV2Enterprise().catch(console.error);
 ```
 </details>
 
@@ -707,60 +761,61 @@ Object.defineProperty(window, 'grecaptcha', {
   <TabItem value="python" label="Python" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```python
-    # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import RecaptchaV2EnterpriseRequest
-    # from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Раскомментируйте, если планируете использовать прокси
+import asyncio
 
-    API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecaptchaV2EnterpriseRequest
+# Импортируйте ProxyInfo, если планируете использовать собственный прокси
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-    async def solve_recaptcha_v2_enterprise():
-        client_options = ClientOptions(api_key=API_KEY)
-        cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
 
-        # Базовый пример без прокси
-        # CapMonster Cloud автоматически использует свои прокси
-        recaptcha2request = RecaptchaV2EnterpriseRequest(
-            websiteUrl="https://example.com",
-            websiteKey="6Lf56sUnAAAAAIKLuONYgRsFUfmI-3Lex3xT5U-s",
-            enterprisePayload={
-                "s": "SOME_ADDITIONAL_TOKEN"
-            }
-        )
 
-        # Пример использования вашего собственного прокси
-        # Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+async def solve_recaptcha_v2_enterprise():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-        # proxy = ProxyInfo(
-        #     proxyType="http",
-        #     proxyAddress="123.45.67.89",
-        #     proxyPort=8080,
-        #     proxyLogin="username",
-        #     proxyPassword="password"
-        # )
+    # Базовый пример без прокси
+    # CapMonster Cloud автоматически использует собственные прокси
+    recaptcha2_enterprise_request = RecaptchaV2EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        pageAction="your-page-action",
+    )
 
-        # recaptcha2request = RecaptchaV2EnterpriseRequest(
-        #     websiteUrl="https://example.com",
-        #     websiteKey="6Lf56sUnAAAAAIKLuONYgRsFUfmI-3Lex3xT5U-s",
-        #     enterprisePayload={
-                # "s": "SOME_ADDITIONAL_TOKEN"
-        #     },
-        #     proxy=proxy,
-        #     userAgent="userAgentPlaceholder"
-        # )
+    # Пример с использованием вашего прокси
+    # Раскомментируйте этот блок, если хотите использовать свой прокси
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-        # При необходимости можно проверить баланс 
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    recaptcha2_enterprise_request = RecaptchaV2EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        pageAction="your-page-action",
+        proxy=proxy,
+    )
+    """
 
-        result = await cap_monster_client.solve_captcha(recaptcha2request)
-        print("Solution:", result)
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
 
-    asyncio.run(solve_recaptcha_v2_enterprise())
-    ```
+    result = await client.solve_captcha(recaptcha2_enterprise_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_recaptcha_v2_enterprise())
+```
     </details>
 
     <BlogLink url="https://capmonster.cloud/ru/blog/re-1/python-recaptcha-v2"/>
@@ -769,64 +824,67 @@ Object.defineProperty(window, 'grecaptcha', {
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```csharp
-    // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud;
-    using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            // Ваш API-ключ CapMonster Cloud
-            var clientOptions = new ClientOptions
-            {
-                ClientKey = "YOUR_API_KEY" 
-            };
+            ClientKey = "YOUR_API_KEY"
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-            // При необходимости можно проверить баланс 
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
+        // Базовый пример без прокси
+        // CapMonster Cloud автоматически использует собственные прокси
+        var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key",
+            PageAction = "your-page-action"
+        };
 
-            // Базовый пример без прокси
-            // CapMonster Cloud автоматически использует свои прокси
-            var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
-            {
-                WebsiteUrl = "https://example.com", // URL страницы с капчей
-                WebsiteKey = "6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s", // Замените на корректное значение
-                EnterprisePayload = "{\"s\":\"SOME_ADDITIONAL_TOKEN\"}"
-            };
+        // Пример с использованием вашего прокси
+        // Раскомментируйте этот блок, если хотите использовать свой прокси
+        /*
+        recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key",
+            PageAction = "your-page-action",
 
-            // Пример использования вашего собственного прокси
-            // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
-            /*
-            var recaptchaV2EnterpriseRequest = new RecaptchaV2EnterpriseRequest
-            {
-                WebsiteUrl = "https://example.com",
-                WebsiteKey = "6Lf26sUnAAAAAIKLuWNYgRsFUfmI-3Lex3xT5N-s",
-                EnterprisePayload = "{\"s\":\"SOME_ADDITIONAL_TOKEN\"}",
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
 
-                Proxy = new ProxyContainer(
-                    "123.45.67.89",          
-                    8080,               
-                    ProxyType.Http,     
-                    "username",   
-                    "password" 
-                )
-            };
-            */
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
-            var recaptchaV2EnterpriseResult = await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
+        var recaptchaV2EnterpriseResult =
+            await cmCloudClient.SolveAsync(recaptchaV2EnterpriseRequest);
 
-            Console.WriteLine("Solution: " + recaptchaV2EnterpriseResult.Solution.Value);
-        }
+        Console.WriteLine(
+            "Solution: " + recaptchaV2EnterpriseResult.Solution.Value
+        );
     }
-    ``` 
+}
+``` 
 </details>
     <BlogLink url="https://capmonster.cloud/ru/blog/re-1/c-recaptcha-v2"/>
   </TabItem>

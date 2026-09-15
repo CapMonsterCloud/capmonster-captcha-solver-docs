@@ -38,7 +38,7 @@ A reCAPTCHA v3 Enterprise funciona totalmente em segundo plano e não exige que 
 Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa reCAPTCHA v3, especificando o parâmetro `isEnterprise` [(*consulte a seção reCAPTCHA v3*)](../recaptcha-v3-task/).
 :::
 
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
 
@@ -50,8 +50,9 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    A chave identificadora do ReCaptcha v3 na página de destino.
-    <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+    Chave de identificação do ReCaptcha3 na página de destino. <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+    
+    Tem aproximadamente o seguinte formato: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
     ---
 
@@ -61,33 +62,34 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>O valor do parâmetro `action` que é enviado pelo widget ReCaptcha para o Google e que, durante a verificação no servidor, é visível para o proprietário do site. Valor padrão: *verify*</p>
-    <p>Exemplo em HTML:
-    <br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
+    <p>Valor do parâmetro `action`, que é enviado pelo widget ReCaptcha ao Google e que fica visível para o proprietário do site durante a verificação posterior no servidor. Especifique este parâmetro caso o valor seja diferente do valor padrão: *verify*</p>
+	<p>Exemplo em HTML:
+	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
+
+</div>
 
 ## Método de criar tarefa
 
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Solicitação**
+		**Exemplo de requisição**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Resposta**
+		**Exemplo de resposta**
 		```json
 		{
 		  "errorId":0,
@@ -95,7 +97,7 @@ Você também pode resolver o reCAPTCHA v3 Enterprise usando o tipo de tarefa re
 		}
 		```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## Método de obter resultado da tarefa
 
@@ -105,21 +107,21 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta do ReCaptcha3. Você receberá a resposta dentro de um período de 10 a 30 segundos, dependendo da carga de trabalho do serviço.
 
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -142,7 +144,7 @@ Para alguns sites, a resposta pode ser semelhante ao exemplo a seguir. Ao confir
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 <br />
 
@@ -316,3 +318,174 @@ class Program
   </TabItem>
 </Tabs>
 
+## Usar biblioteca SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3EnterpriseRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Não é necessário usar proxy para RecaptchaV3EnterpriseRequest
+  const recaptcha3EnterpriseRequest = new RecaptchaV3EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha3EnterpriseRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Mostrar código (Node.js)</summary>
+
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3EnterpriseRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveRecaptchaV3Enterprise() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Não é necessário usar proxy para RecaptchaV3EnterpriseRequest
+  const recaptcha3EnterpriseRequest = new RecaptchaV3EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha3EnterpriseRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveRecaptchaV3Enterprise().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+
+  <details>
+      <summary>Mostrar código</summary>
+
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecaptchaV3EnterpriseRequest
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_recaptcha_v3_enterprise():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Não é necessário usar proxy para RecaptchaV3EnterpriseRequest
+    recaptcha3_enterprise_request = RecaptchaV3EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        minScore=0.7,
+        pageAction="your-page-action",
+    )
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(recaptcha3_enterprise_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_recaptcha_v3_enterprise())
+```
+</details>
+
+  </TabItem>
+
+  {/* <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>Mostrar código</summary>
+
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using Zennolab.CapMonsterCloud.Requests;
+using Zennolab.CapMonsterCloud;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"  // Sua chave de API do CapMonster Cloud
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",  // URL da sua página com CAPTCHA
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
+        };
+
+        var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);
+
+        Console.WriteLine("Solution: " + recaptchaV3Result.Solution.Value);
+    }
+}
+```
+
+</details> */}
+{/* 
+
+  </TabItem> */}
+</Tabs>

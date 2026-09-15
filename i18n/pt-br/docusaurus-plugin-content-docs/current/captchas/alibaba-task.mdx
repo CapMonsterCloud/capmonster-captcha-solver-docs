@@ -1,5 +1,5 @@
 ---
-sidebar_position: 27
+sidebar_position: 26
 sidebar_label: Alibaba Captcha
 title: "Reconhecimento automático e bypass do Alibaba CAPTCHA | API"
 description: "Aprenda como reconhecer o Alibaba CAPTCHA usando a API do serviço de reconhecimento e resolução automática de captchas CapMonster Cloud!"
@@ -29,9 +29,14 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 A seguir estão exemplos de tipos de tarefas do Alibaba CAPTCHA que atualmente são suportados pelo serviço CapMonster Cloud:
 
 <ImagesLayout gap="16px" columns={3}>
-  <ImageWrap title="Slider CAPTCHA">![](./images/alibaba-task/slider.png)</ImageWrap>
-  <ImageWrap title="Puzzle CAPTCHA">![](./images/alibaba-task/puzzle.png)</ImageWrap>
-  <ImageWrap title="Image restoration CAPTCHA">![](./images/alibaba-task/restoration.png)</ImageWrap>
+  <ImageWrap title="Puzzle">![](./images/alibaba-task/puzzle.png)</ImageWrap>
+  <ImageWrap title="Image restoration">![](./images/alibaba-task/restoration.png)</ImageWrap>
+  <ImageWrap title="Click">![](./images/alibaba-task/click.png)</ImageWrap>
+</ImagesLayout>
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
+  <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
 
 :::warning **Atenção!**
@@ -42,7 +47,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da requisição
 
-<TabItem value="proxy" label="CustomTask (ao usar proxy)" className="bordered-panel">
+<div className="bordered-panel">
 
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -60,8 +65,8 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
   <ParamItem title="sceneId (dentro de metadata)" required type="string" />
-
-  Identificador do cenário do CAPTCHA, enviado no seguinte formato: `"sceneId":"1ww7426c4"` (veja [a seção correspondente](#sceneid) para saber como encontrar este valor)
+  Identificador do cenário do captcha, transmitido no seguinte formato: `"sceneId":"1ww7426c4"`— **o valor é fornecido apenas como exemplo**. <br />
+Utilize o seu próprio valor — as instruções para obtê-lo estão disponíveis na [seção correspondente](#sceneid)
 
   ---
   <ParamItem title="prefix (dentro de metadata)" required type="string" />
@@ -84,38 +89,69 @@ Utilize esses parâmetros apenas quando eles estiverem presentes no site (*veja 
 
 <ParamItem title="userId (dentro de metadata)" type="string" />
 Identificador único do usuário ou da sessão no lado do site. <br />
+Exemplo: `HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=`
 
 ---
 
 <ParamItem title="userUserId (dentro de metadata)" type="string" />
 Identificador adicional (secundário) do usuário. <br />
+Exemplo: `/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=`
 
 ---
 
 <ParamItem title="verifyType (dentro de metadata)" type="string" />
 Versão ou tipo do mecanismo de verificação do captcha. <br />
+Exemplo: `1.0`
 
 ---
 
 <ParamItem title="region (dentro de metadata)" type="string" />
 Região do servidor ou data center onde o captcha é processado. <br />
+Exemplo: `sgp`
 
 ---
 
 <ParamItem title="UserCertifyId (dentro de metadata)" type="string" />
 ID único de verificação associado à sessão atual do captcha. <br />
+Exemplo: `0a03e59417757735511105780e2a5e`
 
 ---
 
 <ParamItem title="apiGetLib (dentro de metadata)" type="string" />
 Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no lado do cliente e pode mudar dinamicamente a cada renderização da página. <br />
+Exemplo: `https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041`
+
+---
+
+<ParamItem title="punishUrl (dentro de metadata)" type="string" />
+
+URL completo da página de verificação recebido do site de destino.
+
+O parâmetro é usado em sites nos quais o Alibaba retorna uma URL separada `/punish` para realizar a verificação. Envie a URL completa, incluindo os parâmetros da consulta. <br />
+
+Exemplo: `https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=`
+
+*As instruções para obter a URL estão disponíveis na seção **Como encontrar todos os parâmetros necessários para criar uma tarefa** → **[punishUrl](#punishurl)**.*
+
+---
+
+<ParamItem title="cookieRequired (dentro de metadata)" type="boolean" />
+
+Retorna cookies junto com a solução do CAPTCHA.
+
+Use o valor `true` somente para sites que utilizam **Alibaba WAF** ou **Amazon WAF** e exigem cookies após a conclusão bem-sucedida da verificação.
+
+Por padrão, esse parâmetro não é utilizado.
+
+---
 
 </div>
 
   <ParamItem title="userAgent" type="string" />
   
-  User-Agent do navegador. <br />
-  **Utilize apenas um User-Agent atual do Windows. O recomendado é:** `userAgentPlaceholder`
+  User-Agent do navegador. Use o valor atual compatível com o CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
   ---
 
@@ -151,57 +187,25 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
 
   ---
 
-</TabItem>
+</div>
 
-## Método de criação da tarefa
+### Variante com `punishUrl`
 
-### Variante padrão (sem parâmetros adicionais)
+Em alguns sites protegidos pelo Alibaba, a verificação é acionada por uma URL separada `/punish`. Nesse caso, envie a URL recebida no parâmetro `punishUrl` (dentro de `metadata`).
+
+O Alibaba Punish pode usar verificações como seleção de imagens correspondentes ou slider.
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel">
-    <MethodItem>
-    ```http
-    https://api.capmonster.cloud/createTask
-    ```
-    </MethodItem>
-    <MethodDescription>
-      
-      **Requisição**
-```json
-{
-  "clientKey": "API_KEY",
-  "task": {
-    "type": "CustomTask",
-    "class": "alibaba",
-    "websiteURL": "https://www.example.com",
-    "userAgent": "userAgentPlaceholder",
-    "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug"
-    }
-  }
-}     
-```
-
-      **Resposta**
-      ```json
-      {
-        "errorId": 0,
-        "taskId": 407533077
-      }
-      ```
-    </MethodDescription>
-  </TabItem>
-
-    <TabItem value="proxy" label="CustomTask (com proxy)" className="method-panel">
+  <TabItem value="punish-proxyless" label="CustomTask (sem proxy)" default className="method-panel">
     <MethodItem>
       ```http
       https://api.capmonster.cloud/createTask
       ```
     </MethodItem>
     <MethodDescription>
-      
-      **Requisição**
+
+      **Exemplo de requisição**
+
 ```json
 {
   "clientKey": "API_KEY",
@@ -211,41 +215,34 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere"
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
     }
   }
 }
 ```
 
-      **Resposta**
-      ```json
-      {
-        "errorId": 0,
-        "taskId": 407533077
-      }
-      ```
+      **Exemplo de resposta**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
     </MethodDescription>
   </TabItem>
-</Tabs>
 
-### Variante com parâmetros estendidos (`userId`, `userUserId`, `verifyType`, etc.):
-
-<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel">
+  <TabItem value="punish-proxy" label="CustomTask (com proxy)" className="method-panel">
     <MethodItem>
-    ```http
-    https://api.capmonster.cloud/createTask
-    ```
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
     </MethodItem>
     <MethodDescription>
-      
-      **Requisição**
+
+      **Exemplo de requisição**
+
 ```json
 {
   "clientKey": "API_KEY",
@@ -255,25 +252,87 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     "websiteURL": "https://www.example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
+      "punishUrl": "https://example.com/_____tmd_____/punish?x5secdata=your-x5secdata&x5step=2"
+    },
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
+  }
+}
+```
+
+      **Exemplo de resposta**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
+    </MethodDescription>
+  </TabItem>
+</Tabs>
+
+---
+
+### Variante com retorno de cookies (`cookieRequired`)
+
+Para alguns sites que utilizam **Alibaba WAF** ou **Amazon WAF**, é necessário obter cookies após a resolução bem-sucedida. Esses cookies são utilizados nas solicitações subsequentes.
+
+Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
+
+```json
+{
+  "cookieRequired": true
+}
+```
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel">
+    <MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+**Exemplo de requisição**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
       "verifyType": "1.0",
       "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
-      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
     }
   }
-}     
+}
 ```
-  **Resposta**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533077
-  }
-  ```
+
+**Exemplo de resposta**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
 </MethodDescription>
 
   </TabItem>
@@ -286,7 +345,7 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
     </MethodItem>
     <MethodDescription>
 
-  **Requisição**
+**Exemplo de requisição**
 
 ```json
 {
@@ -294,59 +353,68 @@ Link para a biblioteca JS do captcha utilizada pelo site. O valor é gerado no l
   "task": {
     "type": "CustomTask",
     "class": "alibaba",
-    "websiteURL": "https://www.example.com",
+    "websiteURL": "https://example.com",
     "userAgent": "userAgentPlaceholder",
     "metadata": {
-      "sceneId": "1ww7426c4",
-      "prefix": "dlw3kug",
-      "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
-      "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
+      "prefix": "your-prefix",
+      "sceneId": "your-scene-id",
+      "userId": "your-user-id",
+      "userUserId": "your-user-user-id",
       "verifyType": "1.0",
       "region": "sgp",
-      "UserCertifyId": "0a03e59417757735511105780e2a5e",
-      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
+      "UserCertifyId": "your-user-certify-id",
+      "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
+      "cookieRequired": true
     },
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-  **Resposta**
-  ```json
-  {
-    "errorId": 0,
-    "taskId": 407533077
-  }
-  ```
+
+**Exemplo de resposta**
+
+```json
+{
+  "errorId": 0,
+  "taskId": 407533077
+}
+```
+
 </MethodDescription>
 
   </TabItem>
 </Tabs>
 
+
 ## Método de obter resultado da tarefa
 
-Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do CAPTCHA Alibaba.
+Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do Alibaba CAPTCHA.
 
-<TabItem value="proxyless" label="CustomTask (sem proxy)" default className="method-panel-full">
-  <MethodItem>
-    ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
-  <MethodDescription>
+<MethodItem>
 
-  **Requisição**
-  ```json
-  {
-    "clientKey": "API_KEY",
-    "taskId": 407533077
-  }
+```http
+https://api.capmonster.cloud/getTaskResult
 ```
 
-**Resposta**
+</MethodItem>
+<br />
+
+<MethodDescription>
+
+**Exemplo de requisição**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "taskId": 407533077
+}
+```
+
+**Exemplo de resposta**
 
 ```json
 {
@@ -362,8 +430,37 @@ Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a s
 }
 ```
 
-  </MethodDescription>
-</TabItem>
+</MethodDescription>
+
+Se `"cookieRequired": true` tiver sido especificado na requisição, a resposta também conterá cookies agrupados por domínio. Isso também se aplica às tarefas com `punishUrl`. Use os cookies do objeto `solution.domains` nas requisições subsequentes ao domínio correspondente, juntamente com o resultado da resolução do CAPTCHA.
+
+<MethodDescription>
+
+**Exemplo de resposta**
+```json
+{
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null,
+  "status": "ready",
+  "solution": {
+    "domains": {
+      "example.com": {
+        "cookies": {
+          "arms_uid": "23906d34-14da-4ddb-b651-b4d72d5376e1",
+          "sca": "ec12103d",
+          "atpsida": "b8cd8cc0185b...1196_1",
+          "cna": "vJsNIxNBKGMCAax0zMDiXVu1",
+          "cbc": "T2gAde24vOm4...wkkwYA=",
+          "x5sec": "7b2274223a...227d",
+          "tfstk": "gPEnRZi0vyuB...ECvCA."
+        }
+      }
+    }
+  }
+}
+```
+</MethodDescription>
 
 ## Como encontrar todos os parâmetros necessários para criar uma tarefa
 
@@ -385,6 +482,7 @@ Este parâmetro também pode ser encontrado usando a busca nas requisições de 
 
 ![](./images/alibaba-task/sceneId1.png)
 
+---
 
 ### `prefix`
 
@@ -394,6 +492,797 @@ O `prefix` pode ser obtido a partir da URL da requisição usada no site para ca
 2. Encontre a requisição relacionada ao carregamento da tarefa (geralmente via **DevTools** → **Network**).
 
 ![](./images/alibaba-task/prefix.png)<br /> 
+
+---
+
+### `punishUrl`
+
+`punishUrl` é a URL de verificação do Alibaba retornada quando a proteção é acionada no site de destino.
+
+Normalmente, essa URL pode ser obtida a partir de uma requisição de rede cuja resposta contém o seguinte erro:
+
+```text
+FAIL_SYS_USER_VALIDATE
+```
+
+#### Obtenção de `punishUrl` pelo DevTools
+
+1. Abra a página de destino e execute a ação que aciona a verificação do Alibaba.
+2. Abra o **DevTools** → **Network**.
+3. Encontre a requisição enviada no momento em que a proteção é acionada. Para facilitar a busca, procure uma resposta que contenha o erro `FAIL_SYS_USER_VALIDATE`.
+4. Abra a requisição encontrada e acesse a aba **Preview**. Na resposta, localize o campo `data` — ele contém a URL de verificação que deve ser usada como `punishUrl`.
+
+![](./images/alibaba-task/punish-url-preview.png)<br />
+
+5. A mesma URL também pode ser encontrada na aba **Response**.
+
+![](./images/alibaba-task/punish-url-response.png)<br />
+
+6. Copie a URL completa e envie-a no parâmetro `punishUrl` (dentro de `metadata`) ao criar a tarefa.
+
+A URL obtida deve conter uma porta (por exemplo, `443`), o caminho `_____tmd_____/punish` e os parâmetros `x5secdata`, `x5step`, `action` e `pureCaptcha`.
+
+Formato da URL:
+
+```text
+https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xgf6888e6c4d5d8115ka6bba95967ab87aa13767f97ccadf409d1782833032a-388365139a1244837524abakc3dafclick33ba7696f04104647438bcba5be532d2833__bx__example.com:443/api/example/testlogin/&x5step=2&action=captchaclick&pureCaptcha=
+```
+<br />
+
+#### Obtenção automática de `punishUrl`
+
+`punishUrl` também pode ser obtido programaticamente de uma das seguintes formas:
+
+* por requisições HTTP — quando são conhecidos a URL da API, o método, os headers e outros parâmetros da requisição;
+* por Playwright — quando é necessário capturar a requisição diretamente no navegador.
+
+Em alguns casos, primeiro é retornada uma URL intermediária com `x5secdata` e `x5step`. Após o processamento, o `punishUrl` final também contém os parâmetros `action` e `pureCaptcha`.
+
+Para requisições HTTP, use os parâmetros da requisição real do site de destino. No cenário com navegador, informe a página necessária e execute a ação que aciona o Alibaba Punish.
+
+:::warning Importante
+Os exemplos demonstram apenas o princípio geral de obtenção de `punishUrl`. Substitua a URL, os headers e outros valores pelos dados atuais do site de destino.
+:::
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript (Node.js)" default className="method-panel">
+<details>
+      <summary>Mostrar código (por requisições HTTP)</summary>
+
+```js
+const USER_AGENT =
+  "userAgentPlaceholder";
+
+const TIMEOUT = 30000;
+
+/* ================= CONFIGURAÇÕES DA REQUISIÇÃO ================= */
+// Todos os valores abaixo são fornecidos apenas como exemplo
+// Informe os parâmetros da requisição real do site de destino
+// Adicione headers extras, se necessário, como origin, referer e accept-language
+
+const REQUEST_CONFIG = {
+  pageUrl: "https://example.com/login",
+
+  url: "https://api.example.com/login?fromSite=example&appName=example-app",
+
+  method: "POST",
+
+  // Query parameters da requisição, por exemplo: login, email,
+  // número de telefone ou outros valores
+  params: {
+    value: "example"
+  },
+
+  headers: {
+    accept: "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "user-agent": USER_AGENT,
+    origin: "https://example.com",
+    referer: "https://example.com/login",
+  },
+};
+
+/* ================= LÓGICA GERAL ================= */
+
+function isPunishUrl(url) {
+  return typeof url === "string" && url.includes("_____tmd_____/punish");
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    ["x5secdata", "x5step", "action", "pureCaptcha"].every((name) =>
+      hasParam(url, name),
+    )
+  );
+}
+
+function cookiesToHeader(cookies = {}) {
+  return Object.entries(cookies)
+    .map(([name, value]) => `${name}=${value}`)
+    .join("; ");
+}
+
+function extractFromHtml(html, baseUrl) {
+  const match = html.match(
+    /(?:["']url["']\s*:\s*["']([^"']+)["'])|(https?:\/\/[^\s"'<>]+\/_____tmd_____\/punish\?[^\s"'<>]+)/i,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const value = (match[1] || match[2])
+    .replace(/\\\//g, "/")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x3D;|&#61;/gi, "=");
+
+  try {
+    const url = new URL(value, baseUrl).href;
+    return isPunishUrl(url) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+async function extractPunishUrl(response) {
+  const text = await response.text();
+
+  try {
+    const url = JSON.parse(text)?.data?.url;
+
+    if (isPunishUrl(url)) {
+      return url;
+    }
+  } catch {}
+
+  return extractFromHtml(text, response.url);
+}
+
+async function sendRequest(config) {
+  const url = new URL(config.url);
+
+  for (const [name, value] of Object.entries(config.params || {})) {
+    if (value != null) {
+      url.searchParams.set(name, value);
+    }
+  }
+
+  const headers = {
+    ...(config.headers || {}),
+  };
+
+  const cookie = cookiesToHeader(config.cookies);
+
+  if (cookie) {
+    headers.cookie = cookie;
+  }
+
+  const method = (config.method || "GET").toUpperCase();
+
+  const options = {
+    method,
+    headers,
+    signal: AbortSignal.timeout(TIMEOUT),
+  };
+
+  if (method !== "GET" && method !== "HEAD") {
+    if (config.json != null) {
+      options.body = JSON.stringify(config.json);
+    } else if (config.data != null) {
+      options.body = config.data;
+    }
+  }
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+
+  return response;
+}
+
+async function resolvePunishUrl(response, config, maxSteps = 3) {
+  const visited = new Set();
+
+  for (let step = 0; step < maxSteps; step++) {
+    const punishUrl = await extractPunishUrl(response);
+
+    if (!punishUrl) {
+      throw new Error("punishUrl não foi encontrado na resposta");
+    }
+
+    if (visited.has(punishUrl)) {
+      throw new Error("Foi detectado um punishUrl repetido");
+    }
+
+    visited.add(punishUrl);
+
+    if (isFinalPunishUrl(punishUrl)) {
+      return punishUrl;
+    }
+
+    const headers = {
+      accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "user-agent": USER_AGENT,
+      referer: config.pageUrl,
+    };
+
+    const cookie = cookiesToHeader(config.cookies);
+
+    if (cookie) {
+      headers.cookie = cookie;
+    }
+
+    response = await fetch(punishUrl, {
+      headers,
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    }
+  }
+
+  throw new Error("Não foi possível obter o punishUrl final");
+}
+
+async function main() {
+  try {
+    const response = await sendRequest(REQUEST_CONFIG);
+
+    const punishUrl = await resolvePunishUrl(response, REQUEST_CONFIG);
+
+    console.log("punishUrl final:");
+    console.log(punishUrl);
+  } catch (error) {
+    console.error("Não foi possível obter punishUrl:");
+    console.error(error.message);
+  }
+}
+
+main();
+```
+</details>
+
+<details>
+      <summary>Mostrar código (por Playwright)</summary>
+```js
+const { chromium } = require("playwright");
+
+// Página na qual o Alibaba Punish é utilizado
+const PAGE_URL = "https://example.com/";
+
+const TIMEOUT = 180000;
+
+function isPunishUrl(url) {
+  return (
+    typeof url === "string" &&
+    url.includes("_____tmd_____/punish")
+  );
+}
+
+function hasParam(url, name) {
+  try {
+    return new URL(url).searchParams.has(name);
+  } catch {
+    return false;
+  }
+}
+
+function isFinalPunishUrl(url) {
+  return (
+    isPunishUrl(url) &&
+    hasParam(url, "x5secdata") &&
+    hasParam(url, "x5step") &&
+    hasParam(url, "action") &&
+    hasParam(url, "pureCaptcha")
+  );
+}
+
+function addHttpsPort(url) {
+  if (
+    typeof url !== "string" ||
+    !url.startsWith("https://")
+  ) {
+    return url;
+  }
+
+  if (/^https:\/\/[^/]+:\d+(?:\/|$)/i.test(url)) {
+    return url;
+  }
+
+  return url.replace(
+    /^https:\/\/([^/]+)/i,
+    "https://$1:443"
+  );
+}
+
+function waitForPunishUrl(page) {
+  return new Promise((resolve, reject) => {
+    let finalPunishUrl = null;
+
+    const timer = setTimeout(() => {
+      cleanup();
+
+      reject(
+        new Error(
+          "punishUrl final não foi encontrado"
+        )
+      );
+    }, TIMEOUT);
+
+    function cleanup() {
+      clearTimeout(timer);
+
+      page.off("request", onRequest);
+      page.off("response", onResponse);
+    }
+
+    function processUrl(url) {
+      if (
+        finalPunishUrl ||
+        !isFinalPunishUrl(url)
+      ) {
+        return;
+      }
+
+      finalPunishUrl =
+        addHttpsPort(url);
+
+      cleanup();
+      resolve(finalPunishUrl);
+    }
+
+    function onRequest(request) {
+      processUrl(
+        request.url()
+      );
+    }
+
+    function onResponse(response) {
+      processUrl(
+        response.url()
+      );
+    }
+
+    page.on("request", onRequest);
+    page.on("response", onResponse);
+  });
+}
+
+async function main() {
+  const browser = await chromium.launch({
+    headless: false,
+  });
+
+  const context =
+    await browser.newContext();
+
+  const page =
+    await context.newPage();
+
+  const punishUrlPromise =
+    waitForPunishUrl(page);
+
+  await page.goto(
+    PAGE_URL,
+    {
+      waitUntil: "domcontentloaded",
+    }
+  );
+
+  console.log(
+    "Execute na página a ação que aciona a verificação do Alibaba"
+  );
+
+  try {
+    const punishUrl =
+      await punishUrlPromise;
+
+    console.log(
+      "punishUrl final:"
+    );
+
+    console.log(punishUrl);
+  } catch (error) {
+    console.error(
+      "Não foi possível obter punishUrl:"
+    );
+
+    console.error(
+      error.message
+    );
+  }
+
+  await browser.close();
+}
+
+main().catch(console.error);
+```
+
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Mostrar código (por requisições HTTP)</summary>
+```python
+import re
+from urllib.parse import urljoin
+
+import requests
+
+
+USER_AGENT = "userAgentPlaceholder"
+
+TIMEOUT = 30
+
+# ================= CONFIGURAÇÕES DA REQUISIÇÃO =================
+# Todos os valores abaixo são fornecidos apenas como exemplo
+# Informe os parâmetros da requisição real do site de destino
+# Adicione headers extras, se necessário, como origin, referer e accept-language
+
+REQUEST_CONFIG = {
+    "page_url": "https://example.com/login",
+
+    "url": "https://api.example.com/login?fromSite=example&appName=example-app",
+
+    "method": "POST",
+
+    # Query parameters da requisição, por exemplo: login, email,
+    # número de telefone ou outros valores
+    "params": {
+        "value": "example",
+    },
+
+    "headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json",
+        "user-agent": USER_AGENT,
+        "origin": "https://example.com",
+        "referer": "https://example.com/login",
+    },
+}
+
+# ================= LÓGICA GERAL =================
+
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and all(
+            has_param(url, name)
+            for name in (
+                "x5secdata",
+                "x5step",
+                "action",
+                "pureCaptcha",
+            )
+        )
+    )
+
+
+def cookies_to_header(cookies=None):
+    return "; ".join(
+        f"{name}={value}"
+        for name, value in (cookies or {}).items()
+    )
+
+
+def extract_from_html(html, base_url):
+    match = re.search(
+        r'''(?:["']url["']\s*:\s*["']([^"']+)["'])'''
+        r'''|(https?://[^\s"'<>]+/_____tmd_____/punish\?[^\s"'<>]+)''',
+        html,
+        flags=re.IGNORECASE,
+    )
+
+    if not match:
+        return None
+
+    value = (
+        (match.group(1) or match.group(2))
+        .replace("\\/", "/")
+        .replace("&amp;", "&")
+        .replace("&#x3D;", "=")
+        .replace("&#61;", "=")
+    )
+
+    url = urljoin(base_url, value)
+
+    return url if is_punish_url(url) else None
+
+
+def extract_punish_url(response):
+    text = response.text
+
+    try:
+        data = response.json()
+        url = data.get("data", {}).get("url")
+
+        if is_punish_url(url):
+            return url
+    except (ValueError, AttributeError):
+        pass
+
+    return extract_from_html(
+        text,
+        response.url,
+    )
+
+
+def send_request(config):
+    headers = dict(
+        config.get("headers", {})
+    )
+
+    cookie = cookies_to_header(
+        config.get("cookies")
+    )
+
+    if cookie:
+        headers["cookie"] = cookie
+
+    response = requests.request(
+        method=config.get("method", "GET"),
+        url=config["url"],
+        params=config.get("params"),
+        headers=headers,
+        json=config.get("json"),
+        data=config.get("data"),
+        timeout=TIMEOUT,
+    )
+
+    response.raise_for_status()
+
+    return response
+
+
+def resolve_punish_url(
+    response,
+    config,
+    max_steps=3,
+):
+    visited = set()
+
+    for _ in range(max_steps):
+        punish_url = extract_punish_url(
+            response
+        )
+
+        if not punish_url:
+            raise RuntimeError(
+                "punishUrl não foi encontrado na resposta"
+            )
+
+        if punish_url in visited:
+            raise RuntimeError(
+                "Foi detectado um punishUrl repetido"
+            )
+
+        visited.add(punish_url)
+
+        if is_final_punish_url(punish_url):
+            return punish_url
+
+        headers = {
+            "accept": (
+                "text/html,application/xhtml+xml,"
+                "application/xml;q=0.9,*/*;q=0.8"
+            ),
+            "user-agent": USER_AGENT,
+            "referer": config["page_url"],
+        }
+
+        cookie = cookies_to_header(
+            config.get("cookies")
+        )
+
+        if cookie:
+            headers["cookie"] = cookie
+
+        response = requests.get(
+            punish_url,
+            headers=headers,
+            timeout=TIMEOUT,
+        )
+
+        response.raise_for_status()
+
+    raise RuntimeError(
+        "Não foi possível obter o punishUrl final"
+    )
+
+
+def main():
+    try:
+        response = send_request(
+            REQUEST_CONFIG
+        )
+
+        punish_url = resolve_punish_url(
+            response,
+            REQUEST_CONFIG,
+        )
+
+        print("punishUrl final:")
+        print(punish_url)
+
+    except Exception as error:
+        print("Não foi possível obter punishUrl:")
+        print(error)
+
+
+if __name__ == "__main__":
+    main()
+```
+</details>
+
+<details>
+      <summary>Mostrar código (por Playwright)</summary>
+```python
+import re
+import time
+from playwright.sync_api import sync_playwright
+
+# Página na qual o Alibaba Punish é utilizado
+PAGE_URL = "https://example.com/"
+
+TIMEOUT = 180
+
+def is_punish_url(url):
+    return (
+        isinstance(url, str)
+        and "_____tmd_____/punish" in url
+    )
+
+def has_param(url, name):
+    return bool(
+        isinstance(url, str)
+        and re.search(
+            rf"(?:[?&]){re.escape(name)}(?:=|&|$)",
+            url,
+        )
+    )
+
+def is_final_punish_url(url):
+    return (
+        is_punish_url(url)
+        and has_param(url, "x5secdata")
+        and has_param(url, "x5step")
+        and has_param(url, "action")
+        and has_param(url, "pureCaptcha")
+    )
+
+def find_punish_url(data):
+    if isinstance(data, str):
+        return data if is_final_punish_url(data) else None
+
+    if isinstance(data, dict):
+        for value in data.values():
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    if isinstance(data, list):
+        for value in data:
+            url = find_punish_url(value)
+            if url:
+                return url
+
+    return None
+
+def main():
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(
+            headless=False
+        )
+
+        context = browser.new_context()
+        page = context.new_page()
+
+        final_punish_url = {"value": None}
+
+        def process_url(url):
+            if (
+                not final_punish_url["value"]
+                and is_final_punish_url(url)
+            ):
+                final_punish_url["value"] = url
+
+        def process_response(response):
+            process_url(response.url)
+
+            if final_punish_url["value"]:
+                return
+
+            try:
+                url = find_punish_url(
+                    response.json()
+                )
+
+                if url:
+                    final_punish_url["value"] = url
+            except:
+                pass
+
+        context.on(
+            "request",
+            lambda request: process_url(request.url),
+        )
+
+        context.on(
+            "response",
+            process_response,
+        )
+
+        page.goto(
+            PAGE_URL,
+            wait_until="domcontentloaded",
+        )
+
+        print(
+            "Execute na página a ação "
+            "que aciona a verificação do Alibaba"
+        )
+
+        start = time.time()
+
+        while (
+            not final_punish_url["value"]
+            and time.time() - start < TIMEOUT
+        ):
+            page.wait_for_timeout(500)
+
+        if final_punish_url["value"]:
+            print("punishUrl final:")
+            print(final_punish_url["value"])
+        else:
+            print("punishUrl final não foi encontrado")
+
+        browser.close()
+
+if __name__ == "__main__":
+    main()
+```
+
+</details>
+
+  </TabItem>
+
+</Tabs>
+
+---
+
 
 ## Trabalhando com sites que contêm parâmetros estendidos
 
@@ -488,6 +1377,8 @@ this.AliyunGeneratedDynamicJS =
 5. Construção de `metadata` e da requisição de resolução do captcha.
 
 Esses dados são enviados ao nosso serviço de resolução de captcha:
+
+> **Importante:** todos os valores indicados são fornecidos exclusivamente a título de exemplo. Antes de utilizá-los, substitua-os pelos dados atuais do seu projeto.
 
 ```json
 {
@@ -600,7 +1491,7 @@ class Worker {
 
     this.websiteUrl = "https://example.com/auth"; // Substitua pela URL da página com captcha
     this.userAgent =
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
+      "userAgentPlaceholder";
   }
 
   async executor() {
@@ -625,10 +1516,8 @@ class Worker {
       `Resultado da resolução do captcha: `,
       AlibabaSolvedResult?.solution?.data?.tokens,
     );
-
     const RequireAuthorizationResponsesAfterCaptchaBypass =
       await this.sendAuthrozationsRequest();
-
     console.log(RequireAuthorizationResponsesAfterCaptchaBypass);
   }
 
@@ -651,12 +1540,12 @@ class Worker {
           Referer: "https://example.com/auth",
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -686,12 +1575,12 @@ class Worker {
           Referer: "https://example.com/auth", // Substitua pelo Referer correto do site
           Timezone: "Thu Apr 09 2026 23:29:23 GMT+0300",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "userAgentPlaceholder",
           Version: "0.2.36",
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -705,7 +1594,6 @@ class Worker {
       console.log(response.body.substring(0, 150));
       return response.body;
     }
-
     console.log(response.body);
     return await this.getAuthorizationResponses();
   }
@@ -718,11 +1606,9 @@ class Worker {
       websiteKey: "customTask",
       userAgent: this.userAgent,
     };
-
     if (captchaMetadataParams) {
       cmReqData.metadata = captchaMetadataParams;
     }
-
     const response = await gotScraping.post(
       `${this.providerVendorSolverUrl}/createTask`,
       {
@@ -732,17 +1618,13 @@ class Worker {
         },
       },
     );
-
     let JSON_responseData = JSON.parse(response.body);
-
     if (JSON_responseData.errorId) throw new Error("JSON.TaskId.error");
-
     let taskId = JSON_responseData.taskId;
     let responseData;
 
     while (true) {
       let cmTaskRes = { clientKey: this.API_KEY, taskId: taskId };
-
       let task_response = await gotScraping.post(
         `${this.providerVendorSolverUrl}/getTaskResult`,
         {
@@ -752,17 +1634,13 @@ class Worker {
           },
         },
       );
-
       let JSON_responseDataTaskResponse = JSON.parse(task_response.body);
-
       if (JSON_responseDataTaskResponse.status !== "processing") {
         responseData = JSON_responseDataTaskResponse;
         break;
       }
-
       await delay(5000);
     }
-
     return responseData;
   }
 
@@ -779,7 +1657,6 @@ class Worker {
       u_atoken: JsonData.token,
       u_asig: JsonData.traceid,
     };
-
     return {
       prefix: "57d98d02303c01e7d2f7814c75224396",
       sceneId: JsonData.sceneId,
@@ -879,9 +1756,7 @@ class Worker:
 
         self.website_url = "https://example.com/auth"  # Substitua pela URL da página com captcha
         self.user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/146.0.0.0 Safari/537.36"
+            "userAgentPlaceholder"
         )
 
         self.authorization_params = {}
@@ -913,7 +1788,7 @@ class Worker:
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+            "sec-ch-ua": '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",
@@ -1049,3 +1924,281 @@ if __name__ == "__main__":
 </details>
   </TabItem>
   </Tabs>
+
+## Usar biblioteca SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js1" label="JavaScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AlibabaRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+  });
+
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+    proxy,
+  });
+  */
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(alibabaRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Mostrar código (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AlibabaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveAlibaba() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+  });
+
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  alibabaRequest = new AlibabaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-alibaba",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      sceneId: "your-scene-id",
+      prefix: "your-prefix",
+    },
+    proxy,
+  });
+  */
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(alibabaRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveAlibaba().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="Python" default className="method-panel">
+<details>
+      <summary>Mostrar código</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import AlibabaCustomTaskRequest
+# Importe ProxyInfo se pretende usar seu próprio proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_alibaba():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Exemplo básico sem proxy
+    # O CapMonster Cloud usa automaticamente seus próprios proxies
+    alibaba_request = AlibabaCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-alibaba",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "sceneId": "your-scene-id",
+            "prefix": "your-prefix",
+        },
+    )
+
+    # Exemplo usando seu proxy
+    # Descomente este bloco se quiser usar seu próprio proxy
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    alibaba_request = AlibabaCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-alibaba",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "sceneId": "your-scene-id",
+            "prefix": "your-prefix",
+        },
+        proxy=proxy,
+    )
+    """
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(alibaba_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_alibaba())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp1" label="C#" className="method-panel">
+
+<details>
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Exemplo básico sem proxy
+        // O CapMonster Cloud usa automaticamente seus próprios proxies
+        var alibabaRequest = new AlibabaCustomTaskRequest(
+            "your-scene-id",
+            "your-prefix"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-alibaba",
+            UserAgent = "userAgentPlaceholder"
+        };
+
+        // Exemplo usando seu proxy
+        // Descomente este bloco se quiser usar seu próprio proxy
+        /*
+        alibabaRequest = new AlibabaCustomTaskRequest(
+            "your-scene-id",
+            "your-prefix"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-alibaba",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var alibabaResult = await cmCloudClient.SolveAsync(alibabaRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                alibabaResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

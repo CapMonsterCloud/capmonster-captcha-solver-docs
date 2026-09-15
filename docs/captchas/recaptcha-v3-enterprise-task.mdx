@@ -12,7 +12,6 @@ import MethodItem from '@theme/MethodItem';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
-import BlogLink from '@theme/BlogLink';
 import { ArticleHead } from '../../src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/recaptcha-v3-enterprise-task" />
@@ -41,7 +40,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 Вы также можете решать reCAPTCHA v3 Enterprise, используя задачу типа reCAPTCHA v3, указав параметр `isEnterprise` [(*см. в разделе reCAPTCHA v3*)](../recaptcha-v3-task/).
 :::
 
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3EnterpriseTask**
 
@@ -54,7 +53,9 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 
     <ParamItem title="websiteKey" required type="string" />
    Ключ-идентификатор ReCaptcha3 на целевой странице.
-   <br/>https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE
+   <br/>`https://www.google.com/recaptcha/enterprise.js?render=THIS_ONE`<br/>
+
+   Имеет следующий примерный формат: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE`
 
    ---
 
@@ -64,33 +65,50 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
     ---
 
     <ParamItem title="pageAction" type="string" />
-    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Значение по умолчанию: *verify*</p>
+    <p>Значение параметра `action`, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
+</div>
 
 
 ## Метод создания задачи
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (без прокси)" default className="method-panel">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/createTask
-		```
-	</MethodItem>
+
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+<div className="method-panel">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3EnterpriseTask",
-    "websiteURL": "https://example.com",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d4TuRTE",
+    "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
+    "websiteKey": "your-website-key",
     "minScore": 0.7
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -98,7 +116,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 		}
 		```
 	</MethodDescription>
-</TabItem>
+</div>
 
 
 ## Метод получения результата задачи
@@ -109,21 +127,37 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение ReCaptcha3. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 30 с.
 
-<TabItem value="proxyless" label="RecaptchaV3EnterpriseTaskProxyless (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -147,7 +181,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 <br />
 
@@ -156,7 +190,7 @@ reCAPTCHA v3 Enterprise работает полностью в фоновом р
 |gRecaptchaResponse|String|Хеш, который необходимо подставить в форму с ReCaptcha3 в `<textarea id="g-recaptcha-response" ></textarea>`. Имеет длину от 500 до 2190 байт.|
 
 
-## Отличия **reCAPTCHA v3 Enterprise** от обычной **reCAPTCHA v3**
+## Отличия reCAPTCHA v3 Enterprise от обычной reCAPTCHA v3
 
 | Характеристика                 | reCAPTCHA v3                                              | reCAPTCHA v3 Enterprise                                                                                      |
 | ------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -318,4 +352,176 @@ class Program
 ```
     </details>
   </TabItem>
+</Tabs>
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3EnterpriseRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Для RecaptchaV3EnterpriseRequest прокси не требуются
+  const recaptcha3EnterpriseRequest = new RecaptchaV3EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha3EnterpriseRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Показать код (Node.js)</summary>
+
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3EnterpriseRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveRecaptchaV3Enterprise() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Для RecaptchaV3EnterpriseRequest прокси не требуются
+  const recaptcha3EnterpriseRequest = new RecaptchaV3EnterpriseRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(recaptcha3EnterpriseRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveRecaptchaV3Enterprise().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+
+  <details>
+      <summary>Показать код</summary>
+
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecaptchaV3EnterpriseRequest
+
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+
+
+async def solve_recaptcha_v3_enterprise():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Для RecaptchaV3EnterpriseRequest прокси не требуются
+    recaptcha3_enterprise_request = RecaptchaV3EnterpriseRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        minScore=0.7,
+        pageAction="your-page-action",
+    )
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(recaptcha3_enterprise_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_recaptcha_v3_enterprise())
+```
+</details>
+
+  </TabItem>
+
+  {/* <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>Показать код</summary>
+
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using Zennolab.CapMonsterCloud.Requests;
+using Zennolab.CapMonsterCloud;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"  // Ваш API-ключ CapMonster Cloud
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",  // URL вашей страницы с капчей
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-verify"
+        };
+
+        var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);
+
+        Console.WriteLine("Solution: " + recaptchaV3Result.Solution.Value);
+    }
+}
+```
+
+</details> */}
+{/* 
+
+  </TabItem> */}
 </Tabs>

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 23
+sidebar_position: 22
 sidebar_label: FunCaptcha
 title: "Автоматическое распознавание и обход FunCaptcha | API"
 description: "Узнайте, как обойти FunCaptcha (Arkose Labs captcha) с помощью API сервиса автоматического рапознавания и решения капч Capmonster Cloud!" 
@@ -25,9 +25,11 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 ![](./images/funcaptcha/funcaptcha.png)
 
 :::warning **Внимание!**
-CapMonster Cloud по умолчанию работает через встроенные прокси — они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
+* Для решения FunCaptcha необходимо использовать **ваш собственный прокси**.
 
-Если прокси с авторизацией по IP, то необходимо добавить адрес **65.21.190.34** в белый список.
+* Если прокси с авторизацией по IP, необходимо добавить адрес **65.21.190.34** в белый список.
+
+* Используйте один и тот же прокси при получении параметров CAPTCHA на сайте и при создании задачи в CapMonster Cloud.
 :::
 
 ## Параметры запроса
@@ -40,7 +42,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
-<TabItem value="proxy" label="FunCaptchaTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **FunCaptchaTask**
 
@@ -52,25 +54,30 @@ CapMonster Cloud по умолчанию работает через встро�
 ---
 
 <ParamItem title="websitePublicKey" required type="string" />
-Ключ FunCaptcha (значение *public key* или *pk*).
+Ключ FunCaptcha (значение `public key` или `pk`).<br />
+
+Пример формата: `EX72CCFB-26EX-40E5-91E6-85EX70BE98ED`
 
 ---
 
 <ParamItem title="data" type="string" />
-Дополнительный параметр. Обязателен, если на сайте используется *data[blob]*. <br />
+Дополнительный параметр. Обязателен, если на сайте используется `data[blob]`. <br />
+
  **Важно:** Не загружайте фрейм с капчей для извлечения `blob`. После загрузки капчи значение параметра становится невалидным.
 
 ---
 
 <ParamItem title="funcaptchaApiJSSubdomain" type="string" />
-Поддомен Arkose Labs (значение *surl*). Указывайте в том случае, если он отличается от стандартного: `client-api.arkoselabs.com`
+Поддомен Arkose Labs (значение `surl`). Указывайте в том случае, если он отличается от стандартного: `client-api.arkoselabs.com`<br />
+
 **Важно:** Указывайте только домен без префикса `https://`
 
 ---
 
 <ParamItem title="userAgent" type="string" />
-User-Agent браузера. <br />
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
+User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
 ---
 
@@ -83,7 +90,7 @@ cookieName1=value1; cookieName2=value2
 
 ---
 
-<ParamItem title="proxyType" type="string" />
+<ParamItem title="proxyType" required type="string" />
 **http** - обычный http/https прокси;<br />
 **https** - попробуйте эту опцию только если "http" не работает (требуется для некоторых кастомных прокси);<br />
 **socks4** - socks4 прокси;<br />
@@ -91,7 +98,7 @@ cookieName1=value1; cookieName2=value2
 
 ---
 
-<ParamItem title="proxyAddress" type="string" />
+<ParamItem title="proxyAddress" required type="string" />
 <p>
 IP адрес прокси IPv4/IPv6. Не допускается:
 - использование прозрачных прокси (где сохраняется видимость реального IP клиента);
@@ -100,102 +107,103 @@ IP адрес прокси IPv4/IPv6. Не допускается:
 
 ---
 
-<ParamItem title="proxyPort" type="integer" />
+<ParamItem title="proxyPort" required type="integer" />
 Порт прокси.
 
 ---
 
-<ParamItem title="proxyLogin" type="string" />
+<ParamItem title="proxyLogin" required type="string" />
 Логин прокси-сервера.
 
 ---
 
-<ParamItem title="proxyPassword" type="string" />
+<ParamItem title="proxyPassword" required type="string" />
 Пароль прокси-сервера.
 
-</TabItem>
+</div>
 
 ## Метод создания задачи
-<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-<TabItem value="proxyless" label="FunCaptchaTask (без прокси)" default className="method-panel">
-<MethodItem>
-```http
-https://api.capmonster.cloud/createTask
-```
-</MethodItem>
-<MethodDescription>
-**Запрос**
-```json
-{
-  "clientKey": "API_KEY",
-  "task": {
-    "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
-    "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
-    "userAgent": "userAgentPlaceholder"
-  }
-}
-```
-**Ответ**
-```json
-{
-  "errorId":0,
-  "taskId":407533077
-}
-```
-</MethodDescription>
-</TabItem>
 
-<TabItem value="proxy" label="FunCaptchaTask (при использовании прокси)" default className="method-panel">
 <MethodItem>
+
 ```http
 https://api.capmonster.cloud/createTask
 ```
+
 </MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+<div className="method-panel">
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "FunCaptchaTask",
-    "websiteURL": "https://www.example.com",
-    "websitePublicKey": "EX72CCFB-26EX-40E5-91E6-85EX70BE98ED",
+    "websiteURL": "https://yourwebsite.com/page-with-funcaptcha",
+    "websitePublicKey": "your-website-key",
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
-    "data": "{\"blob\":\"nj9UbL+yio7goOlTQ/b64t.ayrrBnP6kPgzlKYCP/kv491lKS...Wot/7gjpyIxs7VYb0+QuRcfQ/t6bzh5pXDkOFSskA/V/ITSVZSAlglIplLcdreZ4PE8skfMU6k1Q\"}",
+    "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-**Ответ**
+
+**Пример ответа**
 ```json
 {
-  "errorId":0,
-  "taskId":407533077
+  "errorId": 0,
+  "taskId": 407533077
 }
 ```
 </MethodDescription>
-</TabItem>
-</Tabs>
+</div>
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение FunCaptcha.
 
-<TabItem value="proxyless" label="FunCaptchaTask (без прокси)" default className="method-panel-full">
 <MethodItem>
+
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
+
 </MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 <MethodDescription>
-**Запрос**
+**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
@@ -203,7 +211,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 
-**Ответ**
+**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -217,7 +225,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
 </MethodDescription>
-</TabItem>
+</div>
 
 ## Поиск параметров FunCaptcha
 
@@ -289,11 +297,11 @@ console.log("surl:", decodeURIComponent(p.surl));
 
 Примеры на JavaScript (Node.js), Python и C# показывают, как с помощью Playwright получить параметры `public_key` и `blob`, создать задачу в CapMonster Cloud и получить токен решения капчи. Вы можете реализовать аналогичную логику с другими инструментами автоматизации или тестирования.
 
----
 
-<TabItem value="js" label="JavaScript" default className="method-panel">
-    <details>
-      <summary>Node.js</summary>
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+  <TabItem value="js" label="Node.js" default className="method-panel">
+  <details>
+      <summary>Показать код</summary>
 ```javascript
 // npm install playwright
 
@@ -301,6 +309,15 @@ const { chromium } = require("playwright");
 
 const apiKey = "YOUR_API_KEY"; // API-ключ CapMonster Cloud
 const websiteURL = "https://www.example.com/"; // Страница с FunCaptcha
+
+// Для браузера и задачи CapMonster Cloud используйте один и тот же прокси
+const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password"
+};
 
 // Ждём запрос FunCaptcha, проверяем его, извлекаем public_key и blob.
 async function captureBlobAndPublicKey(page) {
@@ -335,8 +352,12 @@ async function createTask(blob, publicKey) {
         websiteURL,
         websitePublicKey: publicKey,
         data: JSON.stringify({ blob }),
-        userAgent:
-            "userAgentPlaceholder"
+        userAgent: "userAgentPlaceholder",
+        proxyType: proxy.proxyType,
+        proxyAddress: proxy.proxyAddress,
+        proxyPort: proxy.proxyPort,
+        proxyLogin: proxy.proxyLogin,
+        proxyPassword: proxy.proxyPassword
     };
 
     const res = await fetch("https://api.capmonster.cloud/createTask", {
@@ -377,7 +398,14 @@ async function getTaskResult(taskId) {
 }
 
 (async () => {
-    const browser = await chromium.launch({ headless: false });
+    const browser = await chromium.launch({
+        headless: false,
+        proxy: {
+            server: `${proxy.proxyType}://${proxy.proxyAddress}:${proxy.proxyPort}`,
+            username: proxy.proxyLogin,
+            password: proxy.proxyPassword
+        }
+    });
     const page = await browser.newPage();
 
     // Блокировка фрейма капчи
@@ -423,13 +451,12 @@ async function getTaskResult(taskId) {
 })();
 ```
 </details>
-  </TabItem>
 
----
+</TabItem>
 
-<TabItem value="python" label="Python" className="method-panel">
-    <details>
-      <summary>Python</summary>
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Показать код</summary>
 ```Python
 # pip install playwright
 # playwright install
@@ -442,6 +469,15 @@ from playwright.async_api import async_playwright
 
 API_KEY = "YOUR_API_KEY"  # API-ключ CapMonster Cloud
 WEBSITE_URL = "https://www.example.com/"  # Страница с FunCaptcha
+
+# Для браузера и задачи CapMonster Cloud используйте один и тот же прокси
+PROXY = {
+    "proxyType": "http",
+    "proxyAddress": "123.45.67.89",
+    "proxyPort": 8080,
+    "proxyLogin": "username",
+    "proxyPassword": "password",
+}
 
 
 # Ждём запрос FunCaptcha, перехватываем его и извлекаем public_key и blob
@@ -478,9 +514,12 @@ def create_task(blob, public_key):
         "websiteURL": WEBSITE_URL,
         "websitePublicKey": public_key,
         "data": json.dumps({"blob": blob}),  # Передаём blob
-        "userAgent": (
-            "userAgentPlaceholder"
-        )
+        "userAgent": "userAgentPlaceholder",
+        "proxyType": PROXY["proxyType"],
+        "proxyAddress": PROXY["proxyAddress"],
+        "proxyPort": PROXY["proxyPort"],
+        "proxyLogin": PROXY["proxyLogin"],
+        "proxyPassword": PROXY["proxyPassword"],
     }
 
     res = requests.post(
@@ -520,7 +559,17 @@ def get_task_result(task_id):
 
 async def main():
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(
+            headless=False,
+            proxy={
+                "server": (
+                    f"{PROXY['proxyType']}://"
+                    f"{PROXY['proxyAddress']}:{PROXY['proxyPort']}"
+                ),
+                "username": PROXY["proxyLogin"],
+                "password": PROXY["proxyPassword"],
+            },
+        )
         page = await browser.new_page()
 
         # Блокируем загрузку фрейма FunCaptcha
@@ -570,11 +619,9 @@ asyncio.run(main())
 </details>
   </TabItem>
 
----
-
-<TabItem value="js" label="JavaScript" default className="method-panel">
-    <details>
-      <summary>C#</summary>
+<TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Показать код</summary>
 ```csharp
 // dotnet add package Microsoft.Playwright
 
@@ -590,6 +637,13 @@ class Program
     private static readonly string WebsiteURL = "https://www.example.com/"; // Страница с FunCaptcha
     private static readonly HttpClient http = new HttpClient();
 
+    // Для браузера и задачи CapMonster Cloud используйте один и тот же прокси
+    private const string ProxyTypeValue = "http";
+    private const string ProxyAddress = "123.45.67.89";
+    private const int ProxyPort = 8080;
+    private const string ProxyLogin = "username";
+    private const string ProxyPassword = "password";
+
     // Ждём сетевой запрос FunCaptcha, ищем public_key + blob
     static TaskCompletionSource<(string blob, string publicKey)> blobTcs;
 
@@ -600,7 +654,13 @@ class Program
         using var playwright = await Playwright.CreateAsync();
         var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            Headless = false
+            Headless = false,
+            Proxy = new Proxy
+            {
+                Server = $"{ProxyTypeValue}://{ProxyAddress}:{ProxyPort}",
+                Username = ProxyLogin,
+                Password = ProxyPassword
+            }
         });
 
         var page = await browser.NewPageAsync();
@@ -692,7 +752,12 @@ class Program
             websiteURL = WebsiteURL,
             websitePublicKey = publicKey,
             data = JsonSerializer.Serialize(new { blob }),
-            userAgent = "userAgentPlaceholder"
+            userAgent = "userAgentPlaceholder",
+            proxyType = ProxyTypeValue,
+            proxyAddress = ProxyAddress,
+            proxyPort = ProxyPort,
+            proxyLogin = ProxyLogin,
+            proxyPassword = ProxyPassword
         };
 
         var payload = new
@@ -744,3 +809,216 @@ class Program
 ```
 </details>
   </TabItem>
+</Tabs>
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FunCaptchaRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // FunCaptcha решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const funCaptchaRequest = new FunCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-funcaptcha",
+    websitePublicKey: "your-website-public-key",
+    funcaptchaApiJSSubdomain: "your-funcaptcha-api-subdomain",
+    data: '{"blob":"your-blob-value"}',
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(funCaptchaRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Показать код (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  FunCaptchaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveFunCaptcha() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // FunCaptcha решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const funCaptchaRequest = new FunCaptchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-funcaptcha",
+    websitePublicKey: "your-website-public-key",
+    funcaptchaApiJSSubdomain: "your-funcaptcha-api-subdomain",
+    data: '{"blob":"your-blob-value"}',
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(funCaptchaRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveFunCaptcha().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="Python" className="method-panel">
+<details>
+      <summary>Показать код</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import FuncaptchaRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+
+
+async def solve_funcaptcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # FunCaptcha решается только с использованием вашего прокси
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    funcaptcha_request = FuncaptchaRequest(
+        websiteUrl="https://yourwebsite.com/page-with-funcaptcha",
+        websitePublicKey="your-website-public-key",
+        funcaptchaApiJSSubdomain="your-funcaptcha-api-subdomain",
+        data='{"blob":"your-blob-value"}',
+        userAgent="userAgentPlaceholder",
+        proxy=proxy,
+    )
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(funcaptcha_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_funcaptcha())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp1" label="C#" className="method-panel">
+
+<details>
+      <summary>Показать код</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // FunCaptcha решается только с использованием вашего прокси
+        var funcaptchaRequest = new FunCaptchaRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-funcaptcha",
+            WebsiteKey = "your-website-public-key",
+            Subdomain = "your-funcaptcha-api-subdomain",
+            Data = "{\"blob\":\"your-blob-value\"}",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var funcaptchaResult =
+            await cmCloudClient.SolveAsync(funcaptchaRequest);
+
+        Console.WriteLine("Solution: " + funcaptchaResult.Solution.Value);
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

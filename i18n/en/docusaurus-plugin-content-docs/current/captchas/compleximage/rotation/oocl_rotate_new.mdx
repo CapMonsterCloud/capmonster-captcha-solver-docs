@@ -37,7 +37,7 @@ The request must contain two images: background and circle.
 </span>
 <br />
 
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -49,25 +49,25 @@ The request must contain two images: background and circle.
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    Image encoded in base64 format.
+    An array of Base64-encoded images (without the `data:image/png;base64,` prefix).
 
     ---
 
     <ParamItem title="Task (inside metadata)" required type="string" />
     Task name: `"oocl_rotate_new"`
 
-</TabItem>
+</div>
 
 ## Create task method
 
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-  **Request**
+  **Request example**
   ```json
   {
     "clientKey": "API_KEY",
@@ -93,7 +93,7 @@ The request must contain two images: background and circle.
 
 	![](../images/ComplexImageTask-Recognition/ex2.png)
 
-	**Response**
+	**Response example**
 	```json
 	{
 	  "errorId":0,
@@ -102,18 +102,18 @@ The request must contain two images: background and circle.
 	```
 </MethodDescription>
 
-</TabItem>
+</div>
 
 ## Get task result method
 
-<TabItem value="proxyless" label="ComplexImageTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -121,7 +121,8 @@ The request must contain two images: background and circle.
 		}
 		```
 
-	**Response:** degrees indicating how much the circle must be rotated clockwise.
+	**Response example:** <br/>
+  The number of degrees by which the circle must be rotated clockwise.
   ```json
   {
     "errorId":0,
@@ -137,7 +138,7 @@ The request must contain two images: background and circle.
   ```
 </MethodDescription>
 
-</TabItem>
+</div>
 
 ## How to get Base64
 
@@ -146,4 +147,197 @@ Images on pages can be represented either as a URL or already encoded in Base64 
 1. Open your website where the captcha is displayed in the browser.  
 2. Right-click the captcha element and select **Inspect**.
 
-![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)
+![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)
+
+## Use the SDK library
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Show code (for browser)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Proxies are not required for ComplexImageTaskRecognitionRequest
+  const ooclRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "background_base64",
+      "circle_base64",
+    ],
+    metaData: {
+      Task: "oocl_rotate_new",
+    },
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(ooclRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>Show code (Node.js)</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+async function solveOoclRotateNew() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Proxies are not required for ComplexImageTaskRecognitionRequest
+  const ooclRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "background_base64",
+      "circle_base64",
+    ],
+    metaData: {
+      Task: "oocl_rotate_new",
+    },
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(ooclRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveOoclRotateNew().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Show code</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # Specify your CapMonster Cloud API key
+
+
+async def solve_oocl_rotate_new():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Proxies are not required for RecognitionComplexImageTaskRequest
+    oocl_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "background_base64",
+            "circle_base64",
+        ],
+        metadata={
+            "Task": "oocl_rotate_new",
+        },
+    )
+
+    # You can check your balance if necessary
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(oocl_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_oocl_rotate_new())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Show code</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Proxies are not required for RecognitionComplexImageTaskRequest
+        var ooclRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "background_base64",
+                "circle_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "oocl_rotate_new"
+            }
+        };
+
+        // You can check your balance if necessary
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(ooclRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>

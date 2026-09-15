@@ -1,5 +1,5 @@
 ---
-sidebar_position: 19
+sidebar_position: 18
 sidebar_label: Temu
 draft: true
 ---
@@ -48,7 +48,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 </span>
 <br />
 
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -100,7 +100,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
     <ParamItem title="proxyPassword" type="string" />
     代理密码。
 
-</TabItem>
+</div>
 
 
 ## 创建任务方法
@@ -192,7 +192,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
  
 **重要!** 获取解决方案后，您必须清除 cookies 并设置新获取的 cookies。 
 
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -232,7 +232,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 }
 	```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## 如何获取 cookie（在 metadata 中） 参数
 可以通过 `document.cookie` 属性在验证码页面上获取 `cookie` 参数的值。

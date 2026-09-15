@@ -1,6 +1,7 @@
-﻿---
+---
 sidebar_position: 4
 sidebar_label: reCAPTCHA (click)
+title: Reconhecimento automático e bypass do reCAPTCHA (click) | API
 ---
 
 import Tabs from '@theme/Tabs';
@@ -40,7 +41,7 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 </span>
 <br />
 
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -52,14 +53,16 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
     ---
 
     <ParamItem title="imageUrls" required="required (se imagesBase64 não estiver preenchido)" type="array" />
-    Imagem única 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte de captcha 1x1 (em um array).
-    Exemplo: [“[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)”]\
+    Imagem completa 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte do captcha 1x1 (em um array).
+Exemplo: ["[https://i.postimg.cc/yYjg75Kv/img1.jpg](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg)"]
 
     ---
 
     <ParamItem title="imagesBase64" required="required (se imageUrls não estiver preenchido)" type="array" />
-    Imagem única 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte de captcha 1x1 no formato base64 (em um array).
-    Exemplo: [ “/9j/4AAQSkZJRgABAQEAAAAAAAD…”]
+    Imagem completa 4x4, [3x3](https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg) ou uma nova parte do captcha 1x1 no formato base64 (em um array).<br />
+
+O formato deve ser o seguinte: [ "/9j/4AAQSkZJRgABAQEAAAAAAAD…"] (*sem o prefixo data:image/jpeg;base64,*).
+
 
     ---
 
@@ -81,13 +84,16 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
     ---
 
     <ParamItem title="userAgent" type="string" />
-    O User-Agent do navegador a ser utilizado ao carregar imagens, se os links foram passados em imageUrls. É necessário usar uma assinatura de navegador moderna, caso contrário o Google retornará um erro pedindo para atualizar o navegador.
+    O User-Agent do navegador a ser utilizado ao carregar imagens, se os links foram passados em imageUrls. 
+    Use o valor atual compatível com o CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
     ---
 
     <ParamItem title="websiteURL" type="string" />
     URL da página onde o captcha está sendo resolvido.
-  </TabItem>
+  </div>
 
 ### Descrição dos parâmetros
 
@@ -103,39 +109,40 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 
 **Task (dentro da metadata)**: metadata adicionais relacionados à tarefa.
 
-**userAgent**: informações sobre o agente do usuário. Atual userAgent: userAgentPlaceholder
+**userAgent**: informações sobre o agente do usuário. O userAgent atual compatível com o nosso serviço: `userAgentPlaceholder`
 
 **websiteURL**: endereço da página da web com o captcha.
 
 ## Criar tarefa
 
 
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 <MethodItem>
   ```http
   https://api.capmonster.cloud/createTask
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "ComplexImageTask",
     "class": "recaptcha",
-    "imageUrls":[ "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg" ],
+    "imageUrls": [
+      "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"
+    ],
     "metadata": {
       "Task": "Click on traffic lights",
-      "Grid": "3x3",
-      "TaskDefinition": "/m/015qff"
+      "Grid": "3x3"
     },
     "userAgent": "userAgentPlaceholder",
-    "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"
+    "websiteUrl": "https://mydomain.com/page-with-recaptcha"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -144,28 +151,28 @@ O objeto contém dados sobre a tarefa para resolver o ReCaptcha2 do Google.
 ```
 
 </MethodDescription>
-</TabItem>
+</div>
 
 
 
 ## Obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do captcha. Dependendo da carga do sistema, você receberá uma resposta em um intervalo de tempo de 300ms a 6s.
 
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -176,7 +183,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
   </MethodDescription>
-  </TabItem>
+  </div>
 
 <br />
 
@@ -193,23 +200,23 @@ https://api.capmonster.cloud/getTaskResult
 
 #### websitekey:
 
-O processo é semelhante a encontrar o websitekey para [ReCaptchaV2Task](https://docs.capmonster.cloud/pt-br/docs/captchas/no-captcha-task#como-encontrar-todos-os-parâmetros-necessários-para-a-criação-da-tarefa) e [ReCaptchaV2Enterprise](https://docs.capmonster.cloud/pt-br/docs/captchas/recaptcha-v2-enterprise-task#como-encontrar-todos-os-parâmetros-necessários-para-a-criação-da-tarefa).
+O processo é semelhante a encontrar o websitekey para [reCAPTCHA V2](https://docs.capmonster.cloud/pt-br/docs/captchas/no-captcha-task/#como-encontrar-todos-os-par%C3%A2metros-necess%C3%A1rios-para-a-cria%C3%A7%C3%A3o-da-tarefa) e [reCAPTCHA V2 Enterprise]](https://docs.capmonster.cloud/pt-br/docs/captchas/recaptcha-v2-enterprise-task/#como-encontrar-todos-os-par%C3%A2metros-necess%C3%A1rios-para-a-cria%C3%A7%C3%A3o-da-tarefa).
 
 #### imageUrls:
 
 Encontre a URL nos atributos do elemento:
 
-![imgUrl](images\recaptcha-click\img-url-elements.png)
+![imgUrl](images/recaptcha-click/img-url-elements.png)
 
 Você também pode obter a URL completa da imagem clicando com o botão direito na imagem e selecionando **Abrir imagem em uma nova guia**. Em seguida, copie a URL diretamente da barra de endereços do navegador.
 
-![imgUrl1](images\recaptcha-click\recap-img-url.png)
+![imgUrl1](images/recaptcha-click/recap-img-url.png)
 
 #### Task (dentro da metadata)
 
 Descrição da tarefa. Clique com o botão direito no texto da tarefa e, nas **Ferramentas do Desenvolvedor**, encontre o elemento correspondente na estrutura da página:
 
-![metadata](images\recaptcha-click\metadata.png)
+![metadata](images/recaptcha-click/metadata.png)
 
 ### Automaticamente
 
@@ -514,160 +521,204 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 ## Usar biblioteca SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
-      <summary>Mostrar Código (para navegador)</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+      <summary>Mostrar código (para navegador)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import { CapMonsterCloudClientFactory, ClientOptions, ComplexImageRecaptchaRequest } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageRecaptchaRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        const cmcClient = CapMonsterCloudClientFactory.Create(
-            new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // Insira sua chave de API do CapMonster Cloud
-        );
+document.addEventListener("DOMContentLoaded", async () => {
 
-        // Se necessário, você pode verificar o saldo
-        const balance = await cmcClient.getBalance();
-        console.log("Balance:", balance);
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
-        const complexImageRecaptchaRequest = new ComplexImageRecaptchaRequest({
-            imageUrls: ['https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg'], // Substitua pelos valores reais
-            metaData: {
-                Grid: '3x3',
-                Task: 'Please click each image containing a mountain',
-                TaskDefinition: '/m/015qff'
-            },
-            websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL da página com o captcha
-        });
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-        const result = await cmcClient.Solve(complexImageRecaptchaRequest);
-        console.log("Solution:", result);
-    });
-    ```
+  // Não é necessário usar proxy para ComplexImageRecaptchaRequest
+  const complexImageRequest = new ComplexImageRecaptchaRequest({
+    imageUrls: [
+      "your-image-url",
+    ],
+    // Substitua pelos seus próprios valores
+    metaData: {
+      Task: "Select all images with a fire hydrant",
+      Grid: "3x3",
+    },
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(complexImageRequest);
+  console.log("Solution:", result.solution);
+});
+```
     </details>
 
-    <details>
-      <summary>Mostrar Código (Node.js)</summary>
+
+<details>
+      <summary>Mostrar código (Node.js)</summary>
 ```javascript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, ComplexImageRecaptchaRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageRecaptchaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY"; // Insira sua chave de API do CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
 async function solveComplexImageRecaptcha() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  // Não é necessário usar proxy para ComplexImageRecaptchaRequest
+  const complexImageRequest = new ComplexImageRecaptchaRequest({
+    imageUrls: [
+      "your-image-url",
+    ],
+    // Substitua pelos seus próprios valores
+    metaData: {
+      Task: "Select all images with a fire hydrant",
+      Grid: "3x3",
+    },
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+  });
 
-    const complexImageRecaptchaRequest = new ComplexImageRecaptchaRequest({
-        imageUrls: ['https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg'], // Substitua pelos valores reais
-        metaData: {
-            Grid: '3x3',
-            Task: 'Please click each image containing a mountain',
-            TaskDefinition: '/m/015qff'
-        },
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle' // URL da página com o captcha
-    });
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const result = await cmcClient.Solve(complexImageRecaptchaRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(complexImageRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveComplexImageRecaptcha().catch(console.error);
 ```
 </details>
-	
+
   </TabItem>
-  
+
   <TabItem value="python" label="Python" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
-    ```python
-    # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+      <summary>Mostrar código</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import RecaptchaComplexImageTaskRequest
+import asyncio
 
-    # Insira sua chave de API do CapMonster Cloud
-    client_options = ClientOptions(api_key="YOUR_API_KEY")
-    cap_monster_client = CapMonsterClient(options=client_options)
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecaptchaComplexImageTaskRequest
 
-    complex_image_recaptcha_request = RecaptchaComplexImageTaskRequest(
-        imagesUrls=["https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg"],  # Substitua pelos valores reais
-        metadata={
-            "Task": "Click on traffic lights",
-            "Grid": "3x3",
-            "TaskDefinition": "/m/015qff",
-            "websiteUrl": "https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=middle"  # URL da página com o captcha
-        }
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_complex_image_recaptcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
     )
 
-    async def solve_captcha():
-        # Se necessário, você pode verificar o saldo
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    # Não é necessário usar proxy para RecaptchaComplexImageTaskRequest
+    complex_image_request = RecaptchaComplexImageTaskRequest(
+        imagesUrls=[
+            "your-image-url"
+        ],
+        # Substitua pelos seus próprios valores
+        metadata={
+            "Task": "Select all squares with mountains or hills",
+            "Grid": "3x3",
+        },
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+    )
 
-        solution = await cap_monster_client.solve_captcha(complex_image_recaptcha_request)
-        return solution
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
 
-    responses = asyncio.run(solve_captcha())
-    print("Solution:", responses)
-    ```
-</details>
-	
+    result = await client.solve_captcha(complex_image_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_complex_image_recaptcha())
+```
+    </details>
+
   </TabItem>
-  
+
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
-      <summary>Mostrar Código</summary>
-    ```csharp
-    // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud.Requests;
-    using Zennolab.CapMonsterCloud;
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Informe sua chave de API do CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            var clientOptions = new ClientOptions
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Não é necessário usar proxy para RecaptchaComplexImageTaskRequest
+        var complexImageRequest = new RecaptchaComplexImageTaskRequest
+        {
+            ImageUrls = new[]
             {
-                ClientKey = "YOUR_API_KEY" // Insira sua chave de API do CapMonster Cloud
-            };
+                "your-image-url"
+            },
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
-
-            // Se necessário, você pode verificar o saldo
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
-
-            var complexImageRecaptchaRequest = new RecaptchaComplexImageTaskRequest
+            // Substitua pelos seus próprios valores
+            Metadata = new RecaptchaComplexImageTaskRequest.RecaptchaMetadata
             {
-                ImageUrls = new[] { "https://i.postimg.cc/yYjg75Kv/payloadtraffic.jpg" }, // Substitua pelos valores reais
-                Metadata = new RecaptchaComplexImageTaskRequest.RecaptchaMetadata
-                {
-                    Task = "Click on traffic lights",
-                    Grid = RecaptchaComplexImageTaskRequest.RecaptchaMetadata.GridSize.Grid3x3,
-                    TaskDefinition = "/m/015qff"
-                }
-            };
+                Task = "Select all squares with mountains or hills",
+                Grid = RecaptchaComplexImageTaskRequest
+                    .RecaptchaMetadata
+                    .GridSize
+                    .Grid3x3
+            },
 
-            var complexImageRecaptchaResult = await cmCloudClient.SolveAsync(complexImageRecaptchaRequest);
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha"
+        };
 
-            Console.WriteLine("Captcha Solution: " + string.Join(", ", complexImageRecaptchaResult.Solution.Answer));
-        }
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var complexImageResult =
+            await cmCloudClient.SolveAsync(complexImageRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                complexImageResult.Solution,
+                Formatting.Indented
+            )
+        );
     }
-    ```
+}
+```
     </details>
-	
+
   </TabItem>
 </Tabs>

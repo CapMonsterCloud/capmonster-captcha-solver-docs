@@ -38,7 +38,7 @@ A solicitação deve conter uma única imagem em formato base64, composta por 5 
 </span>
 <br />
 
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -50,7 +50,7 @@ A solicitação deve conter uma única imagem em formato base64, composta por 5 
 ---
 
 <ParamItem title="imagesBase64" required type="array" />
-Imagem codificada em formato base64.
+Imagem codificada em base64 (envolvida em um array, sem o prefixo `data:image/png;base64,`).
 
 ---
 
@@ -66,18 +66,18 @@ Texto da tarefa que define qual ícone deve ser encontrado. Exemplo: `"Clique no
 Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar `"Por favor, clique no(a) avi\\u00E3o."`
 (*veja o exemplo na seção [Exemplos automáticos de reconhecimento e resolução](#exemplos-automatizados-de-reconhecimento-e-resolução)*).
 
-</TabItem>
+</div>
 
 ## Método para criar tarefa
 
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
     </MethodItem>
     <MethodDescription>
-      **Requisição**
+      **Exemplo de requisição**
       ```json
       {
         "clientKey": "API_KEY",
@@ -95,7 +95,7 @@ Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar 
       }
       ```
 
-	**Resposta**
+	**Exemplo de resposta**
 	```json
 	{
 	  "errorId":0,
@@ -104,7 +104,7 @@ Por exemplo, para o texto `"Por favor, clique no(a) avião."` você deve enviar 
 	```
 </MethodDescription>
 
-</TabItem>
+</div>
 
 Exemplo de tarefa:
 
@@ -118,14 +118,14 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 
 ## Método para obter o resultado da tarefa
 
-<TabItem value="proxyless" label="ComplexImageTask (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Requisição**
+		**Exemplo de requisição**
 		```json
 		{
 		  "clientKey":"API_KEY",
@@ -133,8 +133,8 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 		}
 		```
 
-	**Resposta:**
-	o índice retornado é o número do ícone que deve ser clicado. A indexação dos ícones começa em 1 e termina em 5:
+	**Exemplo de resposta**<br/>
+    O índice retornado é o número do ícone no qual é necessário clicar. A numeração dos ícones começa em 1 e termina em 5:
 
 ```json
 {
@@ -153,11 +153,11 @@ Você deve enviar uma imagem em base64 que represente 5 imagens de ícones unida
 
 </MethodDescription>
 
-</TabItem>
+</div>
 
 ## Exemplos automatizados de reconhecimento e resolução
 
-Exemplos em Python usando `requests` e `Playwright`, demonstrando o fluxo completo de captcha: desde a obtenção da tarefa e extração das imagens até o processamento, preparação e envio para o CapMonster Cloud para reconhecimento, bem como a obtenção do resultado final.
+Exemplos em Python usando Requests e Playwright, demonstrando o fluxo completo de captcha: desde a obtenção da tarefa e extração das imagens até o processamento, preparação e envio para o CapMonster Cloud para reconhecimento, bem como a obtenção do resultado final.
 
 :::warning Importante
 Estes exemplos são apenas para demonstração e ilustram a lógica geral de funcionamento com o seu site. Em projetos reais, o código pode precisar de adaptação para um site específico, suas requisições e cabeçalhos.
@@ -167,7 +167,7 @@ Dados sensíveis (chaves de API, configurações de proxy, etc.) devem ser armaz
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="python" label="Usando requests" default className="method-panel">
+  <TabItem value="python" label="Usando Requests" default className="method-panel">
 <details>
       <summary>Mostrar código</summary>
 ```python
@@ -396,7 +396,7 @@ if __name__ == "__main__":
 </details>
   </TabItem>
 
-  <TabItem value="python1" label="Using Playwright" className="method-panel">
+  <TabItem value="python1" label="Usando Playwright" className="method-panel">
   <details>
     <summary>Mostrar código</summary>
 ```python
@@ -606,3 +606,192 @@ if __name__ == "__main__":
 </details>
   </TabItem>
     </Tabs>
+
+## Usar biblioteca SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Não é necessário usar proxy para ComplexImageTaskRecognitionRequest
+  const portugalTextFindIconRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_image_base64"],
+    metaData: {
+      Task: "portugal_text_find_icon",
+      TaskArgument: "Encontre o(a) avi\u00E3o.",
+    },
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(portugalTextFindIconRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>Mostrar código (Node.js)</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solvePortugalTextFindIcon() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Não é necessário usar proxy para ComplexImageTaskRecognitionRequest
+  const portugalTextFindIconRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_image_base64"],
+    metaData: {
+      Task: "portugal_text_find_icon",
+      TaskArgument: "Encontre o(a) avi\u00E3o.",
+    },
+  });
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(portugalTextFindIconRequest);
+  console.log("Solution:", result.solution);
+}
+
+solvePortugalTextFindIcon().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
+
+async def solve_portugal_text_find_icon():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Não é necessário usar proxy para RecognitionComplexImageTaskRequest
+    portugal_text_find_icon_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "your_image_base64",
+        ],
+        metadata={
+            "Task": "portugal_text_find_icon",
+            "TaskArgument": "Encontre o(a) avi\\u00E3o.",
+        },
+    )
+
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(portugal_text_find_icon_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_portugal_text_find_icon())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Mostrar código</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Não é necessário usar proxy para RecognitionComplexImageTaskRequest
+        var portugalTextFindIconRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "your_image_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "portugal_text_find_icon",
+                TaskArgument = "Encontre o(a) avi\u00E3o."
+            }
+        };
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(portugalTextFindIconRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>

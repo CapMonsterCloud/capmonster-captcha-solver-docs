@@ -37,7 +37,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -49,25 +49,25 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    base64 编码格式的图片。
+    base64 编码的图像数组（不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"oocl_rotate_new"`
 
-</TabItem>
+</div>
 
 ## 创建任务方法
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-  **请求**
+  **请求示例**
   ```json
   {
     "clientKey": "API_KEY",
@@ -83,64 +83,60 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
       }
     }
   }
-```
+  ```
 
-背景示例（*background_base64*）：
+    	背景示例（*background_base64*）：
 
-![](../images/ComplexImageTask-Recognition/ex1.png)
+    	![](../images/ComplexImageTask-Recognition/ex1.png)
 
-圆形示例（*circle_base64*）：
+    	圆形示例（*circle_base64*）：
 
-![](../images/ComplexImageTask-Recognition/ex2.png)
+    	![](../images/ComplexImageTask-Recognition/ex2.png)
 
-**响应**
-```json
-{
-  "errorId":0,
-  "taskId":407533072
-}
-```
+    	**响应示例**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":407533072
+    	}
+    	```
+    </MethodDescription>
 
-</MethodDescription>
-
-</TabItem>
+</div>
 
 ## 获取任务结果方法
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-
-**响应：** 表示圆形需要顺时针旋转的角度。
-
-```json
-{
-  "errorId":0,
-  "status":"ready",
-  "errorCode":null,
-  "errorDescription":null,
-  "solution": 
-  {
-    "answer":[130.90909],
-    "metadata":{"AnswerType":"NumericArray"}
-  }		   
-}
-```
-
-</MethodDescription>
-
-</TabItem>
+		**响应示例** <br/>
+    圆形需要顺时针旋转的角度。
+      ```json
+      {
+        "errorId":0,
+        "status":"ready",
+        "errorCode":null,
+        "errorDescription":null,
+        "solution": 
+        {
+          "answer":[130.90909],
+          "metadata":{"AnswerType":"NumericArray"}
+        }		   
+      }
+      ```
+	</MethodDescription>
+</div>
 
 ## 如何获取 Base64
 
@@ -149,4 +145,197 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 1. 在浏览器中打开显示验证码的网站。  
 2. 右键点击验证码元素并选择 **检查（Inspect）**。
 
-![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)
+![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)
+
+## 使用 SDK 库
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // ComplexImageTaskRecognitionRequest 不需要代理
+  const ooclRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "background_base64",
+      "circle_base64",
+    ],
+    metaData: {
+      Task: "oocl_rotate_new",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(ooclRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>显示代码（Node.js）</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+async function solveOoclRotateNew() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // ComplexImageTaskRecognitionRequest 不需要代理
+  const ooclRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "background_base64",
+      "circle_base64",
+    ],
+    metaData: {
+      Task: "oocl_rotate_new",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(ooclRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveOoclRotateNew().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # 指定您的 CapMonster Cloud API 密钥
+
+
+async def solve_oocl_rotate_new():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # RecognitionComplexImageTaskRequest 不需要代理
+    oocl_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "background_base64",
+            "circle_base64",
+        ],
+        metadata={
+            "Task": "oocl_rotate_new",
+        },
+    )
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(oocl_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_oocl_rotate_new())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // RecognitionComplexImageTaskRequest 不需要代理
+        var ooclRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "background_base64",
+                "circle_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "oocl_rotate_new"
+            }
+        };
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(ooclRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>

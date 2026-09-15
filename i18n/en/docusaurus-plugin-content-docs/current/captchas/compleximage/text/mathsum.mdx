@@ -1,0 +1,333 @@
+---
+sidebar_label: mathsum
+title: 'Recognition and solving mathsum | API'
+description: 'Use the ComplexImageTask method for automatic recognition and solving mathsum via the CapMonster Cloud API.'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '@site/src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/compleximage/mathsum" />
+
+# mathsum
+
+![](../images/ComplexImageTask-Recognition/mathsum_w170.png)
+
+<PriceBlockWrap>
+  <PriceBlock title="mathsum" captchaId="complex-rec_baidu" />
+</PriceBlockWrap>
+
+:::warning **Attention!**
+Using proxy servers is not required for this task.
+:::
+<br />
+
+The request must contain a single image in base64 format.
+
+## Request parameters
+
+<br />
+<span style={{ fontSize: "15px", fontWeight: 700 }}>
+> IMPORTANT: obtain the base64 image directly before creating the task to avoid errors during solving (see section [How to get base64](#how-to-get-base64)).
+</span>
+<br />
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ComplexImageTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **recognition**
+
+    ---
+
+    <ParamItem title="imagesBase64" required type="array" />
+    Base64-encoded image (wrapped in an array, without the `data:image/png;base64,` prefix).
+
+    ---
+
+    <ParamItem title="Task (inside metadata)" required type="string" />
+    Task name: `"MathSum"`
+
+</div>
+
+## Create task method
+
+<div className="method-panel">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/createTask
+		```
+    </MethodItem>
+    <MethodDescription>
+      **Request example**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "ComplexImageTask",
+          "class": "recognition",
+          "imagesBase64": [
+            "base64"
+          ],
+          "metadata": {
+            "Task": "MathSum"
+          }
+        }
+      }
+      ```
+
+    	**Task examples:**
+
+    	![](../images/ComplexImageTask-Recognition/mathsum.png)
+
+    	**Response example**
+    	```json
+    	{
+    	  "errorId":0,
+    	  "taskId":143998457
+    	}
+    	```
+    </MethodDescription>
+
+</div>
+
+## Get task result method
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Request example**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 143998457
+		}
+		```
+
+		**Response example:**<br/>
+		The calculation result (a numeric value) passed as a string:
+```json
+{
+  "solution": {
+    "answer": "109",
+    "metadata": {
+      "AnswerType": "Text"
+    }
+  },
+  "cost": 0.0005,
+  "status": "ready",
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null
+}
+```
+	</MethodDescription>
+</div>
+
+## How to get Base64
+
+Images on pages can be represented either as a URL or already encoded in Base64 format. To find the required value, right-click the captcha image, select **Inspect**, and carefully examine the **Elements** section or network requests — there you can find either the image URL or the encoded content.
+
+1. Open your website where the captcha is displayed in the browser.  
+2. Right-click the captcha element and select **Inspect**.
+
+![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)
+
+## Use the SDK library
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Show code (for browser)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Proxies are not required for ComplexImageTaskRecognitionRequest
+  const mathSumRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_image_base64"],
+    metaData: {
+      Task: "MathSum",
+    },
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(mathSumRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>Show code (Node.js)</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+async function solveMathSum() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Proxies are not required for ComplexImageTaskRecognitionRequest
+  const mathSumRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: ["your_image_base64"],
+    metaData: {
+      Task: "MathSum",
+    },
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(mathSumRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveMathSum().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>Show code</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # Specify your CapMonster Cloud API key
+
+
+async def solve_math_sum():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Proxies are not required for RecognitionComplexImageTaskRequest
+    math_sum_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "your_image_base64",
+        ],
+        metadata={
+            "Task": "MathSum",
+        },
+    )
+
+    # You can check your balance if necessary
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(math_sum_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_math_sum())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>Show code</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Proxies are not required for RecognitionComplexImageTaskRequest
+        var mathSumRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "your_image_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "MathSum"
+            }
+        };
+
+        // You can check your balance if necessary
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(mathSumRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>
+

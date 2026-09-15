@@ -1,6 +1,7 @@
 ---
-sidebar_position: 14
+sidebar_position: 13
 sidebar_label: TenDI
+title: Reconhecimento automático e bypass do TenDI | API
 ---
 
 
@@ -34,7 +35,7 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 
 ## Parâmetros da solicitação
 
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -51,18 +52,19 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-    captchaAppId. Por exemplo, `"websiteKey": "189123456"` é um parâmetro único para seu site. Você pode obtê-lo de uma página HTML com captcha ou a partir do tráfego (veja a descrição abaixo).
+    **captchaAppId** corresponde ao valor de `aid`. Por exemplo, `"websiteKey": "189123456"` é um parâmetro exclusivo do seu site. Ele pode ser obtido na página HTML que contém o captcha ou no tráfego de rede (veja a descrição abaixo).
 
     ---
 
     <ParamItem title="captchaUrl (dentro da metadata)" type="string" />
-    Link para o script do captcha. Normalmente termina com `TCaptcha.js` ou `TCaptcha-global.js`. Pode ser encontrado na lista de requisições (veja o exemplo abaixo).
+    Link para o script do CAPTCHA. Normalmente, o arquivo se chama `TCaptcha.js` ou `TCaptcha-global.js`. Para a segunda versão, também podem ser ser usados arquivos chamados `TJNCaptcha*.js` e `TJCaptcha*.js`, em que `*` representa qualquer sequência de caracteres ou uma sequência vazia, por exemplo `-global`. O script pode ser encontrado entre as requisições de rede (veja o exemplo abaixo).
 	
     ---
 
     <ParamItem title="userAgent" type="string" />
-    User-Agent do navegador. <br />
-**Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
+    Use o valor atual compatível com o CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 	
 ---
 
@@ -93,7 +95,7 @@ Login do servidor proxy.
 <ParamItem title="proxyPassword" type="string" />
 Senha do servidor proxy.
 
-</TabItem>
+</div>
 
 ## Método de criação da tarefa
 
@@ -106,24 +108,24 @@ Senha do servidor proxy.
     ```
   </MethodItem>
   <MethodDescription>
-    **Solicitação**
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "TenDI",
-        "websiteURL": "https://example.com",
-        "websiteKey": "189123456",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+    **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "TenDI",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+          }
         }
       }
-    }
-    ```
+      ```
 
-    **Resposta**
+    **Exemplo de resposta**
     ```json
     {
       "errorId": 0,
@@ -140,29 +142,29 @@ Senha do servidor proxy.
     ```
   </MethodItem>
   <MethodDescription>
-    **Solicitação**
-    ```json
-    {
-      "clientKey": "API_KEY",
-      "task": {
-        "type": "CustomTask",
-        "class": "TenDI",
-        "websiteURL": "https://example.com",
-        "websiteKey": "189123456",
-        "userAgent": "userAgentPlaceholder",
-        "metadata": {
-          "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
-        },
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
+    **Exemplo de requisição**
+      ```json
+      {
+        "clientKey": "API_KEY",
+        "task": {
+          "type": "CustomTask",
+          "class": "TenDI",
+          "websiteURL": "https://yourwebsite.com/page-with-tencent",
+          "websiteKey": "your-website-key",
+          "userAgent": "userAgentPlaceholder",
+          "metadata": {
+            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+          },
+          "proxyType": "your-proxy-type",
+          "proxyAddress": "your-proxy-address",
+          "proxyPort": 1234,
+          "proxyLogin": "your-proxy-login",
+          "proxyPassword": "your-proxy-password"
+        }
       }
-    }
-    ```
+      ```
 
-    **Resposta**
+    **Exemplo de resposta**
     ```json
     {
       "errorId": 0,
@@ -177,21 +179,21 @@ Senha do servidor proxy.
 ## Método de obter resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do TenDI.
 
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -208,16 +210,22 @@ https://api.capmonster.cloud/getTaskResult
 }		
 ```
   </MethodDescription>
-  </TabItem>
+  </div>
 
 ## Como obter websiteKey (captchaAppId)
 Ative as *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o captcha e veja as solicitações. Algumas delas conterão o valor do parâmetro que você precisa. Nesse caso, `websiteKey=aid`  
 ![](./images/tendi/tendi-devtools.png) 
 
 ## Como obter captchaUrl
-Abra *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o captcha e examine as requisições de rede. Entre elas aparecerá `TCaptcha.js` ou `TCaptcha-global.js`, no qual você pode encontrar um link semelhante a este:
+Abra *Ferramentas de Desenvolvedor*, vá para a aba **Network**, ative o CAPTCHA e examine as requisições de rede. Entre os arquivos carregados, encontre `TCaptcha.js` ou `TCaptcha-global.js`:
 
 ![](./images/tendi/tendi_captchaUrl.png)
+
+Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha*.js` e `TJCaptcha*.js`:
+
+![](./images/tendi/tendi_captchaUrl-1.png)
+
+O caractere `*` no nome do arquivo representa qualquer sequência de caracteres ou uma sequência vazia. Por exemplo, o padrão `TJNCaptcha*.js` pode corresponder aos arquivos `TJNCaptcha.js` ou `TJNCaptcha-global.js`.
 
 ## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
 
@@ -343,75 +351,23 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-      <summary>Mostrar Código (para navegador)</summary>
-  ```js
-  // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
 
-  import {
-    CapMonsterCloudClientFactory,
-    ClientOptions,
-    TenDIRequest
-  } from '@zennolab_com/capmonstercloud-client';
-
-  const API_KEY = "YOUR_API_KEY"; // Insira sua chave de API do CapMonster Cloud
-
-  document.addEventListener("DOMContentLoaded", async () => {
-    const client = CapMonsterCloudClientFactory.Create(
-      new ClientOptions({ clientKey: API_KEY })
-    );
-
-    // Exemplo básico sem proxy
-    // O CapMonster Cloud usa automaticamente seus próprios proxies
-    let tenDIRequest = new TenDIRequest({
-      websiteURL: "https://example.com", // URL da página com o captcha Tencent (TenDI)
-      websiteKey: "183268248"            // TencentCaptcha appid (substitua por um valor válido)
-    });
-
-    // Exemplo de uso do seu próprio proxy
-    // Descomente este bloco se quiser usar um proxy personalizado
-    /*
-    const proxy = {
-      proxyType: "http",
-      proxyAddress: "123.45.67.89",
-      proxyPort: 8080,
-      proxyLogin: "username",
-      proxyPassword: "password"
-    };
-
-    tenDIRequest = new TenDIRequest({
-      websiteURL: "https://example.com",
-      websiteKey: "183268248",
-      userAgent: "userAgentPlaceholder",
-      proxy
-    });
-    */
-
-    // Se necessário, você pode verificar o saldo
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
-
-    const result = await client.Solve(tenDIRequest);
-    console.log("Solution:", result);
-  });
-```
-</details>
-
-<details>
-      <summary>Mostrar Código (Node.js)</summary>
-```javascript
+```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { 
-  CapMonsterCloudClientFactory, 
-  ClientOptions, 
-  TenDIRequest 
-} from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TenDIRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-const API_KEY = "YOUR_API_KEY"; // Insira sua chave de API do CapMonster Cloud
+document.addEventListener("DOMContentLoaded", async () => {
 
-async function solveTenDI() {
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
   const client = CapMonsterCloudClientFactory.Create(
     new ClientOptions({ clientKey: API_KEY })
   );
@@ -419,27 +375,26 @@ async function solveTenDI() {
   // Exemplo básico sem proxy
   // O CapMonster Cloud usa automaticamente seus próprios proxies
   let tenDIRequest = new TenDIRequest({
-    websiteURL: "https://example.com", // URL da página com o captcha
-    websiteKey: "183268248"            // Substitua por um valor válido
+    websiteURL: "https://yourwebsite.com/page-with-tendi",
+    websiteKey: "your-website-key",
   });
 
-  // Exemplo de uso do seu próprio proxy
-  // Descomente este bloco se quiser usar um proxy personalizado
-
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
   /*
   const proxy = {
     proxyType: "http",
     proxyAddress: "123.45.67.89",
     proxyPort: 8080,
     proxyLogin: "username",
-    proxyPassword: "password"
+    proxyPassword: "password",
   };
 
   tenDIRequest = new TenDIRequest({
-    websiteURL: "https://example.com",
-    websiteKey: "websiteKey",
+    websiteURL: "https://yourwebsite.com/page-with-tendi",
+    websiteKey: "your-website-key",
     proxy,
-    userAgent: "userAgentPlaceholder"
+    userAgent: "userAgentPlaceholder",
   });
   */
 
@@ -448,7 +403,61 @@ async function solveTenDI() {
   console.log("Balance:", balance);
 
   const result = await client.Solve(tenDIRequest);
-  console.log("Solution:", result);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Mostrar código (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TenDIRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+async function solveTenDI() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let tenDIRequest = new TenDIRequest({
+    websiteURL: "https://yourwebsite.com/page-with-tendi",
+    websiteKey: "your-website-key",
+  });
+
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  tenDIRequest = new TenDIRequest({
+    websiteURL: "https://yourwebsite.com/page-with-tendi",
+    websiteKey: "your-website-key",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(tenDIRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveTenDI().catch(console.error);
@@ -458,63 +467,70 @@ solveTenDI().catch(console.error);
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
-<details>
-      <summary>Mostrar Código</summary>
+
+  <details>
+      <summary>Mostrar código</summary>
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import TenDiCustomTaskRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Descomente se quiser usar um proxy
+# Importe ProxyInfo se pretende usar seu próprio proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # Insira sua chave de API do CapMonster Cloud
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
 
-async def solve_tendi_custom():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
+
+async def solve_tendi():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
     # Exemplo básico sem proxy
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     tendi_request = TenDiCustomTaskRequest(
-        websiteUrl="https://example.com",  # URL da página com o captcha Tencent (TenDI)
-        websiteKey="189956587",            # TencentCaptcha appid
-        userAgent="userAgentPlaceholder"
+        websiteUrl="https://yourwebsite.com/page-with-tendi",
+        websiteKey="your-website-key",
     )
 
-    # Exemplo de uso do seu próprio proxy
-    # Descomente este bloco se quiser usar um proxy
-    #
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-    #
-    # tendi_request = TenDiCustomTaskRequest(
-    #     websiteUrl="https://example.com",
-    #     websiteKey="189956587",
-    #     userAgent="userAgentPlaceholder",
-    #     proxy=proxy
-    # )
+    # Exemplo usando seu proxy
+    # Descomente este bloco se quiser usar seu próprio proxy
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    tendi_request = TenDiCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-tendi",
+        websiteKey="your-website-key",
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+    )
+    """
 
     # Se necessário, você pode verificar o saldo
-    balance = await cap_monster_client.get_balance()
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(tendi_request)
+    result = await client.solve_captcha(tendi_request)
     print("Solution:", result)
 
-asyncio.run(solve_tendi_custom())
+
+asyncio.run(solve_tendi())
 ```
 </details>
+
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
 <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
@@ -527,7 +543,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // Insira sua chave de API do CapMonster Cloud
+        // Informe sua chave de API do CapMonster Cloud
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -535,26 +551,22 @@ class Program
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-        // Se necessário, você pode verificar o saldo
-        var balance = await cmCloudClient.GetBalanceAsync();
-        Console.WriteLine("Balance: " + balance);
-
         // Exemplo básico sem proxy
         // O CapMonster Cloud usa automaticamente seus próprios proxies
         var tenDiRequest = new TenDiCustomTaskRequest
         {
-            WebsiteUrl = "https://example.com",   // URL da página com o captcha
-            WebsiteKey = "189956587",             // TencentCaptcha appid
+            WebsiteUrl = "https://yourwebsite.com/page-with-tendi",
+            WebsiteKey = "your-website-key",
             UserAgent = "userAgentPlaceholder"
         };
 
-        // Exemplo de uso do seu próprio proxy
-        // Descomente este bloco se quiser usar um proxy personalizado
+        // Exemplo usando seu proxy
+        // Descomente este bloco se quiser usar seu próprio proxy
         /*
-        var tenDiRequest = new TenDiCustomTaskRequest
+        tenDiRequest = new TenDiCustomTaskRequest
         {
-            WebsiteUrl = "https://example.com",
-            WebsiteKey = "189956587",
+            WebsiteUrl = "https://yourwebsite.com/page-with-tendi",
+            WebsiteKey = "your-website-key",
             UserAgent = "userAgentPlaceholder",
 
             Proxy = new ProxyContainer(
@@ -566,6 +578,10 @@ class Program
             )
         };
         */
+
+        // Se necessário, você pode verificar o saldo
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
         var tenDiResult = await cmCloudClient.SolveAsync(tenDiRequest);
 

@@ -11,50 +11,65 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 # Descrição dos erros
 
-:::info Recomendações para evitar erros:
+:::info Recomendações para evitar erros
 <div style={{color: "#000"}}>
-* Certifique-se de que o tipo de captcha que você precisa resolver é suportado pelo serviço CapMonster Cloud. Se esse tipo de captcha não for suportado, por favor, escreva para nós — consideraremos a possibilidade de adicioná-lo.
-* Verifique regularmente as atualizações da documentação para estar ciente das últimas mudanças na API e evitar o uso de métodos ou parâmetros obsoletos.
-* Use proxies de alta qualidade.
 
-Se o erro persistir e você não conseguir resolvê-lo por conta própria, entre em contato com o suporte através do [formulário](https://helpdesk.zennolab.com/conversation/new), do nosso chat [no site](https://capmonster.cloud/) e na [documentação](https://docs.capmonster.cloud/) ou no [canal do Telegram](https://t.me/capmonstercloud), fornecendo:
+Antes de enviar uma tarefa:
 
-- taskId
-- tipo de tarefa (type)
-- imagem/entrada original
-- data/hora da tarefa
-- corpo da requisição (se possível)
+- certifique-se de que o tipo de CAPTCHA necessário é compatível com o CapMonster Cloud. Se o tipo necessário ainda não for compatível, entre em contato conosco — consideraremos a possibilidade de adicionar suporte;
+- use parâmetros atualizados da API;
+- ao usar um proxy, verifique se ele está disponível e estável.
+
+Se o erro persistir, entre em contato com o suporte pelo [formulário](https://helpdesk.zennolab.com/conversation/new), pelo chat no [site](https://capmonster.cloud/) ou na [documentação](https://docs.capmonster.cloud/), ou pelo [canal do Telegram](https://t.me/capmonstercloud).
+
+Ao entrar em contato, informe o `taskId`, o tipo de tarefa (`type`), os dados de entrada ou a imagem original, a data e a hora da tarefa e, se possível, o corpo da requisição.
+
 </div>
 :::
 
+<span style={{fontSize: '1.5rem'}}>**Reenvio de requisições**</span>
+
+<br />Alguns erros são temporários. Nesses casos, você pode repetir a requisição após algum tempo ou criar uma nova tarefa — a ação recomendada é indicada na descrição do erro correspondente.
+
+Se o erro estiver relacionado à chave da API, saldo, parâmetros da tarefa, proxy, token ou outros dados de entrada, verifique e corrija os valores correspondentes antes de reenviar a requisição.
+
+Ao repetir as requisições, respeite os intervalos recomendados e, se necessário, aumente o tempo entre as tentativas.
 
 ### `INVALID KEY`
 Código de erro na API: `ERROR_KEY_DOES_NOT_EXIST` <br />
 A chave da API não foi encontrada ou foi informada em formato incorreto. Verifique se você está usando a chave do [painel pessoal](https://dash.capmonster.cloud/) e se ela está ativa. Se o erro persistir, entre em contato com o suporte, informando o *taskId* e a requisição completa.
 
+### `INVALID CHARACTER`
+Código de erro na API: `ERROR_PROXY_CREDENTIALS_INVALID_CHARACTER` <br />
+O login ou a senha do proxy contém um caractere inválido %. Informe as credenciais do proxy sem esse caractere e repita a requisição.
+
 ### `NO FUNDS`
 Código de erro na API: `ERROR_ZERO_BALANCE` <br />
-Saldo insuficiente para reconhecimento. [Recarregue seu saldo](https://capmonster.cloud/SelectPaymentType) e tente novamente.
+Saldo insuficiente para reconhecimento. [Recarregue seu saldo](https://capmonster.cloud/SelectPaymentType) e repita a tarefa.
 
 ### `BIG IMAGE SIZE`
 Código de erro na API: `ERROR_TOO_BIG_CAPTCHA_FILESIZE` <br />
-A imagem enviada excede o tamanho máximo permitido de 50 KB. Reduza a resolução ou comprima o arquivo, depois envie a tarefa novamente. Esse erro ocorre apenas em captchas com upload de imagem (*ImageToText, ComplexImageTask, ComplexImageTask Recaptcha* etc.).
+A imagem enviada excede o tamanho máximo permitido de 50 KB. Reduza a resolução ou comprima o arquivo e envie a tarefa novamente. Esse erro ocorre apenas em CAPTCHAs com upload de imagem (*ImageToText, ComplexImageTask, ComplexImageTask Recaptcha* etc.).
 
 ### `ZERO IMAGE SIZE`
 Código de erro na API: `ERROR_ZERO_CAPTCHA_FILESIZE` <br />
-O tamanho da imagem é muito pequeno (menos de 100 bytes). Verifique se o arquivo é válido e contém a imagem do captcha.
+O tamanho da imagem é muito pequeno (menos de 100 bytes). Verifique se o arquivo é válido e contém a imagem do CAPTCHA.
 
 ### `CAPTCHA ID IS NOT FOUND`
 Código de erro na API: `ERROR_NO_SUCH_CAPCHA_ID`, `WRONG_CAPTCHA_ID` <br />
-A tarefa com esse taskId não existe ou o prazo de armazenamento expirou (normalmente 5 minutos). Certifique-se de solicitar o resultado logo após enviar a tarefa.
+Verifique o valor de `taskId`. O erro pode ocorrer se a tarefa não existir, o prazo de armazenamento do resultado tiver expirado ou o identificador estiver em formato incorreto. Repetir a requisição com o mesmo `taskId` não retornará um resultado.
 
 ### `CAPTCHA UNSOLVABLE`
 Código de erro na API: `ERROR_CAPTCHA_UNSOLVABLE` <br />
-O serviço não conseguiu resolver a tarefa. Possíveis causas: captcha não suportado, imagem vazia/corrompida, parâmetros incorretos ou falha técnica. Recomenda-se verificar cuidadosamente os valores enviados ou utilizar o [mapeamento de parâmetros](https://docs.capmonster.cloud/pt-br/docs/extension/extension-main/#mapeamento-de-par%C3%A2metros-de-captcha) na extensão do navegador CapMonster Cloud. Se o erro se repetir, entre em contato com o suporte, fornecendo: *taskId*, tipo de tarefa (*type*), imagem original ou dados de entrada, data/hora da tarefa e corpo da requisição.
+Não foi possível resolver o CAPTCHA. Normalmente, esse é um erro temporário — tente criar a tarefa novamente. Verifique também se os parâmetros da solicitação estão corretos e atualizados.
+
+Para CAPTCHAs com imagens, erros repetidos podem indicar que a imagem não pode ser reconhecida corretamente: ela pode conter muito ruído, estar corrompida ou não conter uma resposta.
+
+Tarefas não resolvidas não são cobradas.
 
 ### `CAPTCHA IS NOT READY`
 Código de erro na API: `CAPTCHA_NOT_READY` <br />
-A solução ainda está em processamento. Tente novamente mais tarde, com intervalo mínimo de 2 segundos.
+A tarefa ainda está sendo resolvida. Repita a requisição [getTaskResult](./methods/get-task-result.mdx) mais tarde, mantendo um intervalo de pelo menos 2 segundos entre as requisições.
 
 ### `REQUEST IS NOT ALLOWED FROM YOUR IP`
 Código de erro na API: `ERROR_IP_NOT_ALLOWED` <br />
@@ -62,39 +77,35 @@ A requisição desse endereço IP com a chave atual foi recusada. Abra a seção
 
 ### `IP BANNED`
 Código de erro na API: `ERROR_IP_BANNED` <br />
-Você excedeu o limite de requisições com chave de API incorreta. Verifique a chave no [painel de controle](https://dash.capmonster.cloud/) e tente novamente mais tarde.
+O endereço IP foi temporariamente bloqueado devido a um grande número de requisições inválidas. Verifique se as requisições estão corretas e tente novamente mais tarde. Não repita a requisição imediatamente após receber esse erro.
 
 ### `INCORRECT METHOD`
 Código de erro na API: `ERROR_NO_SUCH_METHOD` <br />
-Tipo de tarefa incorreto (parâmetro *type*). Verifique a lista de [tipos de captcha suportados](https://docs.capmonster.cloud/pt-br/docs/captchas/) (valor do parâmetro *type*).
+Foi informado um tipo de tarefa incorreto (parâmetro *type*). Verifique a lista de [tipos de CAPTCHA compatíveis](https://docs.capmonster.cloud/pt-br/docs/captchas/) (valor do parâmetro *type*).
 
 ### `REQUEST LIMIT EXCEEDED`
 Código de erro na API: `ERROR_TOO_MUCH_REQUESTS` <br />
-Você excedeu o limite de requisições para obter resposta de uma única tarefa. Solicite o [resultado da tarefa](./methods/get-task-result.mdx) no máximo uma vez a cada 2 segundos.
+O limite permitido de requisições foi excedido. Aumente o intervalo entre as requisições repetidas e tente novamente. Ao solicitar o resultado de uma tarefa, chame [getTaskResult](./methods/get-task-result.mdx) no máximo uma vez a cada 2 segundos.
 
 ### `THE DOMAIN IS NOT ALLOWED`
 Código de erro na API: `ERROR_DOMAIN_NOT_ALLOWED` <br />
-A resolução de captchas de alguns domínios é proibida no CapMonster Cloud. Ao tentar criar uma tarefa para esses domínios, você receberá este erro.
+A resolução de CAPTCHAs de alguns domínios é proibida no CapMonster Cloud. Ao tentar criar uma tarefa para esses domínios, você receberá este erro.
 
 ### `THE TOKEN IS EXPIRED`
 Código de erro na API: `ERROR_TOKEN_EXPIRED` <br />
-O token adicional expirou. Obtenha um novo token e envie a tarefa novamente.
-
-### `NO FREE SERVERS`
-Código de erro na API: `ERROR_NO_SLOT_AVAILABLE` <br />
-No momento não há servidores livres para reconhecer essa tarefa. Ao receber esse erro, entre em contato com o suporte — consideraremos a possibilidade de expandir a infraestrutura.
+O token ou challenge enviado expirou. Obtenha um valor atual e crie uma nova tarefa. Reenviar a tarefa com os mesmos dados resultará no mesmo erro.
 
 ### `INVALID RECAPTCHA SITEKEY`
 Código de erro na API: `ERROR_RECAPTCHA_INVALID_SITEKEY` <br />
-O *websiteKey* informado está incorreto. Verifique o valor no código da página com captcha e envie-o corretamente. Se tiver dificuldades para localizar a chave correta, entre em contato com o suporte.
+O *websiteKey* informado está incorreto. Verifique o valor no código da página com CAPTCHA e envie-o corretamente. Se tiver dificuldades para localizar a chave correta, entre em contato com o suporte.
 
 ### `INVALID RECAPTCHA DOMAIN`
 Código de erro na API: `ERROR_RECAPTCHA_INVALID_DOMAIN` <br />
-O domínio não corresponde ao *sitekey* informado ou o parâmetro *websiteURL* foi enviado em formato incorreto. Informe a URL completa da página com captcha, incluindo o protocolo. **Somente são suportados `http://` e `https://`.**
+O domínio não corresponde ao *sitekey* informado ou o parâmetro *websiteURL* foi enviado em formato incorreto. Informe a URL completa da página com CAPTCHA, incluindo o protocolo. **Somente `http://` e `https://` são suportados.**
 
 ### `RECAPTCHA TIMEOUT`
 Código de erro na API: `ERROR_RECAPTCHA_TIMEOUT` <br />
-O tempo para resolver o reCAPTCHA expirou, possivelmente devido a proxy lento ou resposta demorada dos servidores do Google. Tente outro proxy ou repita a tarefa mais tarde.
+O tempo para resolver o reCAPTCHA expirou. Crie uma nova tarefa. Se o erro ocorrer repetidamente ao usar seu próprio proxy, verifique a velocidade e a disponibilidade dele ou use outro proxy.
 
 ### `YOUR IP IS BLOCKED`
 Código de erro na API: `ERROR_IP_BLOCKED` <br />
@@ -102,32 +113,40 @@ O acesso deste IP foi bloqueado devido a um grande número de requisições mals
 
 ### `FAILED TO CONNECT PROXY`
 Código de erro na API: `ERROR_PROXY_CONNECT_REFUSED` <br />
-Não foi possível conectar ao proxy: erro de conexão ou timeout. Verifique o IP, porta e disponibilidade do proxy.
+O servidor proxy recusou a conexão. Verifique o endereço IP, a porta e a disponibilidade do proxy ou use outro proxy.
 
 ### `THE PROXY IP IS BANNED`
 Código de erro na API: `ERROR_PROXY_BANNED` <br />
-O proxy informado está bloqueado no serviço de captcha. Use outro proxy.
+O proxy informado está bloqueado pelo site de destino. Use outro proxy.
 
 ### `MISSING PROXY`
 Código de erro na API: `ERROR_PROXY_MISSING`<br />
-Parâmetros de proxy obrigatórios não foram informados ou o *proxyType* é inválido. Informe todos os parâmetros obrigatórios: *proxyType*, *proxyAddress*, *proxyPort*. Verifique se o valor de *proxyType* está correto.
+Parâmetros obrigatórios do proxy não foram informados ou foi especificado um *proxyType* incorreto. Informe todos os parâmetros obrigatórios: *proxyType*, *proxyAddress*, *proxyPort*. Verifique se o valor de *proxyType* está correto.
 
 ### `PROXY NOT AUTHORIZED`
 Código de erro na API: `ERROR_PROXY_NOT_AUTHORISED`<br />
-Dados de autenticação do proxy incorretos: *proxyLogin* ou *proxyPassword*. Verifique *proxyLogin* e *proxyPassword*. Certifique-se de que as credenciais estão corretas e ativas.
+Dados de autenticação do proxy incorretos: *proxyLogin* ou *proxyPassword*. Verifique *proxyLogin* e *proxyPassword*. Certifique-se de que as credenciais estejam corretas e ativas.
 
 ### `PROXY READ TIMEOUT`
 Código de erro na API: `ERROR_PROXY_READ_TIMEOUT`<br />
-*proxyAddress* ou *proxyPort* inválidos, resultando em timeout ao conectar. Verifique *proxyAddress* e *proxyPort*. Certifique-se de que o proxy está disponível e funcionando corretamente.
+O tempo de espera pela resposta expirou durante o uso do proxy. Repita a requisição. Se o erro ocorrer regularmente, verifique a disponibilidade e a estabilidade do proxy ou use outro proxy.
 
 ### `INCORRECT TASK TYPE`
 Código de erro na API: `ERROR_TASK_NOT_SUPPORTED` <br />
 O tipo de tarefa informado não é suportado ou foi definido incorretamente. Verifique o valor da propriedade type no objeto da tarefa.
 
-### `ERROR_TASK_ABSENT`
+### `TASK ABSENT`
 Código de erro na API: `ERROR_TASK_ABSENT` <br />
 O objeto task está ausente na requisição [createTask](./methods/create-task.mdx) ou o JSON é inválido. Verifique a estrutura da requisição.
 
 ### `USERAGENT IS EXPIRED`
 Código de erro na API: `ERROR_WRONG_USERAGENT`<br />
 O User Agent informado na requisição é inválido. Veja o User Agent atual [aqui](https://capmonster.cloud/api/useragent/actual).
+
+### `SERVICE NOT AVAILABLE`
+Código de erro na API: `ERROR_SERVICE_NOT_AVAILABLE`<br />
+O serviço está temporariamente indisponível. Este erro é retornado quando o serviço de callback está indisponível ou quando a verificação de disponibilidade do [getTaskResult](./methods/get-task-result.mdx) falha. Nesses casos, a criação de novas tarefas é bloqueada para evitar que o usuário pague por tarefas cujos resultados não poderão ser recebidos. Repita a requisição mais tarde. Se estiver usando callback, verifique se a URL informada está acessível.
+
+### `INVALID TASK`
+Código de erro na API: `ERROR_INVALID_TASK`<br />
+A solicitação está sintaticamente correta, mas contém dados inválidos para criar a tarefa. Por exemplo, campos obrigatórios podem estar ausentes, conter valores incorretos ou dados expirados, impossibilitando a resolução do CAPTCHA. O campo `errorDescription` informa quais campos da solicitação estão incorretos e como corrigi-los. Verifique os parâmetros da tarefa, confirme que os dados enviados estão atualizados e corrija os campos indicados em `errorDescription`. Se você não conseguir resolver o problema por conta própria, entre em contato com nossa equipe de [suporte](https://helpdesk.zennolab.com/conversation/new).

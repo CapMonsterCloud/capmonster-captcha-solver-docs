@@ -1,5 +1,5 @@
 ---
-sidebar_position: 19
+sidebar_position: 18
 sidebar_label: Temu
 title: "Automatic recognition and bypass of Temu CAPTCHA | API"
 description: "Find out how to bypass Temu CAPTCHA using the Capmonster Cloud API for automatic CAPTCHA recognition and solving — exclusively on your own platforms!"
@@ -52,7 +52,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 </span>
 <br />
 
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
 
@@ -107,7 +107,7 @@ Proxy server login.
 <ParamItem title="proxyPassword" type="string" />
 Proxy server password.
 
-</TabItem> 
+</div>
 
 ## Create task method
 
@@ -198,7 +198,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the
  
 **Important!** After receiving the solution, you must clear the cookies and set the newly obtained cookies. 
 
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -238,7 +238,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to obtain the
 }
 	```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## How to obtain the cookie (inside metadata) parameter
 The value for the `cookie` parameter can be obtained on the CAPTCHA page via the `document.cookie` property.

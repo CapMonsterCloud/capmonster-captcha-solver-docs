@@ -16,7 +16,6 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 <ArticleHead slug="captchas/compleximage/bls" />
 
-
 # bls
 
 ![](../images/ComplexImageTask-Recognition/bls_img.png)
@@ -28,7 +27,6 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 :::warning **注意！**
 此任务不需要使用代理服务器。
 :::
-<br />
 
 在请求中，必须提供 9 张 base64 格式的图片。<br />
 此外，必须在 `metadata` 中传递 `TaskArgument` 参数值。
@@ -43,7 +41,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 </span>
 <br />
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ComplexImageTask**
 
@@ -55,33 +53,33 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     ---
 
     <ParamItem title="imagesBase64" required type="array" />
-    由 base64 编码的图片数组。
+    base64 编码的图像数组（不包含 `data:image/png;base64,` 前缀）。
 
     ---
 
-    <ParamItem title="Task（在 metadata 中）" required type="string" />
+    <ParamItem title="Task（位于 metadata 中）" required type="string" />
     任务名称：`"bls_3x3"`
 
     ---
 
-    <ParamItem title="TaskArgument（在 metadata 中）" required type="string" />
-    需要在图片中找到的数字值。例如：`"123"`
+    <ParamItem title="TaskArgument（位于 metadata 中）" required type="string" />
+    需要在图像中查找的数字值。例如：`"123"`
 
-</TabItem>
+</div>
 
 ## 创建任务方法
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
       ```json
       {
-        "clientKey":{{API_key}},
+        "clientKey": "API_KEY",
         "task": 
         {
           "type": "ComplexImageTask",
@@ -123,7 +121,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
     	对于此示例：`"TaskArgument": "546"`
 
-    	**响应**
+    	**响应示例**
     	```json
     	{
     	  "errorId":0,
@@ -132,26 +130,26 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
     	```
     </MethodDescription>
 
-</TabItem>
+</div>
 
 ## 获取任务结果方法
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
 		```
 	</MethodItem>
 	<MethodDescription>
-		**请求**
+		**请求示例**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 143998457
 		}
 		```
-		**响应：**
-		一个布尔值数组（`true` 或 `false`），表示每张图片中的数字是否与目标参数匹配。
+		**响应示例：**<br/>
+		由 `true` 或 `false` 元素组成的值数组，具体取决于图像中的数字是否与目标参数匹配。  
 ```json
 {
   "errorId": 0,
@@ -168,13 +166,13 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 ```
 </MethodDescription>
 
-</TabItem>
+</div>
 
 ## 替代解决方法（bls_text）
 
 除了使用自动匹配模式（`bls_3x3`）外，你还可以对每张图片分别进行文本识别。该方法提供了更高的灵活性，并允许对处理流程进行更精细的控制。
 
-此方法通过使用 `ImageToTextTask` 并结合 `bls_text` 模块来实现（*参见章节 [模块名称传递](/api/module-name.mdx)*）。在该模式下，**每张图片都会作为单独的验证码进行处理**，返回结果为识别出的文本值。
+此方法通过使用 `ImageToTextTask` 并结合 `bls_text` 模块来实现（*参见章节 [模块名称传递](/docs/captchas/ImageToText/module-name)*）。在该模式下，**每张图片都会作为单独的验证码进行处理**，返回结果为识别出的文本值。
 
 ### 工作流程
 
@@ -185,14 +183,14 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 
 ### 请求示例
 
-<TabItem value="proxyless" label="ComplexImageTask（无代理）" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-      **请求**
+      **请求示例**
 
 ```json
 {
@@ -205,7 +203,7 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
 }
 ```
 
-**响应示例**
+**响应示例**    
 
 ```json
 {
@@ -218,10 +216,8 @@ import { ArticleHead } from '@site/src/theme/ArticleHead';
   }
 }
 ```
-
-</MethodDescription>
-
-</TabItem>
+    </MethodDescription>
+</div>
 
 ### 自动化 bls_text 解决示例
 
@@ -338,5 +334,228 @@ solveBlsText();
 1. 在浏览器中打开显示验证码的网站。  
 2. 右键点击验证码元素并选择 **检查（Inspect）**。
 
-![base64ComplexImage](..\images\ComplexImageTask-Recognition\base64.png)
+![base64ComplexImage](../images/ComplexImageTask-Recognition/base64.png)
 
+## 使用 SDK 库
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>显示代码（浏览器）</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // ComplexImageTaskRecognitionRequest 不需要代理
+  const blsRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "your_image_1_base64",
+      "your_image_2_base64",
+      "your_image_3_base64",
+      "your_image_4_base64",
+      "your_image_5_base64",
+      "your_image_6_base64",
+      "your_image_7_base64",
+      "your_image_8_base64",
+      "your_image_9_base64",
+    ],
+    metaData: {
+      Task: "bls_3x3",
+      TaskArgument: "123",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(blsRequest);
+  console.log("Solution:", result.solution);
+});
+```
+    </details>
+
+    <details>
+      <summary>显示代码（Node.js）</summary>
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  ComplexImageTaskRecognitionRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+async function solveBls3x3() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+  // ComplexImageTaskRecognitionRequest 不需要代理
+  const blsRequest = new ComplexImageTaskRecognitionRequest({
+    imagesBase64: [
+      "your_image_1_base64",
+      "your_image_2_base64",
+      "your_image_3_base64",
+      "your_image_4_base64",
+      "your_image_5_base64",
+      "your_image_6_base64",
+      "your_image_7_base64",
+      "your_image_8_base64",
+      "your_image_9_base64",
+    ],
+    metaData: {
+      Task: "bls_3x3",
+      TaskArgument: "123",
+    },
+  });
+
+  // 如有需要，可以检查余额
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(blsRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveBls3x3().catch(console.error);
+```
+</details>
+
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import RecognitionComplexImageTaskRequest
+
+API_KEY = "YOUR_API_KEY"  # 指定您的 CapMonster Cloud API 密钥
+
+
+async def solve_bls_3x3():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # RecognitionComplexImageTaskRequest 不需要代理
+    bls_request = RecognitionComplexImageTaskRequest(
+        imagesBase64=[
+            "your_image_1_base64",
+            "your_image_2_base64",
+            "your_image_3_base64",
+            "your_image_4_base64",
+            "your_image_5_base64",
+            "your_image_6_base64",
+            "your_image_7_base64",
+            "your_image_8_base64",
+            "your_image_9_base64",
+        ],
+        metadata={
+            "Task": "bls_3x3",
+            "TaskArgument": "123",
+        },
+    )
+
+    # 如有需要，可以检查余额
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(bls_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_bls_3x3())
+```
+    </details>
+
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+  <details>
+      <summary>显示代码</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        const string API_KEY = "YOUR_API_KEY"; // 指定您的 CapMonster Cloud API 密钥
+
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = API_KEY
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // RecognitionComplexImageTaskRequest 不需要代理
+        var blsRequest = new RecognitionComplexImageTaskRequest
+        {
+            ImagesBase64 = new[]
+            {
+                "your_image_1_base64",
+                "your_image_2_base64",
+                "your_image_3_base64",
+                "your_image_4_base64",
+                "your_image_5_base64",
+                "your_image_6_base64",
+                "your_image_7_base64",
+                "your_image_8_base64",
+                "your_image_9_base64"
+            },
+
+            Metadata = new RecognitionComplexImageTaskRequest.RecognitionMetadata
+            {
+                Task = "bls_3x3",
+                TaskArgument = "123"
+            }
+        };
+
+        // 如有需要，可以检查余额
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var result = await cmCloudClient.SolveAsync(blsRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                result.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+``` 
+</details>
+  </TabItem>
+
+</Tabs>

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 25
+sidebar_position: 24
 sidebar_label: TSPD
 title: "Автоматическое распознавание и обход TSPD | API"
 description: "Узнайте, как распознать TSPD с помощью API сервиса автоматического рапознавания и решения капч CapMonster Cloud!" 
@@ -42,7 +42,7 @@ TSPD — это WAF-защита (Web Application Firewall), предназна�
 </span>
 <br />
 
-<TabItem value="proxy" label="CastleTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -69,8 +69,9 @@ TSPD — это WAF-защита (Web Application Firewall), предназна�
 ---
 
 <ParamItem title="userAgent" type="string" />
-User-Agent браузера. <br />
-**Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
+User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+    Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
 ---
 
@@ -106,37 +107,53 @@ User-Agent браузера. <br />
 <ParamItem title="proxyPassword" required type="string" />
 Пароль прокси-сервера.
 
-</TabItem>
+</div>
 
 ## Метод создания задачи
 
-<TabItem value="proxy" label="CustomTask (c прокси)" className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+<div className="method-panel">
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "type": "CustomTask",
         "class": "tspd",
-        "websiteUrl": "https://example.com",        
+        "websiteUrl": "https://yourwebsite.com/page-with-tspd",        
         "metadata": {
             "tspdCookie": "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
             "htmlPageBase64": "PCFET0NU...k+PC9odG1sPg=="
         },
         "userAgent": "userAgentPlaceholder",
-        "proxyType": "http",
-        "proxyAddress": "8.8.8.8",
-        "proxyPort": 8080,
-        "proxyLogin": "proxyLoginHere",
-        "proxyPassword": "proxyPasswordHere"
+        "proxyType": "your-proxy-type",
+        "proxyAddress": "your-proxy-address",
+        "proxyPort": 1234,
+        "proxyLogin": "your-proxy-login",
+        "proxyPassword": "your-proxy-password"
 }
       ```
 
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -144,28 +161,44 @@ User-Agent браузера. <br />
     }
       ```
     </MethodDescription>
-  </TabItem>
+  </div>
 
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение TSPD.
 
 > **Важно**: при успешном прохождении в новых версиях TSPD может возвращаться cookie `TSPD_101_DID`, тогда как в более старых версиях он может отсутствовать.
 
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 		```json
      {
           "errorId":0,
@@ -187,7 +220,7 @@ User-Agent браузера. <br />
       }
 		```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## Работа со страницей с TSPD
 
@@ -200,7 +233,7 @@ User-Agent браузера. <br />
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -304,7 +337,7 @@ Upgrade-Insecure-Requests: 1
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -371,7 +404,7 @@ const url =
 // === Заголовки ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -481,7 +514,7 @@ const url =
 // === Задайте нужные заголовки ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="145", "Google Chrome";v="145"',
+    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -561,64 +594,74 @@ main().catch(console.error);
 <details>
       <summary>Показать код (Node.js)</summary>
 ```js
-import { gotScraping } from "got-scraping"; // Для выполнения HTTP-запросов с TLS-отпечатком
+import { gotScraping } from "got-scraping";
 import fs from "fs";
 
-const API_KEY = "YOUR_API_KEY"; // Замените на ваш API-ключ CapMonster Cloud
+// =========================================================
+// КОНФИГУРАЦИЯ (рекомендуется хранить данные в отдельном файле или переменных окружения)
+// =========================================================
+
+const API_KEY = "YOUR_CAPMONSTER_API_KEY"; // Замените на ваш реальный API ключ CapMonster Cloud
 const CAPMONSTER_URL = "https://api.capmonster.cloud";
 
-// Замените на целевой URL
-const url = "https://example.com";
+const url = "https://example.com"; // Замените на целевой URL, где есть TSPD защита
 
-//  Замените на ваш прокси
+// Установите настройки прокси
 const proxy = {
-  host: "proxyAddress",
-  port: 8080,
-  login: "proxyLogin",
-  password: "proxyPassword",
-  type: "http",
+    host: "your-proxy-address",
+    port: 1234,
+    login: "your-proxy-login",
+    password: "your-proxy-password",
+    type: "http"
 };
 
 const proxyUrl = `${proxy.type}://${proxy.login}:${proxy.password}@${proxy.host}:${proxy.port}`;
 
-// Используйте актуальный User-Agent
+// User-Agent для имитации реального браузера Chrome
 const userAgent =
   "userAgentPlaceholder";
+
+// =========================================================
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// =========================================================
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function extractValidTspdCookies(setCookies) {
+  /** Извлечение cookies из заголовков Set-Cookie */
   const cookies = setCookies.map((c) => c.split(";")[0].trim());
 
-  console.log("\nRaw cookies:");
+  console.log("\nПолученные cookies:");
   console.log(cookies);
 
-  // Извлекаем только TS cookies
+  // Извлечение всех cookies начинающихся с "TS"
   const tsCookies = cookies.filter((c) => c.startsWith("TS"));
 
-  // Проверяем, что TSPD_101_DID отсутствует
+  // Проверка блокировки - TSPD_101_DID указывает на блокировку
   const hasDid = cookies.some((c) => c.startsWith("TSPD_101_DID="));
 
   if (hasDid) {
-    console.log("TSPD_101_DID detected. Request was blocked.");
+    console.log("Обнаружен TSPD_101_DID. Запрос был заблокирован.");
     return null;
   }
 
+  // Проверка формата TS cookies
   const validFormat = tsCookies.every((c) => /^[^=]+=[^=]+$/.test(c));
 
   if (!validFormat) {
-    console.log("Invalid TS cookie format.");
+    console.log("Неверный формат TS cookies.");
     return null;
   }
 
-  console.log("Valid TSPD cookie set detected.");
+  console.log("Обнаружен валидный набор TSPD cookies.");
 
   return tsCookies.join("; ");
 }
 
 function solutionToCookieHeader(solution) {
+  /** Извлечение cookies из результата решения */
   const domain = Object.keys(solution.domains)[0];
   const cookies = solution.domains[domain].cookies || {};
 
@@ -631,7 +674,12 @@ function solutionToCookieHeader(solution) {
   return result.join("; ");
 }
 
+// =========================================================
+// ОСНОВНЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С CAPMONSTER CLOUD
+// =========================================================
+
 async function createTask(task) {
+  /** Создание задачи в CapMonster Cloud для решения TSPD */
   const response = await gotScraping
     .post(`${CAPMONSTER_URL}/createTask`, {
       json: {
@@ -649,6 +697,7 @@ async function createTask(task) {
 }
 
 async function getTaskResult(taskId) {
+  /** Получение результата решения TSPD от CapMonster Cloud */
   while (true) {
     await delay(3000);
 
@@ -669,19 +718,25 @@ async function getTaskResult(taskId) {
       return response.solution;
     }
 
-    console.log("Waiting for solution...");
+    console.log("Ожидание решения...");
   }
 }
 
-async function main() {
-  try {
-    console.log("Sending initial request...");
+// =========================================================
+// ОСНОВНАЯ ФУНКЦИЯ
+// =========================================================
 
+async function main() {
+  /** Главная функция для обхода TSPD защиты */
+  try {
+    console.log("Отправка первого запроса...");
+
+    // Первый запрос для получения TSPD защиты
     const response = await gotScraping(url, {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -696,8 +751,6 @@ async function main() {
         "sec-fetch-dest": "document",
 
         "accept-language": "en-US",
-
-        referer: "https://example.com/", // Замените на актуальный referer
       },
     });
 
@@ -711,11 +764,12 @@ async function main() {
 
     if (!tspdCookies) {
       console.log(
-        "Stopping script. No valid TSPD cookies detected. Continuing normal site interaction.",
+        "Остановка скрипта. Не обнаружено валидных TSPD cookies. Продолжение обычного взаимодействия с сайтом.",
       );
       return;
     }
 
+    // Формирование задачи для CapMonster Cloud
     const task = {
       type: "CustomTask",
       class: "tspd",
@@ -732,25 +786,28 @@ async function main() {
       proxyPassword: proxy.password,
     };
 
-    console.log("\nCreating CapMonster Cloud task...");
+    console.log("\nСоздание задачи в CapMonster Cloud...");
 
     const taskId = await createTask(task);
 
-    console.log("Task ID:", taskId);
+    console.log("ID задачи:", taskId);
 
+    // Получение результата
     const solution = await getTaskResult(taskId);
 
-    console.log("\nSolution received:");
+    console.log("\nПолучено решение:");
     console.log(JSON.stringify(solution, null, 2));
 
+    // Извлечение cookies из решения
     const cookieHeader = solutionToCookieHeader(solution);
 
-    console.log("\nFinal Cookie header:");
+    console.log("\nФинальный Cookie заголовок:");
     console.log(cookieHeader);
 
+    // Формирование финальных заголовков
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",
@@ -771,25 +828,31 @@ async function main() {
 
       priority: "u=0,i",
       "Upgrade-Insecure-Requests": "1",
-      referer: "https://example.com/", // Замените на актуальный referer
     };
 
-    console.log("\nFinal request headers:");
+    console.log("\nФинальные заголовки запроса:");
     console.log(JSON.stringify(finalHeaders, null, 2));
 
+    // Финальный запрос с полученными cookies
     const finalResponse = await gotScraping(url, {
       proxyUrl,
       headers: finalHeaders,
       followRedirect: true,
     });
 
-    console.log("\nFinal page length:", finalResponse.body.length);
+    console.log("\nДлина финальной страницы:", finalResponse.body.length);
 
+    // Сохранение страницы
     fs.writeFileSync("final_page.html", finalResponse.body);
 
-    console.log("Page saved to final_page.html");
+    console.log("Страница сохранена в final_page.html");
+
+    console.log("\n" + "=".repeat(60));
+    console.log("РЕЗУЛЬТАТ:");
+    console.log(JSON.stringify({ cookies: cookieHeader }, null, 2));
+    console.log("=".repeat(60));
   } catch (err) {
-    console.error("Error:", err.message);
+    console.error("Ошибка:", err.message);
   }
 }
 
@@ -804,189 +867,488 @@ main();
 ```python
 import asyncio
 import base64
-import re
 import json
+import aiohttp
+from urllib.parse import urlparse
 
-from curl_cffi.requests import AsyncSession # Для выполнения HTTP-запросов с TLS-отпечатком
+# =========================================================
+# КОНФИГУРАЦИЯ (рекомендуется хранить данные в отдельном файле или переменных окружения)
+# =========================================================
 
-API_KEY = "YOUR_API_KEY"  # Замените на ваш API-ключ CapMonster Cloud
+API_KEY = "YOUR_CAPMONSTER_API_KEY"  # Замените на ваш реальный API ключ CapMonster Cloud
+BASE_URL = "https://example.com"  # Замените на целевой URL, где есть TSPD защита
 CAPMONSTER_URL = "https://api.capmonster.cloud"
+USER_AGENT = "userAgentPlaceholder"
 
-url = "https://example.com" # Замените на целевой URL
-
-# Замените на ваш прокси
-proxy = {
-    "host": "proxyAddress",
-    "port": 8080,
-    "login": "proxyLogin",
-    "password": "proxyPassword",
+# Установите настройки прокси
+PROXY = {
+    "host": "your-proxy-address",
+    "port": 1234,
+    "login": "your-proxy-login",
+    "password": "your-proxy-password",
     "type": "http"
 }
 
-proxy_url = f'{proxy["type"]}://{proxy["login"]}:{proxy["password"]}@{proxy["host"]}:{proxy["port"]}'
+# =========================================================
+# ОСНОВНОЙ КЛАСС
+# =========================================================
 
-# Используйте актуальный User-Agent
-user_agent = "userAgentPlaceholder"
-
-
-def extract_ts_cookies(set_cookies):
-    cookies = [c.split(";")[0].strip() for c in set_cookies]
-
-    print("\nRaw cookies:")
-    print(cookies)
-
-    # Проверяем, что TSPD_101_DID отсутствует
-    has_did = any(c.startswith("TSPD_101_DID=") for c in cookies)
-
-    if has_did:
-        print("TSPD_101_DID detected. Request was blocked.")
-        return None
+class TSPDBypass:
+    """Класс для решения TSPD с помощью CapMonster Cloud"""
     
-     # Извлекаем только TS cookies
-    ts = [c for c in cookies if c.startswith("TS")]
+    def __init__(self):
+        self.domain = urlparse(BASE_URL).hostname
 
-    if not ts:
-        return None
+    def build_headers(self, cookies=None):
+        """Формирование HTTP заголовков для запроса"""
+        headers = {
+            "Host": self.domain,
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Language": "en-US",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "sec-ch-ua": '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
+        }
+        if cookies:
+            headers["Cookie"] = cookies
+        return headers
 
-    if not all(re.match(r"^[^=]+=[^=]+$", c) for c in ts):
-        print("Invalid TS cookie format.")
-        return None
+    def build_proxy_url(self):
+        """Формирование URL для подключения к прокси"""
+        if not PROXY.get("host"):
+            return None
+        return f"{PROXY['type']}://{PROXY['login']}:{PROXY['password']}@{PROXY['host']}:{PROXY['port']}"
 
-    print("Valid TSPD cookie set detected.")
-    return "; ".join(ts)
+    @staticmethod
+    def extract_ts_cookies(set_cookie_headers):
+        """Извлечение cookies из заголовков Set-Cookie"""
+        cookies = [line.split(";", 1)[0].strip() for line in set_cookie_headers if "=" in line.split(";", 1)[0]]
+        return "; ".join(cookies)
 
+    def extract_solution_cookies(self, solver_result):
+        """Извлечение cookies из результата решения капчи"""
+        solution = solver_result["solution"]
+        domains = solution.get("Domains") or solution.get("domains")
+        cookies_dict = domains[self.domain].get("Cookies") or domains[self.domain].get("cookies")
+        return "; ".join([f"{k}={v}" for k, v in cookies_dict.items()])
 
-def solution_to_cookie_dict(solution):
-    domain = list(solution["domains"].keys())[0]
-    return solution["domains"][domain].get("cookies", {})
+    async def request_page(self, cookies=None):
+        """Выполнение HTTP запроса к целевому сайту"""
+        proxy = self.build_proxy_url()
+        
+        async with aiohttp.ClientSession(
+            connector=aiohttp.TCPConnector(ssl=False),
+            cookie_jar=aiohttp.DummyCookieJar()
+        ) as session:
+            async with session.get(
+                BASE_URL,
+                headers=self.build_headers(cookies),
+                proxy=proxy,
+                allow_redirects=True
+            ) as response:
+                html = await response.text()
+                tspd_cookies = self.extract_ts_cookies(response.headers.getall("Set-Cookie", []))
+                is_tspd = "/TSPD/" in html or "TSPD_101" in html or "tspd" in html.lower()
+                
+                return {
+                    "success": not is_tspd,
+                    "html": html,
+                    "html_base64": base64.b64encode(html.encode()).decode(),
+                    "cookies": tspd_cookies
+                }
 
+    async def create_task(self, html_page_base64, tspd_cookie):
+        """Создание задачи в CapMonster Cloud для решения TSPD"""
+        payload = {
+            "clientKey": API_KEY,
+            "task": {
+                "type": "CustomTask",
+                "class": "tspd",
+                "websiteUrl": BASE_URL,
+                "userAgent": USER_AGENT,
+                "metadata": {
+                    "tspdCookie": tspd_cookie,
+                    "htmlPageBase64": html_page_base64
+                },
+                "proxyType": PROXY.get("type"),
+                "proxyAddress": PROXY.get("host"),
+                "proxyPort": PROXY.get("port"),
+                "proxyLogin": PROXY.get("login"),
+                "proxyPassword": PROXY.get("password")
+            }
+        }
+        
+        async with aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar()) as session:
+            async with session.post(
+                f"{CAPMONSTER_URL}/createTask",
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                text = await response.text()
+                try:
+                    data = json.loads(text)
+                except json.JSONDecodeError:
+                    print(f"Ошибка: Получен не-JSON ответ: {text}")
+                    raise
+                
+                if data.get("errorId") != 0:
+                    raise Exception(data)
+                
+                return data["taskId"]
 
-def solution_to_cookie_header(solution):
-    domain = list(solution["domains"].keys())[0]
-    cookies = solution["domains"][domain].get("cookies", {})
+    async def get_result(self, task_id):
+        """Получение результата решения TSPD от CapMonster Cloud"""
+        async with aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar()) as session:
+            while True:
+                payload = {"clientKey": API_KEY, "taskId": task_id}
+                
+                async with session.post(
+                    f"{CAPMONSTER_URL}/getTaskResult",
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    text = await response.text()
+                    try:
+                        data = json.loads(text)
+                    except json.JSONDecodeError:
+                        print(f"Ошибка: Получен не-JSON ответ: {text}")
+                        raise
+                    
+                    if data.get("errorId") != 0:
+                        raise Exception(data)
+                    
+                    if data["status"] == "ready":
+                        return data
+                
+                await asyncio.sleep(5)
 
-    return "; ".join([f"{k}={v}" for k, v in cookies.items()])
-
-
-async def create_task(session, task):
-    r = await session.post(
-        f"{CAPMONSTER_URL}/createTask",
-        json={"clientKey": API_KEY, "task": task},
-    )
-    data = r.json()
-
-    if data["errorId"] != 0:
-        raise Exception(data["errorDescription"])
-
-    return data["taskId"]
-
-
-async def get_result(session, task_id):
-    while True:
-        await asyncio.sleep(3)
-
-        r = await session.post(
-            f"{CAPMONSTER_URL}/getTaskResult",
-            json={"clientKey": API_KEY, "taskId": task_id},
-        )
-        data = r.json()
-
-        if data["errorId"] != 0:
-            raise Exception(data["errorDescription"])
-
-        if data["status"] == "ready":
-            return data["solution"]
-
-        print("Waiting...")
-
-
-async def main():
-    async with AsyncSession(
-    impersonate="chrome124",
-    proxies={
-        "http": proxy_url,
-        "https": proxy_url,
-    },
-    headers={
-        "user-agent": user_agent,
-        "accept-language": "en-US,en;q=0.9",
-        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "upgrade-insecure-requests": "1",
-    },
-) as session:
-
-        print("Step 1: Initial request")
-
-        r = await session.get(url)
-
-        html = r.text
-        html_b64 = base64.b64encode(html.encode()).decode()
-
-        set_cookies = r.headers.get_list("set-cookie")
-        tspd = extract_ts_cookies(set_cookies)
-
-        if not tspd:
-            print("No TS cookies")
-            return
-
-        print("\nTS cookies:")
-        print(tspd)
-
-        task = {
-            "type": "CustomTask",
-            "class": "tspd",
-            "websiteUrl": url,
-            "metadata": {
-                "tspdCookie": tspd,
-                "htmlPageBase64": html_b64,
-            },
-            "userAgent": user_agent,
-            "proxyType": proxy["type"],
-            "proxyAddress": proxy["host"],
-            "proxyPort": proxy["port"],
-            "proxyLogin": proxy["login"],
-            "proxyPassword": proxy["password"],
+    async def bypass(self):
+        """Основной метод для решения TSPD"""
+        print("Отправка первого запроса...")
+        
+        # Первый запрос для получения TSPD защиты
+        first_response = await self.request_page()
+        
+        html = first_response["html"]
+        html_base64 = first_response["html_base64"]
+        tspd_cookies = first_response["cookies"]
+        
+        print("\nПолученные cookies:")
+        print(tspd_cookies)
+        
+        # Проверка блокировки
+        if "TSPD_101_DID=" in tspd_cookies:
+            print("Обнаружен TSPD_101_DID. Запрос был заблокирован.")
+            return {"success": False, "cookies": tspd_cookies, "html": html}
+        
+        # Проверка формата TS cookies
+        ts_cookies = [c for c in tspd_cookies.split("; ") if c.startswith("TS")]
+        valid_format = all("=" in c for c in ts_cookies)
+        
+        if not valid_format:
+            print("Неверный формат TS cookies.")
+            return {"success": False, "cookies": tspd_cookies, "html": html}
+        
+        print("Обнаружен валидный набор TSPD cookies.")
+        
+        # Создание задачи в CapMonster Cloud
+        print("\nСоздание задачи в CapMonster Cloud...")
+        first_solver = await self.create_task(html_base64, tspd_cookies)
+        print("ID задачи:", first_solver)
+        
+        # Получение результата
+        first_result = await self.get_result(first_solver)
+        
+        print("\nПолучено решение:")
+        print(json.dumps(first_result["solution"], indent=2, ensure_ascii=False))
+        
+        # Извлечение cookies из решения
+        final_cookies = self.extract_solution_cookies(first_result)
+        
+        print("\nФинальный Cookie заголовок:")
+        print(final_cookies)
+        
+        # Формирование финальных заголовков
+        final_headers = self.build_headers(final_cookies)
+        final_headers["sec-ch-ua"] = '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"'
+        final_headers["sec-ch-ua-mobile"] = "?0"
+        final_headers["sec-ch-ua-platform"] = '"Windows"'
+        final_headers["Upgrade-Insecure-Requests"] = "1"
+        final_headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
+        final_headers["Accept-Encoding"] = "gzip, deflate, br, zstd"
+        final_headers["Accept-Language"] = "en-US"
+        final_headers["priority"] = "u=0,i"
+        
+        print("\nФинальные заголовки запроса:")
+        print(json.dumps(final_headers, indent=2, ensure_ascii=False))
+        
+        # Финальный запрос с полученными cookies
+        final_response = await self.request_page(final_cookies)
+        
+        print("\nДлина финальной страницы:", len(final_response["html"]))
+        
+        # Сохранение страницы
+        with open("final_page.html", "w", encoding="utf-8") as f:
+            f.write(final_response["html"])
+        print("Страница сохранена в final_page.html")
+        
+        return {
+            "cookies": final_cookies,
+            "html": final_response["html"]
         }
 
-        print("\nStep 2: Create task")
-
-        task_id = await create_task(session, task)
-        print("Task ID:", task_id)
-
-        solution = await get_result(session, task_id)
-
-        print("\nSolution received:")
-        print(json.dumps(solution, indent=2))
-
-        cookies = solution_to_cookie_dict(solution)
-
-        print("\nApplying cookies to session:")
-        for k, v in cookies.items():
-            print(f"{k}={v}")
-            session.cookies.set(k, v)
-
-        cookie_header = solution_to_cookie_header(solution)
-
-        print("\nFinal Cookie header:")
-        print(cookie_header)
-
-        print("\nStep 3: Final request")
-
-        final = await session.get(url)
-
-        print("\nFinal status:", final.status_code)
-        print("Final page length:", len(final.text))
-
-        with open("final.html", "w", encoding="utf-8") as f:
-            f.write(final.text)
-
-        print("Page saved to final.html")
-
+async def main():
+    """Главная функция"""
+    bypasser = TSPDBypass()
+    
+    try:
+        result = await bypasser.bypass()
+        print("\n" + "="*60)
+        print("РЕЗУЛЬТАТ:")
+        print(json.dumps({"cookies": result["cookies"]}, indent=4, ensure_ascii=False))
+        print("="*60)
+    except Exception as err:
+        print("Ошибка:", str(err))
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 </details>
+  </TabItem>
+
+</Tabs>
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js1" label="JavaScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TSPDRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // TSPD решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const tspdRequest = new TSPDRequest({
+    websiteURL: "https://yourwebsite.com/page-with-tspd",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      tspdCookie:
+        "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
+      htmlPageBase64: "your_html_page_base64",
+    },
+    proxy,
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(tspdRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Показать код (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TSPDRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveTSPD() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // TSPD решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const tspdRequest = new TSPDRequest({
+    websiteURL: "https://yourwebsite.com/page-with-tspd",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      tspdCookie:
+        "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
+      htmlPageBase64: "your_html_page_base64",
+    },
+    proxy,
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(tspdRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveTSPD().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python1" label="Python" default className="method-panel">
+<details>
+      <summary>Показать код</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import TspdCustomTaskRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+
+
+async def solve_tspd():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # TSPD решается только с использованием вашего прокси
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    tspd_request = TspdCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-tspd",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "tspdCookie": (
+                "TS386a400d029=08...010245; "
+                "TS386a400d029=08...01a06e; "
+                "TS386a400d078=08...dbb3b0c; "
+                "TSd2153684027=08...1944"
+            ),
+            "htmlPageBase64": "your_html_page_base64",
+        },
+        proxy=proxy,
+    )
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(tspd_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_tspd())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp1" label="C#" className="method-panel">
+
+<details>
+      <summary>Показать код</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // TSPD решается только с использованием вашего прокси
+        var tspdRequest = new TspdCustomTaskRequest(
+            "TS386a400d029=08...010245; " +
+            "TS386a400d029=08...01a06e; " +
+            "TS386a400d078=08...dbb3b0c; " +
+            "TSd2153684027=08...1944",
+            "your_html_page_base64"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-tspd",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var tspdResult = await cmCloudClient.SolveAsync(tspdRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                tspdResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+</details>
+
   </TabItem>
 
 </Tabs>
