@@ -1,5 +1,5 @@
 ---
-sidebar_position: 24
+sidebar_position: 23
 sidebar_label: Castle
 title: "Automatic detection and bypass of Castle | API"
 description: "Learn how to detect Castle using the API of the automatic captcha recognition and solving service CapMonster Cloud!"
@@ -35,7 +35,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
 ## Request parameters
 
-<TabItem value="proxy" label="CastleTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -109,7 +109,7 @@ Proxy server login.
 <ParamItem title="proxyPassword" type="string" />
 Proxy server password.
 
-</TabItem>
+</div>
 
 ## Create task method
 
@@ -191,7 +191,7 @@ Proxy server password.
 
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Castle solution.
 
-<TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -229,7 +229,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to get the Ca
 }   
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## How to get Castle parameters
 

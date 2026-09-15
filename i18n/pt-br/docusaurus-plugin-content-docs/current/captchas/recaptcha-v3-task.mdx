@@ -1,6 +1,7 @@
 ---
 sidebar_position: 1
 sidebar_label: reCAPTCHA v3
+title: Reconhecimento automático e bypass do reCAPTCHA v3 | API
 ---
 
 import Tabs from '@theme/Tabs';
@@ -36,7 +37,7 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 ## Parâmetros da solicitação
 
 
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -48,7 +49,10 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
     ---
 
     <ParamItem title="websiteKey" required type="string" />
-   Chave do site Recaptcha.<br/>https://www.google.com/recaptcha/api.js?render=ESTA_AQUI
+   Chave de identificação do ReCaptcha3 na página de destino.
+  `https://www.google.com/recaptcha/api.js?render=THIS_ONE`<br/>
+
+  Tem aproximadamente o seguinte formato: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob`
 
    ---
 
@@ -66,34 +70,34 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 
     <ParamItem title="pageAction" type="string" />
     <p>Valor de ação do widget. O proprietário do site define o que o usuário está fazendo na página através deste parâmetro. Valor padrão: *verify*</p><p>Exemplo:<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
+</div>
 
 
 ## Método de criar tarefa
 
 
-<TabItem value="proxyless" label="RecaptchaV2TaskProxyless (sem proxy)" default className="method-panel">
+<div className="method-panel">
 <MethodItem>
   ```http
   https://api.capmonster.cloud/createTask
   ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
-  "clientKey":"API_KEY",
+  "clientKey": "API_KEY",
   "task": {
-    "type":"RecaptchaV3TaskProxyless",
-    "websiteURL":"https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-    "websiteKey":"6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
+    "type": "RecaptchaV3TaskProxyless",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
     "isEnterprise": false,
     "minScore": 0.7,
-    "pageAction": "myverify"
+    "pageAction": "your-verify"
   }
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -102,7 +106,7 @@ Ao criar uma tarefa, é recomendável fornecer dois parâmetros: `pageAction` e 
 ```
 
 </MethodDescription>
-</TabItem>
+</div>
 
 ## Método de obter resultado da tarefa
 
@@ -112,21 +116,21 @@ Em alguns sites, é importante que o UserAgent corresponda ao usado ao resolver 
 
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para solicitar a resposta do ReCaptcha3. Você receberá a resposta dentro de um período de 10 a 30 segundos, dependendo da carga de trabalho do serviço.
 
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
     <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
     </MethodItem>
     <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -152,7 +156,7 @@ https://api.capmonster.cloud/getTaskResult
 }
 ```
   </MethodDescription>
-  </TabItem>
+  </div>
 
 <br />
 
@@ -173,17 +177,17 @@ A chave pública do site (sitekey). Normalmente, pode ser encontrada no script i
 
 Em **Elements**:
 
-![elements](images\recaptcha-v3\sitekey-elements.png)
+![elements](images/recaptcha-v3/sitekey-elements.png)
 
 Na aba **Network**:
 
-![network](images\recaptcha-v3\sitekey-network.png)
+![network](images/recaptcha-v3/sitekey-network.png)
 
 #### pageAction
 
 O nome da ação passada para *grecaptcha.execute()*. Por exemplo:
 
-![action](images\recaptcha-v3\action.png)
+![action](images/recaptcha-v3/action.png)
 
 ### Automaticamente
 
@@ -254,7 +258,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
           } catch (e) {}
         });
 
-        const targetUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta";
+        const targetUrl = "https://yourwebsite.com/page-with-recaptcha";
         await page.goto(targetUrl, { timeout: 60000 });
         await page.waitForTimeout(3000);
 
@@ -346,7 +350,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
                   "action": found_action
               })
 
-      asyncio.run(extract_recaptcha_v3_execute("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta"))
+      asyncio.run(extract_recaptcha_v3_execute("https://yourwebsite.com/page-with-recaptcha"))
       ```
     </details>
   </TabItem>
@@ -367,7 +371,7 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
           public static async Task Main(string[] args)
           {
               await ExtractRecaptchaV3Execute
-              ("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta");
+              ("https://yourwebsite.com/page-with-recaptcha");
           }
 
           public static async Task ExtractRecaptchaV3Execute(string url)
@@ -438,9 +442,9 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 ## Usar biblioteca SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-      <summary>Mostrar Código (para navegador)</summary> 
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
 ```js
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
@@ -448,98 +452,116 @@ import {
   CapMonsterCloudClientFactory,
   ClientOptions,
   RecaptchaV3ProxylessRequest
-} from '@zennolab_com/capmonstercloud-client';
+} from "@zennolab_com/capmonstercloud-client";
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-  const cmcClient = CapMonsterCloudClientFactory.Create(
-    new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // Insira sua chave de API do CapMonster Cloud
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
   );
 
-  // Se necessário, você pode verificar o saldo
-  const balance = await cmcClient.getBalance();
-  console.log('Balance:', balance);
-
-  const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-    websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // URL da sua página com a captcha
-    websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-    minScore: 0.6,  
-    pageAction: 'myverify',
+  // Não é necessário usar proxy para RecaptchaV3ProxylessRequest
+  const recaptcha3Request = new RecaptchaV3ProxylessRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
   });
 
-  const solution = await cmcClient.Solve(recaptchaV3Request);
-  console.log('Solution:', solution);
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
+  const result = await client.Solve(recaptcha3Request);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
 <details>
-      <summary>Mostrar Código (Node.js)</summary>
+      <summary>Mostrar código (Node.js)</summary>
+
 ```javascript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV3ProxylessRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3ProxylessRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY"; // Insira sua chave de API do CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
 async function solveRecaptchaV3() {
-    const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await cmcClient.getBalance();
-    console.log("Balance:", balance);
+  // Não é necessário usar proxy para RecaptchaV3ProxylessRequest
+  const recaptcha3Request = new RecaptchaV3ProxylessRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
 
-    const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta", // URL da sua página com a captcha
-        websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-        minScore: 0.6,
-        pageAction: "myverify",
-    });
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const solution = await cmcClient.Solve(recaptchaV3Request);
-    console.log("Solution:", solution);
+  const result = await client.Solve(recaptcha3Request);
+  console.log("Solution:", result.solution);
 }
 
 solveRecaptchaV3().catch(console.error);
 ```
-</details>
+  </details>
+
 
 <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/javascript-recaptcha-v3"/>
 
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
-<details>
-      <summary>Mostrar Código</summary>
+
+  <details>
+      <summary>Mostrar código</summary>
+
 ```python
-# https://github.com/Zennolab/capmonstercloud-client-python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import RecaptchaV3ProxylessRequest
 
-client_options = ClientOptions(api_key="YOUR_API_KEY")  # Insira sua chave de API do CapMonster Cloud
-cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
 
-# Se necessário, você pode verificar o saldo
-balance = asyncio.run(cap_monster_client.get_balance())
-print("Balance:", balance)
 
-recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-    websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # URL da sua página com captcha
-    websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-    minScore=0.6,
-    pageAction="myverify"
-)
+async def solve_recaptcha_v3():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-async def solve_captcha():
-    return await cap_monster_client.solve_captcha(recaptcha_v3_request)
+    # Não é necessário usar proxy para RecaptchaV3ProxylessRequest
+    recaptcha3_request = RecaptchaV3ProxylessRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        minScore=0.7,
+        pageAction="your-page-action",
+    )
 
-responses = asyncio.run(solve_captcha())
-print(responses)
+    # Se necessário, você pode verificar o saldo
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(recaptcha3_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_recaptcha_v3())
 ```
 </details>
 
@@ -548,47 +570,52 @@ print(responses)
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
+
 <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
+
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Threading.Tasks;
 using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
 class Program
 {
     static async Task Main(string[] args)
     {
+        // Informe sua chave de API do CapMonster Cloud
         var clientOptions = new ClientOptions
         {
-            ClientKey = "YOUR_API_KEY"  // Insira sua chave de API do CapMonster Cloud
+            ClientKey = "YOUR_API_KEY"
         };
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Não é necessário usar proxy para RecaptchaV3ProxylessRequest
+        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-page-action"
+        };
 
         // Se necessário, você pode verificar o saldo
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
-        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
-        {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // URL da sua página com captcha
-            WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-            MinScore = 0.6,
-            PageAction = "myverify"
-        };
-
         var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);
-
         Console.WriteLine("Solution: " + recaptchaV3Result.Solution.Value);
     }
 }
 ```
+
 </details>
 
 <BlogLink url="https://capmonster.cloud/pt-BR/blog/re-1/c-recaptcha-v3"/>
 
   </TabItem>
 </Tabs>
-

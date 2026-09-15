@@ -1,0 +1,64 @@
+﻿---
+sidebar_position: 3
+sidebar_label: Confidence threshold for text CAPTCHAs
+title: "Setting the recognition threshold"
+description: "Learn how to set the Capmonster Cloud captcha recognition and traversal service to a threshold of system confidence in the answer, below which money is not deducted."
+---
+
+import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
+
+<ArticleHead slug="captchas/ImageToText/threshold" />
+
+# Setting the confidence threshold for text CAPTCHA recognition
+
+## How to set the confidence threshold
+
+In our service, the likelihood of successfully recognizing a captcha depends on its complexity. Funds are only deducted for correctly solved captchas. If the system's confidence in the answer is below the user-defined threshold, no funds will be deducted.
+
+:::warning **Please note!**
+The **recognizingThreshold** parameter applies only to **ImageToTextTask** (text captchas). For other types of captchas (ReCaptcha, Turnstile, etc.) this parameter is not used and does not affect the result.
+:::
+
+To ensure that CapMonster Cloud returns a guaranteed correct result, you can include the **recognizingThreshold** parameter with your captcha recognition request, with a value from **0** to **100**. This parameter sets the system’s confidence threshold for a correct captcha solution and defines the minimum value below which no funds will be deducted from your balance.
+
+### Example
+
+POST
+```http
+https://api.capmonster.cloud/createTask
+ ```
+
+```json
+{
+
+  "task": { 
+    ...
+    "recognizingThreshold" : 70
+  },
+  "clientKey":"API_KEY",
+  "softId" : 345
+
+}
+```
+---
+In this case, if the parameter is set to **70**, only answers in which our system is more than 70% confident will be returned; for all other tasks, an error "**ERROR_CAPTCHA_UNSOLVABLE**" will be returned.
+
+:::info
+The confidence threshold is an internal metric used by the system to assess the likelihood that the recognized text is correct. The higher the threshold, the more accurate the responses, but the more frequently tasks may be considered unsolvable (ERROR_CAPTCHA_UNSOLVABLE).
+:::
+
+Another way to pass a threshold is to use only the field to specify the ApiKey. You can add threshold information in the following format: `{apikey}__recognizingthreshold_{value}`
+
+For example, “API_KEY\_\_recognizingthreshold\_70”
+
+You can also enter the name of the module with the key in the following format: `{apikey}__module-name`.
+
+The key, the confidence threshold and the name of the module are indicated with the underscore “\_\_”
+
+Example: “API_KEY\_\_solvemedia\_\_recognizingthreshold\_70”
+
+:::note
+If you are unable to configure the confidence threshold, please contact our **[support team](https://helpdesk.zennolab.com/en-us/conversation/new)**. We will help you with the configuration.
+:::
+
+

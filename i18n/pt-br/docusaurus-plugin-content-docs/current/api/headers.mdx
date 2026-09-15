@@ -1,0 +1,291 @@
+---
+sidebar_position: 3
+title: Cabeçalhos HTTP do navegador
+description: Como obter e usar cabeçalhos HTTP do navegador ao enviar solicitações para páginas da web.
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import BlogLink from '@theme/BlogLink';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+
+<ArticleHead slug="api/headers" />
+
+# Cabeçalhos HTTP do navegador
+
+Ao resolver CAPTCHAs e enviar solicitações para o site de destino, o servidor pode considerar os cabeçalhos HTTP, os cookies e outros parâmetros da sessão do navegador. Se eles estiverem ausentes ou inconsistentes entre si, o servidor poderá rejeitar a solicitação, redirecionar o usuário ou solicitar uma nova verificação.
+
+Dentro de uma mesma sessão, recomenda-se manter:
+
+- `User-Agent`;
+- Client Hints;
+- cookies;
+- idioma do navegador;
+- proxy, se utilizado;
+- parâmetros das solicitações.
+
+:::warning Importante
+
+Use o User-Agent atual compatível com o CapMonster Cloud:
+
+```text
+GET https://capmonster.cloud/api/useragent/actual
+```
+
+Envie esse valor ao abrir a página, criar a tarefa e usar o resultado da resolução da CAPTCHA.
+
+:::
+
+<BlogLink url="https://capmonster.cloud/pt-br/blog/user-agent-updates/"/>
+
+## Finalidade dos cabeçalhos
+
+| Cabeçalho | Finalidade |
+| --- | --- |
+| `User-Agent` | Informações sobre o navegador e o sistema operacional |
+| `Accept` | Formatos de resposta aceitos |
+| `Accept-Language` | Idiomas preferidos |
+| `Accept-Encoding` | Métodos de compactação compatíveis |
+| `Referer` | URL da página de origem da navegação |
+| `Origin` | Origem da solicitação usada em solicitações POST e CORS |
+| `Cookie` | Cookies da sessão atual |
+| `Sec-CH-UA` | Marca e versão do navegador |
+| `Sec-CH-UA-Mobile` | Modo móvel ou desktop |
+| `Sec-CH-UA-Platform` | Plataforma do navegador |
+| `Sec-Fetch-Site` | Relação entre a origem da solicitação e o recurso de destino |
+| `Sec-Fetch-Mode` | Modo da solicitação |
+| `Sec-Fetch-Dest` | Tipo do recurso solicitado |
+
+## Quais cabeçalhos enviar
+
+Não existe um conjunto universal de cabeçalhos: ele depende do site e do tipo de solicitação.
+
+Normalmente, são utilizados:
+
+- `User-Agent`;
+- `Accept`;
+- `Accept-Language`;
+- Client Hints;
+- cabeçalhos `Sec-Fetch-*` correspondentes à solicitação.
+
+Envie os cabeçalhos `Cookie`, `Referer` e `Origin` somente quando eles estiverem presentes na solicitação original do navegador ou forem necessários para a sessão atual.
+
+Não defina manualmente:
+
+- `Host`;
+- `Content-Length`;
+- `Transfer-Encoding`;
+- `Content-Encoding`.
+
+Esses valores geralmente são gerados automaticamente pelo cliente HTTP.
+
+## Consistência da sessão
+
+Dentro de uma mesma sessão, não altere sem necessidade:
+
+- `User-Agent`;
+- `Sec-CH-UA`;
+- `Sec-CH-UA-Mobile`;
+- `Sec-CH-UA-Platform`;
+- idioma;
+- proxy.
+
+O User-Agent e os Client Hints devem descrever o mesmo navegador.
+
+Exemplo incorreto:
+
+```text
+User-Agent: Chrome/150
+Sec-CH-UA: "Google Chrome";v="140"
+```
+
+Exemplo correto:
+
+```text
+User-Agent: Chrome/150
+Sec-CH-UA: "Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"
+```
+
+Os cookies também devem ser obtidos na mesma sessão em que a solicitação é enviada.
+
+## Como lidar com redirecionamentos
+
+Ao seguir redirecionamentos, mantenha os principais parâmetros da sessão:
+
+- `User-Agent`;
+- Client Hints;
+- cookies;
+- idioma;
+- proxy.
+
+Os cabeçalhos dependentes do contexto podem mudar:
+
+- `Referer` deve corresponder à página anterior;
+- `Sec-Fetch-Site` depende do domínio atual;
+- os cookies devem ser atualizados após o recebimento de `Set-Cookie`;
+- `Host` deve ser gerado pelo cliente HTTP para o novo URL.
+
+Não envie manualmente cookies nem cabeçalhos de autorização para outro domínio.
+
+## Como obter os cabeçalhos
+
+### Pelas Ferramentas do desenvolvedor
+
+1. Abra a página no navegador.
+2. Pressione **F12** e acesse a guia **Network**.
+3. Execute a ação necessária ou recarregue a página.
+4. Selecione a solicitação correspondente.
+5. Na guia **Headers**, copie os valores da seção **Request Headers**.
+
+![](./images/headers/devtools.png)
+
+Também é possível copiar a solicitação usando os comandos **Copy as cURL** ou **Copy as fetch**.
+
+Antes de publicar exemplos, remova cookies reais, tokens de autorização e outros dados confidenciais.
+
+### A partir da sessão do navegador
+
+Ao usar automação de navegador, obtenha os cabeçalhos e cookies da sessão atual. Não combine dados de contextos de navegador diferentes.
+
+Para isso, você pode usar:
+
+- **Playwright** — eventos de solicitação, o método `request.headers()` ou gravação em HAR.
+- **Puppeteer** — manipuladores de solicitações de rede ou Chrome DevTools Protocol.
+- **Selenium** — Chrome DevTools Protocol ou ferramentas adicionais de rede.
+- [**ZennoPoster**](https://zennolab.com/en/products/zennoposter/) — solicitações de rede da sessão atual do navegador.
+- **Arquivo HAR** — dados das solicitações, incluindo cabeçalhos, cookies e corpo da solicitação.
+- **Analisador de proxy** — inspeção do tráfego HTTP(S) e dos cabeçalhos realmente enviados.
+- **cURL** — reprodução e verificação de uma solicitação copiada do DevTools com **Copy as cURL**.
+
+Recomenda-se usar os cabeçalhos da sessão ativa do navegador em vez de criá-los manualmente.
+
+:::tip Fingerprint do navegador
+
+O site pode considerar não apenas os cabeçalhos HTTP, mas também os parâmetros do ambiente do navegador, como resolução da tela, fuso horário, Canvas, WebGL e outras características.
+
+Para verificar os dados transmitidos pelo navegador, você pode usar serviços de diagnóstico on-line especializados.
+
+:::
+
+## Exemplo de conjunto de cabeçalhos
+
+Para solicitar uma página HTML, você pode usar o seguinte conjunto básico:
+
+```http
+User-Agent: userAgentPlaceholder
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.9
+Accept-Encoding: gzip, deflate, br
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Sec-CH-UA: "Chromium";v="150", "Google Chrome";v="150", "Not:A-Brand";v="99"
+Sec-CH-UA-Mobile: ?0
+Sec-CH-UA-Platform: "Windows"
+```
+
+Em formato JSON:
+
+```json
+{
+  "headers": {
+    "User-Agent": "userAgentPlaceholder",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Sec-CH-UA": "\"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\", \"Not:A-Brand\";v=\"99\"",
+    "Sec-CH-UA-Mobile": "?0",
+    "Sec-CH-UA-Platform": "\"Windows\""
+  }
+}
+```
+
+:::tip Sec-Fetch-*
+Os valores dos cabeçalhos `Sec-Fetch-*` dependem do contexto da solicitação. Neste exemplo, eles correspondem à abertura direta da página; ao acessar a página por um link de outro site, os valores podem ser diferentes.
+:::
+
+## Uso ao resolver CAPTCHAs
+
+Mantenha os parâmetros da sessão do navegador em todas as etapas da interação com o site de destino:
+
+1. Abra a página com a CAPTCHA.
+2. Obtenha os cookies, os cabeçalhos e os parâmetros da sessão atual.
+3. Identifique os parâmetros da CAPTCHA, incluindo `websiteURL`, `websiteKey` e outros valores obrigatórios.
+4. [Crie uma tarefa](/docs/api/methods/create-task) no CapMonster Cloud.
+5. Obtenha o [resultado da resolução](/docs/api/methods/get-task-result).
+6. Envie o resultado da resolução, como um token ou cookies, para a página de verificação ou para a API do site de destino dentro da mesma sessão.
+
+### Envio do resultado da resolução para uma página HTML
+
+Use:
+
+- o mesmo `User-Agent`;
+- Client Hints correspondentes;
+- cookies da sessão atual;
+- o mesmo idioma do navegador;
+- o mesmo proxy, se tiver sido utilizado;
+- `Referer` e `Origin`, se estiverem presentes na solicitação original.
+
+### Envio do resultado da resolução por uma API
+
+Use os cabeçalhos da solicitação original da API.
+
+Não adicione cabeçalhos de navegação do navegador, como `Sec-Fetch-User` e `Upgrade-Insecure-Requests`, se eles não estiverem presentes na solicitação original.
+
+### Sequência de solicitações
+
+```text
+GET /page
+        │
+        ├─ cookies e cabeçalhos HTTP
+        ├─ parâmetros da CAPTCHA
+        │
+        ▼
+CapMonster Cloud
+        │
+        ├─ resultado da resolução
+        │
+        ▼
+POST /verify
+        │
+        ├─ cookies da sessão atual
+        ├─ o mesmo User-Agent
+        ├─ Client Hints correspondentes
+        ├─ Referer e Origin atuais
+        │
+        ▼
+resposta do site de destino
+```
+
+:::info
+
+Exemplos de uso de cabeçalhos ao passar por CAPTCHAs e outras verificações de proteção:
+
+- [Cloudflare Challenge (cf_clearance)](/docs/captchas/turnstile-challenge-task/#exemplos-de-resolução-automática-do-cloudflare-challenge-cf_clearance)
+- [TSPD](/docs/captchas/tspd-task/#exemplos-de-resolu%C3%A7%C3%A3o-autom%C3%A1tica-do-tspd)
+- [Hunt CAPTCHA](/docs/captchas/hunt-task/#exemplo-de-resolu%C3%A7%C3%A3o-do-hunt-captcha)
+
+:::
+
+## Erros comuns
+
+| Erro | O que verificar |
+| --- | --- |
+| Apenas o `User-Agent` é enviado | Adicione os cabeçalhos relevantes da solicitação original |
+| São usados dados de sessões diferentes | Obtenha os cabeçalhos e cookies do mesmo contexto do navegador |
+| O `User-Agent` não corresponde ao `Sec-CH-UA` | Alinhe as versões do navegador e a plataforma |
+| Cookies desatualizados são enviados | Obtenha os cookies novamente ou processe `Set-Cookie` |
+| Cabeçalhos de navegação HTML são usados em uma solicitação de API | Use os cabeçalhos de uma solicitação do mesmo tipo |
+| `Host` ou `Content-Length` é definido manualmente | Remova o cabeçalho para que o cliente HTTP o gere automaticamente |
+
+<br />
+
+Se a solicitação falhar, compare-a com a solicitação do navegador na guia **Network**. Verifique o URL, o método, o corpo, os cookies, os cabeçalhos, o proxy e o URL final após os redirecionamentos.

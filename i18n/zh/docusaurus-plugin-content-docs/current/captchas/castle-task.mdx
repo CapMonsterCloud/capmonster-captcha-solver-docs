@@ -1,5 +1,5 @@
 ---
-sidebar_position: 24
+sidebar_position: 23
 sidebar_label: Castle
 title: "Castle 自动检测与绕过 | API"
 description: "学习如何使用 CapMonster Cloud 自动识别与解决验证码服务 API 来检测 Castle！"
@@ -36,7 +36,7 @@ CapMonster Cloud 默认通过内置代理工作 —— 它们已包含在价格�
 
 ## 请求参数
 
-<TabItem value="proxy" label="CastleTask" className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -110,7 +110,7 @@ Castle 所在页面的 URL。
 <ParamItem title="proxyPassword" type="string" />
 代理服务器登录密码。
 
-</TabItem>
+</div>
 
 ## 创建任务的方法
 
@@ -191,7 +191,7 @@ Castle 所在页面的 URL。
 ## 获取任务结果的方法
 使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 Castle 的解决结果。
 
-<TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel-full">
+<div className="method-panel-full">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/getTaskResult
@@ -229,7 +229,7 @@ Castle 所在页面的 URL。
 }   
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## 如何获取 Castle 参数
 

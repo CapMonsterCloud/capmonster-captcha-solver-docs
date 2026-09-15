@@ -1,5 +1,5 @@
 ---
-sidebar_position: 22
+sidebar_position: 21
 sidebar_label: Altcha
 ---
 
@@ -7,6 +7,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -22,15 +24,13 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 
 ## Примеры заданий
 
-<Tabs className="full-width-tabs">
-  <TabItem value="pow" label="PoW (Proof-of-Work)" default>
-    ![](./images/altcha/altcha_frictionless.png)
-  </TabItem>
-  <TabItem value="code" label="Code Captcha">
-    ![](./images/altcha/altcha_code.png)
-  </TabItem>
-</Tabs>
+Ниже представлены примеры типов заданий Altcha, которые на данный момент поддерживаются сервисом CapMonster Cloud:
 
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap title="PoW (Proof-of-Work)">![](./images/altcha/altcha_frictionless.png)</ImageWrap>
+  <ImageWrap title="Code Captcha">![](./images/altcha/altcha_code.png)</ImageWrap>
+</ImagesLayout>
+<br />
 *Также существует **невидимая капча** (**Invisible Captcha**), которая не имеет видимого интерфейса на странице и не требует каких-либо действий пользователя — проверка выполняется в фоновом режиме.*
 
 :::warning **Внимание!**
@@ -49,7 +49,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
-<TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
   
   <ParamItem title="type" required type="string" />
   **CustomTask**
@@ -72,13 +72,17 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
   <ParamItem title="challenge (внутри metadata)" required="required" type="string" />
-  Уникальный идентификатор задачи, полученный с веб-страницы.
+  Уникальный идентификатор задачи, полученный с веб-страницы.<br />
+  Пример: `3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
 
   ---
 
   <ParamItem title="iterations (внутри metadata)" required="required" type="string" />
   Количество итераций или максимальное число для вычислений.
-> **Важно:** параметр `iterations` соответствует значению `maxnumber`!
+> **Важно:** параметр `iterations` соответствует значению `maxnumber`!<br />
+
+Пример: `5000`
+
 
   ---
 
@@ -94,13 +98,15 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
   <ParamItem title="signature (внутри metadata)" required="required" type="string" />
-  Цифровая подпись запроса.
+  Цифровая подпись запроса.<br />
+  Пример: `4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18`
 
   ---
 
   <ParamItem title="userAgent" type="string" />
-  User-Agent браузера. <br />
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
+  User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
   ---
 
@@ -135,18 +141,35 @@ CapMonster Cloud по умолчанию работает через встро�
   Пароль прокси-сервера.
 
   ---
-</TabItem>
+</div>
 
 ## Метод создания задачи
+
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="Altcha CustomTask (без прокси)" default className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
     <MethodDescription>
-      **Запрос**
+      **Пример запроса**
       ```json
       {
         "clientKey": "API_KEY",
@@ -157,15 +180,15 @@ CapMonster Cloud по умолчанию работает через встро�
           "websiteKey": "",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt":"46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt":"your-salt",
+            "signature": "your-signature"
           }
         }
       }
       ```
-      **Ответ**
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -176,37 +199,32 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 
   <TabItem value="proxy" label="Altcha CustomTask (с прокси)" className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
     <MethodDescription>
-      **Запрос**
-      ```json
-      {
-        "clientKey": "API_KEY",
-        "task": {
-          "type": "CustomTask",
-          "class": "altcha",
-          "websiteURL": "https://example.com",
-          "websiteKey": "",
-          "userAgent": "userAgentPlaceholder",
-          "metadata": {
-            "challenge": "3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c",
-            "iterations": "5000",
-            "salt":"46d5b1c8871e5152d902ee3f?edk=1493462145de1ce33a52fb569b27a364&codeChallenge=464Cjs7PbiJJhJZ_ReJ-y9UGGDndcpsnP6vS8x1nEJyTkhjQkJyL2jcnYEuMKcrG&expires=1761048664",
-            "signature": "4b1cf0e0be0f4e5247e50b0f9a449830f1fbca44c32ff94bc080146815f31a18"
-          },
-          "proxyType":"http",
-          "proxyAddress":"8.8.8.8",
-          "proxyPort":8080,
-          "proxyLogin":"proxyLoginHere",
-          "proxyPassword":"proxyPasswordHere"
-        }
-      }
-      ```
-      **Ответ**
+      **Пример запроса**
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "altcha",
+    "websiteURL": "https://example.com",
+    "websiteKey": "",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "challenge": "your-challenge",
+      "iterations": "your-iterations",
+      "salt":"your-salt",
+      "signature": "your-signature"
+    },
+    "proxyType":"your-proxy-type",
+    "proxyAddress":"your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin":"your-proxy-login",
+    "proxyPassword":"your-proxy-password"
+  }
+}
+```
+      **Пример ответа**
       ```json
       {
         "errorId": 0,
@@ -221,21 +239,37 @@ CapMonster Cloud по умолчанию работает через встро�
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Altcha.
 
-<TabItem value="proxyless" label="Altcha CustomTask (без прокси)" default className="method-panel-full">
-  <MethodItem>
-    ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
   <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
       "clientKey": "API_KEY",
       "taskId": 407533072
     }
     ```
-    **Ответ**
+    **Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -249,7 +283,7 @@ CapMonster Cloud по умолчанию работает через встро�
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 ## Как найти все нужные параметры для создания задачи
 
@@ -361,7 +395,9 @@ fetch(url, { method: 'GET' })
 
 ![](./images/altcha/altcha_base64.png)
 
-Если декодировать это значение, на выходе мы получим JSON-объект, содержащий данные, используемые для валидации капчи:
+После декодирования значения формируется JSON-объект с данными, необходимыми для проверки капчи.
+
+Пример:
 
 ```JSON
 {
@@ -483,7 +519,7 @@ const ALTCHA_PAGE = "https://url_with_altcha";
 
     if (res.status === "ready") {
       fullSolution = res.solution;
-      console.log("Full solution from CapMonster:", fullSolution);
+      console.log("Full solution from CapMonster Cloud:", fullSolution);
       break;
     }
     await new Promise((r) => setTimeout(r, 3000));
@@ -550,3 +586,305 @@ const ALTCHA_PAGE = "https://url_with_altcha";
 })();
 ```
 </details>  
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AltchaRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let altchaRequest = new AltchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-altcha",
+    websiteKey: "",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      challenge: "your-challenge",
+      iterations: "your-iterations",
+      salt: "your-salt",
+      signature: "your-signature",
+    },
+  });
+
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  altchaRequest = new AltchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-altcha",
+    websiteKey: "",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      challenge: "your-challenge",
+      iterations: "your-iterations",
+      salt: "your-salt",
+      signature: "your-signature",
+    },
+  });
+  */
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(altchaRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Показать код (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  AltchaRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveAltchaRequest() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let altchaRequest = new AltchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-altcha",
+    websiteKey: "",
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      challenge: "your-challenge",
+      iterations: "your-iterations",
+      salt: "your-salt",
+      signature: "your-signature",
+    },
+  });
+
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  altchaRequest = new AltchaRequest({
+    websiteURL: "https://yourwebsite.com/page-with-altcha",
+    websiteKey: "",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+    metadata: {
+      challenge: "your-challenge",
+      iterations: "your-iterations",
+      salt: "your-salt",
+      signature: "your-signature",
+    },
+  });
+  */
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(altchaRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveAltchaRequest().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" default className="method-panel">
+<details>
+      <summary>Показать код</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import AltchaCustomTaskRequest
+# Импортируйте ProxyInfo, если планируете использовать собственный прокси
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+
+
+async def solve_altcha():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Базовый пример без прокси
+    # CapMonster Cloud автоматически использует собственные прокси
+    altcha_request = AltchaCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-altcha",
+        websiteKey="",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt": "your-salt",
+            "signature": "your-signature",
+        },
+    )
+
+    # Пример с использованием вашего прокси
+    # Раскомментируйте этот блок, если хотите использовать свой прокси
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    altcha_request = AltchaCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-altcha",
+        websiteKey="",
+        userAgent="userAgentPlaceholder",
+        metadata={
+            "challenge": "your-challenge",
+            "iterations": "your-iterations",
+            "salt": "your-salt",
+            "signature": "your-signature",
+        },
+        proxy=proxy,
+    )
+    """
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(altcha_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_altcha())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>Показать код</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Базовый пример без прокси
+        // CapMonster Cloud автоматически использует собственные прокси
+        var altchaRequest = new AltchaCustomTaskRequest(
+            "your-challenge",
+            "your-iterations",
+            "your-salt",
+            "your-signature"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-altcha",
+            WebsiteKey = "",
+            UserAgent = "userAgentPlaceholder"
+        };
+
+        // Пример с использованием вашего прокси
+        // Раскомментируйте этот блок, если хотите использовать свой прокси
+        /*
+        altchaRequest = new AltchaCustomTaskRequest(
+            "your-challenge",
+            "your-iterations",
+            "your-salt",
+            "your-signature"
+        )
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-altcha",
+            WebsiteKey = "",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var altchaResult = await cmCloudClient.SolveAsync(altchaRequest);
+
+        Console.WriteLine("Solution:");
+        Console.WriteLine(
+            JsonConvert.SerializeObject(
+                altchaResult.Solution,
+                Formatting.Indented
+            )
+        );
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

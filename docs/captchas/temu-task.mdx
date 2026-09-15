@@ -50,6 +50,7 @@ CapMonster Cloud по умолчанию работает через встро�
 </span>
 <br />
 
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **CustomTask**
@@ -109,17 +110,34 @@ CapMonster Cloud по умолчанию работает через встро�
 
     --- 
 </TabItem>
+</Tabs>
 
 
 ## Метод создания задачи
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
     <MethodDescription>
 
     **Запрос**
@@ -152,11 +170,6 @@ CapMonster Cloud по умолчанию работает через встро�
   </TabItem>
 
   <TabItem value="proxy" label="CustomTask (с использованием прокси)" className="method-panel">
-    <MethodItem>
-      ```http
-      https://api.capmonster.cloud/createTask
-      ```
-    </MethodItem>
     <MethodDescription>
 
     **Запрос**
@@ -199,12 +212,29 @@ CapMonster Cloud по умолчанию работает через встро�
 
 **Важно!** После получения решения, необходимо очистить куки и подставить новые полученные куки. 
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<Tabs>
 <TabItem value="proxyless" label="CustomTask (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
 	<MethodDescription>
 		**Запрос**
 		```json
@@ -241,6 +271,7 @@ CapMonster Cloud по умолчанию работает через встро�
 	```
 	</MethodDescription>
 </TabItem>
+</Tabs>
 
 ### Как получить cookie
 Значение для параметра `cookie` можно получить на странице с капчей через свойство `document.cookie`.
@@ -351,7 +382,7 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
 <details>
       <summary>Показать код (для браузера)</summary>
   ```js
@@ -367,7 +398,7 @@ CapMonster Cloud по умолчанию работает через встро�
       );
 
       // Базовый пример без прокси
-      // CapMonster Cloud автоматически использует свои прокси
+      // CapMonster Cloud автоматически использует собственные прокси
       let temuRequest = new TemuRequest({
           class: "Temu",
           websiteURL: "https://www.example.com/bgn_verification.html?verifyCode=",  // URL страницы с Temu
@@ -425,7 +456,7 @@ CapMonster Cloud по умолчанию работает через встро�
           );
 
           // Базовый пример без прокси
-          // CapMonster Cloud автоматически использует свои прокси
+          // CapMonster Cloud автоматически использует собственные прокси
           let temuRequest = new TemuRequest({
               class: "Temu",
               websiteURL: "https://www.example.com/bgn_verification.html?verifyCode=",  // URL страницы с Temu
@@ -491,7 +522,7 @@ async def solve_temu_captcha():
     cap_monster_client = CapMonsterClient(options=client_options)
 
     # Базовый пример без прокси
-    # CapMonster Cloud автоматически использует свои прокси
+    # CapMonster Cloud автоматически использует собственные прокси
     temu_request = TemuCustomTaskRequest(
         websiteUrl="https://www.example.com/bgn_verification.html?verifyCode=",  # URL страницы с Temu
         userAgent="userAgentPlaceholder",                                        # Используйте актуальный UserAgent
@@ -555,7 +586,7 @@ class Program
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
         // Базовый пример без прокси
-        // CapMonster Cloud автоматически использует свои прокси
+        // CapMonster Cloud автоматически использует собственные прокси
         var temuRequest = new TemuCustomTaskRequest(
             "region=141; language=en; currency=EUR; api_uid=CnBpI2fwFW2BogBITHVYAg==; timezone=Europe%2FMoscow; _nano_fp=XpmYXqmJnqX8npXblT_T6~7rkpA2LDnz2BPFuT5m; privacy_setting_detail=%7B%22firstPAds%22%3A0%2C%22adj%22%3A0%2C%22fbsAnlys%22%3A0%2C%22fbEvt%22%3A0%2C%22ggAds%22%3A0%2C%22fbAds%22%3A0%2C%22ttAds%22%3A0%2C%22scAds%22%3A0%2C%22ptAds%22%3A0%2C%22bgAds%22%3A0%2C%22tblAds%22%3A0%2C%22obAds%22%3A0%2C%22vgAds%22%3A0%2C%22idAds%22%3A0%2C%22opAds%22%3A0%2C%22stAds%22%3A0%2C%22pmAds%22%3A0%7D; webp=1; _bee=pgoBlKp038lBhEyoQ4yXnuNrw1X5va2U; verifyAuthToken=QkZmx2TJFbSuuRVD_MKJmA0b84fe3df183da8ab"
         )

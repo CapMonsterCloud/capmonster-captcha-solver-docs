@@ -38,7 +38,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 ## Параметры запроса
 
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="bordered-panel">
+<div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **RecaptchaV3TaskProxyless**
 
@@ -51,7 +51,9 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
     <ParamItem title="websiteKey" required type="string" />
    Ключ-идентификатор ReCaptcha3 на целевой странице.
-   <br/>https://www.google.com/recaptcha/api.js?render=THIS_ONE
+   `https://www.google.com/recaptcha/api.js?render=THIS_ONE`<br/>
+
+   Имеет следующий примерный формат: `6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob`
 
    ---
 
@@ -71,33 +73,50 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
     <p>Значение параметра action, которое передаётся виджетом ReCaptcha в Google и который при последующей верификации на сервере виден владельцу сайта. Указывайте этот параметр, если его значение отличается от значения по умолчанию: *verify*</p>
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
-</TabItem>
+</div>
 
 
 ## Метод создания задачи
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/createTask
-		```
-	</MethodItem>
+
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+<div className="method-panel">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "RecaptchaV3TaskProxyless",
-    "websiteURL": "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-    "websiteKey": "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
+    "websiteURL": "https://yourwebsite.com/page-with-recaptcha",
+    "websiteKey": "your-website-key",
     "isEnterprise": false,
     "minScore": 0.7,
-    "pageAction": "myverify"
+    "pageAction": "your-verify"
   }
 }
 ```
 
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -105,7 +124,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 		}
 		```
 	</MethodDescription>
-</TabItem>
+</div>
 
 
 ## Метод получения результата задачи
@@ -116,21 +135,37 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение ReCaptcha3. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 10 с до 30 с.
 
-<TabItem value="proxyless" label="RecaptchaV3TaskProxyless (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -157,7 +192,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 <br />
 
@@ -178,17 +213,17 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 
 В **Elements**:
 
-![elements](images\recaptcha-v3\sitekey-elements.png)
+![elements](images/recaptcha-v3/sitekey-elements.png)
 
 Во вкладке **Network**:
 
-![network](images\recaptcha-v3\sitekey-network.png)
+![network](images/recaptcha-v3/sitekey-network.png)
 
 #### pageAction
 
 Название действия, передаваемое в *grecaptcha.execute().* Например:​
 
-![action](images\recaptcha-v3\action.png)
+![action](images/recaptcha-v3/action.png)
 
 ### Автоматически
 
@@ -259,7 +294,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
           } catch (e) {}
         });
 
-        const targetUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta";
+        const targetUrl = "https://yourwebsite.com/page-with-recaptcha";
         await page.goto(targetUrl, { timeout: 60000 });
         await page.waitForTimeout(3000);
 
@@ -351,7 +386,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
                   "action": found_action
               })
 
-      asyncio.run(extract_recaptcha_v3_execute("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta"))
+      asyncio.run(extract_recaptcha_v3_execute("https://yourwebsite.com/page-with-recaptcha"))
       ```
     </details>
   </TabItem>
@@ -372,7 +407,7 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
           public static async Task Main(string[] args)
           {
               await ExtractRecaptchaV3Execute
-              ("https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta");
+              ("https://yourwebsite.com/page-with-recaptcha");
           }
 
           public static async Task ExtractRecaptchaV3Execute(string url)
@@ -443,75 +478,82 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
 ## Используйте библиотеку SDK
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import {
-      CapMonsterCloudClientFactory,
-      ClientOptions,
-      RecaptchaV3ProxylessRequest
-    } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3ProxylessRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-      const cmcClient = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: 'YOUR_API_KEY' }) // Укажите ваш API-ключ CapMonster Cloud
-      );
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      // При необходимости можно проверить баланс
-      const balance = await cmcClient.getBalance();
-      console.log('Balance:', balance);
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-      const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-        websiteURL: 'https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta', // URL вашей страницы с капчей
-        websiteKey: '6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob',
-        minScore: 0.6,  
-        pageAction: 'myverify',
-      });
+  // Для RecaptchaV3ProxylessRequest прокси не требуются
+  const recaptcha3Request = new RecaptchaV3ProxylessRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
 
-      const solution = await cmcClient.Solve(recaptchaV3Request);
-      console.log('Solution:', solution);
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    });
+  const result = await client.Solve(recaptcha3Request);
+  console.log("Solution:", result.solution);
+});
 ```
 </details>
 
 <details>
       <summary>Показать код (Node.js)</summary>
 
-      ```javascript
-      // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-      import { CapMonsterCloudClientFactory, ClientOptions, RecaptchaV3ProxylessRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  RecaptchaV3ProxylessRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-      const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      async function solveRecaptchaV3() {
-          const cmcClient = CapMonsterCloudClientFactory.Create(
-              new ClientOptions({ clientKey: API_KEY })
-          );
+async function solveRecaptchaV3() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-          // При необходимости можно проверить баланс
-          const balance = await cmcClient.getBalance();
-          console.log("Balance:", balance);
+  // Для RecaptchaV3ProxylessRequest прокси не требуются
+  const recaptcha3Request = new RecaptchaV3ProxylessRequest({
+    websiteURL: "https://yourwebsite.com/page-with-recaptcha",
+    websiteKey: "your-website-key",
+    minScore: 0.7,
+    pageAction: "your-page-action",
+  });
 
-          const recaptchaV3Request = new RecaptchaV3ProxylessRequest({
-              websiteURL: "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",
-              websiteKey: "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-              minScore: 0.6,
-              pageAction: "myverify",
-          });
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-          const solution = await cmcClient.Solve(recaptchaV3Request);
-          console.log("Solution:", solution);
-      }
+  const result = await client.Solve(recaptcha3Request);
+  console.log("Solution:", result.solution);
+}
 
-      solveRecaptchaV3().catch(console.error);
-      ```
-      </details>
+solveRecaptchaV3().catch(console.error);
+```
+  </details>
 
 
 <BlogLink url="https://capmonster.cloud/ru/blog/re-1/javascript-recaptcha-v3"/>
@@ -524,31 +566,38 @@ reCAPTCHA v3 работает полностью в фоновом режиме 
       <summary>Показать код</summary>
 
 ```python
-# https://github.com/Zennolab/capmonstercloud-client-python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import RecaptchaV3ProxylessRequest
 
-client_options = ClientOptions(api_key="YOUR_API_KEY")  # Ваш API-ключ CapMonster Cloud
-cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
 
-# При необходимости можно проверить баланс
-balance = asyncio.run(cap_monster_client.get_balance())
-print("Balance:", balance)
 
-recaptcha_v3_request = RecaptchaV3ProxylessRequest(
-    websiteUrl="https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  # URL вашей страницы с капчей
-    websiteKey="6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",  # Замените на корректное значение
-    minScore=0.6,  
-    pageAction="myverify"  
-)
+async def solve_recaptcha_v3():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-async def solve_captcha():
-    return await cap_monster_client.solve_captcha(recaptcha_v3_request)
+    # Для RecaptchaV3ProxylessRequest прокси не требуются
+    recaptcha3_request = RecaptchaV3ProxylessRequest(
+        websiteUrl="https://yourwebsite.com/page-with-recaptcha",
+        websiteKey="your-website-key",
+        minScore=0.7,
+        pageAction="your-page-action",
+    )
 
-responses = asyncio.run(solve_captcha())
-print(responses)
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(recaptcha3_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_recaptcha_v3())
 ```
 </details>
 
@@ -564,34 +613,37 @@ print(responses)
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Threading.Tasks;
 using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
 class Program
 {
     static async Task Main(string[] args)
     {
+        // Укажите ваш API-ключ CapMonster Cloud
         var clientOptions = new ClientOptions
         {
-            ClientKey = "YOUR_API_KEY"  // Ваш API-ключ CapMonster Cloud
+            ClientKey = "YOUR_API_KEY"
         };
 
         var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Для RecaptchaV3ProxylessRequest прокси не требуются
+        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-recaptcha",
+            WebsiteKey = "your-website-key",
+            MinScore = 0.7,
+            PageAction = "your-page-action"
+        };
 
         // При необходимости можно проверить баланс
         var balance = await cmCloudClient.GetBalanceAsync();
         Console.WriteLine("Balance: " + balance);
 
-        var recaptchaV3Request = new RecaptchaV3ProxylessRequest
-        {
-            WebsiteUrl = "https://lessons.zennolab.com/captchas/recaptcha/v3.php?level=beta",  // URL вашей страницы с капчей
-            WebsiteKey = "6Le0xVgUAAAAAIt20XEB4rVhYOODgTl00d8juDob",
-            MinScore = 0.6,
-            PageAction = "myverify"
-        };
-
         var recaptchaV3Result = await cmCloudClient.SolveAsync(recaptchaV3Request);
-
         Console.WriteLine("Solution: " + recaptchaV3Result.Solution.Value);
     }
 }

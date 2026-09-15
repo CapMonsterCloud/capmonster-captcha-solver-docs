@@ -12,11 +12,11 @@
     "description": "The generated-index page description for category API in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Методы": {
-    "message": "Methods",
+    "message": "Métodos",
     "description": "The label for category Методы in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Типы капч": {
-    "message": "Captcha types",
+    "message": "Tipos de captcha",
     "description": "The label for category Типы капч in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Типы капч.link.generated-index.description": {
@@ -24,11 +24,11 @@
     "description": "The generated-index page description for category Типы капч in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Внешние сервисы": {
-    "message": "External services",
+    "message": "Serviços externos",
     "description": "The label for category Внешние сервисы in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Расширение": {
-    "message": "Extension",
+    "message": "Extensão do navegador",
     "description": "The label for category Расширение in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Методы.link.generated-index.description": {
@@ -135,5 +135,29 @@
   "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
     "message": "Use módulos de Text — componentes especializados para resolver captchas baseados em imagem com seleção de objetos. A resposta retorna resultados de reconhecimento (texto ou índice da opção correta) de acordo com a tarefa.",
     "description": "A descrição da página generated-index para a categoria Text na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении": {
+    "message": "Mapeamento de parâmetros na extensão",
+    "description": "O rótulo da categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.title": {
+    "message": "Mapeamento de parâmetros na extensão",
+    "description": "O título da página generated-index para a categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
+    "message": "Visualize o mapeamento dos parâmetros de CAPTCHA nas extensões de navegador do CapMonster Cloud.",
+    "description": "A descrição da página generated-index para a categoria Маппинг параметров в расширении na sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText": {
+    "message": "ImageToText",
+    "description": "The label for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.title": {
+    "message": "ImageToText",
+    "description": "The generated-index page title for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.description": {
+    "message": "Reconhecimento de CAPTCHA de texto, configuração do limite de confiança e uso de módulos personalizados.",
+    "description": "The generated-index page description for category ImageToText in sidebar tutorialSidebar"
   }
 }

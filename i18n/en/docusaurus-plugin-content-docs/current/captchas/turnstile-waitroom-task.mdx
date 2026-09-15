@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 sidebar_label: Cloudflare Waiting Room
 title: "Recognise and resolve Cloudflare Waiting Room | API"
 description: "Turnstile Task method to automatically recognise and solve Cloudflare Waiting Room captchas via Capmonster Cloud API. Full tutorial and examples in the Capmonster Cloud Docs documentation."
@@ -49,7 +49,7 @@ You can also identify this Cloudflare type via the page header:
 </span>
 <br />
 
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -61,7 +61,7 @@ You can also identify this Cloudflare type via the page header:
 ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Cloudflare site key
+  Cloudflare key. Any string may be provided, for example: `xxxxxx`.
 
 ---
 
@@ -84,8 +84,9 @@ console.log(htmlBase64);
 ---
 
   <ParamItem title="userAgent" required type="string" />
-  Browser User-Agent.<br />
-  **Provide only the current Windows UA:** userAgentPlaceholder
+  Browser User-Agent. Use the current value supported by CapMonster Cloud: `userAgentPlaceholder`<br />
+
+You can get the latest value at: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
 ---
 
@@ -119,38 +120,38 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   Proxy password.
 
-</TabItem>
+</div>
 ---
 
 ## Create task method
 
-<TabItem value="proxyless" label="TurnstileTask (without proxy)" default className="method-panel">
+<div className="method-panel">
 	<MethodItem>
 		```http
 		https://api.capmonster.cloud/createTask
 		```
 	</MethodItem>
 	<MethodDescription>
-		**Request**
+		**Request example**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-waitroom",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "wait_room",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Response**
+		**Response example**
 		```json
 		{
 		  "errorId":0,
@@ -158,19 +159,19 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
+</div>
 ---
 ## Get task result method
 Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve the Waiting Room solution. Depending on system load, the response can take between 5 and 20 seconds.
 
-<TabItem value="proxyless" label="TurnstileTask (proxyless)" default className="method-panel-full">
+<div className="method-panel-full">
   <MethodItem>
     ```http
     https://api.capmonster.cloud/getTaskResult
     ```
   </MethodItem>
   <MethodDescription>
-    **Request**
+    **Request example**
     ```json
     {
       "clientKey": "API_KEY",
@@ -178,7 +179,7 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
 
-    **Response**
+    **Response example**
     ```json
     {
       "errorId": 0,
@@ -189,8 +190,218 @@ Use the [getTaskResult](../api/methods/get-task-result.mdx) method to retrieve t
     }
     ```
   </MethodDescription>
-</TabItem>
+</div>
 
 |**Property**|**Type**|**Description**|
 | :- | :- | :- |
 |cf_clearance|String|Special Cloudflare cookies that you can set in your browser|
+
+## Use the SDK library
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Show code (for browser)</summary>
+  ```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TurnstileRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Cloudflare Waiting Room can only be solved using your own proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-waiting-room",
+    websiteKey: "xxxxxxxxxx",
+    cloudflareTaskType: "wait_room",
+    proxy,
+    htmlPageBase64: "your_html_page_base64",
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(turnstileRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Show code (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TurnstileRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Specify your CapMonster Cloud API key
+
+async function solveTurnstileWaitRoom() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Cloudflare Waiting Room can only be solved using your own proxy
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-waiting-room",
+    websiteKey: "xxxxxxxxxx",
+    cloudflareTaskType: "wait_room",
+    proxy,
+    htmlPageBase64: "your_html_page_base64",
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // You can check your balance if necessary
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(turnstileRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveTurnstileWaitRoom().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" default className="method-panel">
+<details>
+      <summary>Show code</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import TurnstileRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Specify your CapMonster Cloud API key
+
+
+async def main():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Cloudflare wait_room can only be solved using your own proxy
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    turnstile_request = TurnstileRequest(
+        websiteURL="https://yourwebsite.com/page-with-waiting-room",
+        websiteKey="xxxxxxxx",
+        cloudflareTaskType="wait_room",
+        proxy=proxy,
+        htmlPageBase64="your_html_page_base64",
+        userAgent="userAgentPlaceholder",
+    )
+
+    # You can check your balance if necessary
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(turnstile_request)
+    print("Solution:", result)
+
+
+asyncio.run(main())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>Show code</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Specify your CapMonster Cloud API key
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Cloudflare Waiting Room can only be solved using your own proxy
+        var turnstileRequest = new TurnstileRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-waiting-room",
+            WebsiteKey = "xxxxxxxx",
+            CloudflareTaskType = "wait_room",
+            HtmlPageBase64 = "your_html_page_base64",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // You can check your balance if necessary
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var turnstileResult = await cmCloudClient.SolveAsync(turnstileRequest);
+        Console.WriteLine("Solution: " + turnstileResult.Solution.Clearance);
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

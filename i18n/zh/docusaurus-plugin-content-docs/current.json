@@ -12,11 +12,11 @@
     "description": "The generated-index page description for category API in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Методы": {
-    "message": "Methods",
+    "message": "方法",
     "description": "The label for category Методы in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Типы капч": {
-    "message": "Captcha types",
+    "message": "验证码类型",
     "description": "The label for category Типы капч in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Типы капч.link.generated-index.description": {
@@ -24,11 +24,11 @@
     "description": "The generated-index page description for category Типы капч in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Внешние сервисы": {
-    "message": "External services",
+    "message": "外部服务",
     "description": "The label for category Внешние сервисы in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Расширение": {
-    "message": "Extension",
+    "message": "浏览器扩展",
     "description": "The label for category Расширение in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.Методы.link.generated-index.description": {
@@ -135,5 +135,29 @@
   "sidebar.tutorialSidebar.category.Text.link.generated-index.description": {
     "message": "使用 Text Modules —— 专门用于解决基于图像的对象选择验证码。返回识别结果（文本或正确选项索引）。",
     "description": "The generated-index page description for category Text in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении": {
+    "message": "扩展程序中的参数映射",
+    "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的标签"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.title": {
+    "message": "扩展程序中的参数映射",
+    "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的 generated-index 页面标题"
+  },
+  "sidebar.tutorialSidebar.category.Маппинг параметров в расширении.link.generated-index.description": {
+    "message": "查看 CapMonster Cloud 浏览器扩展程序中的 CAPTCHA 参数映射。",
+    "description": "tutorialSidebar 侧边栏中“Маппинг параметров в расширении”分类的 generated-index 页面描述"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText": {
+    "message": "ImageToText",
+    "description": "The label for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.title": {
+    "message": "ImageToText",
+    "description": "The generated-index page title for category ImageToText in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.ImageToText.link.generated-index.description": {
+    "message": "文本 CAPTCHA 识别、置信度阈值设置以及自定义模块的使用。",
+    "description": "The generated-index page description for category ImageToText in sidebar tutorialSidebar"
   }
 }

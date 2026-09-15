@@ -1,6 +1,7 @@
 ---
-sidebar_position: 13
+sidebar_position: 12
 sidebar_label: Basilisk
+title: Reconhecimento automático e bypass do Basilisk | API
 ---
 
 
@@ -30,7 +31,7 @@ O CapMonster Cloud, por padrão, funciona com proxies integrados — já incluí
 Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço **65.21.190.34** à lista de permissões (whitelist).
 :::
 ## Parâmetros da solicitação
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (sem proxy)" default className="bordered-panel">
+<div className="bordered-panel">
 <ParamItem title="type" required type="string" />
 **CustomTask**
 
@@ -47,13 +48,16 @@ O endereço da página principal onde o captcha é resolvido.
 ---
 
 <ParamItem title="websiteKey" required type="string" />
-Pode ser encontrado no código HTML no atributo **data-sitekey** do contêiner do captcha ou no payload de uma solicitação POST para `https://basiliskcaptcha.com/challenge/check-site` no campo **site_key**
+Pode ser encontrado no código HTML no atributo **data-sitekey** do contêiner do captcha ou no payload de uma solicitação POST para `https://basiliskcaptcha.com/challenge/check-site` no campo **site_key**<br />
+    
+Exemplo: `b7890hre6cf2544b2759c19fb2600897`
 
 ---
 
 <ParamItem title="userAgent" type="string" />
-User-Agent do navegador. <br />
-**Transmita apenas o UA atual do sistema operacional Windows. No momento, o válido é**: `userAgentPlaceholder`
+User-Agent do navegador. Use o valor atual compatível com o CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
 ---
 
@@ -87,7 +91,7 @@ Login do servidor proxy.
 <ParamItem title="proxyPassword" type="string" />
 Senha do servidor proxy.
 
-</TabItem>
+</div>
 
 ## Criar tarefa
 
@@ -97,24 +101,24 @@ Senha do servidor proxy.
 <MethodItem>
 ```http
 https://api.capmonster.cloud/createTask
-````
+```
 
 </MethodItem>
 <MethodDescription>
-**Solicitação**
-```json
-{
-   "clientKey": "API_KEY",
-   "task": {
-       "type": "CustomTask",
-       "class": "Basilisk",
-       "websiteURL": "https://domain.io/account/register",
-       "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
-       "userAgent": "userAgentPlaceholder"
-   }
-}
-```
-**Resposta**
+**Exemplo de requisição**
+    ```json
+    {
+      "clientKey": "API_KEY",
+      "task": {
+        "type": "CustomTask",
+        "class": "Basilisk",
+        "websiteURL": "https://domain.io/account/register",
+        "websiteKey": "your-website-key",
+        "userAgent": "userAgentPlaceholder"
+      }
+    }
+    ```
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -131,25 +135,25 @@ https://api.capmonster.cloud/createTask
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
-```json
-{
-   "clientKey": "API_KEY",
-   "task": {
-       "type": "CustomTask",
-       "class": "Basilisk",
-       "websiteURL": "https://domain.io/account/register",
-       "websiteKey": "b7890hre5cf2544b2759c19fb2600897",
-       "userAgent": "userAgentPlaceholder",
-       "proxyType": "http",
-       "proxyAddress": "8.8.8.8",
-       "proxyPort": 8080,
-       "proxyLogin": "proxyLoginHere",
-       "proxyPassword": "proxyPasswordHere"
-   }
-}
-```
-**Resposta**
+**Exemplo de requisição**
+  ```json
+  {
+    "clientKey": "API_KEY",
+    "task": {
+      "type": "CustomTask",
+      "class": "Basilisk",
+      "websiteURL": "https://domain.io/account/register",
+      "websiteKey": "your-website-key",
+      "userAgent": "userAgentPlaceholder",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password"
+    }
+  }
+  ```
+**Exemplo de resposta**
 ```json
 {
   "errorId":0,
@@ -165,21 +169,21 @@ https://api.capmonster.cloud/createTask
 ## Obter o resultado da tarefa
 Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução do Basilisk.
 
-<TabItem value="proxyless" label="GeeTestTaskProxyless (sem proxy)" default className="method-panel-full">
+<div className="method-panel-full">
 <MethodItem>
 ```http
 https://api.capmonster.cloud/getTaskResult
 ```
 </MethodItem>
 <MethodDescription>
-**Solicitação**
+**Exemplo de requisição**
 ```json
 {
   "clientKey":"API_KEY",
   "taskId": 407533072
 }
 ```
-**Resposta**
+**Exemplo de resposta**
 ```json
 {
   "errorId": 0,
@@ -195,7 +199,7 @@ https://api.capmonster.cloud/getTaskResult
 }		
 ```
 </MethodDescription>
-</TabItem>
+</div>
 
 ## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
 
@@ -208,7 +212,7 @@ https://api.capmonster.cloud/getTaskResult
 
 Na aba **Network**, filtre as requisições usando palavras-chave relacionadas a captchas, como *site_key*. Essas requisições conterão o parâmetro *site_key* — um valor usado para identificar o site durante o processo de resolução do captcha:
 
-![site-key-basilisk](images\basilisk\site-key.png)
+![site-key-basilisk](images/basilisk/site-key.png)
 
 ### Automaticamente
 
@@ -346,103 +350,114 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
-  <TabItem value="js" label="JavaScript" default className="method-panel">
-<details>
-      <summary>Mostrar Código (para navegador)</summary>
-  ```js
- // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Mostrar código (para navegador)</summary>
 
-import { CapMonsterCloudClientFactory, ClientOptions, BasiliskRequest } from '@zennolab_com/capmonstercloud-client';
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  BasiliskRequest
+} from "@zennolab_com/capmonstercloud-client";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
 
-    // Exemplo básico sem proxy
-    // O CapMonster Cloud usa automaticamente seus próprios proxies
-    let basiliskRequest = new BasiliskRequest({
-        websiteURL: "https://example.com",       // URL da página com Basilisk
-        websiteKey: "websiteKey"                 // Substitua pelo valor correto
-    });
+  const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
-    // Exemplo de uso do seu próprio proxy
-    // Descomente este bloco se quiser usar um proxy personalizado
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-    basiliskRequest = new BasiliskRequest({
-        websiteURL: "https://example.com",
-        websiteKey: "b3760bfe5cf4254b2759c19fg2698og",
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let basiliskRequest = new BasiliskRequest({
+    websiteURL: "https://yourwebsite.com/page-with-basilisk",
+    websiteKey: "your-website-key",
+  });
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    const result = await client.Solve(basiliskRequest);
-    console.log("Solution:", result);
+  basiliskRequest = new BasiliskRequest({
+    websiteURL: "https://yourwebsite.com/page-with-basilisk",
+    websiteKey: "your-website-key",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
+
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(basiliskRequest);
+  console.log("Solution:", result.solution);
 });
 ```
 </details>
 
+
 <details>
-      <summary>Mostrar Código (Node.js)</summary>
-```javascript
+      <summary>Mostrar código (Node.js)</summary>
+```JavaScript
 // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-import { CapMonsterCloudClientFactory, ClientOptions, BasiliskRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  BasiliskRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-const API_KEY = "YOUR_API_KEY";  // Insira sua chave de API do CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Informe sua chave de API do CapMonster Cloud
 
 async function solveBasilisk() {
-    const client = CapMonsterCloudClientFactory.Create(
-        new ClientOptions({ clientKey: API_KEY })
-    );
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-    // Exemplo básico sem proxy
-    // O CapMonster Cloud usa automaticamente seus próprios proxies
-    let basiliskRequest = new BasiliskRequest({
-        websiteURL: "https://example.com",       // URL da página com Basilisk
-        websiteKey: "b3760bfe5cf4254b2759c19fg2698og"                 // Substitua pelo valor correto
-    });
+  // Exemplo básico sem proxy
+  // O CapMonster Cloud usa automaticamente seus próprios proxies
+  let basiliskRequest = new BasiliskRequest({
+    websiteURL: "https://yourwebsite.com/page-with-basilisk",
+    websiteKey: "your-website-key",
+  });
 
-    // Exemplo de uso do seu próprio proxy
-    // Descomente este bloco se quiser usar um proxy personalizado
-    /*
-    const proxy = {
-        proxyType: "http",
-        proxyAddress: "123.45.67.89",
-        proxyPort: 8080,
-        proxyLogin: "username",
-        proxyPassword: "password"
-    };
+  // Exemplo usando seu proxy
+  // Descomente este bloco se quiser usar seu próprio proxy
+  /*
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-    basiliskRequest = new BasiliskRequest({
-        websiteURL: "https://example.com",
-        websiteKey: ""b3760bfe5cf4254b2759c19fg2698og",
-        proxy,
-        userAgent: "userAgentPlaceholder"
-    });
-    */
+  basiliskRequest = new BasiliskRequest({
+    websiteURL: "https://yourwebsite.com/page-with-basilisk",
+    websiteKey: "your-website-key",
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
 
-    // Se necessário, você pode verificar o saldo
-    const balance = await client.getBalance();
-    console.log("Balance:", balance);
+  // Se necessário, você pode verificar o saldo
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-    const result = await client.Solve(basiliskRequest);
-    console.log("Solution:", result);
+  const result = await client.Solve(basiliskRequest);
+  console.log("Solution:", result.solution);
 }
 
 solveBasilisk().catch(console.error);
@@ -452,62 +467,71 @@ solveBasilisk().catch(console.error);
   </TabItem>
 
   <TabItem value="python" label="Python" className="method-panel">
+
 <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 ```python
 # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
 import asyncio
+
 from capmonstercloudclient import CapMonsterClient, ClientOptions
 from capmonstercloudclient.requests import BasiliskCustomTaskRequest
-# from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Descomente se planeja usar proxy
+# Importe ProxyInfo se pretende usar seu próprio proxy
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-API_KEY = "YOUR_API_KEY"  # Insira sua chave de API do CapMonster Cloud
+API_KEY = "YOUR_API_KEY"  # Informe sua chave de API do CapMonster Cloud
+
 
 async def solve_basilisk():
-    client_options = ClientOptions(api_key=API_KEY)
-    cap_monster_client = CapMonsterClient(options=client_options)
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
     # Exemplo básico sem proxy
     # O CapMonster Cloud usa automaticamente seus próprios proxies
     basilisk_request = BasiliskCustomTaskRequest(
-        websiteUrl="https://example.com",                  # URL da página com Basilisk
-        websiteKey="b3760bfe5cf4254b2759c19fg2698og"      # Substitua pelo valor correto
+        websiteUrl="https://yourwebsite.com/page-with-basilisk",
+        websiteKey="your-website-key",
     )
 
-    # Exemplo de uso do seu próprio proxy
-    # Descomente este bloco se quiser usar um proxy personalizado
+    # Exemplo usando seu proxy
+    # Descomente este bloco se quiser usar seu próprio proxy
+    """
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-    # proxy = ProxyInfo(
-    #     proxyType="http",
-    #     proxyAddress="123.45.67.89",
-    #     proxyPort=8080,
-    #     proxyLogin="username",
-    #     proxyPassword="password"
-    # )
-    #
-    # basilisk_request = BasiliskCustomTaskRequest(
-    #     websiteUrl="https://example.com",
-    #     websiteKey="b3760bfe5cf4254b2759c19fg2698og",
-    #     proxy=proxy
-    # )
+    basilisk_request = BasiliskCustomTaskRequest(
+        websiteUrl="https://yourwebsite.com/page-with-basilisk",
+        websiteKey="your-website-key",
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+    )
+    """
 
     # Se necessário, você pode verificar o saldo
-    balance = await cap_monster_client.get_balance()
+    balance = await client.get_balance()
     print("Balance:", balance)
 
-    result = await cap_monster_client.solve_captcha(basilisk_request)
+    result = await client.solve_captcha(basilisk_request)
     print("Solution:", result)
+
 
 asyncio.run(solve_basilisk())
 ```
 </details>
+
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
 
 <details>
-      <summary>Mostrar Código</summary>
+      <summary>Mostrar código</summary>
 ```csharp
 // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
@@ -520,7 +544,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // Insira sua chave de API do CapMonster Cloud
+        // Informe sua chave de API do CapMonster Cloud
         var clientOptions = new ClientOptions
         {
             ClientKey = "YOUR_API_KEY"
@@ -532,26 +556,26 @@ class Program
         // O CapMonster Cloud usa automaticamente seus próprios proxies
         var basiliskRequest = new BasiliskCustomTaskRequest
         {
-            WebsiteUrl = "https://example.com",                  // URL da página com Basilisk
-            WebsiteKey = "b3760bfe5cf4254b2759c19fg2698og"      // Substitua pelo valor correto
+            WebsiteUrl = "https://yourwebsite.com/page-with-basilisk",
+            WebsiteKey = "your-website-key"
         };
 
-        // Exemplo de uso do seu próprio proxy
-        // Descomente este bloco se quiser usar um proxy personalizado
-
+        // Exemplo usando seu proxy
+        // Descomente este bloco se quiser usar seu próprio proxy
         /*
         basiliskRequest = new BasiliskCustomTaskRequest
         {
-            WebsiteUrl = "https://example.com",
-            WebsiteKey = "b3760bfe5cf4254b2759c19fg2698og",
+            WebsiteUrl = "https://yourwebsite.com/page-with-basilisk",
+            WebsiteKey = "your-website-key",
+            UserAgent = "userAgentPlaceholder",
+
             Proxy = new ProxyContainer(
-                "123.45.67.89",   
-                8080,            
-                ProxyType.Http, 
-                "username",      
-                "password" 
-            ),
-            UserAgent = "userAgentPlaceholder"
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
         };
         */
 
@@ -561,8 +585,8 @@ class Program
 
         var basiliskResult = await cmCloudClient.SolveAsync(basiliskRequest);
 
-        Console.WriteLine("Basilisk Solution Data: " + string.Join(", ", basiliskResult.Solution.Data));
-        Console.WriteLine("Basilisk Solution Headers: " + string.Join(", ", basiliskResult.Solution.Headers));
+        Console.WriteLine("Solution Data: " + string.Join(", ", basiliskResult.Solution.Data));
+        Console.WriteLine("Solution Headers: " + string.Join(", ", basiliskResult.Solution.Headers));
     }
 }
 ```
@@ -570,4 +594,3 @@ class Program
   </TabItem>
 
 </Tabs>
-

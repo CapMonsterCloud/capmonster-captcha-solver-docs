@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 sidebar_label: Cloudflare Waiting Room
 title: "Распознавание и решение Cloudflare Waiting Room | API"
 description: "Задачи Turnstile Task и Cloudflare Waiting Room для автоматического распознавания и решения Cloudflare Waiting Room капч через API Capmonster Cloud." 
@@ -49,7 +49,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </span>
 <br />
 
-<TabItem value="proxyless" label="RecaptchaV2EnterpriseTaskProxyless (without proxy)" default className="bordered-panel">
+<div className="bordered-panel">
   <ParamItem title="type" required type="string" />
   **TurnstileTask**
 
@@ -61,7 +61,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   ---
 
   <ParamItem title="websiteKey" required type="string" />
-  Ключ Cloudflare на целевом сайте
+  Ключ Cloudflare. Допускается передача любой строки, например: `xxxxxx`.
 
   ---
 
@@ -84,8 +84,9 @@ console.log(htmlBase64);
   ---
 
   <ParamItem title="userAgent" required type="string" />
-  User-Agent браузера.<br /> 
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является версия**: `userAgentPlaceholder`
+  User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+  Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
   ---
 
@@ -119,37 +120,53 @@ console.log(htmlBase64);
   <ParamItem title="proxyPassword" required type="string" />
   Пароль прокси-сервера.
 
-</TabItem>
+</div>
 ---
 ## Метод создания задачи
 
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/createTask
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
+<div className="method-panel">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 ```json 
 {
   "clientKey": "API_KEY",
   "task": {
     "type": "TurnstileTask",
-    "websiteURL": "https://example.com",
+    "websiteURL": "https://yourwebsite.com/page-with-cf-waitroom",
     "websiteKey": "xxxxxxxxxx",
     "cloudflareTaskType": "wait_room",
     "htmlPageBase64": "PCFET0NUWVBFIGh0...vYm9keT48L2h0bWw+",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-		**Ответ**
+		**Пример ответа**
 		```json
 		{
 		  "errorId":0,
@@ -157,19 +174,35 @@ console.log(htmlBase64);
 		}
 		```
 	</MethodDescription>
-</TabItem>
+</div>
 ---
 ## Метод получения результата задачи
 Используйте метод [getTaskResult](../api/methods/get-task-result.mdx), чтобы получить решение Waiting Room. В зависимости от загрузки системы вы получите ответ через время в диапазоне от 5 до 20 с.
 
-<TabItem value="proxyless" label="TurnstileTask (без прокси)" default className="method-panel-full">
-  <MethodItem>
-    ```http
-    https://api.capmonster.cloud/getTaskResult
-    ```
-  </MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
   <MethodDescription>
-    **Запрос**
+    **Пример запроса**
     ```json
     {
       "clientKey": "API_KEY",
@@ -177,7 +210,7 @@ console.log(htmlBase64);
     }
     ```
 
-    **Ответ**
+    **Пример ответа**
     ```json
     {
       "errorId": 0,
@@ -188,8 +221,218 @@ console.log(htmlBase64);
     }
     ```
   </MethodDescription>
-</TabItem>
+</div>
 
 |**Свойство**|**Тип**|**Описание**|
 | :- | :- | :- |
 |cf_clearance|String|Специальные куки cloudflare, которые вы можете подставить в свой браузер|
+
+## Используйте библиотеку SDK
+
+<Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
+
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+  <details>
+      <summary>Показать код (для браузера)</summary>
+  ```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TurnstileRequest
+} from "@zennolab_com/capmonstercloud-client";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
+
+  // Cloudflare Waiting Room решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-waiting-room",
+    websiteKey: "xxxxxxxxxx",
+    cloudflareTaskType: "wait_room",
+    proxy,
+    htmlPageBase64: "your_html_page_base64",
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(turnstileRequest);
+  console.log("Solution:", result.solution);
+});
+```
+</details>
+
+<details>
+      <summary>Показать код (Node.js)</summary>
+```JavaScript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  TurnstileRequest,
+} = require("@zennolab_com/capmonstercloud-client");
+
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+
+async function solveTurnstileWaitRoom() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
+
+  // Cloudflare Waiting Room решается только с использованием вашего прокси
+  const proxy = {
+    proxyType: "http",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
+
+  const turnstileRequest = new TurnstileRequest({
+    websiteURL: "https://yourwebsite.com/page-with-waiting-room",
+    websiteKey: "xxxxxxxxxx",
+    cloudflareTaskType: "wait_room",
+    proxy,
+    htmlPageBase64: "your_html_page_base64",
+    userAgent: "userAgentPlaceholder",
+  });
+
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
+
+  const result = await client.Solve(turnstileRequest);
+  console.log("Solution:", result.solution);
+}
+
+solveTurnstileWaitRoom().catch(console.error);
+```
+
+</details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" default className="method-panel">
+<details>
+      <summary>Показать код</summary>
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+
+import asyncio
+
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import TurnstileRequest
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
+
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+
+
+async def main():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
+
+    # Cloudflare wait_room решается только с использованием вашего прокси
+    proxy = ProxyInfo(
+        proxyType="http",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
+
+    turnstile_request = TurnstileRequest(
+        websiteURL="https://yourwebsite.com/page-with-waiting-room",
+        websiteKey="xxxxxxxx",
+        cloudflareTaskType="wait_room",
+        proxy=proxy,
+        htmlPageBase64="your_html_page_base64",
+        userAgent="userAgentPlaceholder",
+    )
+
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
+
+    result = await client.solve_captcha(turnstile_request)
+    print("Solution:", result)
+
+
+asyncio.run(main())
+```
+</details>
+  </TabItem>
+
+  <TabItem value="csharp" label="C#" className="method-panel">
+
+<details>
+      <summary>Показать код</summary>
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
+        {
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Cloudflare Waiting Room решается только с использованием вашего прокси
+        var turnstileRequest = new TurnstileRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-waiting-room",
+            WebsiteKey = "xxxxxxxx",
+            CloudflareTaskType = "wait_room",
+            HtmlPageBase64 = "your_html_page_base64",
+            UserAgent = "userAgentPlaceholder",
+
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
+
+        var turnstileResult = await cmCloudClient.SolveAsync(turnstileRequest);
+        Console.WriteLine("Solution: " + turnstileResult.Solution.Clearance);
+    }
+}
+```
+</details>
+
+  </TabItem>
+
+</Tabs>

@@ -1,5 +1,5 @@
-﻿---
-sidebar_position: 6
+---
+sidebar_position: 7
 sidebar_label: GeeTest
 title: "Распознавание и решение GeeTest — GeeTest Task | API"
 description: "Смотрите в документации Capmonster Cloud Docs, как настроить автоматическое распознавание и решить (обойти) капчи GeeTest через API с помощью типа задач GeeTest Task с использованием ваших прокси."
@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -35,14 +37,17 @@ CapMonster Cloud по умолчанию работает через встро�
 Результатом решения задачи является три или пять токенов для сабмита формы.
 
 :::info
-- Параметры `gt`, `challenge` и `geetestApiServerSubdomain` чаще всего находятся внутри JavaScript функции `initGeetest`.
-- Также, эти параметры можно получить из HTML кода страницы. Их можно найти в блоке `<sсript>`, который появляется после полной загрузки страницы в браузере.
-  
-V3
+
+Для **GeeTest V3**: 
+- Параметры `gt`, `challenge` и `geetestApiServerSubdomain` могут передаваться в JavaScript-коде инициализации GeeTest, например в функции `initGeetest`.
+
+- Некоторые параметры также могут присутствовать в HTML-коде страницы или сетевых запросах. Для GeeTest V3 значение `challenge` необходимо получать до инициализации CAPTCHA.
+
 
 ![](./images/geetest-task/Aspose.Words.09e28b99-ec8b-4638-848b-cdd6fefc7ac8.001.png)
 
-V4 (captcha_id = gt)
+Для **GeeTest V4** в параметре `gt` передаётся значение `captcha_id`.
+
 
 ![](./images/geetest-task/Aspose.Words.09e28b99-ec8b-4638-848b-cdd6fefc7ac8.002.png)
 :::
@@ -53,32 +58,25 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Примеры заданий</span>
 
-<Tabs className="full-width-tabs">
-  <TabItem value="intelligent" label="Intelligent mode" default className="bordered-panel">
-    ![](./images/geetest-task/intelligent.png)
-  </TabItem>
-  <TabItem value="slide" label="Slide CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/slide.png)
-  </TabItem>
-  <TabItem value="icon" label="Icon CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/icon.png)
-  </TabItem>
-  <TabItem value="space" label="Space CAPTCHA" className="bordered-panel">
-    ![](./images/geetest-task/space.png)
-  </TabItem>
-</Tabs>
+Ниже представлены примеры типов заданий GeeTest V3, которые на данный момент поддерживаются сервисом CapMonster Cloud:
+
+<ImagesLayout gap="16px" columns={4}>
+  <ImageWrap title="Intelligent mode">![](./images/geetest-task/intelligent.png)</ImageWrap>
+  <ImageWrap title="Slide CAPTCHA">![](./images/geetest-task/slide.png)</ImageWrap>
+  <ImageWrap title="Icon CAPTCHA">![](./images/geetest-task/icon.png)</ImageWrap>
+  <ImageWrap title="Space CAPTCHA">![](./images/geetest-task/space.png)</ImageWrap>
+</ImagesLayout>
 
 ### <span style={{fontSize: '1.5rem'}}>Параметры запроса</span>
 
 <br />
 <span style={{ fontSize: "15px", fontWeight: 700 }}>
->  ВАЖНО: значения некоторых параметров являются динамическими — они меняются при каждом рендеринге страницы с GeeTest v3.  
-> Извлекайте их непосредственно перед созданием задачи, чтобы избежать ошибок при решении.
-> Примеры автоматического извлечения параметров см. в разделе [Как найти все нужные параметры для создания задачи](#как-найти-все-нужные-параметры-для-создания-задачи).
+> ВАЖНО: параметр `challenge` в GeeTest V3 является динамическим.  
+> Получайте новое значение непосредственно перед созданием каждой задачи и до инициализации CAPTCHA на странице. После загрузки CAPTCHA ранее полученный `challenge` становится недействительным.
 </span>
 <br />
 
-  <TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -95,11 +93,12 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="challenge" required="required only for V3" type="string" />
-    <p>Динамический ключ.<br />
-    Для каждого обращения к API необходимо получать новое значение `challenge`. Если капча уже была загружена на странице, текущее значение `challenge` становится недействительным, и API вернёт [ошибку](../api/api-errors.mdx) `ERROR_TOKEN_EXPIRED`.<br />
-Задачи, завершившиеся с ошибкой `ERROR_TOKEN_EXPIRED`, тарифицируются как успешно решённые.<br />
-Необходимо проанализировать сетевые запросы и определить запрос, в ответе которого возвращается актуальное значение `challenge`. Перед каждым созданием задачи на распознавание капчи следует повторно выполнять этот запрос и извлекать из ответа новое значение `challenge`.</p>
+    Динамический ключ. Перед созданием каждой задачи на решение необходимо получать новое значение `challenge`.<br />
 
+    **Важно:** получайте `challenge` до инициализации CAPTCHA на странице.<br />
+
+Если CAPTCHA уже была загружена, полученное значение становится недействительным. При отправке такого значения в CapMonster Cloud API будет возвращена [ошибка](../api/api-errors.mdx) `ERROR_INVALID_TASK` с сообщением о невалидности параметра.<br />
+    
     ---
 
     <ParamItem title="version" required type="integer"/>
@@ -108,7 +107,7 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="geetestApiServerSubdomain" type="string" />
-    Поддомен сервера Geetest API (должен отличаться от api.geetest.com). 
+    Поддомен сервера Geetest API (должен отличаться от `api.geetest.com`). 
 	<br />Необязательный параметр. Может потребоваться для некоторых сайтов.
 
     ---
@@ -121,8 +120,9 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="userAgent" type="string" />
-    User-Agent браузера. <br />
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder`
+    User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
     ---
 
@@ -155,36 +155,52 @@ V4 (captcha_id = gt)
 
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
-  </TabItem>
+  </div>
   
 
 
 ### <span style={{fontSize: '1.5rem'}}>Метод создания задачи</span>
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://www.geetest.com/en/demo",
-    "gt": "022397c99c9f646f6477822485f30404",
-    "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "gt-value",
+    "challenge": "challenge-value",
     "version": 3,
-    "geetestApiServerSubdomain": "api-na.geetest.com"
+    "geetestApiServerSubdomain": "example.api.geetest.com"
 
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 			```json
 			{
 			  "errorId":0,
@@ -195,33 +211,28 @@ V4 (captcha_id = gt)
 	</TabItem>
 	
 	<TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json 
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://www.geetest.com/en/demo",
-    "gt": "022397c99c9f646f6477822485f30404",
-    "challenge": "7f044f48bc951ecfbfc03842b5e1fe59",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "gt-value",
+    "challenge": "challenge-value",
     "version": 3,
-    "geetestApiServerSubdomain": "api-na.geetest.com",
+    "geetestApiServerSubdomain": "example.api.geetest.com",
     "userAgent": "userAgentPlaceholder",
-    "proxyType": "http",
-    "proxyAddress": "8.8.8.8",
-    "proxyPort": 8080,
-    "proxyLogin": "proxyLoginHere",
-    "proxyPassword": "proxyPasswordHere"
+    "proxyType": "your-proxy-type",
+    "proxyAddress": "your-proxy-address",
+    "proxyPort": 1234,
+    "proxyLogin": "your-proxy-login",
+    "proxyPassword": "your-proxy-password"
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 			```json
 			{
 			  "errorId":0,
@@ -236,21 +247,37 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
-<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -263,7 +290,7 @@ V4 (captcha_id = gt)
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 <br />
 
@@ -274,92 +301,138 @@ V4 (captcha_id = gt)
 <tr><td>validate</td><td>String</td></tr>
 <tr><td>seccode</td><td>String</td></tr>
 </table>
+<br />
 
-### Как найти все нужные параметры для создания задачи
+### <span style={{fontSize: '1.5rem'}}>Как найти все нужные параметры для создания задачи</span>
 
-#### Вручную
+#### <span style={{fontSize: '1.2rem'}}>Вручную</span>
 
-1. Откройте ваш сайт, где отображается капча, в браузере.
-2. Правой кнопкой кликните по элементу капчи и выберите **Inspect**.
+1. Откройте сайт, на котором отображается GeeTest V3, в браузере.
+2. Откройте инструменты разработчика (**DevTools**) и перейдите во вкладку **Network**.
+3. Обновите страницу, чтобы записать сетевые запросы с момента загрузки.
+4. Найдите запрос к серверу целевого сайта, в ответе которого возвращаются параметры GeeTest, в том числе `gt` и `challenge`.
 
-Все параметры можно найти в *init-params* среди запросов:
+Значение `challenge` необходимо получить **до инициализации CAPTCHA**, то есть до выполнения запроса GeeTest вида:
 
-![paramsv3](images\geetest-task\init-params.png)
+```text
+https://api.geetest.com/gettype.php?gt=...
+```
 
-#### Автоматически
+Перед инициализацией CAPTCHA сайт может получать параметры GeeTest со своего сервера. Чтобы найти актуальное значение `challenge`, проверьте запросы к домену целевого сайта и их ответы.
 
-Для автоматизации поиска параметров их можно извлекать через **браузер** (обычный или headless, например, с **Playwright**) или напрямую из **HTTP-запросов**. Поскольку значения динамических параметров действуют недолго, их рекомендуется использовать сразу после получения.
+![](images/geetest-task/init-params.png)
 
-:::warning **Важно!**
-Приведённые фрагменты кода являются базовыми примерами для ознакомления в извлечении необходимых параметров. Точная реализация будет зависеть от вашего сайта с капчей, его структуры и используемых HTML-элементов и селекторов.
+В некоторых случаях сайт шифрует данные, получаемые от своего сервера, поэтому значение `challenge` может быть недоступно в явном виде в ответе такого запроса. В этом случае значение можно получить из параметров запросов GeeTest, например:
+
+```text
+https://api.geetest.com/get.php?gt=...
+```
+
+и/или:
+
+```text
+https://api.geevisit.com/ajax.php?gt=...
+```
+
+![](images/geetest-task/geetest-v3-get-params.png)
+
+:::warning Важно:
+При таком способе необходимо получить параметры из запроса и **заблокировать запросы к GeeTest API до их отправки**. Если запрос будет выполнен и CAPTCHA загрузится, использованное значение `challenge` станет недействительным.
 :::
+
+После получения актуальных значений `gt` и `challenge` используйте их для создания задачи GeeTest V3 в CapMonster Cloud.
+<br />
+
+#### <span style={{fontSize: '1.2rem'}}>Автоматически</span>
+
+Получение параметров GeeTest V3 можно автоматизировать двумя способами. Выберите подходящий вариант в зависимости от реализации целевого сайта.
+
+**Получение параметров из ответа сервера сайта**
+
+Если сервер сайта возвращает `gt` и `challenge` в открытом виде, повторите соответствующий запрос перед созданием задачи.
+
+Например:
+
+```text
+https://example.com/api/v1/captcha/gee-test/init-params
+```
 
 <Tabs className="full-width-tabs filled-tabs request-tabs">
   <TabItem value="js" label="JavaScript" default className="method-panel">
     <details>
       <summary>Показать код (в браузере)</summary>
 
-      ```js
-      (function detectGeeTestV3Browser() {
-        const t = Date.now();
-        const url = `https://example.com/api/v1/captcha/gee-test/init-params?t=${t}`;
+```js
+async function getGeeTestV3Params() {
+  // Замените URL на запрос вашего сайта,
+  // в ответе которого возвращаются gt и challenge.
+  // Если запрос содержит динамические параметры,
+  // сформируйте их перед отправкой.
+  const timestamp = Date.now();
 
-        fetch(url)
-          .then(res => res.json())
-          .then(data => {
-            const { gt, challenge } = data;
-            if (gt && challenge) {
-              console.log("GeeTest v3 detected:");
-              console.log({ gt, challenge });
-            } else {
-              console.log("Не удалось найти параметры gt/challenge");
-            }
-          })
-          .catch(err => console.error("Ошибка запроса:", err));
-      })();
-      ```
+  const response = await fetch(
+    `https://example.com/api/v1/captcha/gee-test/init-params?t=${timestamp}`
+  );
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  const gt = data.gt;
+  const challenge = data.challenge;
+
+  if (!gt || !challenge) {
+    throw new Error("Не удалось получить gt или challenge");
+  }
+
+  console.log({ gt, challenge });
+
+  return { gt, challenge };
+}
+
+getGeeTestV3Params().catch(console.error);
+```
+
     </details>
 
     <details>
       <summary>Показать код (Node.js)</summary>
 
-      ```js
-      async function detectGeeTestV3() {
-        const result = {
-          version: null,
-          data: {},
-        };
+```js
+async function getGeeTestV3Params() {
+  // Замените URL на запрос вашего сайта,
+  // в ответе которого возвращаются gt и challenge.
+  // Если запрос содержит динамические параметры,
+  // сформируйте их перед отправкой.
+  const timestamp = Date.now();
 
-        const t = Date.now(); // Получаем текущую метку времени
-        try {
-          const response = await fetch(
-            `https://example.com/api/v1/captcha/gee-test/init-params?t=${t}`
-          );
+  const response = await fetch(
+    `https://example.com/api/v1/captcha/gee-test/init-params?t=${timestamp}`
+  );
 
-          if (response.ok) {
-            const data = await response.json();
-            const challenge = data.challenge;
-            const gt = data.gt;
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
 
-            if (gt && challenge) {
-              result.version = "v3";
-              result.data = { gt, challenge };
-              console.log(result.data);
-            } else {
-              console.log("Error: Missing gt or challenge");
-            }
-          } else {
-            console.log("Error: Invalid response status", response.status);
-          }
-        } catch (error) {
-          console.error("Request failed", error);
-        }
+  const data = await response.json();
 
-        return result;
-      }
+  const gt = data.gt;
+  const challenge = data.challenge;
 
-      detectGeeTestV3();
-      ```
+  if (!gt || !challenge) {
+    throw new Error("Missing gt or challenge");
+  }
+
+  console.log({ gt, challenge });
+
+  return { gt, challenge };
+}
+
+getGeeTestV3Params().catch(console.error);
+```
+
     </details>
   </TabItem>
 
@@ -367,36 +440,46 @@ V4 (captcha_id = gt)
     <details>
       <summary>Показать код</summary>
 
-      ```python
-      import requests
-      import asyncio
-      import time
+```python
+import time
 
-      async def detect_gee_test_v3():
-        result = {
-            'version': None,
-            'data': {},
-        }
+import requests
 
-        t = int(time.time() * 1000)
-        response = requests.get(f'https://example.com/api/v1/captcha/gee-test/init-params?t={t}')
-        
-        if response.status_code == 200:
-            data = response.json()
-            challenge = data.get('challenge')
-            gt = data.get('gt')
 
-            if gt and challenge:
-                result['version'] = 'v3'
-                result['data'] = {'gt': gt, 'challenge': challenge}
-                print(result['data'])
-            else:
-                print('error')
+def get_geetest_v3_params():
+    # Замените URL на запрос вашего сайта,
+    # в ответе которого возвращаются gt и challenge.
+    # Если запрос содержит динамические параметры,
+    # сформируйте их перед отправкой.
+    timestamp = int(time.time() * 1000)
 
-        return result
+    response = requests.get(
+        "https://example.com/api/v1/captcha/gee-test/init-params",
+        params={
+            "t": timestamp,
+        },
+    )
+    response.raise_for_status()
 
-      asyncio.run(detect_gee_test_v3())
-      ```
+    data = response.json()
+
+    gt = data.get("gt")
+    challenge = data.get("challenge")
+
+    if not gt or not challenge:
+        raise ValueError("Не удалось получить gt или challenge")
+
+    print({
+        "gt": gt,
+        "challenge": challenge,
+    })
+
+    return gt, challenge
+
+
+get_geetest_v3_params()
+```
+
     </details>
   </TabItem>
 
@@ -404,184 +487,322 @@ V4 (captcha_id = gt)
     <details>
       <summary>Показать код</summary>
 
-      ```csharp
-      using System;
-      using System.Net.Http;
-      using System.Threading.Tasks;
-      using Newtonsoft.Json.Linq;
+```csharp
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
-      class Program
-      {
-          static async Task DetectGeeTestV3()
-          {
-              var result = new
-              {
-                  version = (string)null,
-                  data = new { gt = (string)null, challenge = (string)null },
-              };
+class Program
+{
+    static async Task GetGeeTestV3Params()
+    {
+        using var client = new HttpClient();
 
-              using (var client = new HttpClient())
-              {
-                  long t = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                  var url = $"https://example.com/api/v1/captcha/gee-test/init-params?t={t}";
+        // Замените URL на запрос вашего сайта,
+        // в ответе которого возвращаются gt и challenge.
+        // Если запрос содержит динамические параметры,
+        // сформируйте их перед отправкой.
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-                  var response = await client.GetAsync(url);
+        var url =
+            $"https://example.com/api/v1/captcha/gee-test/init-params?t={timestamp}";
 
-                  if (response.IsSuccessStatusCode)
-                  {
-                      var responseContent = await response.Content.ReadAsStringAsync();
-                      var data = JObject.Parse(responseContent);
-                      var challenge = data["challenge"]?.ToString();
-                      var gt = data["gt"]?.ToString();
+        var response = await client.GetAsync(url);
 
-                      if (!string.IsNullOrEmpty(gt) && !string.IsNullOrEmpty(challenge))
-                      {
-                          result = new
-                          {
-                              version = "v3",
-                              data = new { gt = gt, challenge = challenge }
-                          };
-                          Console.WriteLine($"GT: {gt}, Challenge: {challenge}");
-                      }
-                      else
-                      {
-                          Console.WriteLine("Error: Missing required parameters.");
-                      }
-                  }
-                  else
-                  {
-                      Console.WriteLine("Error: Failed to get response.");
-                  }
-              }
-          }
+        response.EnsureSuccessStatusCode();
 
-          static async Task Main(string[] args)
-          {
-              await DetectGeeTestV3();
-          }
-      }
-      ```
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JObject.Parse(content);
+
+        var gt = data["gt"]?.ToString();
+        var challenge = data["challenge"]?.ToString();
+
+        if (string.IsNullOrEmpty(gt) || string.IsNullOrEmpty(challenge))
+        {
+            throw new Exception("Не удалось получить gt или challenge");
+        }
+
+        Console.WriteLine($"GT: {gt}");
+        Console.WriteLine($"Challenge: {challenge}");
+    }
+
+    static async Task Main()
+    {
+        await GetGeeTestV3Params();
+    }
+}
+```
+
     </details>
   </TabItem>
 </Tabs>
 
+<br />
+
+**Получение параметров из запроса GeeTest**
+
+Если значение `challenge` не удаётся получить из ответа сервера сайта, перехватите запрос:
+
+```text
+https://api.geetest.com/get.php?gt=...&challenge=...
+```
+
+или:
+
+```text
+https://api.geevisit.com/ajax.php?gt=...&challenge=...
+```
+
+Извлеките `gt` и `challenge` из query-параметров и заблокируйте запрос до его отправки.
+
+<Tabs className="full-width-tabs filled-tabs request-tabs">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
+    <details>
+      <summary>Показать код (Playwright)</summary>
+
+```js
+import { chromium } from "playwright";
+
+async function getGeeTestV3Params(pageUrl) {
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext();
+
+  let params = null;
+
+  await context.route("**/*", async (route) => {
+    const requestUrl = route.request().url();
+
+    if (
+      requestUrl.includes("api.geetest.com/get.php") ||
+      requestUrl.includes("api.geevisit.com/ajax.php")
+    ) {
+      const url = new URL(requestUrl);
+
+      const gt = url.searchParams.get("gt");
+      const challenge = url.searchParams.get("challenge");
+
+      if (gt && challenge && !params) {
+        params = { gt, challenge };
+        console.log(params);
+      }
+
+      await route.abort();
+      return;
+    }
+
+    await route.continue();
+  });
+
+  const page = await context.newPage();
+  await page.goto(pageUrl);
+
+  await page.waitForTimeout(5000);
+  await browser.close();
+
+  if (!params) {
+    throw new Error("Не удалось получить gt и challenge");
+  }
+
+  return params;
+}
+
+getGeeTestV3Params(
+  "https://example.com/page-with-geetest"
+).catch(console.error);
+```
+
+    </details>
+  </TabItem>
+
+  <TabItem value="python" label="Python" className="method-panel">
+    <details>
+      <summary>Показать код (Playwright)</summary>
+
+```python
+import asyncio
+from urllib.parse import urlparse, parse_qs
+
+from playwright.async_api import async_playwright
+
+
+async def get_geetest_v3_params(page_url):
+    params = {}
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=False)
+        context = await browser.new_context()
+
+        async def handle_route(route):
+            request_url = route.request.url
+
+            if (
+                "api.geetest.com/get.php" in request_url
+                or "api.geevisit.com/ajax.php" in request_url
+            ):
+                query = parse_qs(urlparse(request_url).query)
+
+                gt = query.get("gt", [None])[0]
+                challenge = query.get("challenge", [None])[0]
+
+                if gt and challenge and not params:
+                    params["gt"] = gt
+                    params["challenge"] = challenge
+                    print(params)
+
+                await route.abort()
+                return
+
+            await route.continue_()
+
+        await context.route("**/*", handle_route)
+
+        page = await context.new_page()
+        await page.goto(page_url)
+
+        await asyncio.sleep(5)
+        await browser.close()
+
+    if not params:
+        raise RuntimeError("Не удалось получить gt и challenge")
+
+    return params
+
+
+asyncio.run(
+    get_geetest_v3_params(
+        "https://example.com/page-with-geetest"
+    )
+)
+```
+
+    </details>
+  </TabItem>
+</Tabs>
+
+<br />
+
+
 ### <span style={{fontSize: '1.5rem'}}>Используйте библиотеку SDK</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import { 
-        CapMonsterCloudClientFactory, 
-        ClientOptions, 
-        GeeTestRequest 
-    } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  GeeTestRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+document.addEventListener("DOMContentLoaded", async () => {
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        const client = CapMonsterCloudClientFactory.Create(
-            new ClientOptions({ clientKey: API_KEY })
-        );
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-        // При необходимости можно проверить баланс 
-        const balance = await client.getBalance();
-        console.log("Balance:", balance);
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-        // Базовый пример без прокси
-        // CapMonster Cloud автоматически использует свои прокси
-        let geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php", // URL страницы с капчей
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",        // Замените на корректное значение
-            challenge: "d93591bdf7860e1e4ee2fca799911215",
-            version: 3
-        });
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    challenge: "your-challenge-value",
+    version: 3,
+  });
 
-        // Пример использования вашего собственного прокси
-        // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "https",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-        /*
-        const proxy = {
-            proxyType: "https",
-            proxyAddress: "123.45.67.89",
-            proxyPort: 8080,
-            proxyLogin: "username",
-            proxyPassword: "password"
-        };
+  geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    challenge: "your-challenge-value",
+    version: 3,
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
 
-        geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php",
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
-            challenge: "d93591bdf7860e1e4ee2fca799911215",
-            version: 3,
-            proxy,
-            userAgent: "userAgentPlaceholder"
-        });
-        */
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-        const result = await client.Solve(geetestRequest);
-        console.log("Solution:", result);
-    });
-    ```
+  const result = await client.Solve(geetestRequest);
+  console.log("Solution:", result.solution);
+});
+```
 </details>
 
 <details>
       <summary>Показать код (Node.js)</summary>
-      ```javascript
-      // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-      import { CapMonsterCloudClientFactory, ClientOptions, GeeTestRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  GeeTestRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-      const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      async function solveGeeTest() {
-          const client = CapMonsterCloudClientFactory.Create(
-              new ClientOptions({ clientKey: API_KEY })
-          );
+async function solveGeeTest() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-          // При необходимости можно проверить баланс 
-          const balance = await client.getBalance();
-          console.log("Balance:", balance);
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    challenge: "your-challenge-value",
+    version: 3,
+  });
 
-          // Базовый пример без прокси
-          // CapMonster Cloud автоматически использует свои прокси
-          let geetestRequest = new GeeTestRequest({
-              websiteURL: "https://example.com/geetest.php", // URL страницы с капчей
-              gt: "81dc9bdb52d04dc20036dbd8313ed055",       // Замените на корректное значение
-              challenge: "d93591bdf7860e1e4ee2fca799911215", // Замените на корректное значение
-              version: 3
-          });
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "https",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-          // Пример использования вашего собственного прокси
-          // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    challenge: "your-challenge-value",
+    version: 3,
+    proxy,
+    userAgent: "userAgentPlaceholder",
+  });
+  */
 
-          /*
-          const proxy = {
-              proxyType: "https",
-              proxyAddress: "123.45.67.89",
-              proxyPort: 8080,
-              proxyLogin: "username",
-              proxyPassword: "password"
-          };
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-          geetestRequest = new GeeTestRequest({
-              websiteURL: "https://example.com/geetest.php",
-              gt: "81dc9bdb52d04dc20036dbd8313ed055",
-              challenge: "d93591bdf7860e1e4ee2fca799911215",
-              version: 3,
-              proxy,
-              userAgent: "userAgentPlaceholder"
-          });
-          */
+  const result = await client.Solve(geetestRequest);
+  console.log("Solution:", result.solution);
+}
 
-          const result = await client.Solve(geetestRequest);
-          console.log("Solution:", result);
-      }
-
-      solveGeeTest().catch(console.error);
+solveGeeTest().catch(console.error);
 ```
 </details>
   </TabItem>
@@ -589,128 +810,136 @@ V4 (captcha_id = gt)
   <TabItem value="python" label="Python" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```python
-    # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import GeetestRequest
-    # from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo   # Раскомментируйте, если планируете использовать прокси
+import asyncio
 
-    API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import GeetestRequest
+# Импортируйте ProxyInfo, если планируете использовать собственный прокси
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-    async def solve_geetest():
-        client_options = ClientOptions(api_key=API_KEY)
-        cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
 
-        # Базовый пример без прокси
-        # CapMonster Cloud автоматически использует свои прокси
-        geetest_request = GeetestRequest(
-            websiteUrl="https://example.com",
-            gt="81dc9bdb52d04dc20036dbd8313ed055",
-            challenge="d93591bdf7860e1e4ee2fca799911215",
-            version=3
-        )
 
-        # Пример использования вашего собственного прокси
-        # Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+async def solve_geetest():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-        # proxy = ProxyInfo(
-        #     proxyType="http",
-        #     proxyAddress="123.45.67.89",
-        #     proxyPort=8080,
-        #     proxyLogin="username",
-        #     proxyPassword="password"
-        # )
+    # Базовый пример без прокси
+    # CapMonster Cloud автоматически использует собственные прокси
+    geetest_request = GeetestRequest(
+        websiteUrl="https://yourwebsite.com/page-with-geetest",
+        gt="your-gt-value",
+        challenge="your-challenge-value",
+        version=3,
+    )
 
-        # geetest_request = GeetestRequest(
-        #     websiteUrl="https://example.com",
-        #     gt="81dc9bdb52d04dc20036dbd8313ed055",
-        #     challenge="d93591bdf7860e1e4ee2fca799911215",
-        #     version=3,
-        #     proxy=proxy,
-        #     userAgent="userAgentPlaceholder"
-        # )
+    # Пример с использованием вашего прокси
+    # Раскомментируйте этот блок, если хотите использовать свой прокси
+    """
+    proxy = ProxyInfo(
+        proxyType="https",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-        # При необходимости можно проверить баланс 
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    geetest_request = GeetestRequest(
+        websiteUrl="https://yourwebsite.com/page-with-geetest",
+        gt="your-gt-value",
+        challenge="your-challenge-value",
+        version=3,
+        userAgent="userAgentPlaceholder",
+        proxy=proxy,
+    )
+    """
 
-        result = await cap_monster_client.solve_captcha(geetest_request)
-        print("Solution:", result)
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
 
-    asyncio.run(solve_geetest())
-    ```
+    result = await client.solve_captcha(geetest_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_geetest())
+```
     </details>
   </TabItem>
 
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```csharp
-    // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud;
-    using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            // Ваш API-ключ CapMonster Cloud
-            var clientOptions = new ClientOptions
-            {
-                ClientKey = "YOUR_API_KEY"
-            };
+            ClientKey = "YOUR_API_KEY"
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
 
-            // При необходимости можно проверить баланс 
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
+        // Базовый пример без прокси
+        // CapMonster Cloud автоматически использует собственные прокси
+        var geetestRequest = new GeeTestRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-geetest",
+            Gt = "your-gt-value",
+            Challenge = "your-challenge-value",
+            Version = 3
+        };
 
-            // Базовый пример без прокси
-            // CapMonster Cloud автоматически использует свои прокси
-            var geetestRequest = new GeeTestRequest
-            {
-                WebsiteUrl = "https://example.com/demo/geetest", // URL страницы с капчей
-                Gt = "your_gt_value",                             // Замените на корректное значение
-                Challenge = "your_challenge_value",               // Замените на корректное значение
-                Version = 3                                       // Версия капчи
-            };
+        // Пример с использованием вашего прокси
+        // Раскомментируйте этот блок, если хотите использовать свой прокси
+        /*
+        geetestRequest = new GeeTestRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-geetest",
+            Gt = "your-gt-value",
+            Challenge = "your-challenge-value",
+            Version = 3,
+            UserAgent = "userAgentPlaceholder",
 
-            // Пример использования вашего собственного прокси
-            // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
-            /*
-            var geetestRequest = new GeeTestRequest
-            {
-                WebsiteUrl = "https://example.com/demo/geetest", // URL страницы с капчей
-                Gt = "your_gt_value",  
-                Challenge = "your_challenge_value",
-                Version = 3,
-                UserAgent = "userAgentPlaceholder",
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
 
-                Proxy = new ProxyContainer(
-                    "123.45.67.89", 
-                    8080,           
-                    ProxyType.Http,    
-                    "username",  
-                    "password"
-                )
-            };
-            */
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
-            var geetestResult = await cmCloudClient.SolveAsync(geetestRequest);
+        var geetestResult = await cmCloudClient.SolveAsync(geetestRequest);
 
-            Console.WriteLine("Solution:");
-            Console.WriteLine($"Challenge: {geetestResult.Solution.Challenge}");
-            Console.WriteLine($"Validate:  {geetestResult.Solution.Validate}");
-            Console.WriteLine($"SecCode:   {geetestResult.Solution.SecCode}");
-        }
+        Console.WriteLine($"""
+Solution:
+  Challenge: {geetestResult.Solution.Challenge}
+  Validate:  {geetestResult.Solution.Validate}
+  SecCode:   {geetestResult.Solution.SecCode}
+""");
     }
-    ```
+}
+```
     </details>
   </TabItem>  
 </Tabs>
@@ -726,7 +955,7 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Параметры запроса</span>
 
-  <TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="bordered-panel">
+  <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **GeeTestTask**
 
@@ -748,7 +977,7 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="geetestApiServerSubdomain" type="string" />
-    Поддомен сервера Geetest API (должен отличаться от api.geetest.com). <br />
+    Поддомен сервера Geetest API (должен отличаться от `api.geetest.com`). <br />
 	Необязательный параметр. Может потребоваться для некоторых сайтов.
 
     ---
@@ -761,13 +990,14 @@ V4 (captcha_id = gt)
     ---
 
     <ParamItem title="initParameters" type="object" />
-    Дополнительные параметры для 4 версии, используются вместе с “riskType” (тип капчи/характеристики ее проверки).
+    Дополнительные параметры для 4 версии, используются вместе с "riskType" (например, `slide`).
 
     ---
 
     <ParamItem title="userAgent" type="string" />
-    User-Agent браузера. <br />
-  **Передавайте только актуальный UA от ОС Windows. Сейчас таковым является**: `userAgentPlaceholder` <br />
+    User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить актуальное значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
 
     ---
 
@@ -801,36 +1031,52 @@ V4 (captcha_id = gt)
     <ParamItem title="proxyPassword" type="string" />
     Пароль прокси-сервера.
 
-  </TabItem>
+  </div>
 
 
 ### <span style={{fontSize: '1.5rem'}}>Метод создания задачи</span>
 
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/createTask
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/createTask
+```
+
+Подробнее в разделе [createTask](/docs/api/methods/create-task/).
+
+:::
+
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 	<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
 ```json
 {
-  "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+  "clientKey": "API_KEY",
   "task": {
     "type": "GeeTestTask",
-    "websiteURL": "https://gt4.geetest.com/",
-    "gt": "54088bb07d2df3c46b79f80300b0abbe",
+    "websiteURL": "https://yourwebsite.com/page-with-geetest",
+    "gt": "captcha-id-value",
     "version": 4,
     "initParameters": {
-      "riskType": "slide"
+      "riskType": "risk-type-value"
     }
   }
 }
 ```
-			**Ответ**
+			**Пример ответа**
 			```json
 			{
 			  "errorId":0,
@@ -841,34 +1087,29 @@ V4 (captcha_id = gt)
 	</TabItem>
   
 	<TabItem value="proxy" label="GeeTestTask (при использовании прокси)" className="method-panel">
-		<MethodItem>
-			```http
-			https://api.capmonster.cloud/createTask
-			```
-		</MethodItem>
 		<MethodDescription>
-			**Запрос**
+			**Пример запроса**
   ```json
   {
-    "clientKey": "YOUR_CAPMONSTER_CLOUD_API_KEY",
+    "clientKey": "API_KEY",
     "task": {
       "type": "GeeTestTask",
-      "websiteURL": "https://gt4.geetest.com/",
-      "gt": "54088bb07d2df3c46b79f80300b0abbe",
+      "websiteURL": "https://yourwebsite.com/page-with-geetest",
+      "gt": "captcha-id-value",
       "version": 4,
       "initParameters": {
-        "riskType": "slide"
+        "riskType": "risk-type-value"
       },
-      "proxyType": "http",
-      "proxyAddress": "8.8.8.8",
-      "proxyPort": 8080,
-      "proxyLogin": "proxyLoginHere",
-      "proxyPassword": "proxyPasswordHere",
+      "proxyType": "your-proxy-type",
+      "proxyAddress": "your-proxy-address",
+      "proxyPort": 1234,
+      "proxyLogin": "your-proxy-login",
+      "proxyPassword": "your-proxy-password",
       "userAgent": "userAgentPlaceholder"
     }
   }
   ```
-			**Ответ**
+			**Пример ответа**
 			```json
 			{
 			  "errorId":0,
@@ -883,21 +1124,37 @@ V4 (captcha_id = gt)
 
 ### <span style={{fontSize: '1.5rem'}}>Метод получения результата задачи</span>
 
-<TabItem value="proxyless" label="GeeTestTask (без прокси)" default className="method-panel-full">
-	<MethodItem>
-		```http
-		https://api.capmonster.cloud/getTaskResult
-		```
-	</MethodItem>
+<MethodItem>
+
+```http
+https://api.capmonster.cloud/getTaskResult
+```
+
+</MethodItem>
+<br />
+
+:::info Альтернативный адрес метода
+
+Для пользователей из России также доступен:
+
+```text
+https://ru.api.capmonster.cloud/getTaskResult
+```
+
+Подробнее в разделе [getTaskResult](/docs/api/methods/get-task-result/).
+
+:::
+
+<div className="method-panel-full">
 	<MethodDescription>
-		**Запрос**
+		**Пример запроса**
 		```json
 		{
 		  "clientKey":"API_KEY",
 		  "taskId": 407533072
 		}
 		```
-		**Ответ**
+		**Пример ответа**
 ```json
 {
   "errorId": 0,
@@ -912,7 +1169,7 @@ V4 (captcha_id = gt)
 }
 ```
 	</MethodDescription>
-</TabItem>
+</div>
 
 <br />
 
@@ -947,7 +1204,7 @@ input[name=captcha_output]</td>
 6. Кликните по этому запросу и откройте вкладку **Payload**, чтобы просмотреть необходимые данные.
 
 
-![paramsv4](images\geetest-task\load-callback.png)
+![paramsv4](images/geetest-task/load-callback.png)
 
 #### Автоматически
 
@@ -1158,120 +1415,129 @@ class Program
 ### <span style={{fontSize: '1.5rem'}}>Используйте библиотеку SDK</span>
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
-  <TabItem value="js" label="JavaScript" default className="method-panel">
+  <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
   <details>
       <summary>Показать код (для браузера)</summary>
-    ```js
-    // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```js
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-    import { 
-        CapMonsterCloudClientFactory, 
-        ClientOptions, 
-        GeeTestRequest 
-    } from '@zennolab_com/capmonstercloud-client';
+import {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  GeeTestRequest
+} from "@zennolab_com/capmonstercloud-client";
 
-    const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+document.addEventListener("DOMContentLoaded", async () => {
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        const client = CapMonsterCloudClientFactory.Create(
-            new ClientOptions({ clientKey: API_KEY })
-        );
+  const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-        // При необходимости можно проверить баланс
-        const balance = await client.getBalance();
-        console.log("Balance:", balance);
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY })
+  );
 
-        // Базовый пример без прокси
-        // CapMonster Cloud автоматически использует свои прокси
-        let geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php", // URL страницы с капчей
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
-            version: "4",
-            initParameters: { riskType: "slide" }
-        });
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    version: "4",
+    initParameters: {
+      riskType: "your-risk-type",
+    },
+  });
 
-        // Пример использования вашего собственного прокси
-        // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "https",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-        /*
-        const proxy = {
-            proxyType: "https",
-            proxyAddress: "123.45.67.89",
-            proxyPort: 8080,
-            proxyLogin: "username",
-            proxyPassword: "password"
-        };
+  geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    version: "4",
+    initParameters: {
+      riskType: "your-risk-type",
+    },
+    proxy,
+  });
+  */
 
-        geetestRequest = new GeeTestRequest({
-            websiteURL: "https://example.com/geetest.php",
-            gt: "81dc9bdb52d04dc20036dbd8313ed055",
-            version: "4",
-            initParameters: { riskType: "slide" },
-            proxy,
-            userAgent: "userAgentPlaceholder"
-        });
-        */
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-        const result = await client.Solve(geetestRequest);
-        console.log("Solution:", result);
-    });
-    ```
+  const result = await client.Solve(geetestRequest);
+  console.log("Solution:", result.solution);
+});
+```
     </details>
 
     <details>
       <summary>Показать код (Node.js)</summary>
-      ```javascript
-      // https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
+```javascript
+// https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver
 
-      import { CapMonsterCloudClientFactory, ClientOptions, GeeTestRequest } from '@zennolab_com/capmonstercloud-client';
+const {
+  CapMonsterCloudClientFactory,
+  ClientOptions,
+  GeeTestRequest,
+} = require("@zennolab_com/capmonstercloud-client");
 
-      const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
+const API_KEY = "YOUR_API_KEY"; // Укажите ваш API-ключ CapMonster Cloud
 
-      async function solveGeeTest() {
-          const client = CapMonsterCloudClientFactory.Create(
-              new ClientOptions({ clientKey: API_KEY })
-          );
+async function solveGeeTest() {
+  const client = CapMonsterCloudClientFactory.Create(
+    new ClientOptions({ clientKey: API_KEY }),
+  );
 
-          // При необходимости можно проверить баланс
-          const balance = await client.getBalance();
-          console.log("Balance:", balance);
+  // Базовый пример без прокси
+  // CapMonster Cloud автоматически использует собственные прокси
+  let geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    version: "4",
+    initParameters: {
+      riskType: "your-risk-type",
+    },
+  });
 
-          // Базовый пример без прокси
-          // CapMonster Cloud автоматически использует свои прокси
-          let geetestRequest = new GeeTestRequest({
-              websiteURL: "https://example.com/geetest.php", // URL страницы с капчей
-              gt: "81dc9bdb52d04dc20036dbd8313ed055",
-              version: "4",                                 
-              initParameters: { riskType: "slide" }
-          });
+  // Пример с использованием вашего прокси
+  // Раскомментируйте этот блок, если хотите использовать свой прокси
+  /*
+  const proxy = {
+    proxyType: "https",
+    proxyAddress: "123.45.67.89",
+    proxyPort: 8080,
+    proxyLogin: "username",
+    proxyPassword: "password",
+  };
 
-          // Пример использования вашего собственного прокси
-          // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+  geetestRequest = new GeeTestRequest({
+    websiteURL: "https://yourwebsite.com/page-with-geetest",
+    gt: "your-gt-value",
+    version: "4",
+    initParameters: {
+      riskType: "your-risk-type",
+    },
+    proxy,
+  });
+  */
 
-          /*
-          const proxy = {
-              proxyType: "https",
-              proxyAddress: "123.45.67.89",
-              proxyPort: 8080,
-              proxyLogin: "username",
-              proxyPassword: "password"
-          };
+  // При необходимости можно проверить баланс
+  const balance = await client.getBalance();
+  console.log("Balance:", balance);
 
-          geetestRequest = new GeeTestRequest({
-              websiteURL: "https://example.com/geetest.php",
-              gt: "81dc9bdb52d04dc20036dbd8313ed055",
-              version: "4",
-              initParameters: { riskType: "slide" },
-              proxy,
-              userAgent: "userAgentPlaceholder"
-          });
-          */
+  const result = await client.Solve(geetestRequest);
+  console.log("Solution:", result.solution);
+}
 
-          const result = await client.Solve(geetestRequest);
-          console.log("Solution:", result);
-      }
-
-      solveGeeTest().catch(console.error);
+solveGeeTest().catch(console.error);
 ```
 </details>
 
@@ -1281,134 +1547,148 @@ class Program
   <details>
       <summary>Показать код</summary>
 
-    ```python
-    # https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
+```python
+# https://github.com/CapMonsterCloud/capmonster-python-captcha-solver
 
-    import asyncio
-    from capmonstercloudclient import CapMonsterClient, ClientOptions
-    from capmonstercloudclient.requests import GeetestRequest
-    # from capmonstercloudclient.requests.baseRequestWithProxy import ProxyInfo  # Раскомментируйте, если планируете использовать собственные прокси
+import asyncio
 
-    API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
+from capmonstercloudclient import CapMonsterClient, ClientOptions
+from capmonstercloudclient.requests import GeetestRequest
+# Импортируйте ProxyInfo, если планируете использовать собственный прокси
+from capmonstercloudclient.requests.proxy_info import ProxyInfo
 
-    async def solve_geetest_v4():
-        client_options = ClientOptions(api_key=API_KEY)
-        cap_monster_client = CapMonsterClient(options=client_options)
+API_KEY = "YOUR_API_KEY"  # Укажите ваш API-ключ CapMonster Cloud
 
-        # Базовый пример без прокси
-        # CapMonster Cloud автоматически использует свои прокси
-        geetest_request = GeetestRequest(
-            websiteUrl="https://example.com/",
-            gt="54088bb07d2df3c46b79f80300b0abbe",
-            version=4,
-            initParameters={
-                "riskType": "slide"
-            }
-        )
 
-        # Пример использования вашего собственного прокси
-        # Раскомментируйте данный блок, если вы хотите использовать собственный прокси
+async def solve_geetest():
+    client = CapMonsterClient(
+        options=ClientOptions(api_key=API_KEY)
+    )
 
-        # proxy = ProxyInfo(
-        #     proxyType="http",
-        #     proxyAddress="123.45.67.89",
-        #     proxyPort=8080,
-        #     proxyLogin="username",
-        #     proxyPassword="password"
-        # )
+    # Базовый пример без прокси
+    # CapMonster Cloud автоматически использует собственные прокси
+    geetest_request = GeetestRequest(
+        websiteUrl="https://yourwebsite.com/page-with-geetest",
+        gt="your-gt-value",
+        version="4",
+        initParameters={
+            "riskType": "your-risk-type",
+        },
+    )
 
-        # geetest_request = GeetestRequest(
-        #     websiteUrl="https://example.com/",
-        #     gt="54088bb07d2df3c46b79f80300b0abbe",
-        #     version=4,
-        #     initParameters={
-        #         "riskType": "slide"
-        #     },
-        #     proxy=proxy,
-        #     userAgent="userAgentPlaceholder"
-        # )
+    # Пример с использованием вашего прокси
+    # Раскомментируйте этот блок, если хотите использовать свой прокси
+    """
+    proxy = ProxyInfo(
+        proxyType="https",
+        proxyAddress="123.45.67.89",
+        proxyPort=8080,
+        proxyLogin="username",
+        proxyPassword="password",
+    )
 
-        # При необходимости можно проверить баланс
-        balance = await cap_monster_client.get_balance()
-        print("Balance:", balance)
+    geetest_request = GeetestRequest(
+        websiteUrl="https://yourwebsite.com/page-with-geetest",
+        gt="your-gt-value",
+        version="4",
+        initParameters={
+            "riskType": "your-risk-type",
+        },
+        proxy=proxy,
+        userAgent="userAgentPlaceholder",
+    )
+    """
 
-        result = await cap_monster_client.solve_captcha(geetest_request)
-        print("Solution:", result)
+    # При необходимости можно проверить баланс
+    balance = await client.get_balance()
+    print("Balance:", balance)
 
-    asyncio.run(solve_geetest_v4())
-    ```
+    result = await client.solve_captcha(geetest_request)
+    print("Solution:", result)
+
+
+asyncio.run(solve_geetest())
+```
     </details>
   </TabItem>
   
   <TabItem value="csharp" label="C#" className="method-panel">
   <details>
       <summary>Показать код</summary>
-    ```csharp
-    // https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
+```csharp
+// https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver
 
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Zennolab.CapMonsterCloud;
-    using Zennolab.CapMonsterCloud.Requests;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Zennolab.CapMonsterCloud;
+using Zennolab.CapMonsterCloud.Requests;
 
-    class Program
+class Program
+{
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Укажите ваш API-ключ CapMonster Cloud
+        var clientOptions = new ClientOptions
         {
-            // Ваш API-ключ CapMonster Cloud
-            var clientOptions = new ClientOptions
+            ClientKey = "YOUR_API_KEY"
+        };
+
+        var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
+
+        // Базовый пример без прокси
+        // CapMonster Cloud автоматически использует собственные прокси
+        var geetestRequest = new GeeTestRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-geetest",
+            Gt = "your-gt-value",
+            Version = 4,
+            InitParameters = new Dictionary<string, string>
             {
-                ClientKey = "YOUR_API_KEY"
-            };
+                { "riskType", "your-risk-type" }
+            }
+        };
 
-            var cmCloudClient = CapMonsterCloudClientFactory.Create(clientOptions);
-
-            // При необходимости можно проверить баланс
-            var balance = await cmCloudClient.GetBalanceAsync();
-            Console.WriteLine("Balance: " + balance);
-
-            // Базовый пример без прокси
-            // CapMonster Cloud автоматически использует свои прокси
-            var geetestRequest = new GeeTestRequest
+        // Пример с использованием вашего прокси
+        // Раскомментируйте этот блок, если хотите использовать свой прокси
+        /*
+        geetestRequest = new GeeTestRequest
+        {
+            WebsiteUrl = "https://yourwebsite.com/page-with-geetest",
+            Gt = "your-gt-value",
+            Version = 4,
+            InitParameters = new Dictionary<string, string>
             {
-                WebsiteUrl = "https://example.com/", // URL страницы с капчей
-                Gt = "54088bb07d2df3c46b79f80300b0abbe",
-                Version = 4,                             
-                InitParameters = new Dictionary<string, string> { { "riskType", "slide" } } // Доп. параметр для V4
-            };
+                { "riskType", "your-risk-type" }
+            },
 
-            // Пример использования вашего собственного прокси
-            // Раскомментируйте данный блок, если вы хотите использовать собственный прокси
-            /*
-            var geetestRequest = new GeeTestRequest
-            {
-                WebsiteUrl = "https://example.com/",
-                Gt = "54088bb07d2df3c46b79f80300b0abbe",
-                Version = 4,
-                InitParameters = new Dictionary<string, string> { { "riskType", "slide" } },
+            Proxy = new ProxyContainer(
+                "123.45.67.89",
+                8080,
+                ProxyType.Http,
+                "username",
+                "password"
+            )
+        };
+        */
 
-                Proxy = new ProxyContainer(
-                    "123.45.67.89", 
-                    8080,           
-                    ProxyType.Http,    
-                    "username",   
-                    "password" 
-                )
-            };
-            */
+        // При необходимости можно проверить баланс
+        var balance = await cmCloudClient.GetBalanceAsync();
+        Console.WriteLine("Balance: " + balance);
 
-            var geetestResult = await cmCloudClient.SolveAsync(geetestRequest);
+        var geetestResult = await cmCloudClient.SolveAsync(geetestRequest);
 
-            Console.WriteLine("Solution:");
-            Console.WriteLine($"CaptchaId:     {geetestResult.Solution.CaptchaId}");
-            Console.WriteLine($"LotNumber:     {geetestResult.Solution.LotNumber}");
-            Console.WriteLine($"PassToken:     {geetestResult.Solution.PassToken}");
-            Console.WriteLine($"GenTime:       {geetestResult.Solution.GenTime}");
-            Console.WriteLine($"CaptchaOutput: {geetestResult.Solution.CaptchaOutput}");
-        }
+        Console.WriteLine($"""
+Solution:
+  CaptchaId:     {geetestResult.Solution.CaptchaId}
+  LotNumber:     {geetestResult.Solution.LotNumber}
+  PassToken:     {geetestResult.Solution.PassToken}
+  GenTime:       {geetestResult.Solution.GenTime}
+  CaptchaOutput: {geetestResult.Solution.CaptchaOutput}
+""");
     }
-    ```
+}
+```
     </details>
   </TabItem>
 </Tabs>

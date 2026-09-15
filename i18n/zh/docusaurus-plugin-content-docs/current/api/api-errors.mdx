@@ -11,27 +11,37 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 
 # 错误说明
 
-:::info 防止错误的建议：
+:::info 防止错误的建议
 <div style={{color: "#000"}}>
 
-- 请确保您需要破解的验证码类型由 CapMonster Cloud 服务支持。如果该验证码类型不受支持，请联系我们——我们将考虑添加支持。
-- 检查文档更新，以便及时了解 API 的最新更改，避免使用过时的方法或参数。
-- 使用高质量的代理。
+提交任务前：
 
-如果错误仍然存在且无法自行解决，请通过[表单](https://helpdesk.zennolab.com/conversation/new)、我们在[网站](https://capmonster.cloud/)和[文档](https://docs.capmonster.cloud/)中的聊天，或在 [Telegram 频道](https://t.me/capmonstercloud) 联系支持，并附上：
+- 请确保所需的 CAPTCHA 类型受 CapMonster Cloud 支持。如果当前尚不支持所需类型，请联系我们——我们会考虑添加相应支持；
+- 使用最新的 API 参数；
+- 使用代理时，请确认代理可用且连接稳定。
 
-- taskId
-- 任务类型 (type)
-- 原始图片/输入
-- 任务的日期/时间
-- 请求正文（如可能）
+如果错误仍然存在，请通过[表单](https://helpdesk.zennolab.com/zh-cn/conversation/new)、[网站](https://capmonster.cloud/)或[文档](https://docs.capmonster.cloud/)中的聊天，或通过 [Telegram 频道](https://t.me/capmonstercloud) 联系支持。
+
+联系支持时，请提供 `taskId`、任务类型（`type`）、原始输入数据或图片、任务日期和时间，以及在可能的情况下提供请求正文。
+
 </div>
 :::
 
+<span style={{fontSize: '1.5rem'}}>**重新发送请求**</span>
+
+<br />某些错误可能是临时性的。在这种情况下，可以稍后重试请求，或创建新的任务——具体建议请参见对应错误的说明。
+
+如果错误与 API 密钥、余额、任务参数、代理、令牌或其他输入数据有关，请在重新发送请求前检查并修正相应值。
+
+重试请求时，请遵循建议的请求间隔，并在必要时增加重试之间的等待时间。
 
 ### `INVALID KEY`
 API 错误代码: `ERROR_KEY_DOES_NOT_EXIST` <br />
 未找到 API 密钥或格式不正确。请确认您使用的是[个人账户](https://dash.capmonster.cloud/)中的密钥，并且该密钥处于激活状态。如果错误仍然存在，请联系支持并提供 *taskId* 和完整请求。
+
+### `INVALID CHARACTER`
+API 错误代码: `ERROR_PROXY_CREDENTIALS_INVALID_CHARACTER` <br />
+代理的登录名或密码包含无效字符 `%`。请删除该字符后重新填写代理凭据并重试请求。
 
 ### `NO FUNDS`
 API 错误代码: `ERROR_ZERO_BALANCE` <br />
@@ -39,23 +49,27 @@ API 错误代码: `ERROR_ZERO_BALANCE` <br />
 
 ### `BIG IMAGE SIZE`
 API 错误代码: `ERROR_TOO_BIG_CAPTCHA_FILESIZE` <br />
-上传的图片超过允许的 50 KB 大小。请降低分辨率或压缩文件后重新提交任务。此错误仅出现在需要上传图片的验证码中（*ImageToText、ComplexImageTask、ComplexImageTask Recaptcha* 等）。
+上传的图片超过允许的 50 KB 大小。请降低分辨率或压缩文件后重新提交任务。此错误仅出现在需要上传图片的 CAPTCHA 中（*ImageToText、ComplexImageTask、ComplexImageTask Recaptcha* 等）。
 
 ### `ZERO IMAGE SIZE`
 API 错误代码: `ERROR_ZERO_CAPTCHA_FILESIZE` <br />
-图片大小过小（小于 100 字节）。请检查文件是否正确并包含验证码图片。
+图片大小过小（小于 100 字节）。请检查文件是否正确并包含 CAPTCHA 图片。
 
 ### `CAPTCHA ID IS NOT FOUND`
 API 错误代码: `ERROR_NO_SUCH_CAPCHA_ID`, `WRONG_CAPTCHA_ID` <br />
-不存在该 taskId 的任务或已过期（通常为 5 分钟）。请确保在提交任务后立即请求结果。
+请检查 `taskId` 的值。如果任务不存在、结果保存期限已过或标识符格式不正确，可能会出现此错误。使用相同的 `taskId` 重试请求不会返回结果。
 
 ### `CAPTCHA UNSOLVABLE`
 API 错误代码: `ERROR_CAPTCHA_UNSOLVABLE` <br />
-服务无法解决该任务。可能原因：验证码不受支持、图片为空或损坏、参数错误或技术故障。建议仔细检查传递的参数，或使用 CapMonster Cloud 浏览器扩展中的[参数映射](https://docs.capmonster.cloud/zh/docs/extension/extension-main#%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8F%82%E6%95%B0%E6%98%A0%E5%B0%84)。如果错误重复出现，请联系支持并附上 *taskId*、任务类型 (*type*)、原始图片或输入数据、任务日期/时间及请求正文。
+无法解决 CAPTCHA。通常这是临时错误——请尝试重新创建任务。同时，请检查请求参数是否正确且为最新值。
+
+对于图像类 CAPTCHA，如果反复出现错误，可能表示图像无法被正确识别：图像可能包含过多噪声、已损坏，或不包含有效答案。
+
+未解决的任务不会收费。
 
 ### `CAPTCHA IS NOT READY`
 API 错误代码: `CAPTCHA_NOT_READY` <br />
-解决方案仍在处理中。请至少间隔 2 秒后再次请求。
+任务仍在处理中。请稍后再次调用 [getTaskResult](./methods/get-task-result.mdx)，两次请求之间至少间隔 2 秒。
 
 ### `REQUEST IS NOT ALLOWED FROM YOUR IP`
 API 错误代码: `ERROR_IP_NOT_ALLOWED` <br />
@@ -63,7 +77,7 @@ API 错误代码: `ERROR_IP_NOT_ALLOWED` <br />
 
 ### `IP BANNED`
 API 错误代码: `ERROR_IP_BANNED` <br />
-您使用错误的 API 密钥超出了请求限制，请检查[控制面板](https://dash.capmonster.cloud/)中的密钥，并稍后重试。
+由于大量无效请求，该 IP 地址已被临时封锁。请检查请求是否正确，并稍后重试。收到此错误后不要立即重复发送请求。
 
 ### `INCORRECT METHOD`
 API 错误代码: `ERROR_NO_SUCH_METHOD` <br />
@@ -71,31 +85,27 @@ API 错误代码: `ERROR_NO_SUCH_METHOD` <br />
 
 ### `REQUEST LIMIT EXCEEDED`
 API 错误代码: `ERROR_TOO_MUCH_REQUESTS` <br />
-您对同一任务的结果请求频率过高。请不要超过每 2 秒请求一次[任务结果](./methods/get-task-result.mdx)。
+已超出允许的请求限制。请增加重复请求之间的间隔后再试。获取任务结果时，请不要超过每 2 秒调用一次 [getTaskResult](./methods/get-task-result.mdx)。
 
 ### `THE DOMAIN IS NOT ALLOWED`
 API 错误代码: `ERROR_DOMAIN_NOT_ALLOWED` <br />
-CapMonster Cloud 禁止识别来自某些域名的验证码。当尝试为这些域名创建任务时，将会收到此错误。
+CapMonster Cloud 禁止识别来自某些域名的 CAPTCHA。当尝试为这些域名创建任务时，将会收到此错误。
 
 ### `THE TOKEN IS EXPIRED`
 API 错误代码: `ERROR_TOKEN_EXPIRED` <br />
-附加令牌已过期。请获取新令牌并重新提交任务。
-
-### `NO FREE SERVERS`
-API 错误代码: `ERROR_NO_SLOT_AVAILABLE` <br />
-当前没有可用服务器处理该任务。如果收到此错误，请联系支持，我们将考虑扩展基础设施。
+提交的 token 或 challenge 已过期。请获取最新值并创建新的任务。使用相同数据重新提交任务会再次产生相同错误。
 
 ### `INVALID RECAPTCHA SITEKEY`
 API 错误代码: `ERROR_RECAPTCHA_INVALID_SITEKEY` <br />
-提供的 *websiteKey* 不正确。请检查验证码页面代码中的值并正确传递。如果难以找到正确的 key，请联系支持。
+提供的 *websiteKey* 不正确。请检查 CAPTCHA 页面代码中的值并正确传递。如果难以找到正确的 key，请联系支持。
 
 ### `INVALID RECAPTCHA DOMAIN`
 API 错误代码: `ERROR_RECAPTCHA_INVALID_DOMAIN` <br />
-域名与指定的 *sitekey* 不匹配，或参数 *websiteURL* 格式错误。请提供包含协议的完整验证码页面 URL。**仅支持 `http://` 和 `https://`。**
+域名与指定的 *sitekey* 不匹配，或参数 *websiteURL* 格式错误。请提供包含协议的完整 CAPTCHA 页面 URL。**仅支持 `http://` 和 `https://`。**
 
 ### `RECAPTCHA TIMEOUT`
 API 错误代码: `ERROR_RECAPTCHA_TIMEOUT` <br />
-reCAPTCHA 解决超时，可能是代理速度慢或 Google 服务器响应延迟导致。请尝试更换代理或稍后重试。
+reCAPTCHA 解决超时。请创建新的任务。如果使用自有代理时此错误反复出现，请检查代理的速度和可用性，或更换其他代理。
 
 ### `YOUR IP IS BLOCKED`
 API 错误代码: `ERROR_IP_BLOCKED` <br />
@@ -103,11 +113,11 @@ API 错误代码: `ERROR_IP_BLOCKED` <br />
 
 ### `FAILED TO CONNECT PROXY`
 API 错误代码: `ERROR_PROXY_CONNECT_REFUSED` <br />
-无法连接代理：连接错误或超时。请检查 IP、端口及代理可用性。
+代理服务器拒绝连接。请检查 IP 地址、端口和代理可用性，或更换其他代理。
 
 ### `THE PROXY IP IS BANNED`
 API 错误代码: `ERROR_PROXY_BANNED` <br />
-该代理 IP 被验证码服务封锁。请使用其他代理。
+指定的代理已被目标网站封锁。请使用其他代理。
 
 ### `MISSING PROXY`
 API 错误代码: `ERROR_PROXY_MISSING`<br />
@@ -119,16 +129,24 @@ API 错误代码: `ERROR_PROXY_NOT_AUTHORISED`<br />
 
 ### `PROXY READ TIMEOUT`
 API 错误代码: `ERROR_PROXY_READ_TIMEOUT`<br />
-*proxyAddress* 或 *proxyPort* 错误，导致连接超时。请检查并确保代理可用且稳定。
+使用代理时等待响应超时。请重试请求。如果错误经常出现，请检查代理的可用性和稳定性，或更换其他代理。
 
 ### `INCORRECT TASK TYPE`
 API 错误代码: `ERROR_TASK_NOT_SUPPORTED` <br />
 任务类型不受支持或不正确。请检查任务对象中的 type 属性值。
 
-### `ERROR_TASK_ABSENT`
+### `TASK ABSENT`
 API 错误代码: `ERROR_TASK_ABSENT` <br />
 在 [createTask](./methods/create-task.mdx) 请求中缺少 task 对象或 JSON 无效。请检查请求结构。
 
 ### `USERAGENT IS EXPIRED`
 API 错误代码: `ERROR_WRONG_USERAGENT`<br />
 请求中提供的 User Agent 无效。您可以在[这里](https://capmonster.cloud/api/useragent/actual)查看最新的 User Agent。
+
+### `SERVICE NOT AVAILABLE`
+API 错误代码：`ERROR_SERVICE_NOT_AVAILABLE`<br />
+服务暂时不可用。当回调（callback）服务不可用，或 [getTaskResult](./methods/get-task-result.mdx) 可用性检查失败时，将返回此错误。为了避免用户为无法获取结果的任务付费，在这些情况下将禁止创建新任务。请稍后重试请求。如果使用了 callback，请确保指定的回调 URL 可以正常访问。
+
+### `INVALID TASK`
+API 错误代码：`ERROR_INVALID_TASK`<br />
+请求在语法上是正确的，但包含无法创建任务的无效数据。例如，必填字段缺失、字段值错误或数据已过期，导致无法完成 CAPTCHA 识别。`errorDescription` 字段会说明哪些请求字段存在问题以及如何修正。请检查任务参数，确认提交的数据仍然有效，并根据 `errorDescription` 修正相应字段。如果仍无法自行解决问题，请联系[技术支持](https://helpdesk.zennolab.com/zh-cn/conversation/new)。
