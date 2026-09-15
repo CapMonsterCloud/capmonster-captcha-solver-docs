@@ -1,0 +1,13 @@
+---
+unlisted: true
+---
+
+import { Redirect } from '@docusaurus/router';
+import { useGettingStartRedirect } from '@site/src/hooks/useGettingStartRedirect';
+
+export const DocsRootRedirect = () => {
+  const to = useGettingStartRedirect();
+  return <Redirect to={to} />;
+};
+
+<DocsRootRedirect />
