@@ -203,6 +203,7 @@
   flex-shrink: 0;
 }
 
+/* Расширение */
 .theme-doc-sidebar-item-category-level-1:nth-child(6)
   > .menu__list-item-collapsible
   .menu__link::before {
@@ -214,7 +215,18 @@
   flex-shrink: 0;
 }
 
+/* MCP */
 .theme-doc-sidebar-item-link-level-1:nth-child(7) > .menu__link::before {
+  content: '';
+  background: url('/img/18x18_mcp.svg') center / contain no-repeat;
+  width: 18px;
+  height: 18px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Бонусы и программа лояльности */
+.theme-doc-sidebar-item-link-level-1:nth-child(8) > .menu__link::before {
   content: '';
   background: url('/img/18x18_bonus.svg') center / contain no-repeat;
   width: 18px;
@@ -223,7 +235,8 @@
   flex-shrink: 0;
 }
 
-.theme-doc-sidebar-item-link-level-1:nth-child(8) > .menu__link::before {
+/* FAQ */
+.theme-doc-sidebar-item-link-level-1:nth-child(9) > .menu__link::before {
   content: '';
   background: url('/img/18x18_faq_icon.svg') center / contain no-repeat;
   width: 18px;
@@ -232,7 +245,8 @@
   flex-shrink: 0;
 }
 
-.theme-doc-sidebar-item-link-level-1:nth-child(9) > .menu__link::before {
+/* Обновления */
+.theme-doc-sidebar-item-link-level-1:nth-child(10) > .menu__link::before {
   content: '';
   background: url('/img/18x18_news.svg') center / contain no-repeat;
   width: 18px;
