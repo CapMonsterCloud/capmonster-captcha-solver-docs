@@ -45,10 +45,12 @@ Explore our live hosted documentation portal:
 
 Accelerate your automation pipeline with our official client libraries and integrations:
 
-- 🐍 **[Python SDK (capmonstercloudclient)](https://github.com/ZennoLab/capmonstercloud-client-python)** — Async, Playwright, Selenium, and Requests.
+- 🐍 **[Python SDK (capmonstercloudclient)](https://github.com/CapMonsterCloud/capmonster-python-captcha-solver)** — Async, Playwright, Selenium, and Requests.
 - 🟢 **[Node.js / JavaScript SDK](https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver)** — Official Node.js library with TypeScript support.
 - 🔷 **[.NET / C# SDK](https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver)** — Official .NET package for C# automation projects.
 - 🧩 **[n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver)** — No-code workflow automation node.
+- 🤖 **[MCP Server](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver)** — Connect AI agents (Claude, Cursor, etc.) directly to CapMonster Cloud via Model Context Protocol.
+- 🎭 **[MCP Server for Patchright](https://github.com/CapMonsterCloud/capmonster-mcp-patchright-captcha-solver)** — Stealth browser automation with built-in captcha solving for AI agents.
 - 📦 **[All Repositories & SDKs](https://github.com/orgs/CapMonsterCloud/repositories)** — Full list of open-source tools.
 
 ---
@@ -99,4 +101,4 @@ yarn serve
 
 ## 📄 License
 
-[MIT](./LICENSE) © [ZennoLab](https://zennolab.com/) / [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
+[MIT](./LICENSE) © [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
