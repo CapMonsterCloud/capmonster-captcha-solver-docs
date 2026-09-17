@@ -1,0 +1,81 @@
+.remotePrompt {
+  margin: 16px 0 24px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.copyButton,
+.toggleButton {
+  min-height: 48px;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.copyButton {
+  color: #ffffff;
+  background-color: #7b66ff;
+  border: 1px solid #7b66ff;
+}
+
+.copyButton:hover:not(:disabled) {
+  background-color: #6953ec;
+  border-color: #6953ec;
+}
+
+.copyButton:active:not(:disabled),
+.toggleButton:active {
+  transform: translateY(1px);
+}
+
+.copyButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.toggleButton {
+  color: #6953ec;
+  background-color: transparent;
+  border: 1px solid #c9c0ff;
+}
+
+.toggleButton:hover {
+  color: #5842dc;
+  background-color: rgba(123, 102, 255, 0.08);
+  border-color: #a99cff;
+}
+
+.toggleIcon {
+  margin-left: 9px;
+  font-size: 10px;
+}
+
+.promptContent {
+  margin-top: 16px;
+}
+
+.promptContent pre {
+  max-height: 480px;
+  overflow: auto;
+}
+
+@media (max-width: 576px) {
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .copyButton,
+  .toggleButton {
+    width: 100%;
+  }
+}
