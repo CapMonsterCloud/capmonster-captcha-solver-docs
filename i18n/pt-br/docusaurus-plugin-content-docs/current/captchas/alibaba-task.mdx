@@ -107,7 +107,9 @@ Exemplo: `1.0`
 
 <ParamItem title="region (dentro de metadata)" type="string" />
 Região do servidor ou data center onde o captcha é processado. <br />
-Exemplo: `sgp`
+Exemplo: `sgp`<br />
+
+**Importante:** o valor de `region` afeta o tipo de token retornado: com `region: cn`, é retornado um token do tipo `WEB#` (`VOVCI2`); com `region: sgp`, é retornado um token do tipo `SG_WEB#` (`U0dfV0VCIZ`).
 
 ---
 
@@ -315,7 +317,7 @@ Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -361,7 +363,7 @@ Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -431,6 +433,15 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
+
+:::info O formato do token depende de region
+
+O valor de `region`, enviado em `metadata` ao criar a tarefa, afeta o formato do `deviceToken` retornado:
+
+- `region: cn` — token do tipo `WEB#` (`VOVCI2`);
+- `region: sgp` — token do tipo `SG_WEB#` (`U0dfV0VCIZ`).
+
+:::
 
 Se `"cookieRequired": true` tiver sido especificado na requisição, a resposta também conterá cookies agrupados por domínio. Isso também se aplica às tarefas com `punishUrl`. Use os cookies do objeto `solution.domains` nas requisições subsequentes ao domínio correspondente, juntamente com o resultado da resolução do CAPTCHA.
 
@@ -1388,7 +1399,7 @@ Esses dados são enviados ao nosso serviço de resolução de captcha:
     "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
     "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
     "verifyType": "1.0",
-    "region": "sgp",
+    "region": "your-region",
     "UserCertifyId": "0a03e59417757735511105780e2a5e",
     "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
   }
