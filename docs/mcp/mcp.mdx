@@ -1,0 +1,1009 @@
+---
+sidebar_position: 6
+title: MCP
+sidebar_label: MCP
+---
+
+import { ArticleHead } from '../../src/theme/ArticleHead';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import RemotePrompt from '@site/src/components/RemotePrompt';
+
+<ArticleHead slug="mcp" />
+
+# MCP
+
+
+**Model Context Protocol (MCP)** позволяет AI-агентам подключаться к внешним инструментам и сервисам.
+
+CapMonster Cloud MCP предоставляет агенту инструменты для работы с CAPTCHA.
+
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Как работает MCP CapMonster Cloud</summary>
+
+С помощью MCP AI-агент может определять тип CAPTCHA и параметры задачи, обращаться к документации CapMonster Cloud, создавать задачи и получать результаты решения. При этом конечная цель работы агента – не только решить CAPTCHA, но и корректно интегрировать этот процесс в проект пользователя.
+
+Для работы с веб-страницей MCP CapMonster Cloud можно использовать вместе с браузерным MCP [`capmonster-mcp-patchright`](https://github.com/CapMonsterCloud/capmonster-mcp-patchright):
+
+```text
+AI-агент
+├── capmonster → CapMonster Cloud API
+└── patchright → браузер
+```
+
+`capmonster` отвечает за работу с CapMonster Cloud. `patchright` открывает страницу, помогает определить тип CAPTCHA и получить её параметры, а также применить готовое решение. Затем агент переносит проверенный сценарий в код проекта.
+
+Типовой процесс, под который разработан [SKILL.md](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver/blob/main/capmonster_agent/SKILL.md):
+
+1. Получить URL целевой страницы.
+
+2. Определить тип CAPTCHA.
+
+3. Изучить документацию и определить обязательные параметры.
+
+4. Получить параметры со страницы.
+
+5. Отправить запрос в CapMonster Cloud.
+
+6. Получить результат.
+
+7. Применить результат на странице и интегрировать этот сценарий в код пользователя.
+
+:::info Примечание
+Используйте автоматизацию только на ресурсах, где у вас есть разрешение на такие действия: например, на собственном сайте, тестовом стенде или демонстрационной странице.
+:::
+
+</details>
+
+## Быстрый старт
+
+:::tip Скопируйте prompt для AI-агента
+Выберите prompt в соответствии со своим окружением – **Python / PyPI** или **TypeScript / npm** – и нажмите **Скопировать prompt**. Затем вставьте его в Claude Code, Codex или другой AI-агент. Агент определит клиент и операционную систему, настроит `capmonster` и `patchright`, а затем проверит их работу.
+
+Если автоматическая настройка не удалась, настройте MCP вручную по [инструкции](#ручная-настройка).
+
+:::
+
+<Tabs groupId="quick-start-runtime">
+<TabItem value="quick-start-python" label="Python / PyPI" default>
+
+<RemotePrompt url="https://raw.githubusercontent.com/CapMonsterCloud/capmonster-mcp-captcha-solver/main/capmonster_agent/PROMPT.md" />
+
+</TabItem>
+
+<TabItem value="quick-start-npm" label="TypeScript / npm">
+
+<RemotePrompt url="https://raw.githubusercontent.com/CapMonsterCloud/capmonster-mcp-captcha-solver/main/capmonster_agent/PROMPT_JS.md" />
+
+</TabItem>
+</Tabs>
+
+---
+
+После проверки передайте агенту URL целевой страницы, файлы проекта и условия появления CAPTCHA. Агент должен не только проверить решение в браузере, но и интегрировать рабочий сценарий CapMonster Cloud в ваш код.
+
+:::info Разрешения во время настройки
+Агент может запросить разрешение на установку зависимостей, изменение MCP-конфигурации, запуск команд, сетевой доступ или работу браузера. Просматривайте запросы и подтверждайте ожидаемые действия кнопкой **Allow** или **Approve**.
+
+В Codex текущий режим разрешений можно проверить или изменить командой `/permissions`.
+:::
+
+Повторно отправлять prompt перед каждой задачей не требуется. В рамках текущей сессии после загрузки [SKILL.md](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver/blob/main/capmonster_agent/SKILL.md) можно передавать новые URL, условия появления CAPTCHA и задачи по интеграции.
+
+---
+
+## Ручная настройка
+
+Работать с агентом можно через Desktop-приложение, терминал, IDE или редактор кода. Для полного сценария рекомендуется подключить оба сервера: `capmonster` и `patchright`.
+
+Выберите способ работы – CLI-агент или Desktop-приложение. В каждой вкладке приведена полная последовательность настройки.
+
+<Tabs groupId="mcp-work-mode">
+<TabItem value="cli" label="CLI-агент" default>
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 1. Установите AI-агент**</span>
+
+<br />Для работы потребуется AI-агент или другое приложение с поддержкой MCP.
+
+Если агент уже установлен, проверьте, что он запускается и доступен в системе.
+
+Например, для Claude Code:
+
+```bash
+claude --version
+```
+
+Для Codex:
+
+```bash
+codex --version
+```
+
+Если команда не найдена, установите выбранный AI-агент согласно его официальной инструкции: для [Claude Code](https://code.claude.com/docs/en/setup), для [Codex](https://developers.openai.com/codex/cli).
+
+
+После установки убедитесь, что агент запускается и поддерживает подключение локальных MCP-серверов.
+
+:::tip Агент не найден после установки
+Если терминал или IDE не видит установленный агент, полностью закройте и снова откройте терминал и среду разработки. Уже запущенные приложения могут использовать старое значение `PATH` и не видеть новую команду до перезапуска.
+:::
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 2. Установите Node.js и при необходимости uv**</span>
+
+<br />Для запуска MCP-серверов потребуются `npx` и, в зависимости от выбранной реализации CapMonster MCP, `uvx`.
+
+**Node.js и npx**
+
+:::warning Важно:
+`patchright` запускается через `npx`, поэтому Node.js необходим независимо от выбранной реализации CapMonster MCP.
+:::
+
+Проверьте установку:
+
+```bash
+node --version
+npm --version
+npx --version
+```
+
+Если команды недоступны, установите Node.js.
+
+`npm` и `npx` обычно устанавливаются вместе с Node.js, поэтому отдельно устанавливать `npx` не требуется.
+
+Для работы рекомендуется использовать Node.js 18 или новее.
+
+**uv и uvx**
+
+Если вы планируете использовать Python/PyPI-версию `capmonster-mcp`, также потребуется `uvx`.
+
+Проверьте его наличие:
+
+```bash
+uvx --version
+```
+
+Если команда недоступна, установите `uv`.
+
+После установки `uv` команда `uvx` также станет доступна.
+
+Проверьте:
+
+```bash
+uv --version
+uvx --version
+```
+
+:::info Примечание
+Если вы используете TypeScript/npm-версию `capmonster-mcp`, `uv` и `uvx` устанавливать не требуется.
+:::
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 3. Получите API-ключ**</span>
+
+<br />Для работы `capmonster` необходим API-ключ CapMonster Cloud.
+
+Он передаётся MCP-серверу через переменную окружения:
+
+```text
+CM_API_KEY
+```
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 4. Выберите реализацию CapMonster MCP**</span>
+
+
+<br />Доступны две эквивалентные реализации [`capmonster-mcp`](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver).
+
+<Tabs>
+<TabItem value="npm" label="npm – TypeScript" default>
+
+Для этой версии используется [npm-пакет `capmonster-mcp`](https://www.npmjs.com/package/capmonster-mcp) и `npx`.
+
+MCP-сервер запускается командой:
+
+```bash
+npx -y capmonster-mcp
+```
+
+</TabItem>
+
+<TabItem value="python" label="PyPI – Python">
+
+Для этой версии используется [PyPI-пакет `capmonster-mcp`](https://pypi.org/project/capmonster-mcp/) и `uvx`.
+
+MCP-сервер запускается командой:
+
+```bash
+uvx capmonster-mcp
+```
+
+</TabItem>
+</Tabs>
+
+Устанавливать `capmonster-mcp` как зависимость вашего проекта не требуется. По умолчанию MCP-клиент может запускать опубликованный пакет напрямую через `npx` или `uvx`.
+
+<span style={{ fontSize: "1.1em" }}>**Установка пакетов через npm и pip**</span>
+
+<br />По умолчанию предварительно устанавливать MCP-пакеты не требуется: их можно запускать напрямую через `npx` или `uvx`. Если вы хотите установить пакеты заранее, используйте один из вариантов ниже.
+
+<Tabs>
+<TabItem value="npm-install" label="npm" default>
+
+**CapMonster Cloud MCP**
+
+Установите [capmonster-mcp](https://www.npmjs.com/package/capmonster-mcp) через npm:
+
+```bash
+npm i capmonster-mcp
+```
+
+Проверить установку можно командой:
+
+```bash
+npm list capmonster-mcp
+```
+
+После установки для запуска `capmonster` используйте `npx`:
+
+```json
+{
+  "command": "npx",
+  "args": ["capmonster-mcp"],
+  "env": {
+    "CM_API_KEY": "YOUR_API_KEY"
+  }
+}
+```
+
+**Patchright MCP**
+
+Если вы планируете использовать браузер для открытия страниц, получения параметров CAPTCHA и применения решения, установите [`capmonster-mcp-patchright`](https://www.npmjs.com/package/capmonster-mcp-patchright). Исходный код доступен в [официальном репозитории](https://github.com/CapMonsterCloud/capmonster-mcp-patchright):
+
+```bash
+npm i capmonster-mcp-patchright
+```
+
+Проверить установку можно командой:
+
+```bash
+npm list capmonster-mcp-patchright
+```
+
+Предварительная установка `capmonster-mcp-patchright` необязательна. Во всех примерах ниже его также можно запускать напрямую через:
+
+```bash
+npx -y capmonster-mcp-patchright
+```
+
+</TabItem>
+
+<TabItem value="pypi-install" label="pip / PyPI">
+
+Python-версия `capmonster-mcp` опубликована в [PyPI](https://pypi.org/project/capmonster-mcp/) и требует Python 3.11 или новее.
+
+Установите `capmonster-mcp` через `pip`:
+
+```bash
+python -m pip install capmonster-mcp
+```
+
+Проверить установку можно командой:
+
+```bash
+python -m pip show capmonster-mcp
+```
+
+После установки для `capmonster` можно использовать ту же CLI-команду:
+
+```json
+{
+  "command": "capmonster-mcp",
+  "args": [],
+  "env": {
+    "CM_API_KEY": "YOUR_API_KEY"
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+После установки npm-пакета или Python-пакета полностью перезапустите MCP-клиент, если установка выполнялась после его запуска.
+
+
+<br />
+<span style={{ fontSize: "1.2em" }}>**Шаг 5. Настройте MCP-клиент**</span>
+
+<br />Выберите используемый CLI-клиент.
+
+<Tabs>
+<TabItem value="claude-code-cli" label="Claude Code" default>
+
+Для общей проектной конфигурации создайте в корне проекта файл `.mcp.json` и добавьте в него `capmonster` и `patchright`.
+
+:::tip 
+Это не единственное возможное расположение. Claude Code поддерживает разные области конфигурации; настройки конкретного пользователя или проекта могут также храниться в `.claude.json` или добавляться командами самого клиента. Если MCP настраивает агент, разрешите ему определить подходящий scope и файл автоматически.
+:::
+
+<Tabs>
+<TabItem value="claude-cli-npm" label="TypeScript / npm" default>
+
+```json
+{
+  "mcpServers": {
+    "capmonster": {
+      "command": "npx",
+      "args": ["-y", "capmonster-mcp"],
+      "env": {
+        "CM_API_KEY": "YOUR_API_KEY"
+      }
+    },
+    "patchright": {
+      "command": "npx",
+      "args": ["-y", "capmonster-mcp-patchright"]
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="claude-cli-python" label="Python / PyPI">
+
+```json
+{
+  "mcpServers": {
+    "capmonster": {
+      "command": "uvx",
+      "args": ["capmonster-mcp"],
+      "env": {
+        "CM_API_KEY": "YOUR_API_KEY"
+      }
+    },
+    "patchright": {
+      "command": "npx",
+      "args": ["-y", "capmonster-mcp-patchright"]
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+После перезапуска Claude Code проверьте подключение командой `/mcp`.
+
+![](./images/claude-enable-mcp-servers.png) 
+
+</TabItem>
+
+<TabItem value="codex-cli" label="Codex CLI">
+
+Codex CLI, расширение Codex для IDE и ChatGPT Desktop используют общую конфигурацию MCP. По умолчанию она хранится в файле `config.toml`:
+
+- Windows: `%USERPROFILE%\.codex\config.toml`;
+- macOS/Linux: `~/.codex/config.toml`.
+
+Для подключения MCP-серверов используйте команду `codex mcp add` – Codex автоматически сохранит настройки в файле `config.toml`. Серверы `capmonster` и `patchright` необходимо добавить по отдельности, выполнив соответствующую команду для каждого из них.
+
+<Tabs groupId="codex-mcp-os">
+<TabItem value="codex-mcp-windows" label="Windows" default>
+
+Откройте PowerShell или встроенный терминал IDE.
+
+Для TypeScript/npm-версии `capmonster` выполните:
+
+```powershell
+codex mcp add capmonster --env CM_API_KEY=YOUR_API_KEY -- npx.cmd -y capmonster-mcp
+```
+
+Для Python/PyPI-версии вместо этого выполните:
+
+```powershell
+codex mcp add capmonster --env CM_API_KEY=YOUR_API_KEY -- uvx capmonster-mcp
+```
+
+Затем независимо от выбранной реализации добавьте `patchright`:
+
+```powershell
+codex mcp add patchright -- npx.cmd -y capmonster-mcp-patchright
+```
+
+На Windows используется `npx.cmd`, чтобы запуск MCP-сервера не зависел от политики выполнения PowerShell-скриптов для `npx.ps1`.
+
+</TabItem>
+
+<TabItem value="codex-mcp-macos-linux" label="macOS / Linux">
+
+Откройте терминал.
+
+Для TypeScript/npm-версии `capmonster` выполните:
+
+```bash
+codex mcp add capmonster --env CM_API_KEY=YOUR_API_KEY -- npx -y capmonster-mcp
+```
+
+Для Python/PyPI-версии вместо этого выполните:
+
+```bash
+codex mcp add capmonster --env CM_API_KEY=YOUR_API_KEY -- uvx capmonster-mcp
+```
+
+Затем независимо от выбранной реализации добавьте `patchright`:
+
+```bash
+codex mcp add patchright -- npx -y capmonster-mcp-patchright
+```
+
+</TabItem>
+</Tabs>
+
+Замените `YOUR_API_KEY` на API-ключ CapMonster Cloud. Не добавляйте реальный ключ в сообщения агента, примеры кода или публичный репозиторий.
+
+Проверьте, что добавлены оба сервера:
+
+```bash
+codex mcp list
+```
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Альтернативно: настроить серверы через config.toml</summary>
+
+Для доверенного проекта конфигурацию также можно сохранить в `.codex/config.toml` в корне проекта. Проектный файл будет использоваться только после того, как проект отмечен как доверенный.
+
+<Tabs>
+<TabItem value="codex-cli-npm" label="TypeScript / npm" default>
+
+```toml
+[mcp_servers.capmonster]
+command = "npx"
+args = ["-y", "capmonster-mcp"]
+
+[mcp_servers.capmonster.env]
+CM_API_KEY = "YOUR_API_KEY"
+
+[mcp_servers.patchright]
+command = "npx"
+args = ["-y", "capmonster-mcp-patchright"]
+```
+
+</TabItem>
+
+<TabItem value="codex-cli-python" label="Python / PyPI">
+
+```toml
+[mcp_servers.capmonster]
+command = "uvx"
+args = ["capmonster-mcp"]
+
+[mcp_servers.capmonster.env]
+CM_API_KEY = "YOUR_API_KEY"
+
+[mcp_servers.patchright]
+command = "npx"
+args = ["-y", "capmonster-mcp-patchright"]
+```
+
+</TabItem>
+</Tabs>
+
+На Windows при проблемах с запуском `npx.ps1` укажите `command = "npx.cmd"` вместо `command = "npx"`. Если первая загрузка пакета занимает слишком много времени, в раздел каждого сервера можно добавить `startup_timeout_sec = 60`.
+
+</details>
+
+Полностью перезапустите Codex или IDE. В новой сессии выполните `/mcp` и убедитесь, что `capmonster` и `patchright` подключены и предоставляют инструменты. Подробнее см. в [документации Codex по MCP](https://developers.openai.com/codex/mcp).
+
+![](./images/codex-enable-mcp-servers.png) 
+
+</TabItem>
+</Tabs>
+
+Замените `YOUR_API_KEY` на API-ключ CapMonster Cloud и перезапустите MCP-клиент.
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 6. Передайте агенту prompt**</span>
+
+<br />Откройте новый чат или сессию и отправьте prompt из блока [Быстрый старт](#быстрый-старт). После проверки передайте URL страницы, файлы проекта и условия появления CAPTCHA.
+
+Во время настройки подтверждайте только ожидаемые запросы на разрешения. В рамках текущей сессии повторно отправлять prompt перед каждой задачей не требуется.
+
+![](./images/claude-prompt-ready.png)
+
+</TabItem>
+
+<TabItem value="desktop" label="Desktop-приложение">
+
+CapMonster Cloud MCP можно использовать не только через CLI-агенты, но и через Desktop-приложения с поддержкой локальных MCP-серверов.
+
+Например:
+
+- **Claude Desktop**;
+- **ChatGPT Desktop с Codex**;
+- другой Desktop-клиент с поддержкой локальных STDIO MCP-серверов.
+
+В этом случае запускать AI-агент из терминала не требуется. MCP-серверы настраиваются в самом приложении или в его конфигурационном файле.
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 1. Установите Desktop-приложение**</span>
+
+<br />Установите выбранный MCP-совместимый Desktop-клиент:
+
+- [Claude Desktop](https://claude.com/download);
+- [ChatGPT Desktop](https://chatgpt.com/download).
+
+Если приложение уже установлено, убедитесь, что используется актуальная версия.
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 2. Получите API-ключ и установите runtime**</span>
+
+<br />Для работы `capmonster` получите API-ключ CapMonster Cloud. На этапе настройки его необходимо передать через переменную окружения `CM_API_KEY`.
+
+Для запуска `patchright` требуется Node.js и `npx`.
+
+Проверьте установку:
+
+```bash
+node --version
+npm --version
+npx --version
+```
+
+Если команды недоступны, установите Node.js. `npm` и `npx` обычно устанавливаются вместе с Node.js.
+
+Если для `capmonster` используется Python/PyPI-версия, дополнительно потребуется `uvx`.
+
+Проверьте:
+
+```bash
+uv --version
+uvx --version
+```
+
+Если `uvx` недоступен, установите `uv`.
+
+:::info Примечание
+Для TypeScript/npm-версии `capmonster-mcp` устанавливать `uv` и `uvx` не требуется.
+:::
+<br />
+<span style={{ fontSize: "1.2em" }}>**Шаг 3. Настройте MCP-серверы**</span>
+
+<br />
+
+<br /><Tabs>
+<TabItem value="claude-desktop" label="Claude Desktop" default>
+
+Claude Desktop использует отдельный файл локальной MCP-конфигурации – `claude_desktop_config.json`.
+
+Откройте в Claude Desktop раздел **File → Settings → Developer** и нажмите **Edit Config**. В открывшемся файле добавьте серверы `capmonster` и `patchright`.
+
+<Tabs>
+<TabItem value="claude-npm" label="TypeScript / npm" default>
+
+```json
+{
+  "mcpServers": {
+    "capmonster": {
+      "command": "npx",
+      "args": ["-y", "capmonster-mcp"],
+      "env": {
+        "CM_API_KEY": "YOUR_API_KEY"
+      }
+    },
+    "patchright": {
+      "command": "npx",
+      "args": ["-y", "capmonster-mcp-patchright"]
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="claude-python" label="Python / PyPI">
+
+```json
+{
+  "mcpServers": {
+    "capmonster": {
+      "command": "uvx",
+      "args": ["capmonster-mcp"],
+      "env": {
+        "CM_API_KEY": "YOUR_API_KEY"
+      }
+    },
+    "patchright": {
+      "command": "npx",
+      "args": ["-y", "capmonster-mcp-patchright"]
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+Замените `YOUR_API_KEY` на API-ключ CapMonster Cloud, сохраните конфигурацию и полностью перезапустите Claude Desktop.
+
+После перезапуска нажмите **+** рядом с полем ввода и откройте **Connectors**. Убедитесь, что `capmonster` и `patchright` отображаются в списке. Статус подключения и ошибки запуска также можно посмотреть в настройках разработчика Claude Desktop.
+
+![Подключённые локальные MCP-серверы в Claude Desktop](./images/claude-desktop-mcp-running.png)
+
+:::info Примечание
+Локальные MCP-серверы Claude Desktop из `claude_desktop_config.json` настраиваются отдельно от проектных и пользовательских MCP-конфигураций Claude Code.
+:::
+
+</TabItem>
+
+<TabItem value="chatgpt-desktop" label="ChatGPT Desktop / Codex">
+
+MCP-серверы можно настроить вручную через файл `config.toml`, который используют ChatGPT Desktop, Codex CLI и расширение Codex для IDE.
+
+##### 1. Откройте или создайте файл конфигурации
+
+<Tabs groupId="codex-config-os">
+<TabItem value="codex-config-windows" label="Windows" default>
+
+Файл находится по адресу:
+
+```text
+%USERPROFILE%\.codex\config.toml
+```
+
+Чтобы создать каталог и открыть файл в Блокноте, выполните в PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex"
+notepad "$env:USERPROFILE\.codex\config.toml"
+```
+
+Если появится предложение создать новый файл, подтвердите его. Убедитесь, что файл сохранён с расширением `.toml`, а не `.toml.txt`.
+
+</TabItem>
+
+<TabItem value="codex-config-unix" label="macOS / Linux">
+
+Файл находится по адресу:
+
+```text
+~/.codex/config.toml
+```
+
+Чтобы создать каталог и открыть файл в редакторе `nano`, выполните:
+
+```bash
+mkdir -p ~/.codex
+nano ~/.codex/config.toml
+```
+
+</TabItem>
+</Tabs>
+
+##### 2. Добавьте конфигурацию MCP-серверов
+
+Вставьте в `config.toml` один из следующих вариантов. Если файл уже содержит другие настройки, не удаляйте их – добавьте блоки `mcp_servers` в конец файла.
+
+<Tabs groupId="codex-config-runtime">
+<TabItem value="codex-npm" label="TypeScript / npm" default>
+
+```toml
+[mcp_servers.capmonster]
+command = "npx"
+args = ["-y", "capmonster-mcp"]
+
+[mcp_servers.capmonster.env]
+CM_API_KEY = "YOUR_API_KEY"
+
+[mcp_servers.patchright]
+command = "npx"
+args = ["-y", "capmonster-mcp-patchright"]
+```
+
+:::info Для Windows
+Если запуск `npx` блокируется политикой PowerShell, укажите `command = "npx.cmd"` для обоих серверов.
+:::
+
+</TabItem>
+
+<TabItem value="codex-python" label="Python / PyPI">
+
+```toml
+[mcp_servers.capmonster]
+command = "uvx"
+args = ["capmonster-mcp"]
+
+[mcp_servers.capmonster.env]
+CM_API_KEY = "YOUR_API_KEY"
+
+[mcp_servers.patchright]
+command = "npx"
+args = ["-y", "capmonster-mcp-patchright"]
+```
+
+:::info Для Windows
+Если запуск `npx` блокируется политикой PowerShell, в разделе `mcp_servers.patchright` укажите `command = "npx.cmd"`.
+:::
+
+</TabItem>
+</Tabs>
+
+Замените `YOUR_API_KEY` на API-ключ CapMonster Cloud и сохраните файл.
+
+##### 3. Перезапустите приложение
+
+Полностью завершите ChatGPT Desktop или Codex, затем откройте приложение снова.
+
+В новом чате выполните:
+
+```text
+/mcp
+```
+
+Убедитесь, что в списке отображаются подключённые серверы `capmonster` и `patchright`.
+
+</TabItem>
+</Tabs>
+
+<span style={{ fontSize: "1.2em" }}>**Шаг 4. Передайте агенту prompt**</span>
+
+<br />Откройте новый чат и отправьте prompt из блока [Быстрый старт](#быстрый-старт). После проверки передайте URL страницы, условия появления CAPTCHA и файлы проекта.
+
+Во время настройки подтверждайте только ожидаемые запросы на разрешения. В рамках текущей сессии повторно отправлять prompt перед каждой задачей не требуется.
+
+:::info Примечание
+Основное отличие Desktop-варианта от CLI – способ подключения MCP-серверов. Workflow и первоначальный prompt остаются теми же.
+:::
+
+</TabItem>
+</Tabs>
+
+---
+
+## Доступные инструменты
+
+После подключения MCP-серверов инструменты становятся доступны AI-агенту автоматически. Вручную выбирать их обычно не требуется – агент вызывает нужные инструменты в зависимости от текущей задачи.
+
+### CapMonster Cloud
+
+`capmonster-mcp` предоставляет следующие инструменты:
+
+- `get_supported_tasks` – возвращает поддерживаемые типы задач CapMonster Cloud;
+- `get_task_parameters(task_type)` – возвращает параметры выбранного типа задачи и схему решения;
+- `get_docs(url, offset, limit, section)` – загружает документацию CapMonster Cloud;
+- `create_task(task)` – создаёт задачу и возвращает `taskId`;
+- `get_task_result(task_id)` – однократно проверяет статус задачи;
+- `get_task_result_wait(task_id, timeout_seconds, poll_interval_seconds)` – ожидает завершения задачи автоматически;
+- `get_actual_user_agent()` – возвращает актуальный Windows User-Agent;
+- `get_balance()` – возвращает баланс аккаунта CapMonster Cloud.
+
+### Patchright
+
+`capmonster-mcp-patchright` предоставляет инструменты для работы с браузером. Агент получает доступ к ним через MCP-клиент и самостоятельно выбирает нужные действия.
+
+Актуальный список инструментов доступен в [официальном репозитории](https://github.com/CapMonsterCloud/capmonster-mcp-patchright) и на странице npm-пакета [capmonster-mcp-patchright](https://www.npmjs.com/package/capmonster-mcp-patchright).
+
+---
+
+## Устранение неполадок
+
+:::tip Поручите диагностику агенту
+Если настройка не работает, передайте агенту текст ошибки. Он может проверить runtime, команды запуска, MCP-конфигурации пользователя и проекта, а также предложить или выполнить необходимые исправления.
+:::
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>MCP-сервер не запускается</summary>
+
+Проверьте, что команда из конфигурации доступна в том же окружении, из которого запускается MCP-клиент:
+
+<Tabs>
+<TabItem value="troubleshooting-npm" label="TypeScript / npm" default>
+
+```bash
+node --version
+npx --version
+npx -y capmonster-mcp
+```
+
+</TabItem>
+
+<TabItem value="troubleshooting-python" label="Python / PyPI">
+
+```bash
+uvx --version
+uvx capmonster-mcp
+```
+
+</TabItem>
+</Tabs>
+
+Если команда запускается и остаётся без вывода, это не обязательно ошибка: STDIO MCP-сервер ожидает подключения клиента. Остановить тестовый запуск можно сочетанием клавиш `Ctrl+C`.
+
+Также проверьте, что:
+
+- в JSON-конфигурации нет комментариев, лишних запятых и незакрытых скобок;
+
+- имена полей `mcpServers`, `command`, `args` и `env` указаны без ошибок;
+
+- после изменения конфигурации MCP-клиент полностью перезапущен;
+
+- загрузка пакета через `npx` или `uvx` не блокируется сетью, прокси, антивирусом или корпоративной политикой.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Команда <code>capmonster-mcp</code> не найдена после установки пакета</summary>
+
+Предварительно установленная CLI-команда должна быть доступна в `PATH` процесса, из которого запускается MCP-клиент.
+
+Проверьте расположение команды:
+
+<Tabs>
+<TabItem value="command-path-windows" label="Windows" default>
+
+```powershell
+where.exe capmonster-mcp
+```
+
+</TabItem>
+
+<TabItem value="command-path-unix" label="macOS / Linux">
+
+```bash
+which capmonster-mcp
+```
+
+</TabItem>
+</Tabs>
+
+Если терминал находит команду, а Desktop-приложение – нет, полностью закройте и снова откройте приложение. При необходимости укажите в поле `command` полный путь к исполняемому файлу.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Инструменты <code>capmonster</code> или <code>patchright</code> не отображаются</summary>
+
+Попросите агента проверить, откуда текущая сессия загружает MCP-конфигурацию. Расположение зависит от клиента, области действия и способа подключения сервера:
+
+- в Claude Code серверы могут быть настроены на уровне проекта или пользователя; конфигурация может находиться в `.mcp.json`, `.claude.json` или управляться командами Claude Code;
+
+- Claude Desktop использует `claude_desktop_config.json`;
+
+- Codex использует `~/.codex/config.toml`, `%USERPROFILE%\.codex\config.toml` или проектный `.codex/config.toml`;
+
+- в ChatGPT Desktop локальные серверы также можно добавить через настройки MCP.
+
+После исправления конфигурации полностью перезапустите клиент и откройте новую сессию. В Claude Code подключение можно проверить через `/mcp`, а в Codex – через `/mcp` или `codex mcp list`.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}><code>get_balance</code> возвращает ошибку</summary>
+
+Попросите агента проверить конфигурацию `capmonster`. Обычно нужно убедиться, что:
+
+- в переменной `CM_API_KEY` указан действующий API-ключ CapMonster Cloud;
+
+- вместо ключа не осталось значение `YOUR_API_KEY`;
+
+- ключ передан в блоке `env` сервера `capmonster`, а не `patchright`.
+
+После изменения ключа перезапустите MCP-клиент. Агент сможет повторно проверить подключение и баланс.
+
+Если баланс равен нулю, пополните его перед созданием задач.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}><code>get_docs</code> не загружает документацию</summary>
+
+Попросите агента проверить сетевой доступ MCP-клиента к `https://docs.capmonster.cloud/` и загрузку файла:
+
+```text
+https://docs.capmonster.cloud/llms.txt
+```
+
+Если документация временно недоступна или требуется дополнительно проверить параметры задачи, агент может использовать спецификацию API:
+
+```text
+https://api.capmonster.cloud/docs/swagger-ui/spec.js
+```
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}><code>patchright</code> не открывает страницу</summary>
+
+Проверьте работу `node`, `npx` и команды запуска:
+
+```bash
+npx -y capmonster-mcp-patchright
+```
+
+Если странице требуются прокси, User-Agent или locale, передайте эти параметры агенту. Он сможет использовать их при запуске браузера через `patchright`.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Задача возвращает ошибку или сайт отклоняет решение</summary>
+
+Передайте агенту текст ошибки и условия появления CAPTCHA. Для диагностики он может:
+
+1. проверить поддерживаемый тип задачи;
+
+2. получить актуальные параметры и схему решения;
+
+3. открыть документацию для выбранного типа CAPTCHA;
+
+4. повторно получить динамические параметры после перезагрузки или повторного вызова CAPTCHA;
+
+5. проверить согласованность User-Agent, прокси, cookies, заголовков и Client Hints для CAPTCHA, привязанных к сессии;
+
+6. убедиться, что результат применяется в формате, предусмотренном для конкретного типа CAPTCHA.
+
+Не используйте устаревшие `challenge`, `token`, `data`, `blob` и другие одноразовые параметры.
+
+`ERROR_INVALID_TASK` обычно указывает на некорректные или устаревшие параметры. `ERROR_CAPTCHA_UNSOLVABLE` может быть временной ошибкой – агент может проверить входные данные и создать новую задачу.
+
+</details>
+
+---
+
+## Часто задаваемые вопросы
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Нужно ли вручную выбирать и вызывать MCP-инструменты?</summary>
+
+Нет. После подключения MCP-серверов инструменты автоматически становятся доступны AI-агенту. Агент сам выбирает и вызывает их в зависимости от текущей задачи.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Обязательно ли подключать оба MCP-сервера?</summary>
+
+Нет. `capmonster` можно использовать отдельно, если параметры CAPTCHA уже известны и работа с браузером не требуется. `patchright` нужен, когда агенту необходимо открыть страницу, получить параметры CAPTCHA или применить результат решения.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Какую реализацию выбрать: npm или Python?</summary>
+
+Обе реализации `capmonster-mcp` предоставляют одинаковые инструменты. Выберите вариант под своё окружение:
+
+- npm – если уже установлены Node.js и `npx`;
+
+- Python – если используется Python 3.11 или новее и установлен `uvx`.
+
+Для `patchright` в любом случае необходимы Node.js и `npx`.
+
+</details>
+
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Где хранить API-ключ?</summary>
+
+Передавайте API-ключ через переменную окружения `CM_API_KEY` в конфигурации сервера `capmonster`. Не добавляйте его в prompt, сообщения чата, примеры кода или публичный репозиторий.
+
+Если конфигурационный файл содержит реальный ключ, исключите его из Git или используйте безопасное хранилище секретов, поддерживаемое MCP-клиентом.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Нужно ли отправлять prompt перед каждой CAPTCHA?</summary>
+
+Нет. В рамках текущей сессии после настройки достаточно передавать новые URL, условия появления CAPTCHA и задачи по интеграции.
+
+В новой сессии prompt рекомендуется отправить снова, если агент не сохраняет загруженные инструкции и результаты проверки окружения.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Как проверить, какие типы CAPTCHA поддерживаются?</summary>
+
+Попросите агента определить поддерживаемые типы CAPTCHA. Для этого он может использовать `get_supported_tasks`, а для конкретной задачи – `get_task_parameters(task_type)` и документацию через `get_docs`.
+
+</details>
+
+<details style={{ fontWeight: 'normal' }}>
+  <summary style={{ fontWeight: 'bold' }}>Нужно ли настраивать прокси в MCP-конфигурации?</summary>
+
+Не обязательно. Если браузеру требуется прокси, передайте его параметры агенту – он сможет использовать их при запуске браузера без изменения MCP-конфигурации.
+
+Если выбранный тип CAPTCHA требует собственного прокси, агент также должен передать его параметры в задаче CapMonster Cloud. Для CAPTCHA, привязанных к IP-адресу или сессии, в браузере и задаче должен использоваться один и тот же прокси.
+
+</details>
+

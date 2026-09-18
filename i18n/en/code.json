@@ -420,5 +420,29 @@
   "theme.unlistedContent.message": {
     "message": "This page is unlisted. Search engines will not index it, and only users having a direct link can access it.",
     "description": "The unlisted content banner message"
+  },
+  "remotePrompt.copyLabel": {
+    "message": "Copy prompt",
+    "description": "RemotePrompt copy button"
+  },
+  "remotePrompt.copiedLabel": {
+    "message": "Copied ✓",
+    "description": "RemotePrompt copied state"
+  },
+  "remotePrompt.loadingLabel": {
+    "message": "Loading...",
+    "description": "RemotePrompt loading state"
+  },
+  "remotePrompt.showLabel": {
+    "message": "Show prompt",
+    "description": "RemotePrompt show button"
+  },
+  "remotePrompt.hideLabel": {
+    "message": "Hide prompt",
+    "description": "RemotePrompt hide button"
+  },
+  "remotePrompt.errorLabel": {
+    "message": "Failed to load the prompt.",
+    "description": "RemotePrompt loading error"
   }
 }

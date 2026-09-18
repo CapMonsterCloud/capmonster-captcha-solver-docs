@@ -66,7 +66,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
   <ParamItem title="sceneId（位于 metadata 中）" required type="string" />
 
-  验证码场景标识符，按以下格式传递：`"sceneId":"1ww7426c4"`— **该值仅作为示例**。 <br />
+  验证码场景标识符，按以下格式传递：`"sceneId":"1ww7426c4"`– **该值仅作为示例**。 <br />
   请使用您自己的值——获取该值的说明请参阅[相应章节](#sceneid)
 
   ---
@@ -108,7 +108,9 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <ParamItem title="region（位于 metadata 中）" type="string" />
 处理验证码所使用的服务器或数据中心区域。 <br />
-示例：`sgp`
+示例：`sgp`<br />
+
+**重要：** `region` 的值会影响返回的 token 类型：当 `region: cn` 时，返回 `WEB#` 类型的 token（`VOVCI2`）；当 `region: sgp` 时，返回 `SG_WEB#` 类型的 token（`U0dfV0VCIZ`）。
 
 ---
 
@@ -489,7 +491,7 @@ Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -535,7 +537,7 @@ Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -606,6 +608,15 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
+
+:::info token 格式取决于 region
+
+创建任务时在 `metadata` 中传递的 `region` 值会影响返回的 `deviceToken` 格式：
+
+- `region: cn` – 返回 `WEB#` 类型的 token（`VOVCI2`）；
+- `region: sgp` – 返回 `SG_WEB#` 类型的 token（`U0dfV0VCIZ`）。
+
+:::
 
 如果请求中指定了 `"cookieRequired": true`，响应还会包含按域名分组的 cookies。这同样适用于包含 `punishUrl` 的任务。请将 `solution.domains` 对象中的 cookies 与 CAPTCHA 解决结果一起用于向相应域名发送的后续请求。
 
@@ -1556,7 +1567,7 @@ this.AliyunGeneratedDynamicJS =
       "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
       "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "0a03e59417757735511105780e2a5e",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }

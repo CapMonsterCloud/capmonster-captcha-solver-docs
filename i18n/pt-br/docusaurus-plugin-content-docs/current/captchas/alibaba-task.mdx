@@ -40,7 +40,7 @@ A seguir estão exemplos de tipos de tarefas do Alibaba CAPTCHA que atualmente s
 </ImagesLayout>
 
 :::warning **Atenção!**
-O CapMonster Cloud, por padrão, funciona com proxies integrados — já incluídos no custo do serviço. É necessário especificar seus próprios proxies apenas nos casos em que o site não aceita o token ou quando o acesso aos serviços integrados está restrito.
+O CapMonster Cloud, por padrão, funciona com proxies integrados – já incluídos no custo do serviço. É necessário especificar seus próprios proxies apenas nos casos em que o site não aceita o token ou quando o acesso aos serviços integrados está restrito.
 
 Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço **65.21.190.34** à lista de permissões (whitelist).
 :::
@@ -65,14 +65,14 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   ---
 
   <ParamItem title="sceneId (dentro de metadata)" required type="string" />
-  Identificador do cenário do captcha, transmitido no seguinte formato: `"sceneId":"1ww7426c4"`— **o valor é fornecido apenas como exemplo**. <br />
-Utilize o seu próprio valor — as instruções para obtê-lo estão disponíveis na [seção correspondente](#sceneid)
+  Identificador do cenário do captcha, transmitido no seguinte formato: `"sceneId":"1ww7426c4"`– **o valor é fornecido apenas como exemplo**. <br />
+Utilize o seu próprio valor – as instruções para obtê-lo estão disponíveis na [seção correspondente](#sceneid)
 
   ---
   <ParamItem title="prefix (dentro de metadata)" required type="string" />
 
   Parâmetro de inicialização do CAPTCHA, enviado na URL da requisição usada para carregar o texto da tarefa na página.<br />
-  Por exemplo, se a URL for: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, então o valor do parâmetro `prefix` corresponde ao subdomínio — `dlw3kug`.
+  Por exemplo, se a URL for: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, então o valor do parâmetro `prefix` corresponde ao subdomínio – `dlw3kug`.
 
   ---
 
@@ -107,7 +107,9 @@ Exemplo: `1.0`
 
 <ParamItem title="region (dentro de metadata)" type="string" />
 Região do servidor ou data center onde o captcha é processado. <br />
-Exemplo: `sgp`
+Exemplo: `sgp`<br />
+
+**Importante:** o valor de `region` afeta o tipo de token retornado: com `region: cn`, é retornado um token do tipo `WEB#` (`VOVCI2`); com `region: sgp`, é retornado um token do tipo `SG_WEB#` (`U0dfV0VCIZ`).
 
 ---
 
@@ -315,7 +317,7 @@ Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -361,7 +363,7 @@ Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -431,6 +433,15 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
+
+:::info O formato do token depende de region
+
+O valor de `region`, enviado em `metadata` ao criar a tarefa, afeta o formato do `deviceToken` retornado:
+
+- `region: cn` – token do tipo `WEB#` (`VOVCI2`);
+- `region: sgp` – token do tipo `SG_WEB#` (`U0dfV0VCIZ`).
+
+:::
 
 Se `"cookieRequired": true` tiver sido especificado na requisição, a resposta também conterá cookies agrupados por domínio. Isso também se aplica às tarefas com `punishUrl`. Use os cookies do objeto `solution.domains` nas requisições subsequentes ao domínio correspondente, juntamente com o resultado da resolução do CAPTCHA.
 
@@ -510,7 +521,7 @@ FAIL_SYS_USER_VALIDATE
 1. Abra a página de destino e execute a ação que aciona a verificação do Alibaba.
 2. Abra o **DevTools** → **Network**.
 3. Encontre a requisição enviada no momento em que a proteção é acionada. Para facilitar a busca, procure uma resposta que contenha o erro `FAIL_SYS_USER_VALIDATE`.
-4. Abra a requisição encontrada e acesse a aba **Preview**. Na resposta, localize o campo `data` — ele contém a URL de verificação que deve ser usada como `punishUrl`.
+4. Abra a requisição encontrada e acesse a aba **Preview**. Na resposta, localize o campo `data` – ele contém a URL de verificação que deve ser usada como `punishUrl`.
 
 ![](./images/alibaba-task/punish-url-preview.png)<br />
 
@@ -533,8 +544,8 @@ https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xg
 
 `punishUrl` também pode ser obtido programaticamente de uma das seguintes formas:
 
-* por requisições HTTP — quando são conhecidos a URL da API, o método, os headers e outros parâmetros da requisição;
-* por Playwright — quando é necessário capturar a requisição diretamente no navegador.
+* por requisições HTTP – quando são conhecidos a URL da API, o método, os headers e outros parâmetros da requisição;
+* por Playwright – quando é necessário capturar a requisição diretamente no navegador.
 
 Em alguns casos, primeiro é retornada uma URL intermediária com `x5secdata` e `x5step`. Após o processamento, o `punishUrl` final também contém os parâmetros `action` e `pureCaptcha`.
 
@@ -1388,7 +1399,7 @@ Esses dados são enviados ao nosso serviço de resolução de captcha:
     "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
     "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
     "verifyType": "1.0",
-    "region": "sgp",
+    "region": "your-region",
     "UserCertifyId": "0a03e59417757735511105780e2a5e",
     "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
   }

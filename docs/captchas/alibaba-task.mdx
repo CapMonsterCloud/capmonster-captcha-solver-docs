@@ -40,7 +40,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 </ImagesLayout>
 
 :::warning **Внимание!**
-CapMonster Cloud по умолчанию работает через встроенные прокси — они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
+CapMonster Cloud по умолчанию работает через встроенные прокси – они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
 
 Если прокси с авторизацией по IP, то необходимо добавить адрес **65.21.190.34** в белый список.
 :::
@@ -66,14 +66,14 @@ CapMonster Cloud по умолчанию работает через встро�
 
   <ParamItem title="sceneId (внутри metadata)" required type="string" />
 
-  Идентификатор сценария капчи, передаётся в следующем формате: `"sceneId":"1ww7426c4"`— **значение указано в качестве примера**. <br />
-  Используйте собственное значение — инструкции по его получению приведены в [соответствующем разделе](#sceneid)
+  Идентификатор сценария капчи, передаётся в следующем формате: `"sceneId":"1ww7426c4"`– **значение указано в качестве примера**. <br />
+  Используйте собственное значение – инструкции по его получению приведены в [соответствующем разделе](#sceneid)
 
   ---
   <ParamItem title="prefix (внутри metadata)" required type="string" />
 
   Параметр инициализации капчи, передаётся в URL запроса, используемого для загрузки текста задания на странице.<br />
-  Например, если URL имеет вид: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, то значение параметра `prefix` соответствует поддомену — `dlw3kug`.
+  Например, если URL имеет вид: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, то значение параметра `prefix` соответствует поддомену – `dlw3kug`.
 
 ---
 
@@ -108,7 +108,9 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <ParamItem title="region (внутри metadata)" type="string" />
 Регион сервера или дата-центра, через который обрабатывается капча. <br />
-Пример: `sgp`
+Пример: `sgp`<br />
+
+**Важно:** значение региона влияет на тип возвращаемого токена: при `region: cn` возвращается токен вида `WEB#` (`VOVCI2`), при `region: sgp` – `SG_WEB#` (`U0dfV0VCIZ`).
 
 ---
 
@@ -487,7 +489,7 @@ https://ru.api.capmonster.cloud/createTask
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -532,7 +534,7 @@ https://ru.api.capmonster.cloud/createTask
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -612,6 +614,15 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 
+:::info Формат токена зависит от region
+
+Значение `region`, переданное в `metadata` при создании задачи, влияет на формат возвращаемого `deviceToken`:
+
+- `region: cn` – токен вида `WEB#` (`VOVCI2`);
+- `region: sgp` – токен вида `SG_WEB#` (`U0dfV0VCIZ`).
+
+:::
+
 Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам. Это также относится к задачам с `punishUrl`. Используйте cookies из объекта `solution.domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
 
 <MethodDescription>
@@ -678,7 +689,7 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 ### `punishUrl`
 
-`punishUrl` — это URL проверки Alibaba, который возвращается при срабатывании защиты на целевом сайте.
+`punishUrl` – это URL проверки Alibaba, который возвращается при срабатывании защиты на целевом сайте.
 
 Обычно такой URL можно получить из сетевого запроса, в ответе которого присутствует ошибка:
 
@@ -691,7 +702,7 @@ FAIL_SYS_USER_VALIDATE
 1. Откройте целевую страницу и выполните действие, которое вызывает проверку Alibaba.
 2. Откройте **DevTools** → **Network**.
 3. Найдите запрос, отправленный в момент срабатывания защиты. Для поиска можно ориентироваться на ответ с ошибкой `FAIL_SYS_USER_VALIDATE`.
-4. Откройте найденный запрос и перейдите на вкладку **Preview**. В ответе найдите поле `data` — оно содержит URL проверки, который необходимо использовать как `punishUrl`.
+4. Откройте найденный запрос и перейдите на вкладку **Preview**. В ответе найдите поле `data` – оно содержит URL проверки, который необходимо использовать как `punishUrl`.
 
 ![](./images/alibaba-task/punish-url-preview.png)<br />
 
@@ -714,10 +725,10 @@ https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xg
 
 `punishUrl` также можно получить программно одним из следующих способов:
 
-* через HTTP-запросы — если известны URL API, метод, header и другие параметры запроса;
-* через Playwright — если необходимо отследить запрос непосредственно в браузере.
+* через HTTP-запросы – если известны URL API, метод, header и другие параметры запроса;
+* через Playwright – если необходимо отследить запрос непосредственно в браузере.
 
-В некоторых случаях сначала возвращается промежуточный URL с `x5secdata` и `x5step`, а после его обработки — итоговый `punishUrl` с параметрами `action` и `pureCaptcha`.
+В некоторых случаях сначала возвращается промежуточный URL с `x5secdata` и `x5step`, а после его обработки – итоговый `punishUrl` с параметрами `action` и `pureCaptcha`.
 
 Для HTTP-запросов используйте параметры фактического запроса целевого сайта. В браузерном сценарии укажите нужную страницу и выполните действие, вызывающее Alibaba Punish.
 
@@ -1562,7 +1573,7 @@ this.AliyunGeneratedDynamicJS =
       "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
       "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "0a03e59417757735511105780e2a5e",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }

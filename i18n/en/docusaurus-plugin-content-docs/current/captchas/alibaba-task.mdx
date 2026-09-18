@@ -40,7 +40,7 @@ Below are examples of Alibaba Captcha task types that are currently supported by
 </ImagesLayout>
 
 :::warning **Attention!**
-CapMonster Cloud uses built-in proxies by default — their cost is already included in the service. You only need to specify your own proxies in cases where the website does not accept the token or access to the built-in services is restricted.
+CapMonster Cloud uses built-in proxies by default – their cost is already included in the service. You only need to specify your own proxies in cases where the website does not accept the token or access to the built-in services is restricted.
 
 If you are using a proxy with IP authorization, make sure to whitelist the address **65.21.190.34**.
 :::
@@ -65,7 +65,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   ---
 
   <ParamItem title="sceneId (inside metadata)" required type="string" />
-  The captcha scenario identifier, passed in the following format: `"sceneId":"1ww7426c"` — **the value is provided as an example**. <br />
+  The captcha scenario identifier, passed in the following format: `"sceneId":"1ww7426c"` – **the value is provided as an example**. <br />
   Use your own value. Instructions for obtaining it are provided in the [corresponding section](#sceneid).
 
   ---
@@ -73,7 +73,7 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   <ParamItem title="prefix (inside metadata)" required type="string" />
 
   CAPTCHA initialization parameter, passed in the URL of the request used to load the task text on the page.<br />
-  For example, if the URL looks like: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, then the value of the `prefix` parameter corresponds to the subdomain — `dlw3kug`.
+  For example, if the URL looks like: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, then the value of the `prefix` parameter corresponds to the subdomain – `dlw3kug`.
 
   ---
 
@@ -108,7 +108,9 @@ Example: `1.0`
 
 <ParamItem title="region (inside metadata)" type="string" />
 The server or data center region through which the CAPTCHA is processed. <br />
-Example: `sgp`
+Example: `sgp`<br />
+
+**Important:** the region value affects the type of token returned: with `region: cn`, a `WEB#` token (`VOVCI2`) is returned; with `region: sgp`, an `SG_WEB#` token (`U0dfV0VCIZ`) is returned.
 
 ---
 
@@ -491,7 +493,7 @@ To enable this, add the following parameter to the `metadata` object:
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -536,7 +538,7 @@ To enable this, add the following parameter to the `metadata` object:
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -604,6 +606,15 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
+
+:::info Token format depends on region
+
+The `region` value passed in `metadata` when creating the task affects the format of the returned `deviceToken`:
+
+- `region: cn` – `WEB#` token (`VOVCI2`);
+- `region: sgp` – `SG_WEB#` token (`U0dfV0VCIZ`).
+
+:::
 
 If `"cookieRequired": true` was specified in the request, the response additionally contains cookies grouped by domain. This also applies to tasks with `punishUrl`. Use cookies from the `solution.domains` object in subsequent requests to the corresponding domain together with the CAPTCHA solution.
 
@@ -683,7 +694,7 @@ FAIL_SYS_USER_VALIDATE
 1. Open the target page and perform the action that triggers Alibaba verification.
 2. Open **DevTools** → **Network**.
 3. Find the request sent when the protection is triggered. You can use the response containing the `FAIL_SYS_USER_VALIDATE` error as a reference.
-4. Open the request and go to the **Preview** tab. In the response, find the `data` field — it contains the verification URL to use as `punishUrl`.
+4. Open the request and go to the **Preview** tab. In the response, find the `data` field – it contains the verification URL to use as `punishUrl`.
 
 ![](./images/alibaba-task/punish-url-preview.png)<br />
 
@@ -706,8 +717,8 @@ https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xg
 
 You can also obtain `punishUrl` programmatically in one of the following ways:
 
-* via HTTP requests — if the API URL, method, headers, and other request parameters are known;
-* via Playwright — if you need to track the request directly in the browser.
+* via HTTP requests – if the API URL, method, headers, and other request parameters are known;
+* via Playwright – if you need to track the request directly in the browser.
 
 In some cases, an intermediate URL containing `x5secdata` and `x5step` is returned first, and after it is processed, the final `punishUrl` with the `action` and `pureCaptcha` parameters is returned.
 
@@ -1559,7 +1570,7 @@ These data are sent to our captcha solving service:
     "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
     "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
     "verifyType": "1.0",
-    "region": "sgp",
+    "region": "your-region",
     "UserCertifyId": "0a03e59417757735511105780e2a5e",
     "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
   }
