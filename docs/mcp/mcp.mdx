@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 5
 title: MCP
 sidebar_label: MCP
 ---
@@ -8,6 +8,7 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import RemotePrompt from '@site/src/components/RemotePrompt';
+import BlogLink from '@theme/BlogLink';
 
 <ArticleHead slug="mcp" />
 
@@ -34,7 +35,7 @@ AI-агент
 
 `capmonster` отвечает за работу с CapMonster Cloud. `patchright` открывает страницу, помогает определить тип CAPTCHA и получить её параметры, а также применить готовое решение. Затем агент переносит проверенный сценарий в код проекта.
 
-Типовой процесс, под который разработан [SKILL.md](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver/blob/main/capmonster_agent/SKILL.md):
+Стандартный процесс, под который разработан [SKILL.md](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver/blob/main/capmonster_agent/SKILL.md):
 
 1. Получить URL целевой страницы.
 
@@ -90,6 +91,8 @@ AI-агент
 :::
 
 Повторно отправлять prompt перед каждой задачей не требуется. В рамках текущей сессии после загрузки [SKILL.md](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver/blob/main/capmonster_agent/SKILL.md) можно передавать новые URL, условия появления CAPTCHA и задачи по интеграции.
+
+<BlogLink url="https://capmonster.cloud/ru/blog/kak-nastroit-i-ispolzovat-capmonster-cloud-mcp/"/>
 
 ---
 
