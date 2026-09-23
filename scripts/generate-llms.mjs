@@ -62,6 +62,47 @@ const EXCLUDE_PATTERNS = [
   /node_modules/,
 ];
 
+// Public prices endpoint used by src/hooks/useFetchPrices.ts. Fetched once
+// at build time so <PriceBlock/> can be rendered as text. If the request
+// fails, the price line is simply omitted - the build never fails on it.
+const PRICES_URL = 'https://dash.capmonster.cloud/api/prices?all=true';
+const PRICES_TIMEOUT_MS = 10_000;
+
+// Text for React components that carry content but have no MDX body.
+// Keep in sync with:
+//   src/components/McpNotice/index.js      (mcpTitle / mcpText / mcpLink)
+//   src/locales/<locale>.json              (moreBlogInfo, hundred* strings)
+const COMPONENT_TEXT = {
+  en: {
+    mcpTitle: 'CapMonster Cloud MCP',
+    mcpText: 'CapMonster Cloud MCP can also be used to detect and solve CAPTCHA.',
+    mcpLink: 'Learn more about MCP',
+    moreBlogInfo: 'More on the topic in our blog',
+    price: 'Price',
+    successRate: 'Success rate',
+    resultType: {
+      token: '1000 tokens',
+      image: '1000 images',
+      dynamic: '1000 dynamic images',
+      answers: '1000 answers',
+    },
+  },
+  ru: {
+    mcpTitle: 'CapMonster Cloud MCP',
+    mcpText: 'Для распознавания и решения CAPTCHA также можно использовать CapMonster Cloud MCP.',
+    mcpLink: 'Подробнее о работе с MCP',
+    moreBlogInfo: 'Ещё больше по теме в нашем блоге',
+    price: 'Цена',
+    successRate: 'Успешность',
+    resultType: {
+      token: '1000 токенов',
+      image: '1000 картинок',
+      dynamic: '1000 дин. картинок',
+      answers: '1000 ответов',
+    },
+  },
+};
+
 // --- CLI --------------------------------------------------------------
 
 const { values } = parseArgs({
@@ -69,6 +110,7 @@ const { values } = parseArgs({
     locale:     { type: 'string',  default: 'en' },
     out:        { type: 'string',  default: 'static' },
     'site-url': { type: 'string',  default: SITE_URL },
+    'no-prices': { type: 'boolean', default: false },
     verbose:    { type: 'boolean', default: false },
     help:       { type: 'boolean', short: 'h', default: false },
   },
@@ -82,6 +124,7 @@ Options:
   --locale=<en|ru>      Locale to dump (default: en)
   --out=<dir>           Output directory (default: static)
   --site-url=<url>      Override site URL
+  --no-prices           Do not fetch prices for <PriceBlock/> (offline / deterministic output)
   --verbose             Print each processed file
   --help                Show this help
 `);
@@ -130,8 +173,14 @@ function parseFrontmatter(raw) {
 
 // --- MDX -> MARKDOWN --------------------------------------------------
 
-/** Strip MDX-specific syntax, keep readable markdown for an LLM. */
-function mdxToMarkdown(content) {
+/**
+ * Strip MDX-specific syntax, keep readable markdown for an LLM.
+ *
+ * `ctx` carries what is needed to render content-bearing React components
+ * as text: { text: COMPONENT_TEXT[locale], prices: Map<id, item>|null,
+ *            mcpUrl: absolute page URL of the MCP doc (fixDocLinks turns it into .txt) }.
+ */
+function mdxToMarkdown(content, ctx) {
   // --- Protect code blocks from being touched by other regexes -------
   const stash = [];
   const STASH = (s) => {
@@ -160,6 +209,36 @@ function mdxToMarkdown(content) {
       return `**${title}**${meta ? ` (${meta})` : ''}:`;
     }
   );
+
+  // 2b. <McpNotice /> -> tip admonition (mirrors src/components/McpNotice).
+  //     Rendered as markdown here so step 3 turns it into a blockquote.
+  result = result.replace(/<McpNotice\b[^>]*\/>/g, () => {
+    const t = ctx.text;
+    return `\n:::tip ${t.mcpTitle}\n${t.mcpText} [${t.mcpLink}](${ctx.mcpUrl}).\n:::\n`;
+  });
+
+  // 2c. <PriceBlock captchaId="x" /> -> one line with price and success rate.
+  //     Omitted when prices could not be fetched (or --no-prices).
+  result = result.replace(/<PriceBlock\b([^>]*?)\/>/g, (_, attrs) => {
+    if (!ctx.prices) return '';
+    const id = (attrs.match(/\bcaptchaId=["']([^"']+)["']/) || [])[1];
+    const item = id && ctx.prices.get(id);
+    if (!item) return '';
+    const t = ctx.text;
+    const unit = t.resultType[item.ResultType] || t.resultType.token;
+    const parts = [`**${t.price}:** $${item.Price} / ${unit}`];
+    if (typeof item.SuccessRate === 'number') parts.push(`**${t.successRate}:** ${item.SuccessRate}%`);
+    return `\n${parts.join('. ')}.\n`;
+  });
+  // <PriceBlockWrap> is a pure layout wrapper - handled by the generic strip in step 7.
+
+  // 2d. <BlogLink url="..." /> -> "More on the topic in our blog: <url>"
+  result = result.replace(/<BlogLink\b([^>]*?)\/>/g, (_, attrs) => {
+    const url = (attrs.match(/\burl=["']([^"']+)["']/) || [])[1];
+    if (!url) return '';
+    const title = (attrs.match(/\btitle=["']([^"']+)["']/) || [])[1];
+    return `\n${ctx.text.moreBlogInfo}: ${title ? `[${title}](${url})` : url}\n`;
+  });
 
   // 3. Docusaurus admonitions -> blockquotes
   // Use [ \t]+ (not \s+) so a bare newline after :::type is not treated as a title.
@@ -258,8 +337,21 @@ function extractH1(content) {
   return m ? m[1].trim() : null;
 }
 
+// Lines produced by the component renderers above must never become a page
+// description in llms.txt - skip them in firstParagraph().
+const COMPONENT_LINE_RE = new RegExp(
+  '^(?:\\*\\*(?:' +
+    Object.values(COMPONENT_TEXT).map((t) => t.price).join('|') +
+    '):\\*\\*|(?:' +
+    Object.values(COMPONENT_TEXT).map((t) => t.moreBlogInfo).join('|') +
+    '):).*$',
+  'gm'
+);
+
 function firstParagraph(content) {
   const cleaned = content
+    .replace(COMPONENT_LINE_RE, '')          // price / blog-link lines from components
+    .replace(/^\s*\d+\.\s+.*$/gm, '')        // numbered lists
     .replace(/```[\s\S]*?```/g, '')          // fenced code blocks
     .replace(/`[^`\n]+`/g, '')               // inline code
     .replace(/^#{1,6}\s+.+$/gm, '')          // headings
@@ -378,10 +470,24 @@ function buildUrl(filePath, rootDir, frontmatter) {
     return `${siteUrl}${cfg.urlPrefix}/${slug}/`;
   }
 
-  // "foo/index" -> "foo"
-  const cleaned = rel.replace(/\/index$/i, '').replace(/^index$/i, '');
+  // Docusaurus "category index" convention: foo/index.md, foo/README.md and
+  // foo/foo.md all become the URL of the folder itself (/foo/), not /foo/foo/.
+  // Without this the .txt for e.g. mcp/mcp.mdx would live at /docs/mcp/mcp.txt
+  // while the page is served at /docs/mcp/.
+  const cleaned = collapseCategoryIndex(rel);
   const tail = cleaned ? `/${cleaned}/` : '/';
   return `${siteUrl}${cfg.urlPrefix}${tail}`;
+}
+
+/** "foo/index" | "foo/README" | "foo/foo" -> "foo"; "index" -> "" */
+function collapseCategoryIndex(relNoExt) {
+  const parts = relNoExt.split('/');
+  const last = parts[parts.length - 1];
+  const parent = parts.length > 1 ? parts[parts.length - 2] : null;
+  if (/^(index|readme)$/i.test(last) || (parent !== null && last === parent)) {
+    parts.pop();
+  }
+  return parts.join('/');
 }
 
 function getCategory(filePath, rootDir) {
@@ -391,6 +497,29 @@ function getCategory(filePath, rootDir) {
   return meta
     ? { key: top, label: meta.label, order: meta.order }
     : { key: top, label: humanize(top), order: 50 };
+}
+
+// --- PRICES -----------------------------------------------------------
+
+/**
+ * Fetch the public price list once (same endpoint the site uses at runtime).
+ * Returns Map<captchaId, item> or null on any failure - never throws, so a
+ * hiccup on the prices API cannot break the documentation build.
+ */
+async function fetchPrices() {
+  try {
+    const res = await fetch(PRICES_URL, { signal: AbortSignal.timeout(PRICES_TIMEOUT_MS) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const items = Array.isArray(data?.PricesV2) ? data.PricesV2 : [];
+    if (items.length === 0) throw new Error('empty PricesV2');
+    const map = new Map(items.filter((i) => i && i.Id).map((i) => [i.Id, i]));
+    console.log(`Fetched prices for ${map.size} captcha types`);
+    return map;
+  } catch (e) {
+    console.log(`WARN: prices unavailable (${e.message}); <PriceBlock/> will be omitted from txt`);
+    return null;
+  }
 }
 
 // --- MAIN -------------------------------------------------------------
@@ -410,10 +539,18 @@ async function main() {
   const files = await walkDocs(rootDir);
   console.log(`Found ${files.length} MDX/MD files`);
 
+  const ctx = {
+    text: COMPONENT_TEXT[values.locale] || COMPONENT_TEXT.en,
+    prices: values['no-prices'] ? null : await fetchPrices(),
+    // page URL on purpose: fixDocLinks() rewrites it to the .txt URL like any other doc link
+    mcpUrl: `${siteUrl}${cfg.urlPrefix}/mcp/`,
+  };
+
   const pages = [];
   for (const file of files) {
     try {
-      const raw = (await fs.readFile(file, 'utf-8')).replace(/^\uFEFF/, '');
+      // Strip BOM and normalise CRLF so output is identical on Windows and Linux builds.
+      const raw = (await fs.readFile(file, 'utf-8')).replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
       const { data: frontmatter, content } = parseFrontmatter(raw);
 
       if (frontmatter.draft === true) {
@@ -421,7 +558,7 @@ async function main() {
         continue;
       }
 
-      const markdown = mdxToMarkdown(content);
+      const markdown = mdxToMarkdown(content, ctx);
       const baseName = path.basename(file, path.extname(file));
       const title =
         frontmatter.title ||
