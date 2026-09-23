@@ -99,6 +99,40 @@ yarn serve
 
 ---
 
+### 🚀 Deployment
+
+The live site is built and published by **Cloudflare Pages** (project `capmonstercloud-docs-v2`) directly from this GitHub repository. Every push to `master` triggers a production build; pull requests get preview builds. There is no deploy step in this repo — merging to `master` **is** the deploy.
+
+The Cloudflare build runs `npm run build`, which is:
+
+1. `node scripts/generate-llms.mjs` — generates the plain-text documentation for AI agents (see below);
+2. `docusaurus build` — builds the site into `build/`.
+
+Search (Algolia) credentials are provided as environment variables in the Cloudflare Pages project settings. **Never commit them to this repository** — it is public.
+
+The `Dockerfile` is a legacy artifact from a previous hosting setup and is not used by the current deployment.
+
+### 🤖 Text version for AI agents (llms.txt / MCP)
+
+Alongside the HTML pages the build publishes plain-text copies of the documentation, used by the [CapMonster Cloud MCP server](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver) and other AI agents:
+
+- `https://docs.capmonster.cloud/llms.txt` — index of all pages with short descriptions;
+- `https://docs.capmonster.cloud/llms-full.txt` — the whole documentation in one file;
+- `https://docs.capmonster.cloud/docs/<page>.txt` — one file per page, e.g. `/docs/captchas/recaptcha-v3-task/` → `/docs/captchas/recaptcha-v3-task.txt`.
+
+They are generated from the English MDX sources on every build by `scripts/generate-llms.mjs` (output is git-ignored), so they are always in sync with the deployed pages. Content that lives in React components rather than MDX (`<McpNotice/>`, `<PriceBlock/>`, `<BlogLink/>`) is rendered to text by that script — if you add a new content-bearing component, teach the script about it too.
+
+To check locally:
+
+```bash
+npm run build          # generates txt files + builds the site
+npm run verify-llms    # checks that txt files exist and match the built pages
+```
+
+The same check runs in GitHub Actions (`.github/workflows/llms-txt.yml`) on every pull request.
+
+---
+
 ## 📄 License
 
 [MIT](./LICENSE) © [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
