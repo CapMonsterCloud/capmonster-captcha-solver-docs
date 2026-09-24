@@ -101,7 +101,7 @@ yarn serve
 
 ### 🚀 Deployment
 
-The live site is built and published by **Cloudflare Pages** (project `capmonstercloud-docs-v2`) directly from this GitHub repository. Every push to `master` triggers a production build; pull requests get preview builds. There is no deploy step in this repo — merging to `master` **is** the deploy.
+The live site is built and published by **Cloudflare Pages** (project `capmonstercloud-docs-v2`) directly from this GitHub repository. Every push to `master` triggers a production build. There is no deploy step in this repo — merging to `master` **is** the deploy.
 
 The Cloudflare build runs `npm run build`, which is:
 

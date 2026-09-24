@@ -47,7 +47,24 @@ if (!cfg) {
 
 const buildDir = path.resolve(values.build);
 const problems = [];
+const warnings = [];
 const fail = (msg) => problems.push(msg);
+const warn = (msg) => warnings.push(msg);
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// Markdown links into this locale's docs: ](https://docs.capmonster.cloud/docs/...)
+const DOC_LINK_RE = new RegExp(`\\]\\((${escapeRe(SITE_URL)}(${escapeRe(cfg.urlPrefix)}(?:/[^)#?\\s]*)?))(?:[#?][^)]*)?\\)`, 'g');
+// A rendered <PriceBlock/> line, e.g. "$0.9 / 1000 tokens"
+const PRICE_LINE_RE = /\$\d+(?:\.\d+)? \/ 1000 /;
+
+/** Check that a doc link target exists in the build: foo.txt as a file, /foo/ as foo/index.html. */
+async function checkDocLink(urlPath, where) {
+  if (urlPath.endsWith('.txt')) {
+    if (!(await exists(path.join(buildDir, urlPath)))) fail(`${where}: links to ${urlPath} but that file is not in the build`);
+    return;
+  }
+  const html = path.join(buildDir, urlPath.replace(/\/+$/, ''), 'index.html');
+  if (!(await exists(html))) fail(`${where}: links to page ${urlPath} which is not in the build`);
+}
 
 async function exists(p) {
   try { await fs.access(p); return true; } catch { return false; }
@@ -69,7 +86,8 @@ async function countSourceDocs(rootDir) {
   for (const f of files) {
     const rel = path.relative(rootDir, f).replace(/\\/g, '/');
     if (/(^|\/)_/.test(rel)) continue;
-    const raw = await fs.readFile(f, 'utf-8');
+    // Strip BOM like the generator does - 17 English sources carry one.
+    const raw = (await fs.readFile(f, 'utf-8')).replace(/^﻿/, '');
     if (/^---\r?\n[\s\S]*?^draft:\s*true\s*$[\s\S]*?\r?\n---/m.test(raw)) continue;
     n++;
   }
@@ -95,11 +113,10 @@ async function main() {
   let linked = 0;
   if (await exists(llmsPath)) {
     const llms = await fs.readFile(llmsPath, 'utf-8');
-    const re = new RegExp(`\\]\\((${SITE_URL.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')})(/[^)\\s]+\\.txt)\\)`, 'g');
-    for (const m of llms.matchAll(re)) {
+    for (const m of llms.matchAll(DOC_LINK_RE)) {
       linked++;
-      const file = path.join(buildDir, m[2]);
-      if (!(await exists(file))) fail(`llms.txt links to ${m[2]} but that file is not in the build`);
+      if (!m[2].endsWith('.txt')) fail(`llms.txt links to a page URL instead of a .txt file: ${m[2]}`);
+      await checkDocLink(m[2], 'llms.txt');
     }
     if (linked === 0) fail('llms.txt contains no .txt links');
   }
@@ -108,6 +125,8 @@ async function main() {
   const pagesDir = path.join(buildDir, cfg.urlPrefix.replace(/^\//, ''));
   const txtFiles = (await exists(pagesDir)) ? await walk(pagesDir, (f) => f.endsWith('.txt')) : [];
   if (txtFiles.length === 0) fail(`no per-page .txt files under ${path.relative(buildDir, pagesDir)}`);
+  let bodyLinks = 0;
+  let pagesWithPrice = 0;
 
   for (const f of txtFiles) {
     const rel = path.relative(buildDir, f).replace(/\\/g, '/');
@@ -124,6 +143,14 @@ async function main() {
     // the txt should sit next to the page: /docs/foo/ -> /docs/foo.txt
     const expectedTxt = `${urlPath}.txt`.replace(/^\//, '');
     if (expectedTxt !== rel) fail(`${rel}: expected file name ${expectedTxt} for URL ${url}`);
+
+    // 2b. in-body links into the docs must resolve (both .txt twins and page URLs)
+    for (const m of txt.matchAll(DOC_LINK_RE)) {
+      bodyLinks++;
+      await checkDocLink(m[2], rel);
+    }
+
+    if (PRICE_LINE_RE.test(txt)) pagesWithPrice++;
 
     // 5. raw MDX leftovers
     const body = txt.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]+`/g, '');
@@ -144,8 +171,17 @@ async function main() {
   if (srcCount !== txtFiles.length)
     fail(`page count mismatch: ${srcCount} publishable source docs vs ${txtFiles.length} per-page .txt files`);
 
+  // Prices are baked in at build time from a live endpoint. A hiccup there
+  // must not fail the build, but it should not go unnoticed either.
+  if (txtFiles.length && pagesWithPrice === 0)
+    warn('no per-page .txt contains a price line - the prices API was probably unavailable during the build');
+
   // --- report
-  console.log(`Checked ${txtFiles.length} per-page .txt files, ${linked} llms.txt links, ${srcCount} source docs`);
+  console.log(
+    `Checked ${txtFiles.length} per-page .txt files, ${linked} llms.txt links, ${bodyLinks} in-body links, ` +
+    `${srcCount} source docs, ${pagesWithPrice} pages with prices`
+  );
+  for (const w of warnings) console.warn(`WARN: ${w}`);
   if (problems.length) {
     console.error(`\n${problems.length} problem(s):`);
     for (const p of problems) console.error(`  - ${p}`);

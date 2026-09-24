@@ -78,6 +78,8 @@ const COMPONENT_TEXT = {
     mcpText: 'CapMonster Cloud MCP can also be used to detect and solve CAPTCHA.',
     mcpLink: 'Learn more about MCP',
     moreBlogInfo: 'More on the topic in our blog',
+    fullPriceText: 'View full price',
+    pricesPageUrl: 'https://capmonster.cloud/en/prices/',
     price: 'Price',
     successRate: 'Success rate',
     resultType: {
@@ -92,6 +94,8 @@ const COMPONENT_TEXT = {
     mcpText: 'Для распознавания и решения CAPTCHA также можно использовать CapMonster Cloud MCP.',
     mcpLink: 'Подробнее о работе с MCP',
     moreBlogInfo: 'Ещё больше по теме в нашем блоге',
+    fullPriceText: 'Посмотреть полный прайс',
+    pricesPageUrl: 'https://capmonster.cloud/ru/prices/',
     price: 'Цена',
     successRate: 'Успешность',
     resultType: {
@@ -217,20 +221,26 @@ function mdxToMarkdown(content, ctx) {
     return `\n:::tip ${t.mcpTitle}\n${t.mcpText} [${t.mcpLink}](${ctx.mcpUrl}).\n:::\n`;
   });
 
-  // 2c. <PriceBlock captchaId="x" /> -> one line with price and success rate.
-  //     Omitted when prices could not be fetched (or --no-prices).
+  // 2c. <PriceBlock title="X" captchaId="x" /> -> "X - Price: $N / 1000 tokens. Success rate: N%."
+  //     The label is title ?? item.Name, like the component. Omitted when prices
+  //     could not be fetched (or --no-prices).
   result = result.replace(/<PriceBlock\b([^>]*?)\/>/g, (_, attrs) => {
     if (!ctx.prices) return '';
     const id = (attrs.match(/\bcaptchaId=["']([^"']+)["']/) || [])[1];
     const item = id && ctx.prices.get(id);
     if (!item) return '';
     const t = ctx.text;
+    const label = (attrs.match(/\btitle=["']([^"']+)["']/) || [])[1] || item.Name || id;
     const unit = t.resultType[item.ResultType] || t.resultType.token;
     const parts = [`**${t.price}:** $${item.Price} / ${unit}`];
     if (typeof item.SuccessRate === 'number') parts.push(`**${t.successRate}:** ${item.SuccessRate}%`);
-    return `\n${parts.join('. ')}.\n`;
+    return `\n${label} - ${parts.join('. ')}.\n`;
   });
-  // <PriceBlockWrap> is a pure layout wrapper - handled by the generic strip in step 7.
+  //     <PriceBlockWrap> adds a "View full price" link above the blocks.
+  result = result.replace(
+    /<PriceBlockWrap\b[^>]*>([\s\S]*?)<\/PriceBlockWrap>/g,
+    (_, inner) => `\n${ctx.text.fullPriceText}: ${ctx.text.pricesPageUrl}\n${inner}\n`
+  );
 
   // 2d. <BlogLink url="..." /> -> "More on the topic in our blog: <url>"
   result = result.replace(/<BlogLink\b([^>]*?)\/>/g, (_, attrs) => {
@@ -339,21 +349,21 @@ function extractH1(content) {
 
 // Lines produced by the component renderers above must never become a page
 // description in llms.txt - skip them in firstParagraph().
-const COMPONENT_LINE_RE = new RegExp(
-  '^(?:\\*\\*(?:' +
-    Object.values(COMPONENT_TEXT).map((t) => t.price).join('|') +
-    '):\\*\\*|(?:' +
-    Object.values(COMPONENT_TEXT).map((t) => t.moreBlogInfo).join('|') +
-    '):).*$',
-  'gm'
-);
+const COMPONENT_LINE_RE = (() => {
+  const all = Object.values(COMPONENT_TEXT);
+  const alt = (pick) => all.map((t) => pick(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  return new RegExp(
+    `^(?:.*\\*\\*(?:${alt((t) => t.price)}):\\*\\*.*|(?:${alt((t) => t.moreBlogInfo)}|${alt((t) => t.fullPriceText)}):.*)$`,
+    'gm'
+  );
+})();
 
 function firstParagraph(content) {
   const cleaned = content
     .replace(COMPONENT_LINE_RE, '')          // price / blog-link lines from components
     .replace(/^\s*\d+\.\s+.*$/gm, '')        // numbered lists
     .replace(/```[\s\S]*?```/g, '')          // fenced code blocks
-    .replace(/`[^`\n]+`/g, '')               // inline code
+    .replace(/`([^`\n]+)`/g, '$1')           // inline code -> keep its text
     .replace(/^#{1,6}\s+.+$/gm, '')          // headings
     .replace(/^>\s+.*$/gm, '')               // blockquotes
     .replace(/^\s*[-*+]\s+.*$/gm, '')        // lists
@@ -381,52 +391,59 @@ function humanize(s) {
  *
  * Uses the source file path (not the published URL) for correct relative resolution.
  */
-function fixDocLinks(content, siteUrl, urlPrefix, sourceFileRel) {
-  // Treat the source file as a "virtual file" at its published URL path (no trailing slash).
-  // e.g. "api/methods/create-task.mdx" -> base = "https://.../docs/api/methods/create-task"
-  // This makes URL resolution behave like the file system (sibling = same directory).
-  const fileNoExt = sourceFileRel.replace(/\.[^/.]+$/, '');
-  const base = `${siteUrl}${urlPrefix}/${fileNoExt}`;
-
-  const NON_DOC_EXT = /\.(js|ts|json|css|png|jpg|gif|svg|zip|pdf|crx|mdx)$/i;
-
-  // 1. Absolute capmonster doc links (trailing slash -> .txt)
-  content = content.replace(
-    /\]\((https:\/\/docs\.capmonster\.cloud\/docs\/[^)#\s]*?)\/?(\#[^)]*?)?\)/g,
-    (_, href, anchor = '') => `](${href.replace(/\/+$/, '')}.txt${anchor})`
-  );
-
-  // 2. Relative links -> two sub-passes:
-  //    a) links with .mdx extension (any relative path)
-  //    b) dot-relative links without extension  (e.g. ./../captchas/no-captcha-task)
+function fixDocLinks(content, { siteUrl, urlPrefix, sourceFileRel, pageUrl, knownUrls }) {
   const docsBase = `${siteUrl}${urlPrefix}`;
-  const resolveRel = (match, rel, anchor = '') => {
+  // Source file as a "virtual file" at its URL path (no trailing slash), so that
+  // links to .mdx files resolve like the file system (sibling = same directory).
+  const fileBase = `${docsBase}/${sourceFileRel.replace(/\.[^/.]+$/, '')}`;
+  const SKIP_EXT = /\.(js|ts|json|css|png|jpe?g|gif|svg|zip|pdf|crx|txt)$/i;
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  // Canonical page URL -> ".txt" only when we generate that page. Category
+  // (generated-index) pages have no .txt, so they keep their page URL.
+  const toTarget = (absNoSlash, anchor) => {
+    const page = `${absNoSlash}/`;
+    return knownUrls.has(page) ? `${absNoSlash}.txt${anchor}` : `${page}${anchor}`;
+  };
+
+  // Resolve `rel` against `base`, clamp into this locale's docs prefix and return
+  // the absolute URL without trailing slash (or null if it leaves the site).
+  const resolve = (rel, base, isSourceFile) => {
     try {
-      let resolved = new URL(rel, base).href
-        .replace(/\.mdx$/, '')
-        .replace(/\/+$/, '');
-      if (!resolved.startsWith(siteUrl)) return match;
-      // Clamp: if relative traversal escaped the /docs prefix, re-anchor it.
-      if (!resolved.startsWith(docsBase)) {
-        const tail = resolved.slice(siteUrl.length); // e.g. "/captchas/foo"
-        resolved = `${docsBase}${tail}`;
-      }
-      return `](${resolved}.txt${anchor})`;
+      let abs = new URL(rel, base).href.split('?')[0].replace(/\.mdx?$/i, '').replace(/\/+$/, '');
+      if (!abs.startsWith(siteUrl)) return null;
+      if (!abs.startsWith(docsBase)) abs = `${docsBase}${abs.slice(siteUrl.length)}`; // escaped the prefix
+      let relPath = abs.slice(docsBase.length).replace(/^\/+/, '');
+      if (isSourceFile) relPath = collapseCategoryIndex(relPath); // foo/foo.mdx -> /foo/
+      return relPath ? `${docsBase}/${relPath}` : docsBase;
     } catch {
-      return match;
+      return null;
     }
   };
 
-  content = content.replace(/\]\(([^)#\s][^)]*?\.mdx)(\#[^)]*?)?\)/g, resolveRel);
-
-  // dot-relative paths with no extension (must start with . to avoid matching bare words)
+  // 1. Absolute links into this locale's docs (https://docs.capmonster.cloud/docs/...)
   content = content.replace(
-    /\]\((\.\.?\/[^)#\s]*?[^.)\s])(\#[^)]*?)?\)/g,
-    (match, rel, anchor = '') => {
-      if (/\.(js|ts|json|css|png|jpg|gif|svg|zip|pdf|crx|txt)$/i.test(rel)) return match;
-      return resolveRel(match, rel, anchor);
+    new RegExp(`\\]\\((${esc(docsBase)}(?:/[^)#\\s]*)?)(#[^)]*)?\\)`, 'g'),
+    (m, href, anchor = '') => {
+      if (SKIP_EXT.test(href)) return m;
+      const r = resolve(href, `${docsBase}/`, false);
+      return r ? `](${toTarget(r, anchor)})` : m;
     }
   );
+
+  // 2. Relative links to source files (.md/.mdx): relative to the source file.
+  content = content.replace(/\]\(([^)#\s][^)]*?\.mdx?)(#[^)]*)?\)/gi, (m, rel, anchor = '') => {
+    const r = resolve(rel, fileBase, true);
+    return r ? `](${toTarget(r, anchor)})` : m;
+  });
+
+  // 3. Dot-relative links without extension (e.g. ../recaptcha-v3-task/): the browser
+  //    resolves these against the page URL, which ends with a slash - so do we.
+  content = content.replace(/\]\((\.\.?\/[^)#\s]*?[^.)\s])(#[^)]*)?\)/g, (m, rel, anchor = '') => {
+    if (SKIP_EXT.test(rel)) return m;
+    const r = resolve(rel, pageUrl, false);
+    return r ? `](${toTarget(r, anchor)})` : m;
+  });
 
   return content;
 }
@@ -484,7 +501,8 @@ function collapseCategoryIndex(relNoExt) {
   const parts = relNoExt.split('/');
   const last = parts[parts.length - 1];
   const parent = parts.length > 1 ? parts[parts.length - 2] : null;
-  if (/^(index|readme)$/i.test(last) || (parent !== null && last === parent)) {
+  // Docusaurus compares folder and file names case-insensitively.
+  if (/^(index|readme)$/i.test(last) || (parent !== null && last.toLowerCase() === parent.toLowerCase())) {
     parts.pop();
   }
   return parts.join('/');
@@ -574,10 +592,11 @@ async function main() {
           : 999;
 
       pages.push({
-        file: path.relative(rootDir, file),
+        file: path.relative(rootDir, file).replace(/\\/g, '/'),
         url, title, description,
         category: cat, position,
-        content: fixDocLinks(markdown, siteUrl, cfg.urlPrefix, path.relative(rootDir, file).replace(/\\/g, '/')),
+        markdown,
+        content: null, // filled below, once every page URL is known
       });
 
       log(`   ok ${path.relative(rootDir, file)}`);
@@ -589,6 +608,20 @@ async function main() {
   if (pages.length === 0) {
     console.error('\nERROR: No pages found! Aborting.');
     process.exit(1);
+  }
+
+  // Second pass: rewrite internal links. Links to pages we generate point to
+  // their .txt twin; links to anything else (category pages) stay as page URLs.
+  const knownUrls = new Set(pages.map((p) => p.url));
+  for (const p of pages) {
+    p.content = fixDocLinks(p.markdown, {
+      siteUrl,
+      urlPrefix: cfg.urlPrefix,
+      sourceFileRel: p.file,
+      pageUrl: p.url,
+      knownUrls,
+    });
+    delete p.markdown;
   }
 
   // Sort: category order -> sidebar_position -> title
