@@ -62,6 +62,51 @@ const EXCLUDE_PATTERNS = [
   /node_modules/,
 ];
 
+// Public prices endpoint used by src/hooks/useFetchPrices.ts. Fetched once
+// at build time so <PriceBlock/> can be rendered as text. If the request
+// fails, the price line is simply omitted - the build never fails on it.
+const PRICES_URL = 'https://dash.capmonster.cloud/api/prices?all=true';
+const PRICES_TIMEOUT_MS = 10_000;
+
+// Text for React components that carry content but have no MDX body.
+// Keep in sync with:
+//   src/components/McpNotice/index.js      (mcpTitle / mcpText / mcpLink)
+//   src/locales/<locale>.json              (moreBlogInfo, hundred* strings)
+const COMPONENT_TEXT = {
+  en: {
+    mcpTitle: 'CapMonster Cloud MCP',
+    mcpText: 'CapMonster Cloud MCP can also be used to detect and solve CAPTCHA.',
+    mcpLink: 'Learn more about MCP',
+    moreBlogInfo: 'More on the topic in our blog',
+    fullPriceText: 'View full price',
+    pricesPageUrl: 'https://capmonster.cloud/en/prices/',
+    price: 'Price',
+    successRate: 'Success rate',
+    resultType: {
+      token: '1000 tokens',
+      image: '1000 images',
+      dynamic: '1000 dynamic images',
+      answers: '1000 answers',
+    },
+  },
+  ru: {
+    mcpTitle: 'CapMonster Cloud MCP',
+    mcpText: 'Для распознавания и решения CAPTCHA также можно использовать CapMonster Cloud MCP.',
+    mcpLink: 'Подробнее о работе с MCP',
+    moreBlogInfo: 'Ещё больше по теме в нашем блоге',
+    fullPriceText: 'Посмотреть полный прайс',
+    pricesPageUrl: 'https://capmonster.cloud/ru/prices/',
+    price: 'Цена',
+    successRate: 'Успешность',
+    resultType: {
+      token: '1000 токенов',
+      image: '1000 картинок',
+      dynamic: '1000 дин. картинок',
+      answers: '1000 ответов',
+    },
+  },
+};
+
 // --- CLI --------------------------------------------------------------
 
 const { values } = parseArgs({
@@ -69,6 +114,7 @@ const { values } = parseArgs({
     locale:     { type: 'string',  default: 'en' },
     out:        { type: 'string',  default: 'static' },
     'site-url': { type: 'string',  default: SITE_URL },
+    'no-prices': { type: 'boolean', default: false },
     verbose:    { type: 'boolean', default: false },
     help:       { type: 'boolean', short: 'h', default: false },
   },
@@ -82,6 +128,7 @@ Options:
   --locale=<en|ru>      Locale to dump (default: en)
   --out=<dir>           Output directory (default: static)
   --site-url=<url>      Override site URL
+  --no-prices           Do not fetch prices for <PriceBlock/> (offline / deterministic output)
   --verbose             Print each processed file
   --help                Show this help
 `);
@@ -130,8 +177,14 @@ function parseFrontmatter(raw) {
 
 // --- MDX -> MARKDOWN --------------------------------------------------
 
-/** Strip MDX-specific syntax, keep readable markdown for an LLM. */
-function mdxToMarkdown(content) {
+/**
+ * Strip MDX-specific syntax, keep readable markdown for an LLM.
+ *
+ * `ctx` carries what is needed to render content-bearing React components
+ * as text: { text: COMPONENT_TEXT[locale], prices: Map<id, item>|null,
+ *            mcpUrl: absolute page URL of the MCP doc (fixDocLinks turns it into .txt) }.
+ */
+function mdxToMarkdown(content, ctx) {
   // --- Protect code blocks from being touched by other regexes -------
   const stash = [];
   const STASH = (s) => {
@@ -154,12 +207,61 @@ function mdxToMarkdown(content) {
     (_, attrs) => {
       const title   = (attrs.match(/\btitle=["']([^"']+)["']/)   || [])[1] || '';
       const type    = (attrs.match(/\btype=["']([^"']+)["']/)    || [])[1] || '';
-      const req     = /\brequired\b/.test(attrs);
       if (!title) return '';
-      const meta = [type, req ? 'required' : ''].filter(Boolean).join(', ');
+      // Mirror src/theme/ParamItem: a string value is printed verbatim
+      // ("required (if Task is not filled)"), the bare boolean prints
+      // "required", anything else prints "optional" - unless `response` is set,
+      // in which case no marker is shown at all.
+      const reqStr  = (attrs.match(/\brequired=["']([^"']*)["']/) || [])[1];
+      const reqBool = /\brequired(?:=\{true\})?(?=\s|\/|$)/.test(attrs);
+      const isResponse = /\bresponse\b/.test(attrs);
+      let marker = '';
+      if (!isResponse) {
+        if (reqStr !== undefined && reqStr.trim()) marker = reqStr.trim();
+        else if (reqBool) marker = 'required';
+        else marker = 'optional';
+      }
+      const meta = [type, marker].filter(Boolean).join(', ');
       return `**${title}**${meta ? ` (${meta})` : ''}:`;
     }
   );
+
+  // 2b. <McpNotice /> -> tip admonition (mirrors src/components/McpNotice).
+  //     Rendered as markdown here so step 3 turns it into a blockquote.
+  result = result.replace(/<McpNotice\b[^>]*\/>/g, () => {
+    const t = ctx.text;
+    return `\n:::tip ${t.mcpTitle}\n${t.mcpText} [${t.mcpLink}](${ctx.mcpUrl}).\n:::\n`;
+  });
+
+  // 2c. <PriceBlock title="X" captchaId="x" /> -> "X - Price: $N / 1000 tokens. Success rate: N%."
+  //     The label is title ?? item.Name, like the component. Omitted when prices
+  //     could not be fetched (or --no-prices).
+  result = result.replace(/<PriceBlock\b([^>]*?)\/>/g, (_, attrs) => {
+    if (!ctx.prices) return '';
+    const id = (attrs.match(/\bcaptchaId=["']([^"']+)["']/) || [])[1];
+    const item = id && ctx.prices.get(id);
+    if (!item) return '';
+    const t = ctx.text;
+    const label = (attrs.match(/\btitle=["']([^"']+)["']/) || [])[1] || item.Name || id;
+    const unit = t.resultType[item.ResultType] || t.resultType.token;
+    const parts = [`**${t.price}:** $${item.Price} / ${unit}`];
+    if (typeof item.SuccessRate === 'number') parts.push(`**${t.successRate}:** ${item.SuccessRate}%`);
+    return `\n${label} - ${parts.join('. ')}.\n`;
+  });
+  //     <PriceBlockWrap> adds a "View full price" link above the blocks. Skipped
+  //     together with the price lines when prices are unavailable.
+  result = result.replace(
+    /<PriceBlockWrap\b[^>]*>([\s\S]*?)<\/PriceBlockWrap>/g,
+    (_, inner) => (ctx.prices ? `\n${ctx.text.fullPriceText}: ${ctx.text.pricesPageUrl}\n${inner}\n` : `\n${inner}\n`)
+  );
+
+  // 2d. <BlogLink url="..." /> -> "More on the topic in our blog: <url>"
+  result = result.replace(/<BlogLink\b([^>]*?)\/>/g, (_, attrs) => {
+    const url = (attrs.match(/\burl=["']([^"']+)["']/) || [])[1];
+    if (!url) return '';
+    const title = (attrs.match(/\btitle=["']([^"']+)["']/) || [])[1];
+    return `\n${ctx.text.moreBlogInfo}: ${title ? `[${title}](${url})` : url}\n`;
+  });
 
   // 3. Docusaurus admonitions -> blockquotes
   // Use [ \t]+ (not \s+) so a bare newline after :::type is not treated as a title.
@@ -244,7 +346,9 @@ function mdxToMarkdown(content) {
   // 10. Strip all images - LLMs cannot see them and paths are meaningless in plain text
   result = result.replace(/!\[[^\]]*\]\([^)]*\)\s*/g, '');
 
-  // 11. Collapse excess blank lines
+  // 11. Strip trailing whitespace (indented JSX children leave whitespace-only
+  //     lines behind), then collapse excess blank lines.
+  result = result.replace(/[^\S\n]+$/gm, '');
   result = result.replace(/\n{3,}/g, '\n\n');
 
   // --- Restore stashed code blocks ----------------------------------
@@ -258,10 +362,23 @@ function extractH1(content) {
   return m ? m[1].trim() : null;
 }
 
+// Lines produced by the component renderers above must never become a page
+// description in llms.txt - skip them in firstParagraph().
+const COMPONENT_LINE_RE = (() => {
+  const all = Object.values(COMPONENT_TEXT);
+  const alt = (pick) => all.map((t) => pick(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  return new RegExp(
+    `^(?:.*\\*\\*(?:${alt((t) => t.price)}):\\*\\*.*|(?:${alt((t) => t.moreBlogInfo)}|${alt((t) => t.fullPriceText)}):.*)$`,
+    'gm'
+  );
+})();
+
 function firstParagraph(content) {
   const cleaned = content
+    .replace(COMPONENT_LINE_RE, '')          // price / blog-link lines from components
+    .replace(/^\s*\d+\.\s+.*$/gm, '')        // numbered lists
     .replace(/```[\s\S]*?```/g, '')          // fenced code blocks
-    .replace(/`[^`\n]+`/g, '')               // inline code
+    .replace(/`([^`\n]+)`/g, '$1')           // inline code -> keep its text
     .replace(/^#{1,6}\s+.+$/gm, '')          // headings
     .replace(/^>\s+.*$/gm, '')               // blockquotes
     .replace(/^\s*[-*+]\s+.*$/gm, '')        // lists
@@ -289,52 +406,59 @@ function humanize(s) {
  *
  * Uses the source file path (not the published URL) for correct relative resolution.
  */
-function fixDocLinks(content, siteUrl, urlPrefix, sourceFileRel) {
-  // Treat the source file as a "virtual file" at its published URL path (no trailing slash).
-  // e.g. "api/methods/create-task.mdx" -> base = "https://.../docs/api/methods/create-task"
-  // This makes URL resolution behave like the file system (sibling = same directory).
-  const fileNoExt = sourceFileRel.replace(/\.[^/.]+$/, '');
-  const base = `${siteUrl}${urlPrefix}/${fileNoExt}`;
-
-  const NON_DOC_EXT = /\.(js|ts|json|css|png|jpg|gif|svg|zip|pdf|crx|mdx)$/i;
-
-  // 1. Absolute capmonster doc links (trailing slash -> .txt)
-  content = content.replace(
-    /\]\((https:\/\/docs\.capmonster\.cloud\/docs\/[^)#\s]*?)\/?(\#[^)]*?)?\)/g,
-    (_, href, anchor = '') => `](${href.replace(/\/+$/, '')}.txt${anchor})`
-  );
-
-  // 2. Relative links -> two sub-passes:
-  //    a) links with .mdx extension (any relative path)
-  //    b) dot-relative links without extension  (e.g. ./../captchas/no-captcha-task)
+function fixDocLinks(content, { siteUrl, urlPrefix, sourceFileRel, pageUrl, knownUrls }) {
   const docsBase = `${siteUrl}${urlPrefix}`;
-  const resolveRel = (match, rel, anchor = '') => {
+  // Source file as a "virtual file" at its URL path (no trailing slash), so that
+  // links to .mdx files resolve like the file system (sibling = same directory).
+  const fileBase = `${docsBase}/${sourceFileRel.replace(/\.[^/.]+$/, '')}`;
+  const SKIP_EXT = /\.(js|ts|json|css|png|jpe?g|gif|svg|zip|pdf|crx|txt)$/i;
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  // Canonical page URL -> ".txt" only when we generate that page. Category
+  // (generated-index) pages have no .txt, so they keep their page URL.
+  const toTarget = (absNoSlash, anchor) => {
+    const page = `${absNoSlash}/`;
+    return knownUrls.has(page) ? `${absNoSlash}.txt${anchor}` : `${page}${anchor}`;
+  };
+
+  // Resolve `rel` against `base`, clamp into this locale's docs prefix and return
+  // the absolute URL without trailing slash (or null if it leaves the site).
+  const resolve = (rel, base, isSourceFile) => {
     try {
-      let resolved = new URL(rel, base).href
-        .replace(/\.mdx$/, '')
-        .replace(/\/+$/, '');
-      if (!resolved.startsWith(siteUrl)) return match;
-      // Clamp: if relative traversal escaped the /docs prefix, re-anchor it.
-      if (!resolved.startsWith(docsBase)) {
-        const tail = resolved.slice(siteUrl.length); // e.g. "/captchas/foo"
-        resolved = `${docsBase}${tail}`;
-      }
-      return `](${resolved}.txt${anchor})`;
+      let abs = new URL(rel, base).href.split('?')[0].replace(/\.mdx?$/i, '').replace(/\/+$/, '');
+      if (!abs.startsWith(siteUrl)) return null;
+      if (!abs.startsWith(docsBase)) abs = `${docsBase}${abs.slice(siteUrl.length)}`; // escaped the prefix
+      let relPath = abs.slice(docsBase.length).replace(/^\/+/, '');
+      if (isSourceFile) relPath = collapseCategoryIndex(relPath); // foo/foo.mdx -> /foo/
+      return relPath ? `${docsBase}/${relPath}` : docsBase;
     } catch {
-      return match;
+      return null;
     }
   };
 
-  content = content.replace(/\]\(([^)#\s][^)]*?\.mdx)(\#[^)]*?)?\)/g, resolveRel);
-
-  // dot-relative paths with no extension (must start with . to avoid matching bare words)
+  // 1. Absolute links into this locale's docs (https://docs.capmonster.cloud/docs/...)
   content = content.replace(
-    /\]\((\.\.?\/[^)#\s]*?[^.)\s])(\#[^)]*?)?\)/g,
-    (match, rel, anchor = '') => {
-      if (/\.(js|ts|json|css|png|jpg|gif|svg|zip|pdf|crx|txt)$/i.test(rel)) return match;
-      return resolveRel(match, rel, anchor);
+    new RegExp(`\\]\\((${esc(docsBase)}(?:/[^)#\\s]*)?)(#[^)]*)?\\)`, 'g'),
+    (m, href, anchor = '') => {
+      if (SKIP_EXT.test(href)) return m;
+      const r = resolve(href, `${docsBase}/`, false);
+      return r ? `](${toTarget(r, anchor)})` : m;
     }
   );
+
+  // 2. Relative links to source files (.md/.mdx): relative to the source file.
+  content = content.replace(/\]\(([^)#\s][^)]*?\.mdx?)(#[^)]*)?\)/gi, (m, rel, anchor = '') => {
+    const r = resolve(rel, fileBase, true);
+    return r ? `](${toTarget(r, anchor)})` : m;
+  });
+
+  // 3. Dot-relative links without extension (e.g. ../recaptcha-v3-task/): the browser
+  //    resolves these against the page URL, which ends with a slash - so do we.
+  content = content.replace(/\]\((\.\.?\/[^)#\s]*?[^.)\s])(#[^)]*)?\)/g, (m, rel, anchor = '') => {
+    if (SKIP_EXT.test(rel)) return m;
+    const r = resolve(rel, pageUrl, false);
+    return r ? `](${toTarget(r, anchor)})` : m;
+  });
 
   return content;
 }
@@ -378,10 +502,25 @@ function buildUrl(filePath, rootDir, frontmatter) {
     return `${siteUrl}${cfg.urlPrefix}/${slug}/`;
   }
 
-  // "foo/index" -> "foo"
-  const cleaned = rel.replace(/\/index$/i, '').replace(/^index$/i, '');
+  // Docusaurus "category index" convention: foo/index.md, foo/README.md and
+  // foo/foo.md all become the URL of the folder itself (/foo/), not /foo/foo/.
+  // Without this the .txt for e.g. mcp/mcp.mdx would live at /docs/mcp/mcp.txt
+  // while the page is served at /docs/mcp/.
+  const cleaned = collapseCategoryIndex(rel);
   const tail = cleaned ? `/${cleaned}/` : '/';
   return `${siteUrl}${cfg.urlPrefix}${tail}`;
+}
+
+/** "foo/index" | "foo/README" | "foo/foo" -> "foo"; "index" -> "" */
+function collapseCategoryIndex(relNoExt) {
+  const parts = relNoExt.split('/');
+  const last = parts[parts.length - 1];
+  const parent = parts.length > 1 ? parts[parts.length - 2] : null;
+  // Docusaurus compares folder and file names case-insensitively.
+  if (/^(index|readme)$/i.test(last) || (parent !== null && last.toLowerCase() === parent.toLowerCase())) {
+    parts.pop();
+  }
+  return parts.join('/');
 }
 
 function getCategory(filePath, rootDir) {
@@ -391,6 +530,29 @@ function getCategory(filePath, rootDir) {
   return meta
     ? { key: top, label: meta.label, order: meta.order }
     : { key: top, label: humanize(top), order: 50 };
+}
+
+// --- PRICES -----------------------------------------------------------
+
+/**
+ * Fetch the public price list once (same endpoint the site uses at runtime).
+ * Returns Map<captchaId, item> or null on any failure - never throws, so a
+ * hiccup on the prices API cannot break the documentation build.
+ */
+async function fetchPrices() {
+  try {
+    const res = await fetch(PRICES_URL, { signal: AbortSignal.timeout(PRICES_TIMEOUT_MS) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const items = Array.isArray(data?.PricesV2) ? data.PricesV2 : [];
+    if (items.length === 0) throw new Error('empty PricesV2');
+    const map = new Map(items.filter((i) => i && i.Id).map((i) => [i.Id, i]));
+    console.log(`Fetched prices for ${map.size} captcha types`);
+    return map;
+  } catch (e) {
+    console.log(`WARN: prices unavailable (${e.message}); <PriceBlock/> will be omitted from txt`);
+    return null;
+  }
 }
 
 // --- MAIN -------------------------------------------------------------
@@ -410,10 +572,18 @@ async function main() {
   const files = await walkDocs(rootDir);
   console.log(`Found ${files.length} MDX/MD files`);
 
+  const ctx = {
+    text: COMPONENT_TEXT[values.locale] || COMPONENT_TEXT.en,
+    prices: values['no-prices'] ? null : await fetchPrices(),
+    // page URL on purpose: fixDocLinks() rewrites it to the .txt URL like any other doc link
+    mcpUrl: `${siteUrl}${cfg.urlPrefix}/mcp/`,
+  };
+
   const pages = [];
   for (const file of files) {
     try {
-      const raw = (await fs.readFile(file, 'utf-8')).replace(/^\uFEFF/, '');
+      // Strip BOM and normalise CRLF so output is identical on Windows and Linux builds.
+      const raw = (await fs.readFile(file, 'utf-8')).replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
       const { data: frontmatter, content } = parseFrontmatter(raw);
 
       if (frontmatter.draft === true) {
@@ -421,7 +591,7 @@ async function main() {
         continue;
       }
 
-      const markdown = mdxToMarkdown(content);
+      const markdown = mdxToMarkdown(content, ctx);
       const baseName = path.basename(file, path.extname(file));
       const title =
         frontmatter.title ||
@@ -437,10 +607,11 @@ async function main() {
           : 999;
 
       pages.push({
-        file: path.relative(rootDir, file),
+        file: path.relative(rootDir, file).replace(/\\/g, '/'),
         url, title, description,
         category: cat, position,
-        content: fixDocLinks(markdown, siteUrl, cfg.urlPrefix, path.relative(rootDir, file).replace(/\\/g, '/')),
+        markdown,
+        content: null, // filled below, once every page URL is known
       });
 
       log(`   ok ${path.relative(rootDir, file)}`);
@@ -452,6 +623,20 @@ async function main() {
   if (pages.length === 0) {
     console.error('\nERROR: No pages found! Aborting.');
     process.exit(1);
+  }
+
+  // Second pass: rewrite internal links. Links to pages we generate point to
+  // their .txt twin; links to anything else (category pages) stay as page URLs.
+  const knownUrls = new Set(pages.map((p) => p.url));
+  for (const p of pages) {
+    p.content = fixDocLinks(p.markdown, {
+      siteUrl,
+      urlPrefix: cfg.urlPrefix,
+      sourceFileRel: p.file,
+      pageUrl: p.url,
+      knownUrls,
+    });
+    delete p.markdown;
   }
 
   // Sort: category order -> sidebar_position -> title
