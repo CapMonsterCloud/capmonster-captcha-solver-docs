@@ -211,7 +211,7 @@ During the first request, the server will also issue special cookies (for exampl
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -316,7 +316,7 @@ When making a repeat request to the target page with cookies obtained from CapMo
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -386,7 +386,7 @@ const url =
 // === Headers ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
+    '"Not(A:Brand";v="8", "Chromium";v="153", "Google Chrome";v="153"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -498,7 +498,7 @@ const url =
 // === Set the required headers ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
+    '"Not(A:Brand";v="8", "Chromium";v="153", "Google Chrome";v="153"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -721,7 +721,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -792,7 +792,7 @@ async function main() {
     // Build final headers
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",
@@ -894,7 +894,7 @@ class TSPDBypass:
             "Accept-Encoding": "gzip, deflate, br",
             "Connection": "keep-alive",
             "Upgrade-Insecure-Requests": "1",
-            "sec-ch-ua": '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"',
+            "sec-ch-ua": '"Google Chrome";v="153", "Not.A/Brand";v="8", "Chromium";v="153"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
         }
@@ -1059,7 +1059,7 @@ class TSPDBypass:
         
         # Build final headers
         final_headers = self.build_headers(final_cookies)
-        final_headers["sec-ch-ua"] = '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"'
+        final_headers["sec-ch-ua"] = '"Google Chrome";v="153", "Not.A/Brand";v="8", "Chromium";v="153"'
         final_headers["sec-ch-ua-mobile"] = "?0"
         final_headers["sec-ch-ua-platform"] = '"Windows"'
         final_headers["Upgrade-Insecure-Requests"] = "1"
