@@ -58,6 +58,8 @@ const PRICE_LINE_RE = /\$\d+(?:\.\d+)? \/ 1000 /;
 
 /** Check that a doc link target exists in the build: foo.txt as a file, /foo/ as foo/index.html. */
 async function checkDocLink(urlPath, where) {
+  // Non-page assets under the docs prefix (a PDF, an image) are not pages; skip them.
+  if (/\.[a-z0-9]+$/i.test(urlPath) && !urlPath.endsWith('.txt')) return;
   if (urlPath.endsWith('.txt')) {
     if (!(await exists(path.join(buildDir, urlPath)))) fail(`${where}: links to ${urlPath} but that file is not in the build`);
     return;
@@ -87,7 +89,7 @@ async function countSourceDocs(rootDir) {
     const rel = path.relative(rootDir, f).replace(/\\/g, '/');
     if (/(^|\/)_/.test(rel)) continue;
     // Strip BOM like the generator does - 17 English sources carry one.
-    const raw = (await fs.readFile(f, 'utf-8')).replace(/^﻿/, '');
+    const raw = (await fs.readFile(f, 'utf-8')).replace(/^\uFEFF/, '');
     if (/^---\r?\n[\s\S]*?^draft:\s*true\s*$[\s\S]*?\r?\n---/m.test(raw)) continue;
     n++;
   }

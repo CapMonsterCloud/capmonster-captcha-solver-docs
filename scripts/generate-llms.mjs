@@ -248,10 +248,11 @@ function mdxToMarkdown(content, ctx) {
     if (typeof item.SuccessRate === 'number') parts.push(`**${t.successRate}:** ${item.SuccessRate}%`);
     return `\n${label} - ${parts.join('. ')}.\n`;
   });
-  //     <PriceBlockWrap> adds a "View full price" link above the blocks.
+  //     <PriceBlockWrap> adds a "View full price" link above the blocks. Skipped
+  //     together with the price lines when prices are unavailable.
   result = result.replace(
     /<PriceBlockWrap\b[^>]*>([\s\S]*?)<\/PriceBlockWrap>/g,
-    (_, inner) => `\n${ctx.text.fullPriceText}: ${ctx.text.pricesPageUrl}\n${inner}\n`
+    (_, inner) => (ctx.prices ? `\n${ctx.text.fullPriceText}: ${ctx.text.pricesPageUrl}\n${inner}\n` : `\n${inner}\n`)
   );
 
   // 2d. <BlogLink url="..." /> -> "More on the topic in our blog: <url>"
@@ -345,7 +346,9 @@ function mdxToMarkdown(content, ctx) {
   // 10. Strip all images - LLMs cannot see them and paths are meaningless in plain text
   result = result.replace(/!\[[^\]]*\]\([^)]*\)\s*/g, '');
 
-  // 11. Collapse excess blank lines
+  // 11. Strip trailing whitespace (indented JSX children leave whitespace-only
+  //     lines behind), then collapse excess blank lines.
+  result = result.replace(/[^\S\n]+$/gm, '');
   result = result.replace(/\n{3,}/g, '\n\n');
 
   // --- Restore stashed code blocks ----------------------------------
