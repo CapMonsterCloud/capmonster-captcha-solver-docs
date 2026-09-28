@@ -207,9 +207,21 @@ function mdxToMarkdown(content, ctx) {
     (_, attrs) => {
       const title   = (attrs.match(/\btitle=["']([^"']+)["']/)   || [])[1] || '';
       const type    = (attrs.match(/\btype=["']([^"']+)["']/)    || [])[1] || '';
-      const req     = /\brequired\b/.test(attrs);
       if (!title) return '';
-      const meta = [type, req ? 'required' : ''].filter(Boolean).join(', ');
+      // Mirror src/theme/ParamItem: a string value is printed verbatim
+      // ("required (if Task is not filled)"), the bare boolean prints
+      // "required", anything else prints "optional" - unless `response` is set,
+      // in which case no marker is shown at all.
+      const reqStr  = (attrs.match(/\brequired=["']([^"']*)["']/) || [])[1];
+      const reqBool = /\brequired(?:=\{true\})?(?=\s|\/|$)/.test(attrs);
+      const isResponse = /\bresponse\b/.test(attrs);
+      let marker = '';
+      if (!isResponse) {
+        if (reqStr !== undefined && reqStr.trim()) marker = reqStr.trim();
+        else if (reqBool) marker = 'required';
+        else marker = 'optional';
+      }
+      const meta = [type, marker].filter(Boolean).join(', ');
       return `**${title}**${meta ? ` (${meta})` : ''}:`;
     }
   );
