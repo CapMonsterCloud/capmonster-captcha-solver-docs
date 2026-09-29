@@ -64,6 +64,20 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
 	
     ---
 
+    <ParamItem title="aidEncrypted (dentro da metadata)" type="string" />
+
+Este parâmetro contém o valor de Aid, que deve ser obtido no site de destino antes de criar a tarefa.
+
+Exemplo: `HHuVfL451oAYXSwVa87xnU4QHER9ufsPpaSomCugX5Il/Nc2vLTu2dgoguMwmhAM`
+
+**Importante**: este parâmetro não é utilizado em todos os sites. Se o site não retornar Aid, não é necessário enviar `aidEncrypted`.
+
+O valor de `aidEncrypted` é de **uso único**: é necessário obter um novo Aid para cada nova tarefa.
+
+Para mais detalhes, consulte [Como obter aidEncrypted](#como-obter-aidencrypted).
+
+---
+
     <ParamItem title="userAgent" type="string" />
     Use o valor atual compatível com o CapMonster Cloud: `userAgentPlaceholder`<br />
 
@@ -102,6 +116,8 @@ Senha do servidor proxy.
 
 ## Método de criação da tarefa
 
+Se o site utilizar `aidEncrypted`, envie-o dentro de `metadata`. Obtenha um novo valor no site para cada nova tarefa.
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
 <TabItem value="proxyless" label="Custom task (sem proxy)" default className="method-panel">
@@ -122,7 +138,7 @@ Senha do servidor proxy.
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           }
         }
       }
@@ -156,7 +172,7 @@ Senha do servidor proxy.
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           },
           "proxyType": "your-proxy-type",
           "proxyAddress": "your-proxy-address",
@@ -230,13 +246,55 @@ Para a segunda versão, também podem ser usados arquivos chamados `TJNCaptcha*.
 
 O caractere `*` no nome do arquivo representa qualquer sequência de caracteres ou uma sequência vazia. Por exemplo, o padrão `TJNCaptcha*.js` pode corresponder aos arquivos `TJNCaptcha.js` ou `TJNCaptcha-global.js`.
 
+## Como obter aidEncrypted
+
+Se o site utilizar Aid, obtenha-o por meio de uma requisição separada antes de criar a tarefa e envie o valor retornado no parâmetro `aidEncrypted` dentro do objeto `metadata`.
+
+Abra as **Ferramentas de Desenvolvedor**, vá para a aba **Network** e ative o CAPTCHA. Encontre a requisição que o site utiliza para obter Aid e copie o valor da resposta.
+
+Exemplo de URL da requisição:
+
+```text
+https://example.com/path/GetCaptchaAid.ashx?_=1234567890000
+```
+
+Essa mesma requisição também pode incluir o valor de `websiteKey` (`AppId`).
+
+![](./images/tendi/aid-encrypted.png)
+
+A URL da requisição e o formato da resposta dependem do site.
+
+Exemplo de criação de uma tarefa com o parâmetro `aidEncrypted`:
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "TenDI",
+    "websiteURL": "https://example.com/page-with-captcha",
+    "websiteKey": "YOUR_WEBSITE_KEY",
+    "metadata": {
+      "captchaUrl": "https://example.com/TCaptcha.js",
+      "aidEncrypted": "YOUR_AID_ENCRYPTED"
+    }
+  }
+}
+```
+
+:::warning Importante:
+
+Obtenha um novo valor de Aid antes de criar cada tarefa. Não reutilize um valor de `aidEncrypted` obtido para uma tarefa anterior e não utilize os valores dos exemplos da documentação.
+
+:::
+
 ## Como Encontrar Todos os Parâmetros Necessários para a Criação da Tarefa
 
 ### Automaticamente
 
 Para automatizar a extração dos parâmetros, eles podem ser obtidos via **navegador** (normal ou headless, por exemplo, usando **Playwright**) ou diretamente a partir de **requisições HTTP**. Como os valores dos parâmetros dinâmicos têm curta duração, recomenda-se utilizá-los imediatamente após a extração.
 
-:::warning **Importante!**
+:::warning **Importante:**
 Os trechos de código fornecidos são exemplos básicos para aprendizado sobre como extrair os parâmetros necessários. A implementação exata dependerá do seu site com captcha, sua estrutura e os elementos HTML e seletores utilizados.
 :::
 
