@@ -42,6 +42,16 @@ A seguir estão exemplos de tipos de tarefas do Alibaba CAPTCHA que atualmente s
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
 
+<br />
+**TRACELESS — verificação invisível**
+
+O CapMonster Cloud também oferece suporte ao Alibaba CAPTCHA `TRACELESS` — uma verificação em segundo plano, sem desafio visível, que analisa dados do navegador, do dispositivo e o comportamento do usuário.
+
+Você pode identificar esse tipo pelo valor `"CaptchaType": "TRACELESS"` na resposta à requisição de carregamento do CAPTCHA, na aba **Network** das ferramentas de desenvolvedor do navegador.
+
+![](./images/alibaba-task/traceless.png)
+<br />
+
 :::warning **Atenção!**
 O CapMonster Cloud, por padrão, funciona com proxies integrados – já incluídos no custo do serviço. É necessário especificar seus próprios proxies apenas nos casos em que o site não aceita o token ou quando o acesso aos serviços integrados está restrito.
 

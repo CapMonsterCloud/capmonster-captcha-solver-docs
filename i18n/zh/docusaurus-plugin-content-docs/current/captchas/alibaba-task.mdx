@@ -42,6 +42,16 @@ import McpNotice from '@site/src/components/McpNotice';
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
 
+<br />
+**TRACELESS — 无感验证**
+
+CapMonster Cloud 还支持 Alibaba CAPTCHA `TRACELESS`，这是一种不显示验证任务的后台验证方式，通过分析浏览器、设备数据和用户行为进行验证。
+
+在浏览器开发者工具的 **Network** 选项卡中，查看加载 CAPTCHA 的请求响应，即可通过 `"CaptchaType": "TRACELESS"` 识别此类型。
+
+![](./images/alibaba-task/traceless.png)
+<br />
+
 :::warning **注意！**
 CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费用内。仅当网站不接受令牌或对内置服务的访问受限时，才需要指定您自己的代理。
 

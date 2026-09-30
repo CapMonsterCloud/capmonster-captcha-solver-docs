@@ -41,6 +41,16 @@ import McpNotice from '@site/src/components/McpNotice';
   <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
+<br />
+**TRACELESS — невидимая проверка**
+
+CapMonster Cloud также поддерживает Alibaba CAPTCHA `TRACELESS` — фоновую проверку без видимого задания, которая анализирует данные браузера, устройства и поведение пользователя.
+
+Определить этот тип можно по `"CaptchaType": "TRACELESS"` в ответе на запрос загрузки капчи на вкладке **Network** в инструментах разработчика.
+
+![](./images/alibaba-task/traceless.png)
+<br />
+
 
 :::warning **Внимание!**
 CapMonster Cloud по умолчанию работает через встроенные прокси – они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
