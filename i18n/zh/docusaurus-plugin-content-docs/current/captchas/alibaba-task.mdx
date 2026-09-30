@@ -143,9 +143,11 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <ParamItem title="cookieRequired（位于 metadata 中）" type="boolean" />
 
-与 CAPTCHA 识别结果一起返回 cookies。
+与 CAPTCHA 识别结果一起返回 cookies。<br />
+如果网站使用 **Alibaba WAF**，并且成功完成验证后需要获取 cookies，请将该参数设置为 `true`。
+存在 `ssxmod_itna` 和 `ssxmod_itna2` cookies 表明该网站使用的是 **Alibaba WAF**，而不是普通验证码。
 
-仅当网站使用 **Alibaba WAF** 或 **Amazon WAF**，并且成功完成验证后需要获取 cookies 时，才应将该参数设置为 `true`。
+*详情请参阅[如何区分 Alibaba WAF 与 Alibaba CAPTCHA](#如何区分-alibaba-waf-与-alibaba-captcha)。*
 
 默认情况下不使用此参数。
 
@@ -193,6 +195,16 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   ---
 
 </div>
+
+## 如何区分 Alibaba WAF 与 Alibaba CAPTCHA
+
+存在 `ssxmod_itna` 和 `ssxmod_itna2` cookies 表明网站使用了 Alibaba WAF。使用普通 Alibaba CAPTCHA 时，不会存在这些 cookies。
+
+要检查这些 cookies 是否存在，请打开**开发者工具** → **Application** → **Cookies**，然后选择网站域名。
+
+![Application 选项卡中的 ssxmod_itna 和 ssxmod_itna2 cookies](./images/alibaba-task/alibaba-waf-cookies.png)
+
+如果网站使用 Alibaba WAF，且后续请求需要 cookies，请在创建任务时，在 `metadata` 对象中传递 `cookieRequired: true`。
 
 ## 创建任务的方法
 
@@ -459,7 +471,7 @@ Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
 
 ### 返回 cookies 的选项（`cookieRequired`）
 
-对于某些使用 **Alibaba WAF** 或 **Amazon WAF** 的网站，成功完成 CAPTCHA 识别后还需要获取 cookies，以便在后续请求中使用。
+对于某些使用 **Alibaba WAF** 的网站，成功完成 CAPTCHA 识别后还需要获取 cookies，以便在后续请求中使用。
 
 为此，请在 `metadata` 对象中添加以下参数：
 
