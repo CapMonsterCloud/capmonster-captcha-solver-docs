@@ -64,6 +64,20 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 	
     ---
 
+    <ParamItem title="aidEncrypted（位于 metadata 中）" type="string" />
+
+此参数包含 Aid 值，需要在创建任务之前从目标网站获取。
+
+示例：`HHuVfL451oAYXSwVa87xnU4QHER9ufsPpaSomCugX5Il/Nc2vLTu2dgoguMwmhAM`
+
+**重要**：并非所有网站都使用此参数。如果网站不返回 Aid，则无需传递 `aidEncrypted`。
+
+`aidEncrypted` 的值**仅可使用一次**：每次创建新任务时，都必须获取新的 Aid。
+
+详情请参阅[如何获取 aidEncrypted](#如何获取-aidencrypted)。
+
+---
+
     <ParamItem title="userAgent" type="string" />
     浏览器 User-Agent。请使用 CapMonster Cloud 当前支持的值：`userAgentPlaceholder`<br />
 
@@ -102,6 +116,8 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ## 创建任务方法 
 
+如果网站使用 `aidEncrypted`，请将其放在 `metadata` 中传递。每次创建新任务时，都要从网站获取新的值。
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
   <TabItem value="proxyless" label="CustomTask（无代理）" default className="method-panel">
@@ -122,7 +138,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           }
         }
       }
@@ -156,7 +172,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           },
           "proxyType": "your-proxy-type",
           "proxyAddress": "your-proxy-address",
@@ -229,6 +245,48 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 ![](./images/tendi/tendi_captchaUrl-1.png)
 
 文件名中的 `*` 表示任意字符串或空字符串。例如，`TJNCaptcha*.js` 可以匹配 `TJNCaptcha.js` 或 `TJNCaptcha-global.js`。
+
+## 如何获取 aidEncrypted
+
+如果网站使用 Aid，请在创建任务之前通过单独的请求获取它，并将返回的值传递到 `metadata` 对象中的 `aidEncrypted` 参数。
+
+打开**开发者工具**，转到 **Network** 选项卡并触发验证码。找到网站用于获取 Aid 的请求，然后从响应中复制该值。
+
+请求 URL 示例：
+
+```text
+https://example.com/path/GetCaptchaAid.ashx?_=1234567890000
+```
+
+同一请求中也可能包含 `websiteKey`（`AppId`）的值。
+
+![](./images/tendi/aid-encrypted.png)
+
+请求 URL 和响应格式取决于具体网站。
+
+使用 `aidEncrypted` 参数创建任务的示例：
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "TenDI",
+    "websiteURL": "https://example.com/page-with-captcha",
+    "websiteKey": "YOUR_WEBSITE_KEY",
+    "metadata": {
+      "captchaUrl": "https://example.com/TCaptcha.js",
+      "aidEncrypted": "YOUR_AID_ENCRYPTED"
+    }
+  }
+}
+```
+
+:::warning 重要：
+
+每次创建任务之前，都要获取新的 Aid 值。请勿重复使用为上一任务获取的 `aidEncrypted` 值，也不要使用文档示例中的值。
+
+:::
 
 ## 如何查找任务创建所需的所有参数
 

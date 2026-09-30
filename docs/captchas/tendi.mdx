@@ -64,6 +64,19 @@ CapMonster Cloud по умолчанию работает через встро�
 	
     ---
 
+   <ParamItem title="aidEncrypted (внутри metadata)" type="string" />
+
+Параметр содержит значение Aid, которое необходимо получить с целевого сайта перед созданием задачи.
+
+Пример: `HHuVfL451oAYXSwVa87xnU4QHER9ufsPpaSomCugX5Il/Nc2vLTu2dgoguMwmhAM`
+
+**Важно**: данный параметр используется не на всех сайтах. Если сайт не возвращает Aid, `aidEncrypted` передавать не нужно.
+Значение `aidEncrypted` является **одноразовым**: для каждой новой задачи необходимо получать новый Aid.
+
+Подробнее см. в разделе [Как получить aidEncrypted](#как-получить-aidencrypted).
+
+---
+
     <ParamItem title="userAgent" type="string" />
     User-Agent браузера. Используйте текущее значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
 
@@ -126,6 +139,8 @@ https://ru.api.capmonster.cloud/createTask
 Подробнее в разделе [createTask](/docs/api/methods/create-task/).
 
 :::
+<br />
+Если на сайте используется `aidEncrypted`, передавайте его в `metadata`. Для каждой новой задачи получайте новое значение с сайта.
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
@@ -142,7 +157,7 @@ https://ru.api.capmonster.cloud/createTask
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           }
         }
       }
@@ -171,7 +186,7 @@ https://ru.api.capmonster.cloud/createTask
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           },
           "proxyType": "your-proxy-type",
           "proxyAddress": "your-proxy-address",
@@ -263,6 +278,48 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 `*` в имени файла означает произвольную или пустую строку. Например, шаблон `TJNCaptcha*.js` может соответствовать файлам `TJNCaptcha.js` или `TJNCaptcha-global.js`.
 
+## Как получить aidEncrypted
+
+Если на сайте используется Aid, получите его отдельным запросом перед созданием задачи и передайте полученное значение в параметре `aidEncrypted` внутри объекта `metadata`.
+
+Откройте **Инструменты разработчика**, перейдите на вкладку **Network** и активируйте CAPTCHA. Найдите запрос, с помощью которого сайт получает Aid, и скопируйте значение из ответа.
+
+Пример адреса запроса:
+
+```text
+https://example.com/path/GetCaptchaAid.ashx?_=1234567890000
+```
+
+В этом же запросе также может передаваться значение `websiteKey` (`AppId`).
+
+![](./images/tendi/aid-encrypted.png)
+
+Адрес запроса и формат ответа зависят от конкретного сайта.
+
+Пример создания задачи с параметром `aidEncrypted`:
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "TenDI",
+    "websiteURL": "https://example.com/page-with-captcha",
+    "websiteKey": "YOUR_WEBSITE_KEY",
+    "metadata": {
+      "captchaUrl": "https://example.com/TCaptcha.js",
+      "aidEncrypted": "YOUR_AID_ENCRYPTED"
+    }
+  }
+}
+```
+
+:::warning Важно:
+
+Получайте новое значение Aid перед созданием каждой задачи. Не используйте повторно значение `aidEncrypted`, полученное для предыдущей задачи, и не используйте значения из примеров документации.
+
+:::
+
 
 ## Как найти все нужные параметры для создания задачи на решение
 
@@ -270,7 +327,7 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 Для автоматизации поиска параметров их можно извлекать через **браузер** (обычный или headless, например, с **Playwright**) или напрямую из **HTTP-запросов**. Поскольку значения динамических параметров действуют недолго, их рекомендуется использовать сразу после получения.
 
-:::warning **Важно!**
+:::warning **Важно:**
 Приведённые фрагменты кода являются базовыми примерами для ознакомления в извлечении необходимых параметров. Точная реализация будет зависеть от вашего сайта с капчей, его структуры и используемых HTML-элементов и селекторов.
 :::
 

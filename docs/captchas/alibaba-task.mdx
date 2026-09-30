@@ -41,6 +41,16 @@ import McpNotice from '@site/src/components/McpNotice';
   <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
+<br />
+**TRACELESS — невидимая проверка**
+
+CapMonster Cloud также поддерживает Alibaba CAPTCHA `TRACELESS` — фоновую проверку без видимого задания, которая анализирует данные браузера, устройства и поведение пользователя.
+
+Определить этот тип можно по `"CaptchaType": "TRACELESS"` в ответе на запрос загрузки капчи на вкладке **Network** в инструментах разработчика.
+
+![](./images/alibaba-task/traceless.png)
+<br />
+
 
 :::warning **Внимание!**
 CapMonster Cloud по умолчанию работает через встроенные прокси – они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
@@ -143,9 +153,11 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <ParamItem title="cookieRequired (внутри metadata)" type="boolean" />
 
-Возвращает cookies вместе с результатом решения CAPTCHA.
+Возвращает cookies вместе с результатом решения CAPTCHA.<br />
+Используйте значение `true` для сайтов с **Alibaba WAF**, если после успешного прохождения проверки требуется получить cookies.
+Наличие cookies `ssxmod_itna` и `ssxmod_itna2` — признак того, что на сайте используется **Alibaba WAF**, а не обычная CAPTCHA.
 
-Используйте значение `true` только для сайтов, использующих **Alibaba WAF** или **Amazon WAF**, где после успешного прохождения проверки требуется получить cookies.
+*см. подробнее в разделе [Как отличить Alibaba WAF от Alibaba CAPTCHA](#как-отличить-alibaba-waf-от-alibaba-captcha)*
 
 По умолчанию параметр не используется.
 
@@ -193,6 +205,16 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
 </div>
+
+## Как отличить Alibaba WAF от Alibaba CAPTCHA
+
+Наличие cookies `ssxmod_itna` и `ssxmod_itna2` указывает на использование Alibaba WAF. При обычной Alibaba CAPTCHA эти cookies отсутствуют.
+
+Чтобы проверить их наличие, откройте **Инструменты разработчика** → **Application** → **Cookies** и выберите домен сайта.
+
+![Cookies ssxmod_itna и ssxmod_itna2 во вкладке Application](./images/alibaba-task/alibaba-waf-cookies.png)
+
+Если сайт использует Alibaba WAF и для дальнейших запросов нужны cookies, передайте `cookieRequired: true` в объекте `metadata` при создании задачи.
 
 ## Метод создания задачи
 
@@ -461,7 +483,7 @@ https://ru.api.capmonster.cloud/createTask
 
 ### Вариант с возвратом cookies (`cookieRequired`)
 
-Для некоторых сайтов, использующих **Alibaba WAF** или **Amazon WAF**, после успешного решения необходимо получить cookies, которые затем используются при последующих запросах.
+Для некоторых сайтов, использующих **Alibaba WAF**, после успешного решения необходимо получить cookies, которые затем используются при последующих запросах.
 
 Для этого добавьте в объект `metadata` параметр:
 

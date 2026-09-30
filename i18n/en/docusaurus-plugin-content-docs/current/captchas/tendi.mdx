@@ -63,6 +63,19 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
 
     ---
 
+   <ParamItem title="aidEncrypted (inside metadata)" type="string" />
+
+This parameter contains the Aid value, which must be obtained from the target website before creating a task.
+
+Example: `HHuVfL451oAYXSwVa87xnU4QHER9ufsPpaSomCugX5Il/Nc2vLTu2dgoguMwmhAM`
+
+**Important**: this parameter is not used on all websites. If the website does not return Aid, you do not need to pass `aidEncrypted`.
+The `aidEncrypted` value is **single-use**: a new Aid must be obtained for each new task.
+
+For details, see [How to get aidEncrypted](#how-to-get-aidencrypted).
+
+---
+
     <ParamItem title="userAgent" type="string" />
     Browser User-Agent. Use the current value supported by CapMonster Cloud: `userAgentPlaceholder`<br />
 
@@ -100,6 +113,8 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
 </div>
 
 ## Create task method
+If the website uses `aidEncrypted`, pass it in `metadata`. Obtain a new value from the website for each new task.
+
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
   <TabItem value="proxyless" label="CustomTask (without proxy)" default className="method-panel">
@@ -120,7 +135,7 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           }
         }
       }
@@ -154,7 +169,7 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
           "websiteKey": "your-website-key",
           "userAgent": "userAgentPlaceholder",
           "metadata": {
-            "captchaUrl": "https://global.captcha.example.com/TCaptcha-global.js"
+            "captchaUrl": "https://example.com/TCaptcha.js"
           },
           "proxyType": "your-proxy-type",
           "proxyAddress": "your-proxy-address",
@@ -228,13 +243,56 @@ For the second version, files named `TJNCaptcha*.js` and `TJCaptcha*.js` may als
 
 `*` in the filename represents any string or an empty string. For example, the pattern `TJNCaptcha*.js` can match files such as `TJNCaptcha.js` or `TJNCaptcha-global.js`.
 
+## How to get aidEncrypted
+
+If the website uses Aid, obtain it with a separate request before creating a task and pass the returned value in the `aidEncrypted` parameter inside the `metadata` object.
+
+Open **Developer Tools**, go to the **Network** tab, and trigger the CAPTCHA. Find the request the website uses to obtain Aid and copy the value from the response.
+
+Example request URL:
+
+```text
+https://example.com/path/GetCaptchaAid.ashx?_=1234567890000
+```
+
+The same request may also include the `websiteKey` (`AppId`) value.
+
+![](./images/tendi/aid-encrypted.png)
+
+The request URL and response format depend on the website.
+
+Example of creating a task with the `aidEncrypted` parameter:
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "TenDI",
+    "websiteURL": "https://example.com/page-with-captcha",
+    "websiteKey": "YOUR_WEBSITE_KEY",
+    "metadata": {
+      "captchaUrl": "https://example.com/TCaptcha.js",
+      "aidEncrypted": "YOUR_AID_ENCRYPTED"
+    }
+  }
+}
+```
+
+:::warning Important:
+
+Obtain a new Aid value before creating each task. Do not reuse an `aidEncrypted` value obtained for a previous task, and do not use values from the documentation examples.
+
+:::
+
+
 ## How to find all required parameters for task creation
 
 ### Automatically
 
 To automate parameter extraction, you can retrieve them via a **browser** (regular or headless, e.g., using **Playwright**) or directly from **HTTP requests**. Since dynamic parameter values are short-lived, it is recommended to use them immediately after retrieval.
 
-:::warning **Important!**
+:::warning **Important:**
 The provided code snippets are basic examples for learning how to extract the required parameters. The exact implementation will depend on your captcha page, its structure, and the HTML elements and selectors used.
 :::
 

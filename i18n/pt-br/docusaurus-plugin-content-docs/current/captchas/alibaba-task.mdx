@@ -42,6 +42,16 @@ A seguir estão exemplos de tipos de tarefas do Alibaba CAPTCHA que atualmente s
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
 
+<br />
+**TRACELESS — verificação invisível**
+
+O CapMonster Cloud também oferece suporte ao Alibaba CAPTCHA `TRACELESS` — uma verificação em segundo plano, sem desafio visível, que analisa dados do navegador, do dispositivo e o comportamento do usuário.
+
+Você pode identificar esse tipo pelo valor `"CaptchaType": "TRACELESS"` na resposta à requisição de carregamento do CAPTCHA, na aba **Network** das ferramentas de desenvolvedor do navegador.
+
+![](./images/alibaba-task/traceless.png)
+<br />
+
 :::warning **Atenção!**
 O CapMonster Cloud, por padrão, funciona com proxies integrados – já incluídos no custo do serviço. É necessário especificar seus próprios proxies apenas nos casos em que o site não aceita o token ou quando o acesso aos serviços integrados está restrito.
 
@@ -142,9 +152,11 @@ Exemplo: `https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5
 
 <ParamItem title="cookieRequired (dentro de metadata)" type="boolean" />
 
-Retorna cookies junto com a solução do CAPTCHA.
+Retorna cookies junto com a solução do CAPTCHA.<br />
+Use o valor `true` para sites com **Alibaba WAF** se for necessário obter cookies após a conclusão bem-sucedida da verificação.
+A presença dos cookies `ssxmod_itna` e `ssxmod_itna2` indica que o site utiliza **Alibaba WAF**, e não um CAPTCHA comum.
 
-Use o valor `true` somente para sites que utilizam **Alibaba WAF** ou **Amazon WAF** e exigem cookies após a conclusão bem-sucedida da verificação.
+*Para mais detalhes, consulte [Como distinguir Alibaba WAF de Alibaba CAPTCHA](#como-distinguir-alibaba-waf-de-alibaba-captcha).*
 
 Por padrão, esse parâmetro não é utilizado.
 
@@ -193,6 +205,16 @@ Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragen
   ---
 
 </div>
+
+## Como distinguir Alibaba WAF de Alibaba CAPTCHA
+
+A presença dos cookies `ssxmod_itna` e `ssxmod_itna2` indica o uso de Alibaba WAF. Esses cookies não estão presentes quando o site utiliza um Alibaba CAPTCHA comum.
+
+Para verificar a presença desses cookies, abra as **Ferramentas de Desenvolvedor** → **Application** → **Cookies** e selecione o domínio do site.
+
+![Cookies ssxmod_itna e ssxmod_itna2 na aba Application](./images/alibaba-task/alibaba-waf-cookies.png)
+
+Se o site utilizar Alibaba WAF e os cookies forem necessários para as próximas requisições, envie `cookieRequired: true` no objeto `metadata` ao criar a tarefa.
 
 ### Variante com `punishUrl`
 
@@ -285,7 +307,7 @@ O Alibaba Punish pode usar verificações como seleção de imagens corresponden
 
 ### Variante com retorno de cookies (`cookieRequired`)
 
-Para alguns sites que utilizam **Alibaba WAF** ou **Amazon WAF**, é necessário obter cookies após a resolução bem-sucedida. Esses cookies são utilizados nas solicitações subsequentes.
+Para alguns sites que utilizam **Alibaba WAF**, é necessário obter cookies após a resolução bem-sucedida. Esses cookies são utilizados nas solicitações subsequentes.
 
 Para isso, adicione o seguinte parâmetro ao objeto `metadata`:
 
