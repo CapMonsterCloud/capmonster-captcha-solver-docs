@@ -207,7 +207,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="154", "Chromium";v="154"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -312,7 +312,7 @@ Upgrade-Insecure-Requests: 1
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="154", "Chromium";v="154"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -379,7 +379,7 @@ const url =
 // === 请求头 ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="153", "Google Chrome";v="153"',
+    '"Not(A:Brand";v="8", "Chromium";v="154", "Google Chrome";v="154"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -489,7 +489,7 @@ const url =
 // === 设置所需的请求头 ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="153", "Google Chrome";v="153"',
+    '"Not(A:Brand";v="8", "Chromium";v="154", "Google Chrome";v="154"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -708,7 +708,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="154", "Chromium";v="154"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -779,7 +779,7 @@ async function main() {
     // 构建最终标头
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="153", "Chromium";v="153"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="154", "Chromium";v="154"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",
@@ -881,7 +881,7 @@ class TSPDBypass:
             "Accept-Encoding": "gzip, deflate, br",
             "Connection": "keep-alive",
             "Upgrade-Insecure-Requests": "1",
-            "sec-ch-ua": '"Google Chrome";v="153", "Not.A/Brand";v="8", "Chromium";v="153"',
+            "sec-ch-ua": '"Google Chrome";v="154", "Not.A/Brand";v="8", "Chromium";v="154"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
         }
@@ -1046,7 +1046,7 @@ class TSPDBypass:
         
         # 构建最终标头
         final_headers = self.build_headers(final_cookies)
-        final_headers["sec-ch-ua"] = '"Google Chrome";v="153", "Not.A/Brand";v="8", "Chromium";v="153"'
+        final_headers["sec-ch-ua"] = '"Google Chrome";v="154", "Not.A/Brand";v="8", "Chromium";v="154"'
         final_headers["sec-ch-ua-mobile"] = "?0"
         final_headers["sec-ch-ua-platform"] = '"Windows"'
         final_headers["Upgrade-Insecure-Requests"] = "1"
