@@ -48,6 +48,9 @@ Accelerate your automation pipeline with our official client libraries and integ
 - 🐍 **[Python SDK](https://github.com/CapMonsterCloud/capmonster-python-captcha-solver)** — Async, Playwright, Selenium, and Requests.
 - 🟢 **[Node.js / JavaScript SDK](https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver)** — Official Node.js library with TypeScript support.
 - 🔷 **[.NET / C# SDK](https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver)** — Official .NET package for C# automation projects.
+- 🐹 **[Go SDK](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver)** — Official Go (Golang) client library for CapMonster Cloud.
+- 🐘 **[PHP SDK](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver)** — Official PHP client library for captcha solving in PHP scripts and scrapers.
+- 🦀 **[Rust SDK](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)** — Async Rust crate built on tokio for scraping and browser automation.
 - 🧩 **[n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver)** — No-code workflow automation node.
 - 🤖 **[MCP Server](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver)** — Connect AI agents (Claude, Cursor, etc.) directly to CapMonster Cloud via Model Context Protocol.
 - 🎭 **[MCP Server for Patchright](https://github.com/CapMonsterCloud/capmonster-mcp-patchright-captcha-solver)** — Stealth browser automation with built-in captcha solving for AI agents.
