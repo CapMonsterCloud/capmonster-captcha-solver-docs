@@ -1,0 +1,210 @@
+---
+sidebar_position: 5
+sidebar_label: Вторичные ключи
+title: "Вторичные API-ключи с лимитом расходов — API Capmonster Cloud для корпоративных аккаунтов"
+description: "Создание, просмотр, изменение и удаление вторичных API-ключей корпоративного аккаунта Capmonster Cloud, каждый со своим лимитом расходов, через keys API."
+---
+
+import { ArticleHead } from '../../../src/theme/ArticleHead';
+
+<ArticleHead slug="api/methods/secondary-keys" />
+
+# Вторичные ключи : лимит расходов на ключ
+
+:::info Адреса методов
+```http
+https://api.capmonster.cloud/keys/list
+https://api.capmonster.cloud/keys/create
+https://api.capmonster.cloud/keys/update
+https://api.capmonster.cloud/keys/delete
+```
+
+формат запроса: `JSON POST`
+:::
+
+:::note Только для корпоративных аккаунтов
+Вторичные ключи доступны корпоративным (enterprise) аккаунтам. Чтобы включить их, обратитесь к своему менеджеру.
+:::
+
+У корпоративного аккаунта есть один **основной ключ** (тот, что показан в [личном кабинете](https://dash.capmonster.cloud/)) и любое количество **вторичных ключей**. Вторичный ключ решает капчи точно так же, как основной, и списывает средства с того же баланса аккаунта, но у него может быть собственный **лимит расходов**: как только сумма, списанная по этому ключу, достигает лимита, [createTask](./create-task.mdx) с этим ключом возвращает `ERROR_ZERO_BALANCE`, а остальные ключи продолжают работать. Ключ без лимита не ограничен.
+
+Все запросы к keys API авторизуются **основным ключом** в поле `clientKey`. Вторичные ключи не могут управлять ключами.
+
+## Лимит, расход и остаток
+
+- `spendLimit` — накопительный лимит в USD. Он не сбрасывается сам: чтобы дать ключу больше средств, увеличьте лимит.
+- `spent` — сумма, списанная по ключу с момента его создания.
+- `remaining` — `spendLimit - spent`, не меньше нуля. Для ключа без лимита — `null`.
+- [getBalance](./get-balance.mdx), вызванный с вторичным ключом, возвращает меньшее из баланса аккаунта и `remaining` ключа.
+- При создании задачи средства не резервируются, поэтому уже выполняющиеся задачи могут немного превысить лимит.
+
+## Общие параметры запроса
+
+### `clientKey`
+Type: `String` <br />
+Обязательный: `Да`<br />
+Ваш **основной** ключ
+
+## Общая структура ответа
+
+### `errorId`
+Type: `Integer` <br />
+Идентификатор ошибки.<br />**0** - ошибок нет, свойство *errorCode* отсутствует<br />**1** - ошибка, информация о ней находится в свойстве *errorCode*
+
+### `errorCode`
+Type: `String` <br />
+Код ошибки. См. [глоссарий ошибок](../api-errors.mdx).
+
+### Объект ключа
+Каждый ключ возвращается в виде:
+
+```json
+{
+  "publicKey": "90407e0973872fde3b7a99306814afad",
+  "label": "scraper-eu",
+  "spendLimit": 50.0,
+  "spent": 12.345,
+  "remaining": 37.655,
+  "isActive": true,
+  "createdAt": "2026-10-28T09:15:00"
+}
+```
+
+## /keys/list
+
+Возвращает вторичные ключи аккаунта.
+
+### `includeRevoked`
+Type: `Boolean` <br />
+Обязательный: `Нет`<br />
+Вернуть также удалённые ключи (`isActive: false`, с полем `revokedAt`). По умолчанию `false`.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "includeRevoked": false
+}
+```
+
+```json
+{
+  "errorId": 0,
+  "keys": [
+    {
+      "publicKey": "90407e0973872fde3b7a99306814afad",
+      "label": "scraper-eu",
+      "spendLimit": 50.0,
+      "spent": 12.345,
+      "remaining": 37.655,
+      "isActive": true,
+      "createdAt": "2026-10-28T09:15:00"
+    }
+  ]
+}
+```
+
+## /keys/create
+
+Создаёт вторичный ключ.
+
+### `label`
+Type: `String` <br />
+Обязательный: `Нет`<br />
+Произвольный текст до 64 символов, отображается в списке ключей.
+
+### `spendLimit`
+Type: `Decimal` <br />
+Обязательный: `Нет`<br />
+Лимит в USD, `0` или больше. Не передавайте поле или передайте `null`, чтобы ключ был без лимита.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "label": "scraper-eu",
+  "spendLimit": 50.0
+}
+```
+
+```json
+{
+  "errorId": 0,
+  "key": {
+    "publicKey": "90407e0973872fde3b7a99306814afad",
+    "label": "scraper-eu",
+    "spendLimit": 50.0,
+    "spent": 0,
+    "remaining": 50.0,
+    "isActive": true,
+    "createdAt": "2026-10-28T09:15:00"
+  }
+}
+```
+
+## /keys/update
+
+Изменяет метку и лимит расходов ключа. Оба поля **заменяются** переданными значениями, поэтому всегда передавайте метку, которую хотите сохранить.
+
+### `publicKey`
+Type: `String` <br />
+Обязательный: `Да`<br />
+Изменяемый вторичный ключ.
+
+### `label`
+Type: `String` <br />
+Обязательный: `Нет`<br />
+Новая метка; не передавайте поле, чтобы очистить метку.
+
+### `spendLimit`
+Type: `Decimal` <br />
+Обязательный: `Нет`<br />
+Новый лимит в USD; не передавайте поле или передайте `null`, чтобы снять лимит. Если новый лимит меньше `spent`, ключ перестаёт работать сразу.
+
+### `expectedSpendLimit`
+Type: `Decimal` <br />
+Обязательный: `Да` (передайте `null`, если у ключа нет лимита)<br />
+Значение `spendLimit`, которое вы прочитали последним. Если кто-то изменил лимит за это время, запрос отклоняется с `ERROR_SECONDARY_KEY_CONFLICT` и ничего не меняется: прочитайте ключ заново и повторите запрос с актуальными значениями.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "publicKey": "90407e0973872fde3b7a99306814afad",
+  "label": "scraper-eu",
+  "spendLimit": 100.0,
+  "expectedSpendLimit": 50.0
+}
+```
+
+Ответ имеет тот же вид, что и у `/keys/create`.
+
+## /keys/delete
+
+Удаляет вторичный ключ. Ключ перестаёт работать сразу; история его расходов остаётся доступной через `/keys/list` с `includeRevoked: true`.
+
+### `publicKey`
+Type: `String` <br />
+Обязательный: `Да`<br />
+Удаляемый вторичный ключ.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "publicKey": "90407e0973872fde3b7a99306814afad"
+}
+```
+
+```json
+{
+  "errorId": 0
+}
+```
+
+## Ошибки
+
+| `errorCode` | Значение |
+|---|---|
+| `ERROR_KEY_DOES_NOT_EXIST` | `clientKey` не является активным основным ключом (HTTP 403). |
+| `ERROR_SECONDARY_KEYS_NOT_ALLOWED` | Аккаунт не является корпоративным. |
+| `ERROR_SECONDARY_KEYS_LIMIT_EXCEEDED` | У аккаунта уже максимальное число активных вторичных ключей. |
+| `ERROR_SECONDARY_KEY_NOT_FOUND` | `publicKey` неизвестен, уже удалён или принадлежит другому аккаунту. |
+| `ERROR_SECONDARY_KEY_CONFLICT` | `expectedSpendLimit` отличается от текущего лимита; перечитайте ключ и повторите. |
+| `ERROR_BAD_PARAMETERS` | Некорректные `label` или `spendLimit`; подробности в `errorDescription`. |

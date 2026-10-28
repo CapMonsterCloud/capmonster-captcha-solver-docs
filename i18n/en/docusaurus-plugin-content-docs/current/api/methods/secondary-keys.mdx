@@ -1,0 +1,210 @@
+---
+sidebar_position: 5
+sidebar_label: Secondary keys
+title: "Secondary API keys with spend limits - Capmonster Cloud API for enterprise accounts"
+description: "Create, list, edit and delete secondary API keys of your Capmonster Cloud enterprise account, each with its own spend limit, through the keys API."
+---
+
+import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
+
+<ArticleHead slug="api/methods/secondary-keys" />
+
+# Secondary keys : per-key spend limits
+
+:::info Method addresses
+```http
+https://api.capmonster.cloud/keys/list
+https://api.capmonster.cloud/keys/create
+https://api.capmonster.cloud/keys/update
+https://api.capmonster.cloud/keys/delete
+```
+
+request format: `JSON POST`
+:::
+
+:::note Enterprise accounts only
+Secondary keys are available to enterprise accounts. Contact your account manager to enable them.
+:::
+
+An enterprise account has one **main key** (the key shown in your [dashboard](https://dash.capmonster.cloud/)) and any number of **secondary keys**. A secondary key solves captchas exactly like the main key and pays from the same account balance, but it can carry its own **spend limit**: once the amount charged to that key reaches the limit, [createTask](./create-task.mdx) with that key returns `ERROR_ZERO_BALANCE` while the other keys keep working. A key without a limit is unlimited.
+
+Every request to the keys API is authenticated with the **main key** in `clientKey`. Secondary keys cannot manage keys.
+
+## Spend limit, spent and remaining
+
+- `spendLimit` is a cumulative cap in USD. It never resets by itself: to give a key more headroom, raise its limit.
+- `spent` is the amount charged to the key since it was created.
+- `remaining` is `spendLimit - spent`, never below zero. It is `null` for an unlimited key.
+- [getBalance](./get-balance.mdx) called with a secondary key returns the smaller of the account balance and the key's `remaining`.
+- Nothing is reserved when a task is created, so tasks that are already in progress can push `spent` slightly above the limit.
+
+## Common request parameters
+
+### `clientKey`
+Type: `String` <br />
+Required: `Yes`<br />
+Your **main** key
+
+## Common response structure
+
+### `errorId`
+Type: `Integer` <br />
+Error identificator.<br />**0** - no error, no *errorCode* property<br />**1** - error, information about it is in the *errorCode* property
+
+### `errorCode`
+Type: `String` <br />
+Error code. Check out [error list](../api-errors.mdx).
+
+### Key object
+Each key is returned as:
+
+```json
+{
+  "publicKey": "90407e0973872fde3b7a99306814afad",
+  "label": "scraper-eu",
+  "spendLimit": 50.0,
+  "spent": 12.345,
+  "remaining": 37.655,
+  "isActive": true,
+  "createdAt": "2026-10-28T09:15:00"
+}
+```
+
+## /keys/list
+
+Returns the secondary keys of the account.
+
+### `includeRevoked`
+Type: `Boolean` <br />
+Required: `No`<br />
+Also return deleted keys (`isActive: false`, with `revokedAt`). Default: `false`.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "includeRevoked": false
+}
+```
+
+```json
+{
+  "errorId": 0,
+  "keys": [
+    {
+      "publicKey": "90407e0973872fde3b7a99306814afad",
+      "label": "scraper-eu",
+      "spendLimit": 50.0,
+      "spent": 12.345,
+      "remaining": 37.655,
+      "isActive": true,
+      "createdAt": "2026-10-28T09:15:00"
+    }
+  ]
+}
+```
+
+## /keys/create
+
+Creates a secondary key.
+
+### `label`
+Type: `String` <br />
+Required: `No`<br />
+Free text up to 64 characters, shown in the key list.
+
+### `spendLimit`
+Type: `Decimal` <br />
+Required: `No`<br />
+Cap in USD, `0` or more. Omit it or send `null` for an unlimited key.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "label": "scraper-eu",
+  "spendLimit": 50.0
+}
+```
+
+```json
+{
+  "errorId": 0,
+  "key": {
+    "publicKey": "90407e0973872fde3b7a99306814afad",
+    "label": "scraper-eu",
+    "spendLimit": 50.0,
+    "spent": 0,
+    "remaining": 50.0,
+    "isActive": true,
+    "createdAt": "2026-10-28T09:15:00"
+  }
+}
+```
+
+## /keys/update
+
+Changes the label and the spend limit of a key. Both fields are **replaced** with the values you send, so always send the label you want to keep.
+
+### `publicKey`
+Type: `String` <br />
+Required: `Yes`<br />
+The secondary key to change.
+
+### `label`
+Type: `String` <br />
+Required: `No`<br />
+New label; omit it to clear the label.
+
+### `spendLimit`
+Type: `Decimal` <br />
+Required: `No`<br />
+New cap in USD; omit it or send `null` to make the key unlimited. Lowering the cap below `spent` stops the key immediately.
+
+### `expectedSpendLimit`
+Type: `Decimal` <br />
+Required: `Yes` (send `null` when the key is unlimited)<br />
+The `spendLimit` you last read for this key. If somebody changed the limit in the meantime, the request is rejected with `ERROR_SECONDARY_KEY_CONFLICT` and nothing is changed: read the key again and retry with the current values.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "publicKey": "90407e0973872fde3b7a99306814afad",
+  "label": "scraper-eu",
+  "spendLimit": 100.0,
+  "expectedSpendLimit": 50.0
+}
+```
+
+The response has the same shape as `/keys/create`.
+
+## /keys/delete
+
+Deletes a secondary key. The key stops working at once; its spend history stays visible through `/keys/list` with `includeRevoked: true`.
+
+### `publicKey`
+Type: `String` <br />
+Required: `Yes`<br />
+The secondary key to delete.
+
+```json
+{
+  "clientKey": "MAIN_API_KEY",
+  "publicKey": "90407e0973872fde3b7a99306814afad"
+}
+```
+
+```json
+{
+  "errorId": 0
+}
+```
+
+## Errors
+
+| `errorCode` | Meaning |
+|---|---|
+| `ERROR_KEY_DOES_NOT_EXIST` | `clientKey` is not an active main key (HTTP 403). |
+| `ERROR_SECONDARY_KEYS_NOT_ALLOWED` | The account is not an enterprise account. |
+| `ERROR_SECONDARY_KEYS_LIMIT_EXCEEDED` | The account already has the maximum number of active secondary keys. |
+| `ERROR_SECONDARY_KEY_NOT_FOUND` | `publicKey` is unknown, already deleted or belongs to another account. |
+| `ERROR_SECONDARY_KEY_CONFLICT` | `expectedSpendLimit` differs from the current limit; reload and retry. |
+| `ERROR_BAD_PARAMETERS` | Invalid `label` or `spendLimit`; see `errorDescription`. |

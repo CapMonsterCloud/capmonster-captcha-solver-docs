@@ -150,3 +150,19 @@ The service is temporarily unavailable. This error is returned if the callback s
 ### `INVALID TASK`
 API error code: `ERROR_INVALID_TASK`<br />
 The request is syntactically valid but contains invalid data required to create a task. For example, required fields may be missing, contain invalid values, or contain expired data, making it impossible to solve the CAPTCHA. The `errorDescription` field specifies which request fields are invalid and how to fix them. Check the task parameters, verify that the submitted data is up to date, and correct the fields specified in `errorDescription`. If you are unable to resolve the issue yourself, please contact [support](https://helpdesk.zennolab.com/en/conversation/new).
+
+### `SECONDARY KEYS NOT ALLOWED`
+API error code: `ERROR_SECONDARY_KEYS_NOT_ALLOWED`<br />
+[Secondary keys](./methods/secondary-keys.mdx) are available to enterprise accounts only. Contact your account manager to enable them.
+
+### `SECONDARY KEYS LIMIT EXCEEDED`
+API error code: `ERROR_SECONDARY_KEYS_LIMIT_EXCEEDED`<br />
+The account already has the maximum number of active [secondary keys](./methods/secondary-keys.mdx). Delete keys you no longer use or contact your account manager to raise the limit.
+
+### `SECONDARY KEY NOT FOUND`
+API error code: `ERROR_SECONDARY_KEY_NOT_FOUND`<br />
+The `publicKey` passed to `/keys/update` or `/keys/delete` is unknown, already deleted or belongs to another account. Check the key with `/keys/list`.
+
+### `SECONDARY KEY CONFLICT`
+API error code: `ERROR_SECONDARY_KEY_CONFLICT`<br />
+The spend limit of the key was changed after you read it, so `expectedSpendLimit` no longer matches and nothing was changed. Read the key again with `/keys/list` and retry with the current values.
