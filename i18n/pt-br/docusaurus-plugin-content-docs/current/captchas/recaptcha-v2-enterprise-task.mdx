@@ -88,6 +88,11 @@ Neste exemplo, `6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` é o valor do parâmet
 
     ---
 
+    <ParamItem title="minScore" type="double" />
+    Pode ter um valor de **0,1** a **0,9**
+	
+	---
+
     <ParamItem title="enterprisePayload" type="object" />
     Objeto com parâmetros adicionais do reCAPTCHA Enterprise.
 
@@ -221,6 +226,7 @@ Object.defineProperty(window, 'grecaptcha', {
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
     "websiteKey": "your-website-key",
+	"minScore": 0.7,
     "enterprisePayload": {
       "s": "your-value"
     }
