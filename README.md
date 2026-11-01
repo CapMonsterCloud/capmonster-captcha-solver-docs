@@ -48,6 +48,7 @@ Accelerate your automation pipeline with our official client libraries and integ
 - 🐍 **[Python SDK (capmonstercloudclient)](https://github.com/ZennoLab/capmonstercloud-client-python)** — Async, Playwright, Selenium, and Requests.
 - 🟢 **[Node.js / JavaScript SDK](https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver)** — Official Node.js library with TypeScript support.
 - 🔷 **[.NET / C# SDK](https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver)** — Official .NET package for C# automation projects.
+- 🦀 **[Rust SDK (capmonstercloud-client)](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)** - Async tokio-based Rust client, published on [crates.io](https://crates.io/crates/capmonstercloud-client).
 - 🧩 **[n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver)** — No-code workflow automation node.
 - 📦 **[All Repositories & SDKs](https://github.com/orgs/CapMonsterCloud/repositories)** — Full list of open-source tools.
 
