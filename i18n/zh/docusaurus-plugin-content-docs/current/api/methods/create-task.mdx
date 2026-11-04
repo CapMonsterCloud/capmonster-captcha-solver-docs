@@ -44,7 +44,7 @@ https://api.capmonster.cloud/createTask
 
 类型: `String` <br />
 必填: `否`<br />
-用于接收验证码任务结果的 Web 地址，结果通过 POST 请求发送。<br />内容与 [getTaskResult](./get-task-result.mdx) 方法的响应相同。<br />响应内容不会被验证，服务器需在 2 秒内接收请求，然后关闭连接。
+用于接收验证码任务结果的 Web 地址，结果通过 POST 请求发送：完成的任务解决方案会发送到该地址，因此无需再轮询 [getTaskResult](./get-task-result.mdx) 方法。<br />请求正文包含 `getTaskResult` 响应的字段，包括 `solution`（任务解决方案）和 `cost`（解决费用，单位为美元，USD），此外还有 `taskId` 字段（类型为 `String`，任务标识符）。<br />响应内容不会被验证，服务器需在 2 秒内接收请求，然后关闭连接。
 
 `callbackUrl` 使用示例：
 
@@ -57,6 +57,22 @@ https://api.capmonster.cloud/createTask
     "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
   },
   "callbackUrl": "https://yourwebsite.com/callback"
+}
+```
+
+CapMonster Cloud 发送到 `callbackUrl` 的请求正文示例（`solution` - 任务解决方案，`cost` - 解决费用，单位为 USD）：
+
+```json
+{
+  "solution": {
+    "text": "answer"
+  },
+  "cost": 0.0003,
+  "status": "ready",
+  "taskId": "7654321",
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null
 }
 ```
 

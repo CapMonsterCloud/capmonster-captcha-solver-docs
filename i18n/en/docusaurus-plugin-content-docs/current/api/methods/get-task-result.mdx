@@ -66,6 +66,10 @@ Type: `String` <br />
 Type: `Object` <br />
 Task result data. Different for each type of task.
 
+### `cost`
+Type: `Float` <br />
+Solution cost in US dollars (USD). The value depends on the task type and matches the [current pricing](https://capmonster.cloud/en/prices/). The field is returned only in the ready response, when *status* is **ready**.
+
 ---
 ### Response example
 
@@ -85,6 +89,7 @@ Successful response
 ```json
 {
   "errorId":0,
+  "cost":0.0003,
   "status":"ready",
   "solution": {
     "text":"answer"
