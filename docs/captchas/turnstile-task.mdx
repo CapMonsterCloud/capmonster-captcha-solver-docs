@@ -498,12 +498,76 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Пример использует chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures, regex.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use regex::Regex;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Запуск браузера (с окном, как в примерах Playwright)
+    let (mut browser, mut handler) =
+        Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+
+    let page = browser.new_page("https://example.com").await?;
+
+    // Способ 1: найти элемент с data-sitekey
+    if let Ok(element) = page.find_element("[data-sitekey]").await {
+        if let Some(sitekey) = element.attribute("data-sitekey").await? {
+            println!("Turnstile Sitekey (из элемента): {sitekey}");
+            browser.close().await?;
+            return Ok(());
+        }
+    }
+
+    // Способ 2: разобрать window.onloadTurnstileCallback
+    println!("Turnstile элемент не найден. Проверяем через callback...");
+    let re_sitekey = Regex::new(r#"sitekey: ['"]([^'"]+)['"]"#)?;
+    let re_action = Regex::new(r#"action: ['"]([^'"]+)['"]"#)?;
+    for _ in 0..60 {
+        let callback: String = page
+            .evaluate(
+                "String(window.onloadTurnstileCallback ? window.onloadTurnstileCallback.toString() : '')",
+            )
+            .await?
+            .into_value()?;
+        if !callback.is_empty() {
+            let sitekey = re_sitekey.captures(&callback).map(|c| c[1].to_string());
+            let action = re_action.captures(&callback).map(|c| c[1].to_string());
+            println!("Turnstile Params (из callback): sitekey={sitekey:?}, action={action:?}");
+            break;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 ---
 
 ## Используйте библиотеку SDK
-
-Для Rust используйте официальный SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) и [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
@@ -752,6 +816,9 @@ class Program
   <TabItem value="rust" label="Rust" className="method-panel">
     <details>
       <summary>Показать код</summary>
+
+Для Rust используйте официальный SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) и [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
 
 ```rust
 // https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
