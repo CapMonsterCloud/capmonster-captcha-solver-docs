@@ -172,8 +172,6 @@ console.log("File successfully converted to Base64 and saved as output.txt");
 
 ## Use the SDK library
 
-For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
-
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
@@ -358,4 +356,40 @@ class Program
 </details> */}
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecognitionComplexImageTaskRequest, RecognitionMetadata, PayloadType};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let metadata = RecognitionMetadata::new("bills_audio")
+        .with_payload_type(PayloadType::Audio);
+
+    let request = RecognitionComplexImageTaskRequest::new(
+        vec![
+            "your_audio_base64".to_string(),
+        ],
+        metadata,
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

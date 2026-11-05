@@ -447,8 +447,6 @@ Parameters such as `sitekey`, `rqdata`, and `gid` may be included inside this da
 
 ## Use SDK Library
 
-For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
-
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript" default className="method-panel">
   <details>
@@ -683,4 +681,63 @@ class Program
 }
 ```
   </TabItem>  
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// the Rust SDK has no ready request class for this task: the example uses direct JSON API calls
+    // via reqwest (add to Cargo.toml: reqwest with the json feature, tokio, serde_json)
+
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = reqwest::Client::new();
+
+    // Set your CapMonster Cloud API key
+    let create = client
+        .post("https://api.capmonster.cloud/createTask")
+        .json(&json!({
+            "clientKey": "YOUR_API_KEY",
+            "task": {
+                "type": "HCaptchaTask",
+                "websiteURL": "https://lessons.zennolab.com/captchas/hcaptcha/?level=easy",
+                "websiteKey": "472fc7af-86a4-4382-9a49-ca9090474471",
+                "isInvisible": false,
+                "userAgent": "userAgentPlaceholder"
+            }
+        }))
+        .send()
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+    let task_id = create["taskId"].clone();
+
+    // poll getTaskResult with a 2-5 second interval
+    loop {
+        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+        let result = client
+            .post("https://api.capmonster.cloud/getTaskResult")
+            .json(&json!({ "clientKey": "YOUR_API_KEY", "taskId": task_id }))
+            .send()
+            .await?
+            .json::<serde_json::Value>()
+            .await?;
+        if result["status"] == "ready" {
+            println!("Solution: {}", result["solution"]);
+            break;
+        }
+    }
+
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

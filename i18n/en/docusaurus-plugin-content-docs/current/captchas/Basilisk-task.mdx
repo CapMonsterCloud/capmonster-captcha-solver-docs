@@ -355,11 +355,58 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com/captcha-page").await?;
+
+    let sitekey: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('[data-sitekey]');
+                return el ? el.getAttribute('data-sitekey') : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    if sitekey.is_empty() {
+        println!("site-key not found");
+    } else {
+        println!("Found site-key: {sitekey}");
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
-
-For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
@@ -606,4 +653,35 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{BasiliskCustomTaskRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = BasiliskCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-basilisk",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

@@ -436,11 +436,65 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+
+    // the reCAPTCHA checkbox iframe: its src query has k (sitekey) and size (invisible)
+    let src: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('iframe[src^="https://www.google.com/recaptcha/api2/anchor?"]');
+                return el ? el.src : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    let query = src.split('?').nth(1).unwrap_or("");
+    let (mut sitekey, mut is_invisible) = (None, false);
+    for pair in query.split('&') {
+        let mut parts = pair.splitn(2, '=');
+        match (parts.next(), parts.next()) {
+            (Some("k"), Some(v)) => sitekey = Some(v.to_string()),
+            (Some("size"), Some("invisible")) => is_invisible = true,
+            _ => {}
+        }
+    }
+    println!("sitekey: {sitekey:?}, isInvisible: {is_invisible}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
-
-For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
@@ -677,5 +731,36 @@ class Program
 </details>
 
     <BlogLink url="https://capmonster.cloud/en/blog/re-1/c-recaptcha-v2"/>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV2Request};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV2Request::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

@@ -343,11 +343,49 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+
+    // get the cookies
+    let cookies = page.get_cookies().await?;
+    println!("Cookies:");
+    for cookie in &cookies {
+        println!("{}={}", cookie.name, cookie.value);
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
-
-For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
@@ -590,4 +628,63 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// the Rust SDK has no ready request class for this task: the example uses direct JSON API calls
+    // via reqwest (add to Cargo.toml: reqwest with the json feature, tokio, serde_json)
+
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = reqwest::Client::new();
+
+    // Set your CapMonster Cloud API key and the parameters from the Temu website
+    let create = client
+        .post("https://api.capmonster.cloud/createTask")
+        .json(&json!({
+            "clientKey": "YOUR_API_KEY",
+            "task": {
+                "type": "CustomTask",
+                "class": "Temu",
+                "websiteURL": "https://www.example.com/bgn_verification.html?verifyCode=your-verify-code",
+                "userAgent": "userAgentPlaceholder",
+                "metadata": { "cookie": "your-cookie-string" }
+            }
+        }))
+        .send()
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+    let task_id = create["taskId"].clone();
+
+    // poll getTaskResult with a 2-5 second interval
+    loop {
+        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+        let result = client
+            .post("https://api.capmonster.cloud/getTaskResult")
+            .json(&json!({ "clientKey": "YOUR_API_KEY", "taskId": task_id }))
+            .send()
+            .await?
+            .json::<serde_json::Value>()
+            .await?;
+        if result["status"] == "ready" {
+            println!("Solution: {}", result["solution"]);
+            break;
+        }
+    }
+
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

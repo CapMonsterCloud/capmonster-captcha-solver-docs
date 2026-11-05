@@ -516,11 +516,100 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::js_protocol::runtime::{ExecutionContextId, EvaluateParams};
+use chromiumoxide::Page;
+
+async fn frame_context(page: &Page, needle: &str) -> Result<Option<ExecutionContextId>, Box<dyn std::error::Error>> {
+    for id in page.frames().await? {
+        let url = page.frame_url(id.clone()).await?.unwrap_or_default();
+        if url.contains(needle) {
+            return Ok(page.frame_execution_context(id).await?);
+        }
+    }
+    Ok(None)
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser
+        .new_page("https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high")
+        .await?;
+    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+
+    // reCAPTCHA frames: the checkbox (api2/anchor) and the challenge (api2/bframe)
+    let anchor = frame_context(&page, "api2/anchor").await?;
+    let anchor = anchor.ok_or("The reCAPTCHA checkbox iframe was not found")?;
+
+    // click the checkbox inside the frame
+    page.evaluate_expression(
+        EvaluateParams::builder()
+            .expression("document.querySelector('#recaptcha-anchor').click()")
+            .context_id(anchor)
+            .build()?,
+    )
+    .await?;
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+
+    let challenge = frame_context(&page, "api2/bframe").await?;
+    let challenge = challenge.ok_or("The reCAPTCHA challenge iframe was not found")?;
+
+    // the image, the task text and the grid size
+    let info: serde_json::Value = page
+        .evaluate_expression(
+            EvaluateParams::builder()
+                .expression(
+                    r#"(() => {
+                        const img = document.querySelector('img.rc-image-tile-33') || document.querySelector('img.rc-image-tile-44');
+                        const strong = document.querySelector('.rc-imageselect-desc-no-canonical strong, .rc-imageselect-desc strong');
+                        const tiles = Array.from(document.querySelectorAll('.rc-imageselect-tile')).filter(t => t.offsetParent !== null).length;
+                        return {
+                            image: img ? img.src : '',
+                            task: strong ? strong.textContent.trim() : 'Not found',
+                            grid: tiles >= 16 ? '4x4' : (tiles >= 9 ? '3x3' : '1x1')
+                        };
+                    })()"#,
+                )
+                .context_id(challenge)
+                .build()?,
+        )
+        .await?
+        .into_value()?;
+
+    println!("Image: {}", info["image"]);
+    println!("Task: select all images with: {}", info["task"]);
+    println!("Grid: {}", info["grid"]);
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
-
-For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
@@ -722,5 +811,40 @@ class Program
 ```
     </details>
 
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaComplexImageTaskRequest, RecaptchaGrid, RecaptchaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Replace with your own values
+    let metadata = RecaptchaMetadata::from_task(
+        RecaptchaGrid::ThreeByThree,
+        "Select all squares with mountains or hills",
+    );
+
+    let request = RecaptchaComplexImageTaskRequest::from_url("your-image-url", metadata)
+    .with_website_url("https://yourwebsite.com/page-with-recaptcha");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>
