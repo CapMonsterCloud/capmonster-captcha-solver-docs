@@ -1021,4 +1021,39 @@ class Program
 </details>
   </TabItem>
 
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{AmazonWafRequest, AmazonChallengeAndCaptcha};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let variant = AmazonChallengeAndCaptcha::new(
+        "your-challenge-script-url",
+        "your-website-key",
+        "your-context",
+        "your-iv",
+    )
+    .with_captcha_script("your-captcha-script-url");
+
+    let request = AmazonWafRequest::new("https://yourwebsite.com/page-with-aws-waf", variant)
+    // false - получить ExistingToken и CaptchaVoucher; true - получить Cookies
+    .with_cookie_solution(false);
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

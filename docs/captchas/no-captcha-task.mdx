@@ -725,4 +725,32 @@ class Program
     
     <BlogLink url="https://capmonster.cloud/ru/blog/re-1/c-recaptcha-v2"/>
   </TabItem>
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV2Request};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV2Request::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

@@ -364,4 +364,36 @@ class Program
 </details>
   </TabItem>
 
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecognitionComplexImageTaskRequest, RecognitionMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let metadata = RecognitionMetadata::new("dli");
+
+    let request = RecognitionComplexImageTaskRequest::new(
+        vec![
+            "your_image_base64".to_string(),
+        ],
+        metadata,
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

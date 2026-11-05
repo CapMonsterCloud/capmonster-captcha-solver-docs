@@ -752,4 +752,36 @@ class Program
     </details>
 	
   </TabItem>
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaComplexImageTaskRequest, RecaptchaGrid, RecaptchaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Замените на свои значения
+    let metadata = RecaptchaMetadata::from_task(
+        RecaptchaGrid::ThreeByThree,
+        "Select all squares with mountains or hills",
+    );
+
+    let request = RecaptchaComplexImageTaskRequest::from_url("your-image-url", metadata)
+    .with_website_url("https://yourwebsite.com/page-with-recaptcha");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

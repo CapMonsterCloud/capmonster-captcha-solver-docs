@@ -627,4 +627,60 @@ class Program
 </details>
   </TabItem>
 
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Для этой задачи в Rust SDK нет готового класса запроса: пример использует прямые вызовы JSON API
+    // через reqwest (добавьте в Cargo.toml: reqwest с фичей json, tokio, serde_json)
+
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = reqwest::Client::new();
+
+    // Укажите ваш API-ключ CapMonster Cloud и параметры с сайта Temu
+    let create = client
+        .post("https://api.capmonster.cloud/createTask")
+        .json(&json!({
+            "clientKey": "YOUR_API_KEY",
+            "task": {
+                "type": "CustomTask",
+                "class": "Temu",
+                "websiteURL": "https://www.example.com/bgn_verification.html?verifyCode=your-verify-code",
+                "userAgent": "userAgentPlaceholder",
+                "metadata": { "cookie": "your-cookie-string" }
+            }
+        }))
+        .send()
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+    let task_id = create["taskId"].clone();
+
+    // Опрашивайте getTaskResult с паузой 2-5 секунд
+    loop {
+        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+        let result = client
+            .post("https://api.capmonster.cloud/getTaskResult")
+            .json(&json!({ "clientKey": "YOUR_API_KEY", "taskId": task_id }))
+            .send()
+            .await?
+            .json::<serde_json::Value>()
+            .await?;
+        if result["status"] == "ready" {
+            println!("Решение: {}", result["solution"]);
+            break;
+        }
+    }
+
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

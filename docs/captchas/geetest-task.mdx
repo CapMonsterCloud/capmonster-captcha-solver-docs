@@ -944,6 +944,36 @@ Solution:
 ```
     </details>
   </TabItem>  
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{GeetestRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+// GeeTest v3: challenge - динамический ключ, получайте его перед созданием задачи
+    let request = GeetestRequest::new_v3(
+        "https://yourwebsite.com/page-with-geetest",
+        "your-gt-value",
+        "your-challenge-value",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 <br />
@@ -1693,6 +1723,38 @@ Solution:
     }
 }
 ```
+    </details>
+  </TabItem>
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use serde_json::json;
+use capmonstercloud_client::requests::{GeetestRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+// GeeTest v4: gt - это captcha_id; init_parameters передаются вместе с riskType
+    // (используется макрос json! из crates.io/crates/serde_json)
+    let request = GeetestRequest::new_v4_with_init_parameters(
+        "https://yourwebsite.com/page-with-geetest",
+        "your-gt-value",
+        json!({ "riskType": "your-risk-type" }),
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
     </details>
   </TabItem>
 </Tabs>
