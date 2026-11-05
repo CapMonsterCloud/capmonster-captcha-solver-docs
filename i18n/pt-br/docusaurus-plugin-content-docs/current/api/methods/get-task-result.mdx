@@ -78,6 +78,11 @@ Type: `String` <br />
 Type: `Object` <br />
 Informações sobre a solução da tarefa. Cada tipo de tarefa possui um formato diferente.
 
+### `cost`
+
+Type: `Float` <br />
+Custo da solução da tarefa em dólares americanos (USD). O valor depende do tipo de tarefa e corresponde às [preços atuais](https://capmonster.cloud/pt-br/prices/). O campo é retornado apenas na resposta pronta, quando *status* é **ready**.
+
 ---
 
 ### Exemplo de resposta:
@@ -98,6 +103,7 @@ Resposta bem-sucedida
 ```json
 {
   "errorId":0,
+  "cost":0.0003,
   "status":"ready",
   "solution": {
     "text":"answer"
