@@ -706,11 +706,66 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use serde_json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+
+    let params: serde_json::Value = page
+        .evaluate(
+            r#"(() => {
+                const g = window.gokuProps || {};
+                const scripts = Array.from(document.querySelectorAll('script'));
+                const find = name => {
+                    const s = scripts.find(script => (script.src || '').includes(name));
+                    return s ? s.src : 'Not found';
+                };
+                return {
+                    websiteKey: g.key || 'Not found',
+                    context: g.context || 'Not found',
+                    iv: g.iv || 'Not found',
+                    challengeScriptUrl: find('challenge.js'),
+                    captchaScriptUrl: find('captcha.js')
+                };
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    println!("Captcha params: {params}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
-
-Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
 
@@ -1013,4 +1068,42 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{AmazonWafRequest, AmazonChallengeAndCaptcha};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let variant = AmazonChallengeAndCaptcha::new(
+        "your-challenge-script-url",
+        "your-website-key",
+        "your-context",
+        "your-iv",
+    )
+    .with_captcha_script("your-captcha-script-url");
+
+    let request = AmazonWafRequest::new("https://yourwebsite.com/page-with-aws-waf", variant)
+    // false - 返回 ExistingToken 和 CaptchaVoucher；true - 返回 Cookies
+    .with_cookie_solution(false);
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
