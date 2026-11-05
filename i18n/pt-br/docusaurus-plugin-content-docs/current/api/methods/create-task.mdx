@@ -44,7 +44,7 @@ Array de dados da tarefa. Lista de tipos de tarefas de captcha [aqui](../../../c
 
 Type: `String` <br />
 Obrigatório: `Não`<br />
-Endereço web para envio do resultado da tarefa de captcha. Os dados são enviados via POST.<br />O conteúdo é idêntico à resposta do método [getTaskResult](./get-task-result.mdx).<br />O conteúdo da resposta não é verificado e o servidor deve aceitar a requisição em até 2 segundos, depois a conexão é encerrada.
+Endereço web para envio do resultado da tarefa de captcha. Os dados são enviados via POST: a solução pronta da tarefa chega a esse endereço, então não é necessário consultar o método [getTaskResult](./get-task-result.mdx).<br />O corpo da requisição contém os campos da resposta de `getTaskResult`, incluindo `solution` (solução da tarefa) e `cost` (custo da solução em dólares americanos, USD), além do campo adicional `taskId` (tipo `String`, identificador da tarefa).<br />O conteúdo da resposta não é verificado e o servidor deve aceitar a requisição em até 2 segundos, depois a conexão é encerrada.
 
 Exemplo de uso do parâmetro `callbackUrl`:
 
@@ -57,6 +57,22 @@ Exemplo de uso do parâmetro `callbackUrl`:
     "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
   },
   "callbackUrl": "https://yourwebsite.com/callback"
+}
+```
+
+Exemplo do corpo da requisição que o CapMonster Cloud envia para `callbackUrl` (`solution` - solução da tarefa, `cost` - custo da solução em USD):
+
+```json
+{
+  "solution": {
+    "text": "answer"
+  },
+  "cost": 0.0003,
+  "status": "ready",
+  "taskId": "7654321",
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null
 }
 ```
 

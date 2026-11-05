@@ -39,7 +39,7 @@ Task data array. See list of available object descriptions [here](../../../captc
 ### `callbackUrl`
 Type: `String` <br />
 Required: `No`<br />
-Web address for sending the captcha task result. Data is sent by POST request.<br />The content is identical to the response of the [getTaskResult](./get-task-result.mdx) method.<br />The content of the response is not checked and you should accept the request in 2 seconds then the connection will be closed.
+Web address for sending the captcha task result. Data is sent by POST request: the finished solution arrives at this address, so there is no need to poll the [getTaskResult](./get-task-result.mdx) method.<br />The request body contains the fields of the `getTaskResult` response, including `solution` (task solution) and `cost` (solution cost in US dollars, USD), plus an additional `taskId` field (type `String`, task identifier).<br />The content of the response is not checked and you should accept the request within 2 seconds, after which the connection will be closed.
 
 Example of using the `callbackUrl` function:
 
@@ -52,6 +52,22 @@ Example of using the `callbackUrl` function:
     "websiteKey": "6Lcg7CMUAAAAANphynKgn9YAgA4tQ2KI_iqRyTwd"
   },
   "callbackUrl": "https://yourwebsite.com/callback"
+}
+```
+
+Example of the request body that CapMonster Cloud sends to `callbackUrl` (`solution` - task solution, `cost` - solution cost in USD):
+
+```json
+{
+  "solution": {
+    "text": "answer"
+  },
+  "cost": 0.0003,
+  "status": "ready",
+  "taskId": "7654321",
+  "errorId": 0,
+  "errorCode": null,
+  "errorDescription": null
 }
 ```
 
