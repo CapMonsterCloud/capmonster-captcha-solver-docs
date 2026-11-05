@@ -16,6 +16,7 @@ import PriceBlock from '../../src/theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import BlogLink from '@theme/BlogLink';
 import { ArticleHead } from '../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/recaptcha-v2-enterprise-task" />
 
@@ -26,6 +27,8 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   <PriceBlock  captchaId="rc2e"/>
   {/* <PriceBlock  captchaId="rc2e-spotify-yahoo"/> */}
 </PriceBlockWrap>
+
+<McpNotice />
 
 ## Примеры заданий
 
@@ -86,6 +89,11 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
 	<p>Пример в html:
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
     
+    ---
+	
+	<ParamItem title="minScore" type="double" />
+    Может иметь значение от **0.1** до **0.9**
+
     ---
 
     <ParamItem title="enterprisePayload" type="object" />
@@ -242,6 +250,7 @@ https://ru.api.capmonster.cloud/createTask
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
     "websiteKey": "your-website-key",
+	"minScore": 0.7,
     "enterprisePayload": {
       "s": "your-value"
     }

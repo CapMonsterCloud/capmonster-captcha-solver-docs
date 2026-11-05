@@ -6,6 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start --host 0.0.0.0",
     "generate-llms": "node scripts/generate-llms.mjs",
+    "verify-llms": "node scripts/verify-llms.mjs",
     "build": "node scripts/generate-llms.mjs && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

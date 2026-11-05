@@ -1,0 +1,43 @@
+# Builds the site exactly like production (npm run build = generate-llms + docusaurus build)
+# and verifies that the LLM/MCP text files (llms.txt, llms-full.txt, /docs/**.txt)
+# are present and in sync with the HTML pages.
+#
+# Production deploys are done by Cloudflare Pages from `master`; this workflow does not
+# deploy anything. It only guards against regressions before they reach master.
+name: llms.txt parity
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Placeholders only. The Algolia theme refuses to build with empty values.
+      # Real search keys live in the Cloudflare Pages environment, never in this repo.
+      ALGOLIA_APP_ID: placeholder
+      ALGOLIA_API_KEY: placeholder
+      ALGOLIA_INDEX_NAME: placeholder
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # showLastUpdateTime reads git history
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build site (same command as production)
+        run: npm run build
+
+      - name: Verify LLM text files match the built pages
+        run: npm run verify-llms

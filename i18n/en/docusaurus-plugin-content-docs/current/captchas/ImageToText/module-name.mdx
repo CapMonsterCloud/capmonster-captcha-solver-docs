@@ -6,10 +6,13 @@ description: "Passing the module name to recognize a specific captcha can be use
 ---
 
 import { ArticleHead } from '../../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/ImageToText/module-name" />
 
 # Passing module name
+
+<McpNotice />
 
 When working with automatic CAPTCHA recognition, recognition accuracy and processing speed are important. Different services use their own CAPTCHA types, and a universal solution may not handle all of them equally effectively. For example, CAPTCHAs from **Google**, **SolveMedia**, **WhatsApp**, or **Yandex** may have specific characteristics that can cause the standard recognition module to work more slowly or produce errors.
 

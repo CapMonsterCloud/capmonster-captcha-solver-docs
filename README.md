@@ -45,11 +45,15 @@ Explore our live hosted documentation portal:
 
 Accelerate your automation pipeline with our official client libraries and integrations:
 
-- 🐍 **[Python SDK (capmonstercloudclient)](https://github.com/ZennoLab/capmonstercloud-client-python)** — Async, Playwright, Selenium, and Requests.
+- 🐍 **[Python SDK](https://github.com/CapMonsterCloud/capmonster-python-captcha-solver)** — Async, Playwright, Selenium, and Requests.
 - 🟢 **[Node.js / JavaScript SDK](https://github.com/CapMonsterCloud/capmonster-nodejs-captcha-solver)** — Official Node.js library with TypeScript support.
 - 🔷 **[.NET / C# SDK](https://github.com/CapMonsterCloud/capmonster-dotnet-captcha-solver)** — Official .NET package for C# automation projects.
-- 🦀 **[Rust SDK (capmonstercloud-client)](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)** - Async tokio-based Rust client, published on [crates.io](https://crates.io/crates/capmonstercloud-client).
+- 🐹 **[Go SDK](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver)** — Official Go (Golang) client library for CapMonster Cloud.
+- 🐘 **[PHP SDK](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver)** — Official PHP client library for captcha solving in PHP scripts and scrapers.
+- 🦀 **[Rust SDK](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)** — Async Rust crate built on tokio for scraping and browser automation, published on [crates.io](https://crates.io/crates/capmonstercloud-client).
 - 🧩 **[n8n Community Node](https://github.com/CapMonsterCloud/capmonster-n8n-captcha-solver)** — No-code workflow automation node.
+- 🤖 **[MCP Server](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver)** — Connect AI agents (Claude, Cursor, etc.) directly to CapMonster Cloud via Model Context Protocol.
+- 🎭 **[MCP Server for Patchright](https://github.com/CapMonsterCloud/capmonster-mcp-patchright-captcha-solver)** — Stealth browser automation with built-in captcha solving for AI agents.
 - 📦 **[All Repositories & SDKs](https://github.com/orgs/CapMonsterCloud/repositories)** — Full list of open-source tools.
 
 ---
@@ -98,6 +102,40 @@ yarn serve
 
 ---
 
+### 🚀 Deployment
+
+The live site is built and published by **Cloudflare Pages** (project `capmonstercloud-docs-v2`) directly from this GitHub repository. Every push to `master` triggers a production build. There is no deploy step in this repo — merging to `master` **is** the deploy.
+
+The Cloudflare build runs `npm run build`, which is:
+
+1. `node scripts/generate-llms.mjs` — generates the plain-text documentation for AI agents (see below);
+2. `docusaurus build` — builds the site into `build/`.
+
+Search (Algolia) credentials are provided as environment variables in the Cloudflare Pages project settings. **Never commit them to this repository** — it is public.
+
+The `Dockerfile` is a legacy artifact from a previous hosting setup and is not used by the current deployment.
+
+### 🤖 Text version for AI agents (llms.txt / MCP)
+
+Alongside the HTML pages the build publishes plain-text copies of the documentation, used by the [CapMonster Cloud MCP server](https://github.com/CapMonsterCloud/capmonster-mcp-captcha-solver) and other AI agents:
+
+- `https://docs.capmonster.cloud/llms.txt` — index of all pages with short descriptions;
+- `https://docs.capmonster.cloud/llms-full.txt` — the whole documentation in one file;
+- `https://docs.capmonster.cloud/docs/<page>.txt` — one file per page, e.g. `/docs/captchas/recaptcha-v3-task/` → `/docs/captchas/recaptcha-v3-task.txt`.
+
+They are generated from the English MDX sources on every build by `scripts/generate-llms.mjs` (output is git-ignored), so they are always in sync with the deployed pages. Content that lives in React components rather than MDX (`<McpNotice/>`, `<PriceBlock/>`, `<BlogLink/>`) is rendered to text by that script — if you add a new content-bearing component, teach the script about it too.
+
+To check locally:
+
+```bash
+npm run build          # generates txt files + builds the site
+npm run verify-llms    # checks that txt files exist and match the built pages
+```
+
+The same check runs in GitHub Actions (`.github/workflows/llms-txt.yml`) on every pull request.
+
+---
+
 ## 📄 License
 
-[MIT](./LICENSE) © [ZennoLab](https://zennolab.com/) / [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)
+[MIT](./LICENSE) © [CapMonster Cloud](https://capmonster.cloud/en/?utm_source=github&utm_medium=referral&utm_campaign=docs_repo_read)

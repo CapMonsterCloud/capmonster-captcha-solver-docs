@@ -15,6 +15,7 @@ import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/alibaba-task" />
 
@@ -23,6 +24,8 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 <PriceBlockWrap>
   <PriceBlock title="Alibaba Captcha" captchaId="alibabacaptcha"/>
 </PriceBlockWrap>
+
+<McpNotice />
 
 ## Примеры заданий
 
@@ -38,9 +41,19 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
   <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
+<br />
+**TRACELESS — невидимая проверка**
+
+CapMonster Cloud также поддерживает Alibaba CAPTCHA `TRACELESS` — фоновую проверку без видимого задания, которая анализирует данные браузера, устройства и поведение пользователя.
+
+Определить этот тип можно по `"CaptchaType": "TRACELESS"` в ответе на запрос загрузки капчи на вкладке **Network** в инструментах разработчика.
+
+![](./images/alibaba-task/traceless.png)
+<br />
+
 
 :::warning **Внимание!**
-CapMonster Cloud по умолчанию работает через встроенные прокси — они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
+CapMonster Cloud по умолчанию работает через встроенные прокси – они уже включены в стоимость. Указывать собственные прокси требуется только в тех случаях, когда сайт не принимает токен или доступ к встроенным сервисам ограничен.
 
 Если прокси с авторизацией по IP, то необходимо добавить адрес **65.21.190.34** в белый список.
 :::
@@ -66,14 +79,14 @@ CapMonster Cloud по умолчанию работает через встро�
 
   <ParamItem title="sceneId (внутри metadata)" required type="string" />
 
-  Идентификатор сценария капчи, передаётся в следующем формате: `"sceneId":"1ww7426c4"`— **значение указано в качестве примера**. <br />
-  Используйте собственное значение — инструкции по его получению приведены в [соответствующем разделе](#sceneid)
+  Идентификатор сценария капчи, передаётся в следующем формате: `"sceneId":"1ww7426c4"`– **значение указано в качестве примера**. <br />
+  Используйте собственное значение – инструкции по его получению приведены в [соответствующем разделе](#sceneid)
 
   ---
   <ParamItem title="prefix (внутри metadata)" required type="string" />
 
   Параметр инициализации капчи, передаётся в URL запроса, используемого для загрузки текста задания на странице.<br />
-  Например, если URL имеет вид: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, то значение параметра `prefix` соответствует поддомену — `dlw3kug`.
+  Например, если URL имеет вид: `https://dlw3kug.captcha-open.example.aliyuncs.com/`, то значение параметра `prefix` соответствует поддомену – `dlw3kug`.
 
 ---
 
@@ -108,7 +121,9 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <ParamItem title="region (внутри metadata)" type="string" />
 Регион сервера или дата-центра, через который обрабатывается капча. <br />
-Пример: `sgp`
+Пример: `sgp`<br />
+
+**Важно:** значение региона влияет на тип возвращаемого токена: при `region: cn` возвращается токен вида `WEB#` (`VOVCI2`), при `region: sgp` – `SG_WEB#` (`U0dfV0VCIZ`).
 
 ---
 
@@ -138,9 +153,11 @@ CapMonster Cloud по умолчанию работает через встро�
 
 <ParamItem title="cookieRequired (внутри metadata)" type="boolean" />
 
-Возвращает cookies вместе с результатом решения CAPTCHA.
+Возвращает cookies вместе с результатом решения CAPTCHA.<br />
+Используйте значение `true` для сайтов с **Alibaba WAF**, если после успешного прохождения проверки требуется получить cookies.
+Наличие cookies `ssxmod_itna` и `ssxmod_itna2` — признак того, что на сайте используется **Alibaba WAF**, а не обычная CAPTCHA.
 
-Используйте значение `true` только для сайтов, использующих **Alibaba WAF** или **Amazon WAF**, где после успешного прохождения проверки требуется получить cookies.
+*см. подробнее в разделе [Как отличить Alibaba WAF от Alibaba CAPTCHA](#как-отличить-alibaba-waf-от-alibaba-captcha)*
 
 По умолчанию параметр не используется.
 
@@ -188,6 +205,16 @@ CapMonster Cloud по умолчанию работает через встро�
   ---
 
 </div>
+
+## Как отличить Alibaba WAF от Alibaba CAPTCHA
+
+Наличие cookies `ssxmod_itna` и `ssxmod_itna2` указывает на использование Alibaba WAF. При обычной Alibaba CAPTCHA эти cookies отсутствуют.
+
+Чтобы проверить их наличие, откройте **Инструменты разработчика** → **Application** → **Cookies** и выберите домен сайта.
+
+![Cookies ssxmod_itna и ssxmod_itna2 во вкладке Application](./images/alibaba-task/alibaba-waf-cookies.png)
+
+Если сайт использует Alibaba WAF и для дальнейших запросов нужны cookies, передайте `cookieRequired: true` в объекте `metadata` при создании задачи.
 
 ## Метод создания задачи
 
@@ -456,7 +483,7 @@ https://ru.api.capmonster.cloud/createTask
 
 ### Вариант с возвратом cookies (`cookieRequired`)
 
-Для некоторых сайтов, использующих **Alibaba WAF** или **Amazon WAF**, после успешного решения необходимо получить cookies, которые затем используются при последующих запросах.
+Для некоторых сайтов, использующих **Alibaba WAF**, после успешного решения необходимо получить cookies, которые затем используются при последующих запросах.
 
 Для этого добавьте в объект `metadata` параметр:
 
@@ -487,7 +514,7 @@ https://ru.api.capmonster.cloud/createTask
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -532,7 +559,7 @@ https://ru.api.capmonster.cloud/createTask
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -613,6 +640,15 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 </MethodDescription>
 
+:::info Формат токена зависит от region
+
+Значение `region`, переданное в `metadata` при создании задачи, влияет на формат возвращаемого `deviceToken`:
+
+- `region: cn` – токен вида `WEB#` (`VOVCI2`);
+- `region: sgp` – токен вида `SG_WEB#` (`U0dfV0VCIZ`).
+
+:::
+
 Если в запросе было указано `"cookieRequired": true`, ответ дополнительно содержит cookies, сгруппированные по доменам. Это также относится к задачам с `punishUrl`. Используйте cookies из объекта `solution.domains` при последующих запросах к соответствующему домену вместе с результатом решения CAPTCHA.
 
 <MethodDescription>
@@ -680,7 +716,7 @@ https://ru.api.capmonster.cloud/getTaskResult
 
 ### `punishUrl`
 
-`punishUrl` — это URL проверки Alibaba, который возвращается при срабатывании защиты на целевом сайте.
+`punishUrl` – это URL проверки Alibaba, который возвращается при срабатывании защиты на целевом сайте.
 
 Обычно такой URL можно получить из сетевого запроса, в ответе которого присутствует ошибка:
 
@@ -693,7 +729,7 @@ FAIL_SYS_USER_VALIDATE
 1. Откройте целевую страницу и выполните действие, которое вызывает проверку Alibaba.
 2. Откройте **DevTools** → **Network**.
 3. Найдите запрос, отправленный в момент срабатывания защиты. Для поиска можно ориентироваться на ответ с ошибкой `FAIL_SYS_USER_VALIDATE`.
-4. Откройте найденный запрос и перейдите на вкладку **Preview**. В ответе найдите поле `data` — оно содержит URL проверки, который необходимо использовать как `punishUrl`.
+4. Откройте найденный запрос и перейдите на вкладку **Preview**. В ответе найдите поле `data` – оно содержит URL проверки, который необходимо использовать как `punishUrl`.
 
 ![](./images/alibaba-task/punish-url-preview.png)<br />
 
@@ -716,10 +752,10 @@ https://example.com:443//api/example/testlogin/_____tmd_____/punish?x5secdata=xg
 
 `punishUrl` также можно получить программно одним из следующих способов:
 
-* через HTTP-запросы — если известны URL API, метод, header и другие параметры запроса;
-* через Playwright — если необходимо отследить запрос непосредственно в браузере.
+* через HTTP-запросы – если известны URL API, метод, header и другие параметры запроса;
+* через Playwright – если необходимо отследить запрос непосредственно в браузере.
 
-В некоторых случаях сначала возвращается промежуточный URL с `x5secdata` и `x5step`, а после его обработки — итоговый `punishUrl` с параметрами `action` и `pureCaptcha`.
+В некоторых случаях сначала возвращается промежуточный URL с `x5secdata` и `x5step`, а после его обработки – итоговый `punishUrl` с параметрами `action` и `pureCaptcha`.
 
 Для HTTP-запросов используйте параметры фактического запроса целевого сайта. В браузерном сценарии укажите нужную страницу и выполните действие, вызывающее Alibaba Punish.
 
@@ -1564,7 +1600,7 @@ this.AliyunGeneratedDynamicJS =
       "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
       "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "0a03e59417757735511105780e2a5e",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }
@@ -1717,7 +1753,7 @@ class Worker {
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
+            '"Chromium";v="155", "Not-A.Brand";v="24", "Google Chrome";v="155"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -1752,7 +1788,7 @@ class Worker {
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
+            '"Chromium";v="155", "Not-A.Brand";v="24", "Google Chrome";v="155"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -1959,7 +1995,7 @@ class Worker:
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
+            "sec-ch-ua": '"Chromium";v="155", "Not-A.Brand";v="24", "Google Chrome";v="155"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",

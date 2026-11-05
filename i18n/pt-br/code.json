@@ -422,5 +422,29 @@
   "theme.unlistedContent.message": {
     "message": "Esta página não é listada. Os mecanismos de busca não irão indexá-la, e apenas usuários com o link direto podem acessá-la.",
     "description": "A mensagem do banner de conteúdo não listado"
+  },
+  "remotePrompt.copyLabel": {
+    "message": "Copiar prompt",
+    "description": "RemotePrompt copy button"
+  },
+  "remotePrompt.copiedLabel": {
+    "message": "Copiado ✓",
+    "description": "RemotePrompt copied state"
+  },
+  "remotePrompt.loadingLabel": {
+    "message": "Carregando...",
+    "description": "RemotePrompt loading state"
+  },
+  "remotePrompt.showLabel": {
+    "message": "Mostrar prompt",
+    "description": "RemotePrompt show button"
+  },
+  "remotePrompt.hideLabel": {
+    "message": "Ocultar prompt",
+    "description": "RemotePrompt hide button"
+  },
+  "remotePrompt.errorLabel": {
+    "message": "Não foi possível carregar o prompt.",
+    "description": "RemotePrompt loading error"
   }
 }

@@ -13,6 +13,7 @@ import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/tspd-task" />
 
@@ -21,6 +22,8 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <PriceBlockWrap>
   <PriceBlock title="TSPD" captchaId="tspd"/>
 </PriceBlockWrap>
+
+<McpNotice />
 
 TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自动化攻击和可疑活动。对于普通用户来说，其工作几乎是不可察觉的，因为其主要目的是阻止脚本和机器人。在浏览器中，TSPD 的表现很少见，通常只有在对服务器进行异常或大规模请求时才会显现。
 
@@ -205,7 +208,7 @@ TSPD 是一种 WAF（Web 应用防火墙）保护，旨在防止网站上的自�
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -310,7 +313,7 @@ Upgrade-Insecure-Requests: 1
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -377,7 +380,7 @@ const url =
 // === 请求头 ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
+    '"Not(A:Brand";v="8", "Chromium";v="155", "Google Chrome";v="155"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -487,7 +490,7 @@ const url =
 // === 设置所需的请求头 ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
+    '"Not(A:Brand";v="8", "Chromium";v="155", "Google Chrome";v="155"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -706,7 +709,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -777,7 +780,7 @@ async function main() {
     // 构建最终标头
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",
@@ -879,7 +882,7 @@ class TSPDBypass:
             "Accept-Encoding": "gzip, deflate, br",
             "Connection": "keep-alive",
             "Upgrade-Insecure-Requests": "1",
-            "sec-ch-ua": '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"',
+            "sec-ch-ua": '"Google Chrome";v="155", "Not.A/Brand";v="8", "Chromium";v="155"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
         }
@@ -1044,7 +1047,7 @@ class TSPDBypass:
         
         # 构建最终标头
         final_headers = self.build_headers(final_cookies)
-        final_headers["sec-ch-ua"] = '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"'
+        final_headers["sec-ch-ua"] = '"Google Chrome";v="155", "Not.A/Brand";v="8", "Chromium";v="155"'
         final_headers["sec-ch-ua-mobile"] = "?0"
         final_headers["sec-ch-ua-platform"] = '"Windows"'
         final_headers["Upgrade-Insecure-Requests"] = "1"

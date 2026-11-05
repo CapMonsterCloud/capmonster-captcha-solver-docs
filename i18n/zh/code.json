@@ -422,5 +422,29 @@
   "theme.unlistedContent.message": {
     "message": "此页面未列出。搜索引擎不会索引它，只有拥有直接链接的用户才能访问。",
     "description": "未列出的内容横幅信息"
+  },
+  "remotePrompt.copyLabel": {
+    "message": "复制 prompt",
+    "description": "RemotePrompt copy button"
+  },
+  "remotePrompt.copiedLabel": {
+    "message": "已复制 ✓",
+    "description": "RemotePrompt copied state"
+  },
+  "remotePrompt.loadingLabel": {
+    "message": "加载中...",
+    "description": "RemotePrompt loading state"
+  },
+  "remotePrompt.showLabel": {
+    "message": "显示 prompt",
+    "description": "RemotePrompt show button"
+  },
+  "remotePrompt.hideLabel": {
+    "message": "隐藏 prompt",
+    "description": "RemotePrompt hide button"
+  },
+  "remotePrompt.errorLabel": {
+    "message": "无法加载 prompt。",
+    "description": "RemotePrompt loading error"
   }
 }

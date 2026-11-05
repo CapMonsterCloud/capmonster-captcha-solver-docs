@@ -15,6 +15,7 @@ import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/alibaba-task" />
 
@@ -23,6 +24,8 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <PriceBlockWrap>
   <PriceBlock title="Alibaba Captcha" captchaId="alibabacaptcha"/>
 </PriceBlockWrap>
+
+<McpNotice />
 
 ## 任务示例
 
@@ -38,6 +41,16 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
   <ImageWrap title="Slider">![](./images/alibaba-task/slider.png)</ImageWrap>
   <ImageWrap title="Checkbox">![](./images/alibaba-task/checkbox.png)</ImageWrap>
 </ImagesLayout>
+
+<br />
+**TRACELESS — 无感验证**
+
+CapMonster Cloud 还支持 Alibaba CAPTCHA `TRACELESS`，这是一种不显示验证任务的后台验证方式，通过分析浏览器、设备数据和用户行为进行验证。
+
+在浏览器开发者工具的 **Network** 选项卡中，查看加载 CAPTCHA 的请求响应，即可通过 `"CaptchaType": "TRACELESS"` 识别此类型。
+
+![](./images/alibaba-task/traceless.png)
+<br />
 
 :::warning **注意！**
 CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费用内。仅当网站不接受令牌或对内置服务的访问受限时，才需要指定您自己的代理。
@@ -66,7 +79,7 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
   <ParamItem title="sceneId（位于 metadata 中）" required type="string" />
 
-  验证码场景标识符，按以下格式传递：`"sceneId":"1ww7426c4"`— **该值仅作为示例**。 <br />
+  验证码场景标识符，按以下格式传递：`"sceneId":"1ww7426c4"`– **该值仅作为示例**。 <br />
   请使用您自己的值——获取该值的说明请参阅[相应章节](#sceneid)
 
   ---
@@ -108,7 +121,9 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <ParamItem title="region（位于 metadata 中）" type="string" />
 处理验证码所使用的服务器或数据中心区域。 <br />
-示例：`sgp`
+示例：`sgp`<br />
+
+**重要：** `region` 的值会影响返回的 token 类型：当 `region: cn` 时，返回 `WEB#` 类型的 token（`VOVCI2`）；当 `region: sgp` 时，返回 `SG_WEB#` 类型的 token（`U0dfV0VCIZ`）。
 
 ---
 
@@ -138,9 +153,11 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 <ParamItem title="cookieRequired（位于 metadata 中）" type="boolean" />
 
-与 CAPTCHA 识别结果一起返回 cookies。
+与 CAPTCHA 识别结果一起返回 cookies。<br />
+如果网站使用 **Alibaba WAF**，并且成功完成验证后需要获取 cookies，请将该参数设置为 `true`。
+存在 `ssxmod_itna` 和 `ssxmod_itna2` cookies 表明该网站使用的是 **Alibaba WAF**，而不是普通验证码。
 
-仅当网站使用 **Alibaba WAF** 或 **Amazon WAF**，并且成功完成验证后需要获取 cookies 时，才应将该参数设置为 `true`。
+*详情请参阅[如何区分 Alibaba WAF 与 Alibaba CAPTCHA](#如何区分-alibaba-waf-与-alibaba-captcha)。*
 
 默认情况下不使用此参数。
 
@@ -188,6 +205,16 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   ---
 
 </div>
+
+## 如何区分 Alibaba WAF 与 Alibaba CAPTCHA
+
+存在 `ssxmod_itna` 和 `ssxmod_itna2` cookies 表明网站使用了 Alibaba WAF。使用普通 Alibaba CAPTCHA 时，不会存在这些 cookies。
+
+要检查这些 cookies 是否存在，请打开**开发者工具** → **Application** → **Cookies**，然后选择网站域名。
+
+![Application 选项卡中的 ssxmod_itna 和 ssxmod_itna2 cookies](./images/alibaba-task/alibaba-waf-cookies.png)
+
+如果网站使用 Alibaba WAF，且后续请求需要 cookies，请在创建任务时，在 `metadata` 对象中传递 `cookieRequired: true`。
 
 ## 创建任务的方法
 
@@ -454,7 +481,7 @@ Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
 
 ### 返回 cookies 的选项（`cookieRequired`）
 
-对于某些使用 **Alibaba WAF** 或 **Amazon WAF** 的网站，成功完成 CAPTCHA 识别后还需要获取 cookies，以便在后续请求中使用。
+对于某些使用 **Alibaba WAF** 的网站，成功完成 CAPTCHA 识别后还需要获取 cookies，以便在后续请求中使用。
 
 为此，请在 `metadata` 对象中添加以下参数：
 
@@ -489,7 +516,7 @@ Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -535,7 +562,7 @@ Alibaba Punish 可能使用选择匹配图片或滑块等验证方式。
       "userId": "your-user-id",
       "userUserId": "your-user-user-id",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "your-user-certify-id",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041",
       "cookieRequired": true
@@ -607,6 +634,15 @@ https://api.capmonster.cloud/getTaskResult
 ```
 
 </MethodDescription>
+
+:::info token 格式取决于 region
+
+创建任务时在 `metadata` 中传递的 `region` 值会影响返回的 `deviceToken` 格式：
+
+- `region: cn` – 返回 `WEB#` 类型的 token（`VOVCI2`）；
+- `region: sgp` – 返回 `SG_WEB#` 类型的 token（`U0dfV0VCIZ`）。
+
+:::
 
 如果请求中指定了 `"cookieRequired": true`，响应还会包含按域名分组的 cookies。这同样适用于包含 `punishUrl` 的任务。请将 `solution.domains` 对象中的 cookies 与 CAPTCHA 解决结果一起用于向相应域名发送的后续请求。
 
@@ -1558,7 +1594,7 @@ this.AliyunGeneratedDynamicJS =
       "userId": "HpadJlQnz2zSKcSmjXBaqQvjYUvP4jMJIk/ZwGNDNiM=",
       "userUserId": "/uSXKkVFuuwxXA21/MpXGxpLStWBEup1B3jjlMUWwNE=",
       "verifyType": "1.0",
-      "region": "sgp",
+      "region": "your-region",
       "UserCertifyId": "0a03e59417757735511105780e2a5e",
       "apiGetLib": "https://o.example.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js?t=2041"
     }
@@ -1711,7 +1747,7 @@ class Worker {
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
+            '"Chromium";v="155", "Not-A.Brand";v="24", "Google Chrome";v="155"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -1746,7 +1782,7 @@ class Worker {
           "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
           "bx-v": "2.5.36",
           "sec-ch-ua":
-            '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
+            '"Chromium";v="155", "Not-A.Brand";v="24", "Google Chrome";v="155"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           source: "web",
@@ -1953,7 +1989,7 @@ class Worker:
             "Version": "0.2.36",
             "X-Request-Id": "2b4a7a52-d273-4049-a826-156aae856fe5",
             "bx-v": "2.5.36",
-            "sec-ch-ua": '"Chromium";v="151", "Not-A.Brand";v="24", "Google Chrome";v="151"',
+            "sec-ch-ua": '"Chromium";v="155", "Not-A.Brand";v="24", "Google Chrome";v="155"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
             "source": "web",

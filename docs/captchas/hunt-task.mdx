@@ -15,6 +15,7 @@ import MethodDescription from '@theme/MethodDescription';
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/hunt-task" />
 
@@ -23,6 +24,8 @@ import { ArticleHead } from '../../src/theme/ArticleHead';
 <PriceBlockWrap>
   <PriceBlock title="Hunt" captchaId="hunt"/>
 </PriceBlockWrap>
+
+<McpNotice />
 
 Hunt CAPTCHA — антибот-система, которая анализирует поведение пользователя и при обнаружении подозрительной активности запускает интерактивную проверку.
 
@@ -529,7 +532,7 @@ const htmlHeaders = {
   "cache-control": "no-cache",
   pragma: "no-cache",
   priority: "u=0, i",
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "document",
@@ -550,7 +553,7 @@ const apiHeaders = {
   "content-type": "application/vnd.api+json",
   origin: BASE_URL,
   referer: BASE_URL + "/", // Актуальный referer с сайта
-  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"`,
+  "sec-ch-ua": `"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"`,
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": `"Windows"`,
   "sec-fetch-dest": "empty",
@@ -776,7 +779,7 @@ html_headers = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "priority": "u=0, i",
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "document",
@@ -797,7 +800,7 @@ api_headers = {
     "content-type": "application/vnd.api+json",
     "origin": BASE_URL,
     "referer": BASE_URL + "/en", # Замените на актуальный referer с сайта
-    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+    "sec-ch-ua": '"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",

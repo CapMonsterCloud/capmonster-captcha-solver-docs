@@ -13,6 +13,7 @@ import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
 import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
 
 <ArticleHead slug="captchas/tspd-task" />
 
@@ -21,6 +22,8 @@ import { ArticleHead } from '../../../../../src/theme/ArticleHead';
 <PriceBlockWrap>
   <PriceBlock title="TSPD" captchaId="tspd"/>
 </PriceBlockWrap>
+
+<McpNotice />
 
 TSPD é uma proteção WAF (Web Application Firewall) projetada para prevenir ataques automatizados e atividades suspeitas no site. Para o usuário comum, seu funcionamento é quase imperceptível, já que o principal objetivo é bloquear scripts e bots. No navegador, as manifestações do TSPD são raras e geralmente só se tornam perceptíveis durante requisições incomuns ou em grande volume ao servidor.
 
@@ -205,7 +208,7 @@ Ao enviar uma requisição GET para uma página com **TSPD-challenge**, você re
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -312,7 +315,7 @@ Ao fazer uma nova requisição à página de destino com os cookies do CapMonste
 ```http
 GET https://example.com/login?client_id=example.client.id&authorization_id=example_auth_id
 
-sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+sec-ch-ua: "Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"
 upgrade-insecure-requests: 1
@@ -383,7 +386,7 @@ const url =
 // === Cabeçalhos ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
+    '"Not(A:Brand";v="8", "Chromium";v="155", "Google Chrome";v="155"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -501,7 +504,7 @@ const url =
 // === Defina os cabeçalhos necessários ===
 const headers = {
   "sec-ch-ua":
-    '"Not(A:Brand";v="8", "Chromium";v="151", "Google Chrome";v="151"',
+    '"Not(A:Brand";v="8", "Chromium";v="155", "Google Chrome";v="155"',
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": '"Windows"',
   "Upgrade-Insecure-Requests": "1",
@@ -723,7 +726,7 @@ async function main() {
       proxyUrl,
       headers: {
         "sec-ch-ua":
-          '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+          '"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"',
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": '"Windows"',
         "upgrade-insecure-requests": "1",
@@ -794,7 +797,7 @@ async function main() {
     // Formar cabeçalhos finais
     const finalHeaders = {
       "sec-ch-ua":
-        '"Not:A-Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"',
+        '"Not:A-Brand";v="99", "Google Chrome";v="155", "Chromium";v="155"',
       "sec-ch-ua-mobile": "?0",
       "sec-ch-ua-platform": '"Windows"',
       "upgrade-insecure-requests": "1",
@@ -896,7 +899,7 @@ class TSPDBypass:
             "Accept-Encoding": "gzip, deflate, br",
             "Connection": "keep-alive",
             "Upgrade-Insecure-Requests": "1",
-            "sec-ch-ua": '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"',
+            "sec-ch-ua": '"Google Chrome";v="155", "Not.A/Brand";v="8", "Chromium";v="155"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
         }
@@ -1061,7 +1064,7 @@ class TSPDBypass:
         
         # Construir cabeçalhos finais
         final_headers = self.build_headers(final_cookies)
-        final_headers["sec-ch-ua"] = '"Google Chrome";v="151", "Not.A/Brand";v="8", "Chromium";v="151"'
+        final_headers["sec-ch-ua"] = '"Google Chrome";v="155", "Not.A/Brand";v="8", "Chromium";v="155"'
         final_headers["sec-ch-ua-mobile"] = "?0"
         final_headers["sec-ch-ua-platform"] = '"Windows"'
         final_headers["Upgrade-Insecure-Requests"] = "1"
