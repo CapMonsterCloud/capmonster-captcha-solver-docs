@@ -79,6 +79,10 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 在此示例中，`6LdIFr0ZAAAAAO3vz0O0OQrtAefzdJcWQM2TMYQH` 是 `websiteKey` 参数的值。
 
+	---
+
+   <ParamItem title="minScore" type="double" />
+    可取值范围为 **0.1** 到 **0.9**
 
     ---
 
@@ -224,6 +228,7 @@ Object.defineProperty(window, 'grecaptcha', {
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
     "websiteKey": "your-website-key",
+	"minScore": 0.7,
     "enterprisePayload": {
       "s": "your-value"
     }

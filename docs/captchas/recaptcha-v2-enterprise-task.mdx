@@ -90,6 +90,11 @@ URL Запроса (anchor): `https://www.google.com/recaptcha/enterprise/anchor
 	<br/>*`grecaptcha.execute('site_key', {action:'login_test'})`*.</p>
     
     ---
+	
+	<ParamItem title="minScore" type="double" />
+    Может иметь значение от **0.1** до **0.9**
+
+    ---
 
     <ParamItem title="enterprisePayload" type="object" />
     Объект с дополнительными параметрами reCAPTCHA Enterprise.
@@ -245,6 +250,7 @@ https://ru.api.capmonster.cloud/createTask
     "type": "RecaptchaV2EnterpriseTask",
     "websiteURL": "https://mydomain.com/page-with-recaptcha-enterprise",
     "websiteKey": "your-website-key",
+	"minScore": 0.7,
     "enterprisePayload": {
       "s": "your-value"
     }
