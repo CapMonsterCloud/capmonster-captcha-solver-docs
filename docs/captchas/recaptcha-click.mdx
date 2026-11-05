@@ -545,6 +545,97 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::js_protocol::runtime::{ExecutionContextId, EvaluateParams};
+use chromiumoxide::Page;
+
+async fn frame_context(page: &Page, needle: &str) -> Result<Option<ExecutionContextId>, Box<dyn std::error::Error>> {
+    for id in page.frames().await? {
+        let url = page.frame_url(id.clone()).await?.unwrap_or_default();
+        if url.contains(needle) {
+            return Ok(page.frame_execution_context(id).await?);
+        }
+    }
+    Ok(None)
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser
+        .new_page("https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high")
+        .await?;
+    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+
+    // фреймы reCAPTCHA: чекбокс (api2/anchor) и задание (api2/bframe)
+    let anchor = frame_context(&page, "api2/anchor").await?;
+    let anchor = anchor.ok_or("Не найден iframe с чекбоксом reCAPTCHA")?;
+
+    // кликаем чекбокс внутри фрейма
+    page.evaluate_expression(
+        EvaluateParams::builder()
+            .expression("document.querySelector('#recaptcha-anchor').click()")
+            .context_id(anchor)
+            .build()?,
+    )
+    .await?;
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+
+    let challenge = frame_context(&page, "api2/bframe").await?;
+    let challenge = challenge.ok_or("Не найден iframe с заданием reCAPTCHA")?;
+
+    // изображение, текст задания и размер сетки
+    let info: serde_json::Value = page
+        .evaluate_expression(
+            EvaluateParams::builder()
+                .expression(
+                    r#"(() => {
+                        const img = document.querySelector('img.rc-image-tile-33') || document.querySelector('img.rc-image-tile-44');
+                        const strong = document.querySelector('.rc-imageselect-desc-no-canonical strong, .rc-imageselect-desc strong');
+                        const tiles = Array.from(document.querySelectorAll('.rc-imageselect-tile')).filter(t => t.offsetParent !== null).length;
+                        return {
+                            image: img ? img.src : '',
+                            task: strong ? strong.textContent.trim() : 'Не найдено',
+                            grid: tiles >= 16 ? '4x4' : (tiles >= 9 ? '3x3' : '1x1')
+                        };
+                    })()"#,
+                )
+                .context_id(challenge)
+                .build()?,
+        )
+        .await?
+        .into_value()?;
+
+    println!("Изображение: {}", info["image"]);
+    println!("Задание: выбрать все изображения с: {}", info["task"]);
+    println!("Сетка: {}", info["grid"]);
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK

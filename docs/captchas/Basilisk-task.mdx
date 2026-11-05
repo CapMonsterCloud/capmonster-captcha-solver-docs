@@ -379,6 +379,55 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com/captcha-page").await?;
+
+    let sitekey: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('[data-sitekey]');
+                return el ? el.getAttribute('data-sitekey') : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    if sitekey.is_empty() {
+        println!("site-key not found");
+    } else {
+        println!("Found site-key: {sitekey}");
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK

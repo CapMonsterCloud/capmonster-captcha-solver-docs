@@ -714,6 +714,63 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use serde_json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+
+    let params: serde_json::Value = page
+        .evaluate(
+            r#"(() => {
+                const g = window.gokuProps || {};
+                const scripts = Array.from(document.querySelectorAll('script'));
+                const find = name => {
+                    const s = scripts.find(script => (script.src || '').includes(name));
+                    return s ? s.src : 'Not found';
+                };
+                return {
+                    websiteKey: g.key || 'Not found',
+                    context: g.context || 'Not found',
+                    iv: g.iv || 'Not found',
+                    challengeScriptUrl: find('challenge.js'),
+                    captchaScriptUrl: find('captcha.js')
+                };
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    println!("Captcha params: {params}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK

@@ -364,6 +364,58 @@ Error 16 - данная ошибка связана с применением п
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com/").await?;
+
+    // значение атрибута src из iframe с id main-iframe
+    let iframe_src: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('#main-iframe');
+                return el ? el.getAttribute('src') : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+    println!("iframe src: {iframe_src}");
+
+    // куки, которые начинаются с visid_incap_ или incap_ses_
+    for cookie in page.get_cookies().await? {
+        if cookie.name.starts_with("visid_incap_") || cookie.name.starts_with("incap_ses_") {
+            println!("{}={}", cookie.name, cookie.value);
+        }
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK

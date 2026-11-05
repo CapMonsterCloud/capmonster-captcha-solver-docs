@@ -867,6 +867,138 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Для варианта 1. Challenge (token)</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("about:blank").await?;
+
+    let mut params: Option<serde_json::Value> = None;
+    while params.is_none() {
+        page.goto("https://yourwebsite.com/page-with-cf-challenge").await?;
+
+        page.evaluate(
+            r#"window.turnstile = new Proxy(window.turnstile, {
+                get(target, prop) {
+                    if (prop === 'render') {
+                        return function (a, b) {
+                            window.params = {
+                                websiteKey: b.sitekey,
+                                websiteURL: window.location.href,
+                                data: b.cData,
+                                pagedata: b.chlPageData,
+                                action: b.action,
+                                userAgent: navigator.userAgent
+                            };
+                            return target.render.apply(this, arguments);
+                        };
+                    }
+                    return target[prop];
+                }
+            });"#,
+        )
+        .await?;
+
+        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+        params = page.evaluate("window.params || null").await?.into_value()?;
+        if params.is_none() {
+            tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+        }
+    }
+
+    println!("Turnstile Params: {}", params.unwrap());
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+    <details>
+      <summary>Для варианта 2. Challenge (cookie `cf_clearance`)</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures, base64.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use base64::{engine::general_purpose::STANDARD, Engine};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("about:blank").await?;
+
+    let mut website_key: Option<String> = None;
+    while website_key.is_none() {
+        page.goto("https://yourwebsite.com/page-with-cf-challenge").await?;
+
+        page.evaluate(
+            r#"(() => {
+                window.turnstile = new Proxy(window.turnstile, {
+                    get(target, prop) {
+                        if (prop === 'render') {
+                            return function (a, b) {
+                                window.websiteKey = b.sitekey;
+                                return target.render.apply(this, arguments);
+                            };
+                        }
+                        return target[prop];
+                    }
+                });
+            })()"#,
+        )
+        .await?;
+
+        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+        website_key = page.evaluate("window.websiteKey || null").await?.into_value()?;
+        if website_key.is_none() {
+            tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+        }
+    }
+
+    let html = page.content().await?;
+    let html_base64 = STANDARD.encode(html);
+    println!("websiteKey: {}", website_key.unwrap());
+    println!("htmlPageBase64: {}...", &html_base64[..html_base64.len().min(60)]);
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ---

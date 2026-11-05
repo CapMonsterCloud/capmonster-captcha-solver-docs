@@ -634,6 +634,80 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures, regex, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use regex::Regex;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+
+    // 1) атрибуты data-* элементов .g-recaptcha
+    let mut params: serde_json::Map<String, serde_json::Value> = page
+        .evaluate(
+            r#"(() => {
+                const out = {};
+                document.querySelectorAll('.g-recaptcha').forEach(el => {
+                    for (const a of ['data-sitekey', 'data-s', 'data-cdata', 'data-type', 'data-context']) {
+                        const v = el.getAttribute(a);
+                        if (v) out[a.replace('data-', '')] = v;
+                    }
+                });
+                return out;
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    // 2) inline-скрипты: grecaptcha.enterprise.render(..., { ... })
+    let scripts: Vec<String> = page
+        .evaluate("Array.from(document.querySelectorAll('script:not([src])')).map(s => s.textContent || '')")
+        .await?
+        .into_value()?;
+
+    let re_block = Regex::new(r"grecaptcha\.enterprise\.render\([^,]+,\s*\{(.*?)\}")?;
+    let re_pair = Regex::new(r#"(\w+)\s*:\s*['"]([^'"]+)['"]"#)?;
+    for script in &scripts {
+        if let Some(caps) = re_block.captures(script) {
+            for pair in re_pair.captures_iter(&caps[1]) {
+                params
+                    .entry(pair[1].to_string())
+                    .or_insert_with(|| pair[2].to_string().into());
+            }
+            break;
+        }
+    }
+
+    println!("sitekey: {}", params.get("sitekey").cloned().unwrap_or("null".into()));
+    println!("enterprisePayload: {params:?}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK

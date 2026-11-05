@@ -352,6 +352,59 @@ class Program
 ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com/").await?;
+
+    // ждём iframe с reCAPTCHA и достаём k (sitekey) из его src
+    let mut sitekey = String::new();
+    for _ in 0..20 {
+        sitekey = page
+            .evaluate(
+                r#"(() => {
+                    const iframe = document.querySelector('iframe[src*="recaptcha"]');
+                    return iframe ? new URL(iframe.src).searchParams.get('k') || '' : '';
+                })()"#,
+            )
+            .await?
+            .into_value()?;
+        if !sitekey.is_empty() {
+            break;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+    }
+
+    println!("Site key: {sitekey}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK
