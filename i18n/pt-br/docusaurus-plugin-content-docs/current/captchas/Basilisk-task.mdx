@@ -348,6 +348,55 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Extração de parâmetros com chromiumoxide (cliente CDP, análogo do Playwright para Rust).
+// Adicione ao Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com/captcha-page").await?;
+
+    let sitekey: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('[data-sitekey]');
+                return el ? el.getAttribute('data-sitekey') : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    if sitekey.is_empty() {
+        println!("site-key not found");
+    } else {
+        println!("Found site-key: {sitekey}");
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Usar biblioteca SDK
@@ -597,4 +646,35 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{BasiliskCustomTaskRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = BasiliskCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-basilisk",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

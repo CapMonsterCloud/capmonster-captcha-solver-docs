@@ -507,6 +507,107 @@ class Program
 
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码（HTTP）</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 本示例使用直接的 HTTP 请求（reqwest）。
+// 请在 Cargo.toml 中添加：reqwest, tokio, serde_json.
+
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 请将 URL 替换为您网站的接口，
+    // 其响应返回 gt 和 challenge。
+    let timestamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)?
+        .as_millis();
+
+    let response = reqwest::Client::new()
+        .get("https://example.com/api/v1/captcha/gee-test/init-params")
+        .query(&[("t", timestamp.to_string())])
+        .send()
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+
+    let gt = response["gt"].as_str().unwrap_or("");
+    let challenge = response["challenge"].as_str().unwrap_or("");
+    if gt.is_empty() || challenge.is_empty() {
+        return Err("未能获取 gt 或 challenge".into());
+    }
+
+    println!("gt: {gt}, challenge: {challenge}");
+    Ok(())
+
+}
+```
+
+    </details>
+    <details>
+      <summary>显示代码（浏览器）</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com/page-with-geetest").await?;
+    let mut requests = page.event_listener::<EventRequestWillBeSent>().await?;
+
+    // 捕获 GeeTest 请求：从查询参数中提取 gt 和 challenge
+    let mut found = None;
+    let deadline = tokio::time::Instant::now() + std::time::Duration::from_secs(5);
+    while let Ok(Some(event)) = tokio::time::timeout_at(deadline, requests.next()).await {
+        let url = &event.request.url;
+        if url.contains("api.geetest.com/get.php") || url.contains("api.geevisit.com/ajax.php") {
+            let mut gt = String::new();
+            let mut challenge = String::new();
+            for pair in url.split('?').nth(1).unwrap_or("").split('&') {
+                let mut parts = pair.splitn(2, '=');
+                match (parts.next(), parts.next()) {
+                    (Some("gt"), Some(v)) => gt = v.to_string(),
+                    (Some("challenge"), Some(v)) => challenge = v.to_string(),
+                    _ => {}
+                }
+            }
+            if !gt.is_empty() && !challenge.is_empty() {
+                found = Some((gt, challenge));
+                break;
+            }
+        }
+    }
+
+    match found {
+        Some((gt, challenge)) => println!("gt: {gt}, challenge: {challenge}"),
+        None => println!("未能获取 gt 和 challenge"),
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 <br />
 
@@ -912,6 +1013,39 @@ Solution:
 ```
     </details>
   </TabItem>  
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{GeetestRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+// GeeTest v3：challenge 是动态密钥，请在创建任务前获取
+    let request = GeetestRequest::new_v3(
+        "https://yourwebsite.com/page-with-geetest",
+        "your-gt-value",
+        "your-challenge-value",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 
@@ -1342,6 +1476,73 @@ class Program
 ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com").await?;
+    let mut requests = page.event_listener::<EventRequestWillBeSent>().await?;
+    page.goto("https://www.example.com").await?;
+    tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+
+    // 捕获 gcaptcha4.geetest.com/load 请求：captcha_id 和 risk_type
+    let mut result = None;
+    while let Ok(Some(event)) = tokio::time::timeout(std::time::Duration::from_millis(100), requests.next()).await {
+        let url = &event.request.url;
+        if url.contains("https://gcaptcha4.geetest.com/load?") {
+            let mut captcha_id = String::new();
+            let mut risk_type = String::new();
+            for pair in url.split('?').nth(1).unwrap_or("").split('&') {
+                let mut parts = pair.splitn(2, '=');
+                match (parts.next(), parts.next()) {
+                    (Some("captcha_id"), Some(v)) => captcha_id = v.to_string(),
+                    (Some("risk_type"), Some(v)) => risk_type = v.to_string(),
+                    _ => {}
+                }
+            }
+            if !captcha_id.is_empty() {
+                result = Some((captcha_id, risk_type));
+                break;
+            }
+        }
+    }
+
+    match result {
+        Some((captcha_id, risk_type)) => {
+            println!("GeeTest v4 detected:");
+            println!("captchaId: {captcha_id}, riskType: {risk_type}");
+        }
+        None => println!("error"),
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ### <span style={{fontSize: '1.5rem'}}>使用 SDK 库</span>
@@ -1621,6 +1822,41 @@ Solution:
     }
 }
 ```
+    </details>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use serde_json::json;
+use capmonstercloud_client::requests::{GeetestRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+// GeeTest v4：gt 就是 captcha_id；init_parameters 与 riskType 一起传递
+    // （json! 宏来自 crates.io/crates/serde_json）
+    let request = GeetestRequest::new_v4_with_init_parameters(
+        "https://yourwebsite.com/page-with-geetest",
+        "your-gt-value",
+        json!({ "riskType": "your-risk-type" }),
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
     </details>
   </TabItem>
 </Tabs>

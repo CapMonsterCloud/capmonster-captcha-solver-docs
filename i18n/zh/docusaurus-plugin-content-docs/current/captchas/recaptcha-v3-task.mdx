@@ -447,6 +447,68 @@ reCAPTCHA v3 完全在后台运行，不需要用户执行任何操作。系统�
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures, regex.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::js_protocol::runtime::EvaluateParams;
+use regex::Regex;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://yourwebsite.com/page-with-recaptcha").await?;
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+
+    // 收集内联脚本和外部 .js（在页面上下文中 fetch）
+    let all_js: String = page
+        .evaluate_expression(
+            EvaluateParams::builder()
+                .expression(
+                    r#"(async () => {
+                        const texts = Array.from(document.querySelectorAll('script:not([src])')).map(s => s.textContent || '');
+                        for (const s of document.querySelectorAll('script[src]')) {
+                            try { texts.push(await (await fetch(s.src)).text()); } catch (e) {}
+                        }
+                        return texts.join('\n');
+                    })()"#,
+                )
+                .await_promise(true)
+                .build()?,
+        )
+        .await?
+        .into_value()?;
+
+    let re = Regex::new(r#"grecaptcha\.execute\(\s*['"]([^'"]+)['"]\s*,\s*\{[^}]*action\s*:\s*['"]([^'"]+)['"]"#)?;
+    if let Some(caps) = re.captures(&all_js) {
+        println!("sitekey: {}, action: {}", &caps[1], &caps[2]);
+    } else {
+        println!("未找到 grecaptcha.execute");
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
@@ -627,5 +689,38 @@ class Program
 
 <BlogLink url="https://capmonster.cloud/zh/blog/re-1/c-recaptcha-v3"/>
 
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV3ProxylessRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV3ProxylessRequest::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    )
+    .with_min_score(0.7)
+    .with_page_action("your-page-action");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

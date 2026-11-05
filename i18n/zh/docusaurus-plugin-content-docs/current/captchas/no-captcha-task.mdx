@@ -442,6 +442,62 @@ import McpNotice from '@site/src/components/McpNotice';
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+
+    // reCAPTCHA 复选框 iframe：其 src 查询参数中有 k（sitekey）和 size（invisible）
+    let src: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('iframe[src^="https://www.google.com/recaptcha/api2/anchor?"]');
+                return el ? el.src : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    let query = src.split('?').nth(1).unwrap_or("");
+    let (mut sitekey, mut is_invisible) = (None, false);
+    for pair in query.split('&') {
+        let mut parts = pair.splitn(2, '=');
+        match (parts.next(), parts.next()) {
+            (Some("k"), Some(v)) => sitekey = Some(v.to_string()),
+            (Some("size"), Some("invisible")) => is_invisible = true,
+            _ => {}
+        }
+    }
+    println!("sitekey: {sitekey:?}, isInvisible: {is_invisible}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
@@ -681,5 +737,36 @@ class Program
 </details>
 
     <BlogLink url="https://capmonster.cloud/zh/blog/re-1/c-recaptcha-v2"/>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV2Request};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV2Request::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

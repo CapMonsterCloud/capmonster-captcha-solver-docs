@@ -610,6 +610,80 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures, regex, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use regex::Regex;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+
+    // 1) data-* attributes of .g-recaptcha elements
+    let mut params: serde_json::Map<String, serde_json::Value> = page
+        .evaluate(
+            r#"(() => {
+                const out = {};
+                document.querySelectorAll('.g-recaptcha').forEach(el => {
+                    for (const a of ['data-sitekey', 'data-s', 'data-cdata', 'data-type', 'data-context']) {
+                        const v = el.getAttribute(a);
+                        if (v) out[a.replace('data-', '')] = v;
+                    }
+                });
+                return out;
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    // 2) inline scripts: grecaptcha.enterprise.render(..., { ... })
+    let scripts: Vec<String> = page
+        .evaluate("Array.from(document.querySelectorAll('script:not([src])')).map(s => s.textContent || '')")
+        .await?
+        .into_value()?;
+
+    let re_block = Regex::new(r"grecaptcha\.enterprise\.render\([^,]+,\s*\{(.*?)\}")?;
+    let re_pair = Regex::new(r#"(\w+)\s*:\s*['"]([^'"]+)['"]"#)?;
+    for script in &scripts {
+        if let Some(caps) = re_block.captures(script) {
+            for pair in re_pair.captures_iter(&caps[1]) {
+                params
+                    .entry(pair[1].to_string())
+                    .or_insert_with(|| pair[2].to_string().into());
+            }
+            break;
+        }
+    }
+
+    println!("sitekey: {}", params.get("sitekey").cloned().unwrap_or("null".into()));
+    println!("enterprisePayload: {params:?}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
@@ -865,4 +939,36 @@ class Program
     <BlogLink url="https://capmonster.cloud/en/blog/re-1/c-recaptcha-v2"/>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV2EnterpriseRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV2EnterpriseRequest::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    )
+    .with_page_action("your-page-action");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

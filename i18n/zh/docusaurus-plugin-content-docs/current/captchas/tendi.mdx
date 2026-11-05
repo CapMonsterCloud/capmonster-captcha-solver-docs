@@ -407,6 +407,57 @@ https://example.com/path/GetCaptchaAid.ashx?_=1234567890000
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com/").await?;
+
+    // 捕获腾讯的请求并从查询参数中提取 aid
+    let mut requests = page.event_listener::<EventRequestWillBeSent>().await?;
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+
+    while let Ok(Some(event)) = tokio::time::timeout(std::time::Duration::from_millis(100), requests.next()).await {
+        let url = &event.request.url;
+        if url.starts_with("https://sg.captcha.qcloud.com/cap_union_prehandle?aid=") {
+            let aid = url
+                .split('?')
+                .nth(1)
+                .unwrap_or("")
+                .split('&')
+                .find_map(|p| p.strip_prefix("aid="));
+            println!("Extracted aid: {}", aid.unwrap_or(""));
+        }
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
@@ -655,4 +706,35 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{TenDiCustomTaskRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = TenDiCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-tendi",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

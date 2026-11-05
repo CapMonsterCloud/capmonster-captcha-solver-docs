@@ -858,4 +858,44 @@ class Program
 
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{AltchaCustomTaskRequest, AltchaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let metadata = AltchaMetadata {
+        challenge: "your-challenge".into(),
+        iterations: "your-iterations".into(),
+        salt: "your-salt".into(),
+        signature: "your-signature".into(),
+    };
+
+    let request = AltchaCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-altcha",
+        "",
+        metadata,
+    )
+    .with_user_agent("userAgentPlaceholder");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

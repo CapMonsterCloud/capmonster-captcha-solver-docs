@@ -992,4 +992,43 @@ class Program
 
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{FuncaptchaRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions, ProxyInfo, ProxyType};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // a proxy is required for FunCaptcha
+    let proxy = ProxyInfo::new(ProxyType::Http, "123.45.67.89", 8080)
+        .with_auth("username", "password");
+
+    let request = FuncaptchaRequest::new(
+        "https://yourwebsite.com/page-with-funcaptcha",
+        "your-website-public-key",
+        proxy,
+    )
+    .with_funcaptcha_api_js_subdomain("your-funcaptcha-api-subdomain")
+    .with_data(r#"{"blob":"your-blob-value"}"#)
+    .with_user_agent("userAgentPlaceholder");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

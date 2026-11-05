@@ -488,6 +488,62 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Извлечение параметров через chromiumoxide (CDP-клиент, аналог Playwright для Rust).
+// Добавьте в Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com").await?;
+
+    // iframe с чекбоксом reCAPTCHA: в query его src есть k (sitekey) и size (invisible)
+    let src: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('iframe[src^="https://www.google.com/recaptcha/api2/anchor?"]');
+                return el ? el.src : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+
+    let query = src.split('?').nth(1).unwrap_or("");
+    let (mut sitekey, mut is_invisible) = (None, false);
+    for pair in query.split('&') {
+        let mut parts = pair.splitn(2, '=');
+        match (parts.next(), parts.next()) {
+            (Some("k"), Some(v)) => sitekey = Some(v.to_string()),
+            (Some("size"), Some("invisible")) => is_invisible = true,
+            _ => {}
+        }
+    }
+    println!("sitekey: {sitekey:?}, isInvisible: {is_invisible}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK
@@ -727,5 +783,36 @@ class Program
 </details>
     
     <BlogLink url="https://capmonster.cloud/ru/blog/re-1/c-recaptcha-v2"/>
+  </TabItem>
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для Rust используйте официальный SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) и [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV2Request};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV2Request::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

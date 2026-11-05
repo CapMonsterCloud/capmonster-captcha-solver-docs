@@ -1439,4 +1439,45 @@ class Program
 
 </details>
   </TabItem>
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для Rust используйте официальный SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) и [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{HuntCustomTaskRequest, HuntMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions, ProxyInfo, ProxyType};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Для HUNT прокси обязателен
+    let proxy = ProxyInfo::new(ProxyType::Http, "123.45.67.89", 8080)
+        .with_auth("username", "password");
+    // Режим Fingerprint: передаётся только apiGetLib
+    let metadata = HuntMetadata::fingerprint(
+        "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+    );
+
+    let request = HuntCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-hunt",
+        metadata,
+        proxy,
+    )
+    .with_user_agent("userAgentPlaceholder");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

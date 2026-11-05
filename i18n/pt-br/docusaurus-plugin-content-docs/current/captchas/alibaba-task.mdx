@@ -2239,4 +2239,38 @@ class Program
 
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{AlibabaCustomTaskRequest, AlibabaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let metadata = AlibabaMetadata::new("your-scene-id", "your-prefix");
+
+    let request = AlibabaCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-alibaba",
+        metadata,
+    )
+    .with_user_agent("userAgentPlaceholder");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

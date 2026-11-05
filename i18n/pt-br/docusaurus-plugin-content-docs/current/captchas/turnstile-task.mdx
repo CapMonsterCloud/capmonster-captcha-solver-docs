@@ -492,6 +492,72 @@ Os trechos de código fornecidos são exemplos básicos para aprendizado sobre c
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// O exemplo usa chromiumoxide (cliente CDP, análogo do Playwright para Rust).
+// Adicione ao Cargo.toml: chromiumoxide, tokio, futures, regex.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use regex::Regex;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // inicia o navegador (com janela, como nos exemplos do Playwright)
+    let (mut browser, mut handler) =
+        Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+
+    let page = browser.new_page("https://example.com").await?;
+
+    // Opção 1: encontrar o elemento com data-sitekey
+    if let Ok(element) = page.find_element("[data-sitekey]").await {
+        if let Some(sitekey) = element.attribute("data-sitekey").await? {
+            println!("Turnstile Sitekey (do elemento): {sitekey}");
+            browser.close().await?;
+            return Ok(());
+        }
+    }
+
+    // Opção 2: analisar window.onloadTurnstileCallback
+    println!("Elemento Turnstile não encontrado. Verificando via callback...");
+    let re_sitekey = Regex::new(r#"sitekey: ['"]([^'"]+)['"]"#)?;
+    let re_action = Regex::new(r#"action: ['"]([^'"]+)['"]"#)?;
+    for _ in 0..60 {
+        let callback: String = page
+            .evaluate(
+                "String(window.onloadTurnstileCallback ? window.onloadTurnstileCallback.toString() : '')",
+            )
+            .await?
+            .into_value()?;
+        if !callback.is_empty() {
+            let sitekey = re_sitekey.captures(&callback).map(|c| c[1].to_string());
+            let action = re_action.captures(&callback).map(|c| c[1].to_string());
+            println!("Parâmetros do Turnstile (do callback): sitekey={sitekey:?}, action={action:?}");
+            break;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Usar biblioteca SDK
@@ -739,5 +805,37 @@ class Program
 ```
 
 </details>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{TurnstileRequest, TurnstileStandard};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = TurnstileRequest::new(
+        "https://yourwebsite.com/page-with-turnstile",
+        "your-website-key",
+        TurnstileStandard::new(),
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

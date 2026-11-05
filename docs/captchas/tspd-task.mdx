@@ -1355,4 +1355,45 @@ class Program
 
   </TabItem>
 
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для Rust используйте официальный SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) и [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{TspdCustomTaskRequest, TspdMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions, ProxyInfo, ProxyType};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Для TSPD прокси обязателен
+    let proxy = ProxyInfo::new(ProxyType::Http, "123.45.67.89", 8080)
+        .with_auth("username", "password");
+    let metadata = TspdMetadata::new(
+        "TS386a400d029=08...010245; TS386a400d029=08...01a06e; TS386a400d078=08...dbb3b0c; TSd2153684027=08...1944",
+        "your_html_page_base64",
+    );
+
+    let request = TspdCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-tspd",
+        metadata,
+        proxy,
+    )
+    .with_user_agent("userAgentPlaceholder");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

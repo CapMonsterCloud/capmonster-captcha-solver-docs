@@ -353,6 +353,39 @@ https://ru.api.capmonster.cloud/getTaskResult
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Пример использует прямые HTTP-запросы (reqwest).
+// Добавьте в Cargo.toml: reqwest, tokio, base64.
+
+use base64::{engine::general_purpose::STANDARD, Engine};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Ссылка на изображение
+    let image_url = "https://example/img.jpg";
+
+    let response = reqwest::get(image_url).await?;
+    if response.status().is_success() {
+        let bytes = response.bytes().await?;
+        // Бинарные данные изображения в base64
+        let base64_image = STANDARD.encode(&bytes);
+        println!("{base64_image}");
+    } else {
+        println!("Ошибка загрузки изображения");
+    }
+    Ok(())
+
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Используйте библиотеку SDK
@@ -543,6 +576,43 @@ class Program
     }
 }
 ```
+    </details>
+  </TabItem>
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для Rust используйте официальный SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) и [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{ImageToTextRequest, TextModule};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Укажите ваш API-ключ CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Укажите путь к файлу с изображением капчи
+    let image_bytes = std::fs::read("image.png").expect("не удалось прочитать изображение");
+
+    let request = ImageToTextRequest::new(image_bytes)
+    // При необходимости укажите дополнительные параметры
+    .with_module_name(TextModule::Yandex)
+    .with_threshold(80)
+    .with_case(true)
+    .with_numeric(false)
+    .with_math(false);
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Решение: {solution}");
+    Ok(())
+}
+```
+
     </details>
   </TabItem>
 </Tabs>

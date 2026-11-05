@@ -526,6 +526,97 @@ import McpNotice from '@site/src/components/McpNotice';
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures, serde_json.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::js_protocol::runtime::{ExecutionContextId, EvaluateParams};
+use chromiumoxide::Page;
+
+async fn frame_context(page: &Page, needle: &str) -> Result<Option<ExecutionContextId>, Box<dyn std::error::Error>> {
+    for id in page.frames().await? {
+        let url = page.frame_url(id.clone()).await?.unwrap_or_default();
+        if url.contains(needle) {
+            return Ok(page.frame_execution_context(id).await?);
+        }
+    }
+    Ok(None)
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser
+        .new_page("https://lessons.zennolab.com/captchas/recaptcha/v2_simple.php?level=high")
+        .await?;
+    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+
+    // reCAPTCHA 框架：复选框（api2/anchor）和任务（api2/bframe）
+    let anchor = frame_context(&page, "api2/anchor").await?;
+    let anchor = anchor.ok_or("未找到 reCAPTCHA 复选框 iframe")?;
+
+    // 在框架内点击复选框
+    page.evaluate_expression(
+        EvaluateParams::builder()
+            .expression("document.querySelector('#recaptcha-anchor').click()")
+            .context_id(anchor)
+            .build()?,
+    )
+    .await?;
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+
+    let challenge = frame_context(&page, "api2/bframe").await?;
+    let challenge = challenge.ok_or("未找到 reCAPTCHA 任务 iframe")?;
+
+    // 图片、任务文本和网格大小
+    let info: serde_json::Value = page
+        .evaluate_expression(
+            EvaluateParams::builder()
+                .expression(
+                    r#"(() => {
+                        const img = document.querySelector('img.rc-image-tile-33') || document.querySelector('img.rc-image-tile-44');
+                        const strong = document.querySelector('.rc-imageselect-desc-no-canonical strong, .rc-imageselect-desc strong');
+                        const tiles = Array.from(document.querySelectorAll('.rc-imageselect-tile')).filter(t => t.offsetParent !== null).length;
+                        return {
+                            image: img ? img.src : '',
+                            task: strong ? strong.textContent.trim() : '未找到',
+                            grid: tiles >= 16 ? '4x4' : (tiles >= 9 ? '3x3' : '1x1')
+                        };
+                    })()"#,
+                )
+                .context_id(challenge)
+                .build()?,
+        )
+        .await?
+        .into_value()?;
+
+    println!("图片：{}", info["image"]);
+    println!("任务：选择所有包含以下内容的图片：{}", info["task"]);
+    println!("网格：{}", info["grid"]);
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
@@ -730,5 +821,40 @@ class Program
 ```
     </details>
 
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaComplexImageTaskRequest, RecaptchaGrid, RecaptchaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // 替换为您自己的值
+    let metadata = RecaptchaMetadata::from_task(
+        RecaptchaGrid::ThreeByThree,
+        "Select all squares with mountains or hills",
+    );
+
+    let request = RecaptchaComplexImageTaskRequest::from_url("your-image-url", metadata)
+    .with_website_url("https://yourwebsite.com/page-with-recaptcha");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

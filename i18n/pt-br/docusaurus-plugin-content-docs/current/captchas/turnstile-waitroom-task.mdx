@@ -410,4 +410,40 @@ class Program
 
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{TurnstileRequest, TurnstileWaitRoom};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions, ProxyInfo, ProxyType};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // o proxy é obrigatório para o modo de sala de espera (wait_room)
+    let proxy = ProxyInfo::new(ProxyType::Http, "123.45.67.89", 8080)
+        .with_auth("username", "password");
+
+    let request = TurnstileRequest::new(
+        "https://yourwebsite.com/page-with-waiting-room",
+        "xxxxxxxx",
+        TurnstileWaitRoom::new("your_html_page_base64", "userAgentPlaceholder", proxy),
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

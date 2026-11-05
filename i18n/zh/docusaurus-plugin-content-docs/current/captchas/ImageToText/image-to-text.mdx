@@ -312,6 +312,39 @@ loadAndEncodeCaptchaToBase64(captchaUrl);
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 本示例使用直接的 HTTP 请求（reqwest）。
+// 请在 Cargo.toml 中添加：reqwest, tokio, base64.
+
+use base64::{engine::general_purpose::STANDARD, Engine};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 图片链接
+    let image_url = "https://example/img.jpg";
+
+    let response = reqwest::get(image_url).await?;
+    if response.status().is_success() {
+        let bytes = response.bytes().await?;
+        // 将图片二进制数据转换为 base64
+        let base64_image = STANDARD.encode(&bytes);
+        println!("{base64_image}");
+    } else {
+        println!("图片加载失败");
+    }
+    Ok(())
+
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
@@ -502,6 +535,43 @@ class Program
     }
 }
 ```
+    </details>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{ImageToTextRequest, TextModule};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // 请填写验证码图片文件的路径
+    let image_bytes = std::fs::read("image.png").expect("无法读取图片");
+
+    let request = ImageToTextRequest::new(image_bytes)
+    // 如有需要请指定额外参数
+    .with_module_name(TextModule::Yandex)
+    .with_threshold(80)
+    .with_case(true)
+    .with_numeric(false)
+    .with_math(false);
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
     </details>
   </TabItem>
 </Tabs>
