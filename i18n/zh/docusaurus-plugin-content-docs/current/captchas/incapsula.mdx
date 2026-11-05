@@ -331,6 +331,58 @@ Error 16 - 此错误与使用不符合要求地理位置的代理服务器有关
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// 通过 chromiumoxide 提取参数（CDP 客户端，Rust 的 Playwright 类似工具）。
+// 请在 Cargo.toml 中添加：chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com/").await?;
+
+    // id 为 main-iframe 的 iframe 的 src 属性值
+    let iframe_src: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('#main-iframe');
+                return el ? el.getAttribute('src') : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+    println!("iframe src: {iframe_src}");
+
+    // 以 visid_incap_ 或 incap_ses_ 开头的 cookie
+    for cookie in page.get_cookies().await? {
+        if cookie.name.starts_with("visid_incap_") || cookie.name.starts_with("incap_ses_") {
+            println!("{}={}", cookie.name, cookie.value);
+        }
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## 使用 SDK 库
@@ -560,4 +612,44 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Rust 请使用官方 SDK：[crates.io](https://crates.io/crates/capmonstercloud-client) 和 [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver)。
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{ImpervaCustomTaskRequest, ImpervaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions, ProxyInfo, ProxyType};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // 请填写您的 CapMonster Cloud API 密钥
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Imperva 必须使用代理
+    let proxy = ProxyInfo::new(ProxyType::Http, "123.45.67.89", 8080)
+        .with_auth("username", "password");
+    let metadata = ImpervaMetadata::new(
+        "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+        "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+    );
+
+    let request = ImpervaCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-imperva",
+        metadata,
+        proxy,
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("解决方案：{solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

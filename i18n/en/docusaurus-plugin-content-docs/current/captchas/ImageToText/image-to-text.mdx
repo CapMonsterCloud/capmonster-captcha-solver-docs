@@ -325,6 +325,39 @@ The examples below demonstrate the general approach to obtaining a CAPTCHA image
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// The example uses direct HTTP requests (reqwest).
+// Add to Cargo.toml: reqwest, tokio, base64.
+
+use base64::{engine::general_purpose::STANDARD, Engine};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Image URL
+    let image_url = "https://example/img.jpg";
+
+    let response = reqwest::get(image_url).await?;
+    if response.status().is_success() {
+        let bytes = response.bytes().await?;
+        // binary image data to base64
+        let base64_image = STANDARD.encode(&bytes);
+        println!("{base64_image}");
+    } else {
+        println!("Failed to load the image");
+    }
+    Ok(())
+
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
@@ -515,6 +548,43 @@ class Program
     }
 }
 ```
+    </details>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{ImageToTextRequest, TextModule};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // Set the path to the captcha image file
+    let image_bytes = std::fs::read("image.png").expect("failed to read the image");
+
+    let request = ImageToTextRequest::new(image_bytes)
+    // add optional parameters if needed
+    .with_module_name(TextModule::Yandex)
+    .with_threshold(80)
+    .with_case(true)
+    .with_numeric(false)
+    .with_math(false);
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
     </details>
   </TabItem>
 </Tabs>

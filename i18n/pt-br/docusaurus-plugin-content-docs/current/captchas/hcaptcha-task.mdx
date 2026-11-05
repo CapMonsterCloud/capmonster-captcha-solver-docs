@@ -688,4 +688,63 @@ class Program
 ```
 </details>
   </TabItem>  
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar Código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// o Rust SDK não tem uma classe de requisição pronta para esta tarefa: o exemplo usa chamadas diretas à JSON API
+    // com reqwest (adicione ao Cargo.toml: reqwest com o feature json, tokio, serde_json)
+
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = reqwest::Client::new();
+
+    // Informe sua chave de API do CapMonster Cloud
+    let create = client
+        .post("https://api.capmonster.cloud/createTask")
+        .json(&json!({
+            "clientKey": "YOUR_API_KEY",
+            "task": {
+                "type": "HCaptchaTask",
+                "websiteURL": "https://lessons.zennolab.com/captchas/hcaptcha/?level=easy",
+                "websiteKey": "472fc7af-86a4-4382-9a49-ca9090474471",
+                "isInvisible": false,
+                "userAgent": "userAgentPlaceholder"
+            }
+        }))
+        .send()
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+    let task_id = create["taskId"].clone();
+
+    // consulte getTaskResult com intervalo de 2-5 segundos
+    loop {
+        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+        let result = client
+            .post("https://api.capmonster.cloud/getTaskResult")
+            .json(&json!({ "clientKey": "YOUR_API_KEY", "taskId": task_id }))
+            .send()
+            .await?
+            .json::<serde_json::Value>()
+            .await?;
+        if result["status"] == "ready" {
+            println!("Solução: {}", result["solution"]);
+            break;
+        }
+    }
+
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

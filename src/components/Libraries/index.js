@@ -40,6 +40,13 @@ const LibrariesList = [
     customLinkName: 'Packagist',
     customLinkUrl: 'https://packagist.org/packages/zennolab/capmonstercloud.client'
   },
+  {
+    title: 'Rust',
+    Svg: require('@site/static/img/Rust.svg').default,
+    githubLink: 'https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver',
+    customLinkName: 'Crates.io',
+    customLinkUrl: 'https://crates.io/crates/capmonstercloud-client'
+  },
 ];
 
 

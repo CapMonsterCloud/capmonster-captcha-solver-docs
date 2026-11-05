@@ -318,6 +318,59 @@ class Program
 </details>
 
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Extração de parâmetros com chromiumoxide (cliente CDP, análogo do Playwright para Rust).
+// Adicione ao Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com/").await?;
+
+    // aguarda o iframe do reCAPTCHA e extrai k (sitekey) do src
+    let mut sitekey = String::new();
+    for _ in 0..20 {
+        sitekey = page
+            .evaluate(
+                r#"(() => {
+                    const iframe = document.querySelector('iframe[src*="recaptcha"]');
+                    return iframe ? new URL(iframe.src).searchParams.get('k') || '' : '';
+                })()"#,
+            )
+            .await?
+            .into_value()?;
+        if !sitekey.is_empty() {
+            break;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+    }
+
+    println!("Site key: {sitekey}");
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Usar biblioteca SDK
@@ -490,4 +543,37 @@ class Program
 {/* 
 
   </TabItem> */}
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV3EnterpriseRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV3EnterpriseRequest::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    )
+    .with_min_score(0.7)
+    .with_page_action("your-page-action");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

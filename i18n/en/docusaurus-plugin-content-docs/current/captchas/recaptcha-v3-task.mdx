@@ -439,6 +439,68 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures, regex.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::js_protocol::runtime::EvaluateParams;
+use regex::Regex;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://yourwebsite.com/page-with-recaptcha").await?;
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+
+    // collect inline scripts and external .js files (fetch in the page context)
+    let all_js: String = page
+        .evaluate_expression(
+            EvaluateParams::builder()
+                .expression(
+                    r#"(async () => {
+                        const texts = Array.from(document.querySelectorAll('script:not([src])')).map(s => s.textContent || '');
+                        for (const s of document.querySelectorAll('script[src]')) {
+                            try { texts.push(await (await fetch(s.src)).text()); } catch (e) {}
+                        }
+                        return texts.join('\n');
+                    })()"#,
+                )
+                .await_promise(true)
+                .build()?,
+        )
+        .await?
+        .into_value()?;
+
+    let re = Regex::new(r#"grecaptcha\.execute\(\s*['"]([^'"]+)['"]\s*,\s*\{[^}]*action\s*:\s*['"]([^'"]+)['"]"#)?;
+    if let Some(caps) = re.captures(&all_js) {
+        println!("sitekey: {}, action: {}", &caps[1], &caps[2]);
+    } else {
+        println!("grecaptcha.execute not found");
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
@@ -619,5 +681,38 @@ class Program
 
 <BlogLink url="https://capmonster.cloud/en/blog/re-1/c-recaptcha-v3"/>
 
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{RecaptchaV3ProxylessRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    let request = RecaptchaV3ProxylessRequest::new(
+        "https://yourwebsite.com/page-with-recaptcha",
+        "your-website-key",
+    )
+    .with_min_score(0.7)
+    .with_page_action("your-page-action");
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
   </TabItem>
 </Tabs>

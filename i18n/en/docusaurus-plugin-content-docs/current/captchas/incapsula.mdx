@@ -332,6 +332,58 @@ The provided code snippets are basic examples for learning how to extract the re
       ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Parameter extraction via chromiumoxide (a CDP client, the Playwright analogue for Rust).
+// Add to Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com/").await?;
+
+    // the src attribute value of the iframe with id main-iframe
+    let iframe_src: String = page
+        .evaluate(
+            r#"(() => {
+                const el = document.querySelector('#main-iframe');
+                return el ? el.getAttribute('src') : '';
+            })()"#,
+        )
+        .await?
+        .into_value()?;
+    println!("iframe src: {iframe_src}");
+
+    // cookies that start with visid_incap_ or incap_ses_
+    for cookie in page.get_cookies().await? {
+        if cookie.name.starts_with("visid_incap_") || cookie.name.starts_with("incap_ses_") {
+            println!("{}={}", cookie.name, cookie.value);
+        }
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ## Use the SDK library
@@ -561,4 +613,44 @@ class Program
 </details>
   </TabItem>
 
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Rust, use the official SDK: [crates.io](https://crates.io/crates/capmonstercloud-client) and [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{ImpervaCustomTaskRequest, ImpervaMetadata};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions, ProxyInfo, ProxyType};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Set your CapMonster Cloud API key
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+    // a proxy is required for Imperva
+    let proxy = ProxyInfo::new(ProxyType::Http, "123.45.67.89", 8080)
+        .with_auth("username", "password");
+    let metadata = ImpervaMetadata::new(
+        "_Incapsula_Resource?SWJIYLWA=1234567890abcdef1234567890abcdef",
+        "incap_ses_1234_5678901=testSessionValue1234567890abcdef==; visid_incap_5678901=testVisitorValue1234567890abcdef==;",
+    );
+
+    let request = ImpervaCustomTaskRequest::new(
+        "https://yourwebsite.com/page-with-imperva",
+        metadata,
+        proxy,
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solution: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
