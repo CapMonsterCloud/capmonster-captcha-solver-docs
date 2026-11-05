@@ -504,6 +504,107 @@ class Program
 
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código (HTTP)</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// O exemplo usa requisições HTTP diretas (reqwest).
+// Adicione ao Cargo.toml: reqwest, tokio, serde_json.
+
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Substitua a URL pela requisição do seu site que
+    // retorna gt e challenge na resposta.
+    let timestamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)?
+        .as_millis();
+
+    let response = reqwest::Client::new()
+        .get("https://example.com/api/v1/captcha/gee-test/init-params")
+        .query(&[("t", timestamp.to_string())])
+        .send()
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+
+    let gt = response["gt"].as_str().unwrap_or("");
+    let challenge = response["challenge"].as_str().unwrap_or("");
+    if gt.is_empty() || challenge.is_empty() {
+        return Err("Não foi possível obter gt ou challenge".into());
+    }
+
+    println!("gt: {gt}, challenge: {challenge}");
+    Ok(())
+
+}
+```
+
+    </details>
+    <details>
+      <summary>Mostrar código (no navegador)</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Extração de parâmetros com chromiumoxide (cliente CDP, análogo do Playwright para Rust).
+// Adicione ao Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://example.com/page-with-geetest").await?;
+    let mut requests = page.event_listener::<EventRequestWillBeSent>().await?;
+
+    // captura requisições ao GeeTest: lê gt e challenge da query
+    let mut found = None;
+    let deadline = tokio::time::Instant::now() + std::time::Duration::from_secs(5);
+    while let Ok(Some(event)) = tokio::time::timeout_at(deadline, requests.next()).await {
+        let url = &event.request.url;
+        if url.contains("api.geetest.com/get.php") || url.contains("api.geevisit.com/ajax.php") {
+            let mut gt = String::new();
+            let mut challenge = String::new();
+            for pair in url.split('?').nth(1).unwrap_or("").split('&') {
+                let mut parts = pair.splitn(2, '=');
+                match (parts.next(), parts.next()) {
+                    (Some("gt"), Some(v)) => gt = v.to_string(),
+                    (Some("challenge"), Some(v)) => challenge = v.to_string(),
+                    _ => {}
+                }
+            }
+            if !gt.is_empty() && !challenge.is_empty() {
+                found = Some((gt, challenge));
+                break;
+            }
+        }
+    }
+
+    match found {
+        Some((gt, challenge)) => println!("gt: {gt}, challenge: {challenge}"),
+        None => println!("Não foi possível obter gt e challenge"),
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 <br />
@@ -652,8 +753,6 @@ asyncio.run(
 
 
 ### <span style={{fontSize: '1.5rem'}}>Usar biblioteca SDK</span>
-
-Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
@@ -912,6 +1011,39 @@ Solution:
 ```
     </details>
   </TabItem>  
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use capmonstercloud_client::requests::{GeetestRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+// GeeTest v3: challenge é uma chave dinâmica, obtenha-a antes de criar a tarefa
+    let request = GeetestRequest::new_v3(
+        "https://yourwebsite.com/page-with-geetest",
+        "your-gt-value",
+        "your-challenge-value",
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 
@@ -1346,11 +1478,76 @@ class Program
 ```
     </details>
   </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+// Extração de parâmetros com chromiumoxide (cliente CDP, análogo do Playwright para Rust).
+// Adicione ao Cargo.toml: chromiumoxide, tokio, futures.
+
+use chromiumoxide::Browser;
+use chromiumoxide::browser::BrowserConfig;
+use futures::StreamExt;
+use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let (mut browser, mut handler) = Browser::launch(BrowserConfig::builder().with_head().build()?).await?;
+    tokio::spawn(async move {
+        while let Some(event) = handler.next().await {
+            if event.is_err() {
+                break;
+            }
+        }
+    });
+    let page = browser.new_page("https://www.example.com").await?;
+    let mut requests = page.event_listener::<EventRequestWillBeSent>().await?;
+    page.goto("https://www.example.com").await?;
+    tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+
+    // captura a requisição gcaptcha4.geetest.com/load: captcha_id e risk_type
+    let mut result = None;
+    while let Ok(Some(event)) = tokio::time::timeout(std::time::Duration::from_millis(100), requests.next()).await {
+        let url = &event.request.url;
+        if url.contains("https://gcaptcha4.geetest.com/load?") {
+            let mut captcha_id = String::new();
+            let mut risk_type = String::new();
+            for pair in url.split('?').nth(1).unwrap_or("").split('&') {
+                let mut parts = pair.splitn(2, '=');
+                match (parts.next(), parts.next()) {
+                    (Some("captcha_id"), Some(v)) => captcha_id = v.to_string(),
+                    (Some("risk_type"), Some(v)) => risk_type = v.to_string(),
+                    _ => {}
+                }
+            }
+            if !captcha_id.is_empty() {
+                result = Some((captcha_id, risk_type));
+                break;
+            }
+        }
+    }
+
+    match result {
+        Some((captcha_id, risk_type)) => {
+            println!("GeeTest v4 detected:");
+            println!("captchaId: {captcha_id}, riskType: {risk_type}");
+        }
+        None => println!("error"),
+    }
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 ### <span style={{fontSize: '1.5rem'}}>Usar biblioteca SDK</span>
-
-Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
 
 <Tabs className="full-width-tabs filled-tabs request-tabs" groupId="captcha-type">
   <TabItem value="js" label="JavaScript / TypeScript" default className="method-panel">
@@ -1627,6 +1824,41 @@ Solution:
     }
 }
 ```
+    </details>
+  </TabItem>
+
+  <TabItem value="rust" label="Rust" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Rust, use o SDK oficial: [crates.io](https://crates.io/crates/capmonstercloud-client) e [Github](https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver).
+
+```rust
+// https://github.com/CapMonsterCloud/capmonster-rust-captcha-solver
+
+use serde_json::json;
+use capmonstercloud_client::requests::{GeetestRequest};
+use capmonstercloud_client::{CapMonsterClient, ClientOptions};
+
+#[tokio::main]
+async fn main() -> capmonstercloud_client::Result<()> {
+    // Informe sua chave de API do CapMonster Cloud
+    let client = CapMonsterClient::new(ClientOptions::new("YOUR_API_KEY"))?;
+
+// GeeTest v4: gt é o captcha_id; init_parameters são enviados junto com riskType
+    // (o macro json! vem de crates.io/crates/serde_json)
+    let request = GeetestRequest::new_v4_with_init_parameters(
+        "https://yourwebsite.com/page-with-geetest",
+        "your-gt-value",
+        json!({ "riskType": "your-risk-type" }),
+    );
+
+    let solution = client.solve_captcha(&request).await?;
+    println!("Solução: {solution}");
+    Ok(())
+}
+```
+
     </details>
   </TabItem>
 </Tabs>
