@@ -3,7 +3,7 @@ import SubMenu from './SubMenu';
 import { HeaderMenuSingleItem } from './types';
 import { uniqBy } from './utils/uniqBy';
 import { useFetchPrices } from '../../../hooks/useFetchPrices';
-import { getCaptchaLink } from './utils/getCaptchaLink';
+import { CAPTCHA_DUPLICATES, getCaptchaLink } from './utils/getCaptchaLink';
 import { getMainLocale } from './utils/getMainLocale';
 import { useBaseUrl } from '../../../hooks/useBaseUrl.ts';
 
@@ -45,15 +45,22 @@ const SolutionSubMenu = ({
         url: `${baseLandingUrl}/${getMainLocale(locale)}/recaptcha`,
         gtmId: `header-solutions-recaptcha-btn`,
       },
-      ...uniqBy(normalizePrices(prices), 'Name')?.map(priceItem => {
-        return {
-          icon: <img src={`${baseDashboardUrl}${priceItem.LogoPath}`} width={24} height={24} alt={priceItem?.Name} />,
-          // как появится отдельная страница для Turnstile, поменять имя в базе
-          title: priceItem?.Name === 'Cloudflare Turnstile' ? 'Cloudflare' : priceItem.Name,
-          url: getCaptchaLink(locale, priceItem.LinkKey, priceItem.Id, baseLandingUrl),
-          gtmId: `header-solutions-${priceItem.Id}-docs-btn`,
-        };
+      ...uniqBy(normalizePrices(prices), 'Name')?.flatMap(priceItem => {
+        const variants = CAPTCHA_DUPLICATES[priceItem.Id] ?? [{ id: priceItem.Id, name: priceItem.Name }];
+
+        return variants.map(variant => ({
+          icon: <img src={`${baseDashboardUrl}${priceItem.LogoPath}`} width={24} height={24} alt={variant.name || priceItem.Name} />,
+          title: variant.name || priceItem.Name,
+          url: getCaptchaLink(locale, priceItem.LinkKey, variant.id, baseLandingUrl),
+          gtmId: `header-solutions-${variant.id}-docs-btn`,
+        }));
       }),
+      {
+        icon: <img src={`${baseDashboardUrl}/img/landing/complexTask.svg`} width={24} height={24} alt="complex task" />,
+        title: 'ComplexImage Recognition',
+        url: getCaptchaLink(locale, '', 'complex-rec_oocl_rotate_new', baseLandingUrl),
+        gtmId: 'header-solutions-complex-rec_oocl_rotate_new-docs-btn',
+      },
     ];
     setSubItems(captchas);
   };
