@@ -85,10 +85,18 @@ You can get the latest value at: [https://capmonster.cloud/api/useragent/actual]
 ---
 
 <ParamItem title="cookies" type="string" />
-Pass additional cookies in the format:
+Optional cookies for the current domain. Pass a string in `task.cookies`.
 
+One cookie:
+
+```text
+cookieName=cookieValue
 ```
-cookieName1=value1; cookieName2=value2
+
+Separate multiple cookies with a semicolon and a space:
+
+```text
+cookieName1=cookieValue1; cookieName2=cookieValue2
 ```
 
 ---
@@ -143,6 +151,7 @@ https://api.capmonster.cloud/createTask
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
     "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
+    "cookies": "cookieName1=cookieValue1; cookieName2=cookieValue2",
     "proxyType": "your-proxy-type",
     "proxyAddress": "your-proxy-address",
     "proxyPort": 1234,

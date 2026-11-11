@@ -85,10 +85,18 @@ Arkose Labs 子域名（`surl` 的值）。仅当它与默认值 `client-api.ark
 ---
 
 <ParamItem title="cookies" type="string" />
-请按以下格式传递附加 Cookie：
+当前域名的可选 cookies。请在 `task.cookies` 中传入字符串。
 
+单个 cookie：
+
+```text
+cookieName=cookieValue
 ```
-cookieName1=value1; cookieName2=value2
+
+多个 cookies 之间用分号和空格分隔：
+
+```text
+cookieName1=cookieValue1; cookieName2=cookieValue2
 ```
 
 ---
@@ -145,6 +153,7 @@ https://api.capmonster.cloud/createTask
     "funcaptchaApiJSSubdomain": "example-api.arkoselabs.com",
     "data": "{\"blob\":\"your-blob-value-1234567890\"}",
     "userAgent": "userAgentPlaceholder",
+    "cookies": "cookieName1=cookieValue1; cookieName2=cookieValue2",
     "proxyType": "your-proxy-type",
     "proxyAddress": "your-proxy-address",
     "proxyPort": 1234,
