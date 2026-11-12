@@ -20,7 +20,8 @@ export type PriceName =
   | 'Yidun'
   | 'FengkongCloud'
   | 'ARCaptcha'
-  | 'HeyTap';
+  | 'HeyTap'
+  | 'Proton Captcha';
 
 export type PriceId =
   | 'rc2'
@@ -53,7 +54,8 @@ export type PriceId =
   | 'yidun'
   | 'fengkongcloud'
   | 'arcaptcha'
-  | 'heytap';
+  | 'heytap'
+  | 'proton';
 
 export type PriceResponseItem = {
   Id: PriceId;

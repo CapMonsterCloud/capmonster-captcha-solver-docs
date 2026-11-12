@@ -1,0 +1,178 @@
+---
+sidebar_position: 31
+sidebar_label: Proton Captcha
+title: "Автоматическое решение Proton Captcha | API"
+description: "Узнайте, как обойти Proton Captcha с помощью API CapMonster Cloud! Подробное описание возможностей и примеры."
+---
+
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/proton-task" />
+
+# Proton Captcha
+
+<PriceBlockWrap>
+  <PriceBlock title="Proton Captcha" captchaId="proton"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+Proton Captcha — это система защиты, используемая в сервисах Proton для проверки легитимной активности пользователей и защиты от автоматизированных действий. Для решения этого типа капчи необходим прокси.
+
+## Параметры запроса
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **CustomTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **proton**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    Адрес основной страницы, на которой находится капча.
+
+    ---
+
+    <ParamItem title="HumanVerificationToken (внутри metadata)" required type="string" />
+    Токен из ответа сервера.
+
+    ---
+
+    <ParamItem title="pageAction (внутри metadata)" required type="string" />
+    Действие на сайте: `login` или `signup`
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent браузера. Используйте актуальное значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Получить последнее значение можно по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+    ---
+
+    <ParamItem title="proxyType" required type="string" />
+    **http** - обычный http/https прокси;<br />**https** - попробуйте этот вариант только если "http" не работает (требуется для некоторых кастомных прокси);<br />**socks4** - socks4 прокси;<br />**socks5** - socks5 прокси.
+
+    ---
+
+    <ParamItem title="proxyAddress" required type="string" />
+    <p>
+      IP-адрес IPv4/IPv6 прокси. Не допускается:
+      - использование прозрачных прокси (где виден IP клиента);
+      - использование прокси на локальных машинах.
+    </p>
+
+    ---
+
+    <ParamItem title="proxyPort" required type="integer" />
+    Порт прокси.
+
+    ---
+
+    <ParamItem title="proxyLogin" required type="string" />
+    Логин прокси-сервера.
+
+    ---
+
+    <ParamItem title="proxyPassword" required type="string" />
+    Пароль прокси-сервера.
+
+</div>
+
+## Метод создания задачи
+
+<div className="method-panel">
+  <MethodItem>
+    ```http
+    https://api.capmonster.cloud/createTask
+    ```
+  </MethodItem>
+  <MethodDescription>
+    **Пример запроса**
+    ```json
+    {
+      "clientKey": "API_KEY",
+      "task": {
+        "type": "CustomTask",
+        "class": "proton",
+        "websiteURL": "https://yourwebsite.com/",
+        "userAgent": "userAgentPlaceholder",
+        "metadata": {
+          "HumanVerificationToken": "your-verification-token",
+          "pageAction": "login"
+        },
+        "proxyType": "http",
+        "proxyAddress": "8.8.8.8",
+        "proxyPort": 8080,
+        "proxyLogin": "proxyLoginHere",
+        "proxyPassword": "proxyPasswordHere"
+      }
+    }
+    ```
+
+    **Пример ответа**
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+  </MethodDescription>
+</div>
+
+## Метод получения результата
+Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) для получения решения Proton Captcha.
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Пример запроса**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Пример ответа**
+```json
+{
+  "errorId": 0,
+  "cost": 0.001,
+  "status": "ready",
+  "solution": {
+    "data": {
+      "tokens": "TOKEN_VALUE_HERE....."
+    }
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## Как найти HumanVerificationToken
+
+1. Откройте страницу с Proton Captcha.
+2. Откройте **Инструменты разработчика** (**F12** или правый клик → **Исследовать**).
+3. Перейдите на вкладку **Network** и выполните действие, которое вызывает капчу.
+4. Найдите запрос, в ответе которого содержится `HumanVerificationToken`.
+5. Скопируйте значение токена и передайте его в поле `metadata.HumanVerificationToken`.
+
+## Как найти pageAction
+
+Параметр `pageAction` зависит от действия, выполняемого на сайте:
+- Используйте `login` при входе пользователя в систему
+- Используйте `signup` при создании новой учетной записи
