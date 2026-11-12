@@ -53,7 +53,7 @@ export type PriceId =
   | 'yidun'
   | 'fengkongcloud'
   | 'arcaptcha'
-  | 'proton';
+  | 'heytap';
 
 export type PriceResponseItem = {
   Id: PriceId;
