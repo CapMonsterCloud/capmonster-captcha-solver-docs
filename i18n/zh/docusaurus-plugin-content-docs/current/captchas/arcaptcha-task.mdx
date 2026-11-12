@@ -1,0 +1,148 @@
+---
+sidebar_position: 29
+sidebar_label: ARCaptcha
+title: "自动识别并绕过 ARCaptcha | API"
+description: "了解如何使用 CapMonster Cloud API 绕过 ARCaptcha！功能详细描述和示例。"
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/arcaptcha-task" />
+
+# ARCaptcha
+
+<PriceBlockWrap>
+  <PriceBlock title="ARCaptcha" captchaId="arcaptcha"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+ARCaptcha 是一种注重隐私的验证码系统，用于保护网站免受自动化操作的影响。它提供三种挑战类型：隐藏验证码（Hidden Captcha）、拼图验证码（Puzzle Captcha）和经典验证码（Classic Captcha）。
+
+## 请求参数
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ArCaptchaTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **alibaba**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    验证码所在主页面的地址。
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    在页面上找到的 siteKey 参数的值。
+
+    ---
+
+    <ParamItem title="isInvisible" type="boolean" />
+    如果验证码是不可见的，即具有隐藏验证字段，则为 `true`。当怀疑存在机器人活动时，会触发附加验证。
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    浏览器 User-Agent。使用 CapMonster Cloud 支持的当前值：`userAgentPlaceholder`<br />
+
+您可以在以下地址获取最新值：[https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual)。
+
+</div>
+
+## 创建任务方法
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "ArCaptchaTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com/",
+    "websiteKey": "your-website-key",
+    "isInvisible": false,
+    "userAgent": "userAgentPlaceholder"
+  }
+}
+```
+
+    **响应示例**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## 获取任务结果方法
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 ARCaptcha 解决方案。
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**响应示例**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0005,
+  "status": "ready",
+  "solution": {
+    "token": "892433007938919942863377479842....."
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## 如何查找 websiteKey
+
+1. 打开带有 ARCaptcha 的页面。
+2. 打开**开发者工具**（**F12** 或右键单击 → **检查**）。
+3. 转到 **Network** 选项卡并重新加载页面。
+4. 查找包含 `/api.js` 及参数的 URL 请求。
+5. 在请求 URL 中找到 `site_key` 参数，或检查 HTML 中 ARCaptcha 小部件配置。
+
+或者，在页面源代码中搜索脚本标签或小部件初始化代码中的 `site_key` 或 `sitekey`。
+
+## 如何查找 apiJsUrl
+
+1. 在**开发者工具**中，转到 **Network** 选项卡。
+2. 过滤请求以查找 ARCaptcha 脚本（通常是名为 `api.js` 的文件）。
+3. 复制该脚本的完整 URL，包括所有查询参数。

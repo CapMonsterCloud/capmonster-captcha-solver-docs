@@ -18,7 +18,8 @@ export type PriceName =
   | 'reCAPTCHA Enterprise (Spotify, Yahoo)'
   | 'Temu'
   | 'Yidun'
-  | 'FengkongCloud';
+  | 'FengkongCloud'
+  | 'ARCaptcha';
 
 export type PriceId =
   | 'rc2'
@@ -49,7 +50,8 @@ export type PriceId =
   | 'complex-rc2'
   | 'complex-rec_baidu'
   | 'yidun'
-  | 'fengkongcloud';
+  | 'fengkongcloud'
+  | 'arcaptcha';
 
 export type PriceResponseItem = {
   Id: PriceId;

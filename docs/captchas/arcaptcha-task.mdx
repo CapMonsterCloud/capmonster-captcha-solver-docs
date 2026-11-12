@@ -1,0 +1,148 @@
+---
+sidebar_position: 29
+sidebar_label: ARCaptcha
+title: "Автоматическое решение ARCaptcha | API"
+description: "Узнайте, как обойти ARCaptcha с помощью API CapMonster Cloud! Подробное описание возможностей и примеры."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/arcaptcha-task" />
+
+# ARCaptcha
+
+<PriceBlockWrap>
+  <PriceBlock title="ARCaptcha" captchaId="arcaptcha"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+ARCaptcha — это капча, ориентированная на конфиденциальность, которая защищает веб-сайты от автоматизированных действий. Она предлагает три типа заданий: скрытая капча (Hidden Captcha), головоломка (Puzzle Captcha) и классическая капча (Classic Captcha).
+
+## Параметры запроса
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ArCaptchaTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **alibaba**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    Адрес основной страницы, на которой находится капча.
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    Значение параметра siteKey, найденное на странице.
+
+    ---
+
+    <ParamItem title="isInvisible" type="boolean" />
+    `true`, если капча невидимая, т.е. имеет скрытое поле для подтверждения. При подозрении на бота вызывается дополнительная проверка.
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent браузера. Используйте актуальное значение, поддерживаемое CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Актуальное значение можно получить по адресу: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+</div>
+
+## Метод создания задачи
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **Пример запроса**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "ArCaptchaTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com/",
+    "websiteKey": "your-website-key",
+    "isInvisible": false,
+    "userAgent": "userAgentPlaceholder"
+  }
+}
+```
+
+    **Пример ответа**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## Метод получения результата задачи
+Используйте метод [getTaskResult](../api/methods/get-task-result.mdx) для получения решения ARCaptcha.
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Пример запроса**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Пример ответа**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0005,
+  "status": "ready",
+  "solution": {
+    "token": "892433007938919942863377479842....."
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## Как найти websiteKey
+
+1. Откройте страницу с ARCaptcha.
+2. Откройте **Инструменты разработчика** (**F12** или правый клик → **Inspect**).
+3. Перейдите на вкладку **Network** и перезагрузите страницу.
+4. Найдите запрос к URL, содержащему `/api.js` с параметрами.
+5. Найдите значение параметра `site_key` в URL запроса или проверьте HTML на наличие конфигурации виджета ARCaptcha.
+
+Также можно поискать в исходном коде страницы `site_key` или `sitekey` в тегах скриптов или коде инициализации виджета.
+
+## Как найти apiJsUrl
+
+1. В **Инструментах разработчика** перейдите на вкладку **Network**.
+2. Отфильтруйте запросы, чтобы найти скрипт ARCaptcha (обычно файл с именем `api.js`).
+3. Скопируйте полный URL этого скрипта, включая все параметры запроса.
