@@ -17,7 +17,8 @@ export type PriceName =
   | 'ComplexImageTask Recognition'
   | 'reCAPTCHA Enterprise (Spotify, Yahoo)'
   | 'Temu'
-  | 'Yidun';
+  | 'Yidun'
+  | 'FengkongCloud';
 
 export type PriceId =
   | 'rc2'
@@ -47,7 +48,8 @@ export type PriceId =
   | 'complex-rc2e'
   | 'complex-rc2'
   | 'complex-rec_baidu'
-  | 'yidun';
+  | 'yidun'
+  | 'fengkongcloud';
 
 export type PriceResponseItem = {
   Id: PriceId;

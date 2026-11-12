@@ -1,0 +1,152 @@
+---
+sidebar_position: 28
+sidebar_label: FengkongCloud
+title: "自动识别和绕过 FengkongCloud 验证码 | API"
+description: "了解如何使用 CapMonster Cloud API 绕过 FengkongCloud 验证码！详细的功能描述和示例。"
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/fengkongcloud-task" />
+
+# FengkongCloud
+
+<PriceBlockWrap>
+  <PriceBlock title="FengkongCloud" captchaId="fengkongcloud"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+FengkongCloud 是一种验证码解决方案，可保护网站免受自动化操作的影响。它分析用户行为并生成确认合法活动的令牌。
+
+## 请求参数
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **CustomTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **fengkongcloud**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    验证码所在主页面的地址。
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    在页面上找到的 siteKey 参数值。
+
+    ---
+
+    <ParamItem title="apiJsUrl（位于 metadata 中）" type="string" />
+    指向 `smcp.min.js` 的链接。示例：`https://castatic.fengkongcloud.com/pr/vX.X.X/smcp.min.js`
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    浏览器 User-Agent。使用 CapMonster Cloud 支持的当前值：`userAgentPlaceholder`<br />
+
+您可以在以下位置获取最新值：[https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual)。
+
+</div>
+
+## 创建任务方法
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "fengkongcloud",
+    "websiteURL": "https://www.example.com/",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "apiJsUrl": "https://castatic.fengkongcloud.com/pr/vX.X.X/smcp.min.js"
+    }
+  }
+}
+```
+
+    **响应示例**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## 获取任务结果方法
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 FengkongCloud 解决方案。
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**响应示例**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0006,
+  "status": "ready",
+  "solution": {
+    "data": {
+      "token": "abc123def456.....78"
+    }
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## 如何查找 websiteKey
+
+1. 打开带有 FengkongCloud 验证码的页面。
+2. 打开**开发者工具**（**F12** 或右键单击 → **检查**）。
+3. 转到 **Network** 选项卡并重新加载页面。
+4. 查找包含 `/conf` 的 URL 请求，其中包含 `appid` 或 `organization` 等参数。
+5. `appid` 参数值即为 `websiteKey`。
+
+或者，在页面源代码中搜索 `appid` 或查找从 `fengkongcloud.com` 域加载的脚本。
+
+## 如何查找 apiJsUrl
+
+1. 在**开发者工具**中，转到 **Network** 选项卡。
+2. 过滤请求以查找从 `castatic.fengkongcloud.com` 加载的脚本。
+3. 查找名为 `smcp.min.js` 的文件并复制其完整 URL。
