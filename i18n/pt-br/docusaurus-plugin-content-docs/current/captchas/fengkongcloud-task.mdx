@@ -1,0 +1,152 @@
+---
+sidebar_position: 28
+sidebar_label: FengkongCloud
+title: "Resolver automaticamente o captcha FengkongCloud | API"
+description: "Aprenda como contornar o captcha FengkongCloud usando a API do CapMonster Cloud! Descrição detalhada de recursos e exemplos."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/fengkongcloud-task" />
+
+# FengkongCloud
+
+<PriceBlockWrap>
+  <PriceBlock title="FengkongCloud" captchaId="fengkongcloud"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+FengkongCloud é uma solução de captcha que protege sites contra ações automatizadas. Ele analisa o comportamento do usuário e gera um token que confirma a atividade legítima.
+
+## Parâmetros de solicitação
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **CustomTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **fengkongcloud**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    O endereço da página principal onde o captcha está localizado.
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    O valor do parâmetro siteKey encontrado na página.
+
+    ---
+
+    <ParamItem title="apiJsUrl (dentro da metadata)" type="string" />
+    Link para `smcp.min.js`. Exemplo: `https://castatic.fengkongcloud.com/pr/vX.X.X/smcp.min.js`
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent do navegador. Use o valor atual suportado pelo CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+</div>
+
+## Método de criação de tarefa
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **Exemplo de solicitação**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "fengkongcloud",
+    "websiteURL": "https://www.example.com/",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "apiJsUrl": "https://castatic.fengkongcloud.com/pr/vX.X.X/smcp.min.js"
+    }
+  }
+}
+```
+
+    **Exemplo de resposta**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## Método de obtenção do resultado da tarefa
+Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução FengkongCloud.
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Exemplo de solicitação**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Exemplo de resposta**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0006,
+  "status": "ready",
+  "solution": {
+    "data": {
+      "token": "abc123def456.....78"
+    }
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## Como encontrar o websiteKey
+
+1. Abra a página com o captcha FengkongCloud.
+2. Abra as **Ferramentas do Desenvolvedor** (**F12** ou clique com o botão direito → **Inspecionar**).
+3. Vá para a guia **Network** e recarregue a página.
+4. Procure por uma solicitação para uma URL contendo `/conf` com parâmetros como `appid` ou `organization`.
+5. O valor do parâmetro `appid` é o `websiteKey`.
+
+Alternativamente, pesquise no código-fonte da página por `appid` ou procure scripts carregados de domínios `fengkongcloud.com`.
+
+## Como encontrar o apiJsUrl
+
+1. Nas **Ferramentas do Desenvolvedor**, vá para a guia **Network**.
+2. Filtre as solicitações para encontrar o script carregado de `castatic.fengkongcloud.com`.
+3. Procure por um arquivo chamado `smcp.min.js` e copie sua URL completa.
