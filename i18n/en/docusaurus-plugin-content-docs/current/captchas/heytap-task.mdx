@@ -1,0 +1,153 @@
+---
+sidebar_position: 30
+sidebar_label: HeyTap
+title: "Automatically solve HeyTap Captcha | API"
+description: "Learn how to bypass HeyTap Captcha using CapMonster Cloud API! Detailed description of features and examples."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/heytap-task" />
+
+# HeyTap
+
+<PriceBlockWrap>
+  <PriceBlock title="HeyTap" captchaId="proton"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+HeyTap Captcha is a security system that protects websites from automated actions. It analyzes user behavior and generates a token to confirm legitimate activity.
+
+## Request parameters
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **CustomTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **heytap**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    The address of the main page where the captcha is located.
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    The value of the siteKey parameter found on the page.
+
+    ---
+
+    <ParamItem title="apiServer (inside metadata)" type="string" />
+    Subdomain of the HeyTap API server. Specify only the domain without the `https://` prefix. If different from the default `captcha-sec.heytapmobi.com`, you must specify it.
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    Browser User-Agent. Use the current value supported by CapMonster Cloud: `userAgentPlaceholder`<br />
+
+You can get the latest value at: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+</div>
+
+## Create task method
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "heytap",
+    "websiteURL": "https://yourwebsite.com/",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "apiServer": "captcha-sec.heytapmobi.com"
+    }
+  }
+}
+```
+
+    **Response example**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## Get task result method
+Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the HeyTap solution.
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Request example**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Response example**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0007,
+  "status": "ready",
+  "solution": {
+    "data": {
+      "token": "1A183F8CFC7631B08855D824....."
+    }
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## How to find the websiteKey
+
+1. Open the page with HeyTap Captcha.
+2. Open **Developer Tools** (**F12** or right-click → **Inspect**).
+3. Go to the **Network** tab and reload the page.
+4. Look for a request to a URL containing HeyTap captcha API (usually to `heytapmobi.com`).
+5. The `ak` parameter in the URL is the `websiteKey`.
+
+Alternatively, search the page source code for initialization parameters or configuration objects related to HeyTap.
+
+## How to find the apiServer
+
+1. In **Developer Tools**, go to the **Network** tab.
+2. Look for requests to domains ending with `heytapmobi.com`.
+3. Copy the subdomain (for example, `captcha-sec.heytapmobi.com`).
+4. Pass this value in the `metadata.apiServer` field without the `https://` prefix.
