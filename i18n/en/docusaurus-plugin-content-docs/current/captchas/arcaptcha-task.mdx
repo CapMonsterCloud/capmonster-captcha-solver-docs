@@ -1,0 +1,148 @@
+---
+sidebar_position: 29
+sidebar_label: ARCaptcha
+title: "Automatically solve ARCaptcha | API"
+description: "Learn how to bypass ARCaptcha using CapMonster Cloud API! Detailed description of features and examples."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/arcaptcha-task" />
+
+# ARCaptcha
+
+<PriceBlockWrap>
+  <PriceBlock title="ARCaptcha" captchaId="arcaptcha"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+ARCaptcha is a privacy-focused captcha system that protects websites from automated actions. It offers three challenge types: Hidden Captcha, Puzzle Captcha, and Classic Captcha.
+
+## Request parameters
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ArCaptchaTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **alibaba**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    The address of the main page where the captcha is located.
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    The value of the siteKey parameter found on the page.
+
+    ---
+
+    <ParamItem title="isInvisible" type="boolean" />
+    `true` if the captcha is invisible, meaning it has a hidden verification field. When bot activity is suspected, additional verification is triggered.
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    Browser User-Agent. Use the current value supported by CapMonster Cloud: `userAgentPlaceholder`<br />
+
+You can get the latest value at: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+</div>
+
+## Create task method
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **Request example**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "ArCaptchaTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com/",
+    "websiteKey": "your-website-key",
+    "isInvisible": false,
+    "userAgent": "userAgentPlaceholder"
+  }
+}
+```
+
+    **Response example**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## Get task result method
+Use the method [getTaskResult](../api/methods/get-task-result.mdx) to obtain the ARCaptcha solution.
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Request example**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Response example**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0005,
+  "status": "ready",
+  "solution": {
+    "token": "892433007938919942863377479842....."
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## How to find the websiteKey
+
+1. Open the page with ARCaptcha.
+2. Open **Developer Tools** (**F12** or right-click → **Inspect**).
+3. Go to the **Network** tab and reload the page.
+4. Look for a request to a URL containing `/api.js` with parameters.
+5. Find the `site_key` parameter in the request URL or check the HTML for the ARCaptcha widget configuration.
+
+Alternatively, search the page source code for `site_key` or `sitekey` in script tags or widget initialization code.
+
+## How to find the apiJsUrl
+
+1. In **Developer Tools**, go to the **Network** tab.
+2. Filter requests to find the ARCaptcha script (usually a file named `api.js`).
+3. Copy the full URL of this script, including all query parameters.

@@ -1,0 +1,148 @@
+---
+sidebar_position: 29
+sidebar_label: ARCaptcha
+title: "Resolver ARCaptcha automaticamente | API"
+description: "Aprenda como contornar ARCaptcha usando a API do CapMonster Cloud! Descrição detalhada de recursos e exemplos."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/arcaptcha-task" />
+
+# ARCaptcha
+
+<PriceBlockWrap>
+  <PriceBlock title="ARCaptcha" captchaId="arcaptcha"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+ARCaptcha é um sistema de captcha focado em privacidade que protege sites contra ações automatizadas. Oferece três tipos de desafios: Captcha Oculto (Hidden Captcha), Captcha de Quebra-Cabeça (Puzzle Captcha) e Captcha Clássico (Classic Captcha).
+
+## Parâmetros de solicitação
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **ArCaptchaTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **alibaba**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    O endereço da página principal onde o captcha está localizado.
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    O valor do parâmetro siteKey encontrado na página.
+
+    ---
+
+    <ParamItem title="isInvisible" type="boolean" />
+    `true` se o captcha é invisível, ou seja, possui um campo de verificação oculto. Quando há suspeita de atividade de bot, uma verificação adicional é acionada.
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    User-Agent do navegador. Use o valor atual suportado pelo CapMonster Cloud: `userAgentPlaceholder`<br />
+
+Você pode obter o valor mais recente em: [https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual).
+
+</div>
+
+## Método de criar tarefa
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **Exemplo de solicitação**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "ArCaptchaTask",
+    "class": "alibaba",
+    "websiteURL": "https://example.com/",
+    "websiteKey": "your-website-key",
+    "isInvisible": false,
+    "userAgent": "userAgentPlaceholder"
+  }
+}
+```
+
+    **Exemplo de resposta**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## Método para obter resultado da tarefa
+Use o método [getTaskResult](../api/methods/get-task-result.mdx) para obter a solução ARCaptcha.
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**Exemplo de solicitação**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**Exemplo de resposta**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0005,
+  "status": "ready",
+  "solution": {
+    "token": "892433007938919942863377479842....."
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## Como encontrar o websiteKey
+
+1. Abra a página com ARCaptcha.
+2. Abra as **Ferramentas do Desenvolvedor** (**F12** ou clique com o botão direito → **Inspecionar**).
+3. Vá para a aba **Network** e recarregue a página.
+4. Procure uma solicitação para uma URL contendo `/api.js` com parâmetros.
+5. Encontre o parâmetro `site_key` na URL da solicitação ou verifique o HTML para a configuração do widget ARCaptcha.
+
+Como alternativa, procure no código-fonte da página por `site_key` ou `sitekey` em tags de script ou código de inicialização do widget.
+
+## Como encontrar o apiJsUrl
+
+1. Nas **Ferramentas do Desenvolvedor**, vá para a aba **Network**.
+2. Filtre as solicitações para encontrar o script ARCaptcha (geralmente um arquivo chamado `api.js`).
+3. Copie a URL completa deste script, incluindo todos os parâmetros de consulta.
