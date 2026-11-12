@@ -19,7 +19,8 @@ export type PriceName =
   | 'Temu'
   | 'Yidun'
   | 'FengkongCloud'
-  | 'ARCaptcha';
+  | 'ARCaptcha'
+  | 'HeyTap';
 
 export type PriceId =
   | 'rc2'
@@ -51,7 +52,8 @@ export type PriceId =
   | 'complex-rec_baidu'
   | 'yidun'
   | 'fengkongcloud'
-  | 'arcaptcha';
+  | 'arcaptcha'
+  | 'proton';
 
 export type PriceResponseItem = {
   Id: PriceId;

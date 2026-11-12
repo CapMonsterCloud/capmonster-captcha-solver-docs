@@ -1,0 +1,153 @@
+---
+sidebar_position: 30
+sidebar_label: HeyTap
+title: "自动解决 HeyTap Captcha | API"
+description: "了解如何使用 CapMonster Cloud API 绕过 HeyTap Captcha！功能详细说明和示例。"
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ParamItem from '@theme/ParamItem';
+import MethodItem from '@theme/MethodItem';
+import MethodDescription from '@theme/MethodDescription'
+import PriceBlock from '@theme/PriceBlock';
+import PriceBlockWrap from '@theme/PriceBlockWrap';
+import { ArticleHead } from '../../../../../src/theme/ArticleHead';
+import McpNotice from '@site/src/components/McpNotice';
+
+<ArticleHead slug="captchas/heytap-task" />
+
+# HeyTap
+
+<PriceBlockWrap>
+  <PriceBlock title="HeyTap" captchaId="proton"/>
+</PriceBlockWrap>
+
+<McpNotice />
+
+HeyTap Captcha 是一个安全系统，用于保护网站免受自动化操作的影响。它分析用户行为并生成令牌以确认合法活动。
+
+## 请求参数
+
+<div className="bordered-panel">
+    <ParamItem title="type" required type="string" />
+    **CustomTask**
+
+    ---
+
+    <ParamItem title="class" required type="string" />
+    **heytap**
+
+    ---
+
+    <ParamItem title="websiteURL" required type="string" />
+    验证码所在主页面的地址。
+
+    ---
+
+    <ParamItem title="websiteKey" required type="string" />
+    在页面上找到的 siteKey 参数的值。
+
+    ---
+
+    <ParamItem title="apiServer（位于 metadata 中）" type="string" />
+    HeyTap API 服务器的子域。仅指定域名，不包括 `https://` 前缀。如果与默认的 `captcha-sec.heytapmobi.com` 不同，则必须指定。
+
+    ---
+
+    <ParamItem title="userAgent" type="string" />
+    浏览器 User-Agent。使用 CapMonster Cloud 支持的当前值：`userAgentPlaceholder`<br />
+
+您可以在此处获取最新值：[https://capmonster.cloud/api/useragent/actual](https://capmonster.cloud/api/useragent/actual)。
+
+</div>
+
+## 创建任务方法
+
+<div className="method-panel">
+	<MethodItem>
+      ```http
+      https://api.capmonster.cloud/createTask
+      ```
+    </MethodItem>
+    <MethodDescription>
+
+    **请求示例**
+
+```json
+{
+  "clientKey": "API_KEY",
+  "task": {
+    "type": "CustomTask",
+    "class": "heytap",
+    "websiteURL": "https://yourwebsite.com/",
+    "websiteKey": "your-website-key",
+    "userAgent": "userAgentPlaceholder",
+    "metadata": {
+      "apiServer": "captcha-sec.heytapmobi.com"
+    }
+  }
+}
+```
+
+    **响应示例**
+
+    ```json
+    {
+      "errorId": 0,
+      "taskId": 407533072
+    }
+    ```
+
+    </MethodDescription>
+  </div>
+
+## 获取任务结果方法
+使用 [getTaskResult](../api/methods/get-task-result.mdx) 方法获取 HeyTap 解决方案。
+
+<div className="method-panel-full">
+	<MethodItem>
+		```http
+		https://api.capmonster.cloud/getTaskResult
+		```
+	</MethodItem>
+	<MethodDescription>
+		**请求示例**
+		```json
+		{
+		  "clientKey":"API_KEY",
+		  "taskId": 407533072
+		}
+		```
+		**响应示例**
+```json
+{
+  "errorId": 0,
+  "cost": 0.0007,
+  "status": "ready",
+  "solution": {
+    "data": {
+      "token": "1A183F8CFC7631B08855D824....."
+    }
+  }
+}
+```
+	</MethodDescription>
+</div>
+
+## 如何找到 websiteKey
+
+1. 打开带有 HeyTap Captcha 的页面。
+2. 打开**开发者工具**（**F12** 或右键点击 → **检查**）。
+3. 转到 **Network**（网络）选项卡并重新加载页面。
+4. 查找包含 HeyTap 验证码 API 的 URL 请求（通常是发往 `heytapmobi.com` 的请求）。
+5. URL 中的 `ak` 参数就是 `websiteKey`。
+
+或者，在页面源代码中搜索与 HeyTap 相关的初始化参数或配置对象。
+
+## 如何找到 apiServer
+
+1. 在**开发者工具**中，转到 **Network**（网络）选项卡。
+2. 查找发往以 `heytapmobi.com` 结尾的域名的请求。
+3. 复制子域（例如，`captcha-sec.heytapmobi.com`）。
+4. 将此值传递到 `metadata.apiServer` 字段，不包括 `https://` 前缀。
