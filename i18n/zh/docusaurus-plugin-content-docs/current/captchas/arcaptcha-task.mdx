@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ParamItem from '@theme/ParamItem';
 import MethodItem from '@theme/MethodItem';
+import ImageWrap from '@theme/ImageWrap';
+import ImagesLayout from '@theme/ImagesLayout';
 import MethodDescription from '@theme/MethodDescription'
 import PriceBlock from '@theme/PriceBlock';
 import PriceBlockWrap from '@theme/PriceBlockWrap';
@@ -27,16 +29,21 @@ import McpNotice from '@site/src/components/McpNotice';
 
 ARCaptcha 是一种注重隐私的验证码系统，用于保护网站免受自动化操作的影响。它提供三种挑战类型：隐藏验证码（Hidden Captcha）、拼图验证码（Puzzle Captcha）和经典验证码（Classic Captcha）。
 
+## 任务示例
+
+下面展示了 ARCaptcha 的验证类型示例：
+
+<ImagesLayout gap="16px" columns={3}>
+  <ImageWrap title="Puzzle Captcha">![](./images/arcaptcha/arcaptcha_puzzle.png)</ImageWrap>
+  <ImageWrap title="Classic Captcha">![](./images/arcaptcha/arcaptcha_classic.png)</ImageWrap>
+</ImagesLayout>
+<br />
+
 ## 请求参数
 
 <div className="bordered-panel">
     <ParamItem title="type" required type="string" />
     **ArCaptchaTask**
-
-    ---
-
-    <ParamItem title="class" required type="string" />
-    **alibaba**
 
     ---
 
@@ -79,7 +86,6 @@ ARCaptcha 是一种注重隐私的验证码系统，用于保护网站免受自�
   "clientKey": "API_KEY",
   "task": {
     "type": "ArCaptchaTask",
-    "class": "alibaba",
     "websiteURL": "https://example.com/",
     "websiteKey": "your-website-key",
     "isInvisible": false,
