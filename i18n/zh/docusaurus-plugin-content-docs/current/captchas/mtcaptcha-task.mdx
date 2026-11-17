@@ -522,4 +522,74 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+Go 请使用官方 SDK：[Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver)。
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	// 请指定您的 CapMonster Cloud API 密钥
+	client := capmonster.New("YOUR_API_KEY")
+	ctx := context.Background()
+
+	// 不使用代理的基础示例
+	// CapMonster Cloud 会自动使用自己的代理
+	request := capmonster.MTCaptchaRequest{
+		WebsiteURL:  "https://yourwebsite.com/page-with-mtcaptcha",
+		WebsiteKey:  "your-website-key",
+		IsInvisible: capmonster.Bool(false),
+		PageAction:  "login",
+	}
+
+	// 使用您自己的代理的示例
+	// 如果您想使用自己的代理，请取消注释此代码块
+	/*
+		request = capmonster.MTCaptchaRequest{
+			WebsiteURL:  "https://yourwebsite.com/page-with-mtcaptcha",
+			WebsiteKey:  "your-website-key",
+			IsInvisible: capmonster.Bool(false),
+			PageAction:  "login",
+			Proxy: &capmonster.Proxy{
+				Type:     capmonster.ProxyHTTP,
+				Address:  "123.45.67.89",
+				Port:     8080,
+				Login:    "username",
+				Password: "password",
+			},
+			UserAgent: "userAgentPlaceholder",
+		}
+	*/
+
+	// 如有需要，可以检查余额
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	solution, err := client.Solve(ctx, request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
