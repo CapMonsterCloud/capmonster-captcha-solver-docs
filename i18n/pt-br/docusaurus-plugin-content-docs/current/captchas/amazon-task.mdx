@@ -1114,4 +1114,65 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em PHP, use o SDK oficial: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). Ele exige PHP 8.1+ com as extensões `curl` e `json`. Instale com o Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+// Importe ProxyInfo e ProxyType se pretende usar seu próprio proxy
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\AmazonWafRequest;
+
+// Informe sua chave de API do CapMonster Cloud
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Exemplo básico sem proxy
+// O CapMonster Cloud usa automaticamente seus próprios proxies
+$request = AmazonWafRequest::challengeAndCaptcha(
+    'https://yourwebsite.com/page-with-aws-waf',
+    'your-challenge-script-url',
+    'your-website-key',
+    'your-context',
+    'your-iv',
+    'your-captcha-script-url',
+    // false - obter ExistingToken e CaptchaVoucher
+    // true - obter Cookies
+    cookieSolution: false,
+);
+
+// Exemplo usando seu proxy
+// Descomente este bloco se quiser usar seu próprio proxy
+/*
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = AmazonWafRequest::challengeAndCaptcha(
+    'https://yourwebsite.com/page-with-aws-waf',
+    'your-challenge-script-url',
+    'your-website-key',
+    'your-context',
+    'your-iv',
+    'your-captcha-script-url',
+    proxy: $proxy,
+    cookieSolution: false,
+);
+*/
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>

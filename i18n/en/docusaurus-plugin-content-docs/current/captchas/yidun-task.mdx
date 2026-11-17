@@ -598,4 +598,55 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For PHP, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). It requires PHP 8.1+ with the `curl` and `json` extensions. Install it with Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+// Import ProxyInfo and ProxyType if you plan to use your own proxy
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\YidunRequest;
+
+// Specify your CapMonster Cloud API key
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Basic example without proxy
+// CapMonster Cloud automatically uses its own proxies
+$request = new YidunRequest(
+    'https://yourwebsite.com/page-with-yidun',
+    'your-website-key',
+    userAgent: 'userAgentPlaceholder',
+);
+
+// Example using your proxy
+// Uncomment this block if you want to use your own proxy
+/*
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = new YidunRequest(
+    'https://yourwebsite.com/page-with-yidun',
+    'your-website-key',
+    proxy: $proxy,
+    userAgent: 'userAgentPlaceholder',
+);
+*/
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>
