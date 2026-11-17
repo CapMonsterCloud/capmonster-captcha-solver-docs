@@ -1071,6 +1071,75 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Go, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Specify your CapMonster Cloud API key
+	client := capmonster.New("YOUR_API_KEY")
+
+	// Basic example without proxy
+	// CapMonster Cloud automatically uses its own proxies
+	request := capmonster.GeetestV3Request{
+		WebsiteURL: "https://yourwebsite.com/page-with-geetest",
+		GT:         "your-gt-value",
+		Challenge:  "your-challenge-value", // dynamic key: get a fresh one before creating each task
+	}
+
+	// Example using your proxy
+	// Uncomment this block if you want to use your own proxy
+	/*
+		request = capmonster.GeetestV3Request{
+			WebsiteURL: "https://yourwebsite.com/page-with-geetest",
+			GT:         "your-gt-value",
+			Challenge:  "your-challenge-value",
+			UserAgent:  "userAgentPlaceholder",
+			Proxy: &capmonster.Proxy{
+				Type:     capmonster.ProxyHTTPS,
+				Address:  "123.45.67.89",
+				Port:     8080,
+				Login:    "username",
+				Password: "password",
+			},
+		}
+	*/
+
+	// You can check your balance if necessary
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	solution, err := client.Solve(ctx, request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 
 <br />
@@ -1912,6 +1981,79 @@ async fn main() -> capmonstercloud_client::Result<()> {
     let solution = client.solve_captcha(&request).await?;
     println!("Solution: {solution}");
     Ok(())
+}
+```
+
+    </details>
+  </TabItem>
+
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Go, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Specify your CapMonster Cloud API key
+	client := capmonster.New("YOUR_API_KEY")
+
+	// Basic example without proxy
+	// CapMonster Cloud automatically uses its own proxies
+	request := capmonster.GeetestV4Request{
+		WebsiteURL: "https://yourwebsite.com/page-with-geetest",
+		GT:         "your-gt-value", // the captcha_id
+		InitParameters: map[string]any{
+			"riskType": "your-risk-type",
+		},
+	}
+
+	// Example using your proxy
+	// Uncomment this block if you want to use your own proxy
+	/*
+		request = capmonster.GeetestV4Request{
+			WebsiteURL: "https://yourwebsite.com/page-with-geetest",
+			GT:         "your-gt-value",
+			InitParameters: map[string]any{
+				"riskType": "your-risk-type",
+			},
+			UserAgent: "userAgentPlaceholder",
+			Proxy: &capmonster.Proxy{
+				Type:     capmonster.ProxyHTTPS,
+				Address:  "123.45.67.89",
+				Port:     8080,
+				Login:    "username",
+				Password: "password",
+			},
+		}
+	*/
+
+	// You can check your balance if necessary
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	solution, err := client.Solve(ctx, request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
 }
 ```
 

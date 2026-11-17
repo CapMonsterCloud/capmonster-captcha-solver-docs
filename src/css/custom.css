@@ -545,6 +545,14 @@ a[class*='cardContainer'] {
   border-bottom-right-radius: 0;
 }
 
+/* 5 tabs (JavaScript / Python / C# / Rust / Go) do not fit a phone with the default padding */
+@media (max-width: 480px) {
+  .full-width-tabs li {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
 .bordered-panel {
   padding: 24px;
   border-radius: 10px;
