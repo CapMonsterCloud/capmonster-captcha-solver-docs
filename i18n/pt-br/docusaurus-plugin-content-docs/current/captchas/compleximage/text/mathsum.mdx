@@ -367,4 +367,53 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em Go, use o SDK oficial: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Informe sua chave de API do CapMonster Cloud
+	client := capmonster.New("YOUR_API_KEY")
+
+	// Se necessário, você pode verificar o saldo
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	// Não é necessário usar proxy para RecognitionComplexImageTaskRequest
+	solution, err := client.Solve(ctx, capmonster.RecognitionComplexImageTaskRequest{
+		ImagesBase64: []string{"your_image_base64"},
+		Metadata: capmonster.RecognitionMetadata{
+			Task: "MathSum",
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>

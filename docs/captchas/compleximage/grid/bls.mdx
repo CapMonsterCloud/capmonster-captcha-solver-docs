@@ -662,4 +662,64 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для Go используйте официальный SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Укажите ваш API-ключ CapMonster Cloud
+	client := capmonster.New("YOUR_API_KEY")
+
+	// При необходимости можно проверить баланс
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	// Для RecognitionComplexImageTaskRequest прокси не требуются
+	solution, err := client.Solve(ctx, capmonster.RecognitionComplexImageTaskRequest{
+		ImagesBase64: []string{
+			"your_image_1_base64",
+			"your_image_2_base64",
+			"your_image_3_base64",
+			"your_image_4_base64",
+			"your_image_5_base64",
+			"your_image_6_base64",
+			"your_image_7_base64",
+			"your_image_8_base64",
+			"your_image_9_base64",
+		},
+		Metadata: capmonster.RecognitionMetadata{
+			Task:         "bls_3x3",
+			TaskArgument: "123",
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
 </Tabs>
