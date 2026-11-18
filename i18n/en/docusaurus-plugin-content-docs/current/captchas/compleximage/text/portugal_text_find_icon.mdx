@@ -883,4 +883,38 @@ func main() {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For PHP, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). It requires PHP 8.1+ with the `curl` and `json` extensions. Install it with Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\Requests\RecognitionComplexImageTaskRequest;
+
+// Specify your CapMonster Cloud API key
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Proxies are not required for RecognitionComplexImageTaskRequest
+$request = new RecognitionComplexImageTaskRequest(
+    ['your_image_base64'],
+    'portugal_text_find_icon',
+    taskArgument: 'Encontre o(a) avião.',
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>

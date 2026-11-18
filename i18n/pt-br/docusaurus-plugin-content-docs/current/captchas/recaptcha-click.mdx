@@ -902,4 +902,41 @@ func main() {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em PHP, use o SDK oficial: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). Ele exige PHP 8.1+ com as extensões `curl` e `json`. Instale com o Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\Requests\RecaptchaComplexImageTaskRequest;
+use CapMonsterCloud\Requests\RecaptchaGrid;
+
+// Informe sua chave de API do CapMonster Cloud
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Não é necessário usar proxy para RecaptchaComplexImageTaskRequest
+// Substitua pelos seus próprios valores
+$request = new RecaptchaComplexImageTaskRequest(
+    RecaptchaGrid::Grid3x3,
+    task: 'Select all squares with mountains or hills',
+    imageUrls: ['your-image-url'],
+    websiteUrl: 'https://yourwebsite.com/page-with-recaptcha',
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>
