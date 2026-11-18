@@ -1115,6 +1115,92 @@ async fn main() -> capmonstercloud_client::Result<()> {
     </details>
   </TabItem>
 
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Go, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Specify your CapMonster Cloud API key
+	client := capmonster.New("YOUR_API_KEY")
+
+	// false (default): get ExistingToken and CaptchaVoucher
+	// true: get Cookies
+	cookieSolution := false
+
+	// Basic example without proxy
+	// CapMonster Cloud automatically uses its own proxies
+	request := capmonster.AmazonWafChallengeRequest{
+		WebsiteURL:      "https://yourwebsite.com/page-with-aws-waf",
+		WebsiteKey:      "your-website-key",
+		ChallengeScript: "your-challenge-script-url",
+		CaptchaScript:   "your-captcha-script-url",
+		Context:         "your-context",
+		IV:              "your-iv",
+		CookieSolution:  &cookieSolution,
+	}
+
+	// Example using your proxy
+	// Uncomment this block if you want to use your own proxy
+	/*
+		request = capmonster.AmazonWafChallengeRequest{
+			WebsiteURL:      "https://yourwebsite.com/page-with-aws-waf",
+			WebsiteKey:      "your-website-key",
+			ChallengeScript: "your-challenge-script-url",
+			CaptchaScript:   "your-captcha-script-url",
+			Context:         "your-context",
+			IV:              "your-iv",
+			CookieSolution:  &cookieSolution,
+			Proxy: &capmonster.Proxy{
+				Type:     capmonster.ProxyHTTP,
+				Address:  "123.45.67.89",
+				Port:     8080,
+				Login:    "username",
+				Password: "password",
+			},
+		}
+	*/
+
+	// You can check your balance if necessary
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	solution, err := client.Solve(ctx, request)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// For cookieSolution = false
+	fmt.Println("ExistingToken:", solution.String("existing_token"))
+	fmt.Println("CaptchaVoucher:", solution.String("captcha_voucher"))
+
+	// For cookieSolution = true, use:
+	// fmt.Println("Cookies:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
+
   <TabItem value="php" label="PHP" className="method-panel">
     <details>
       <summary>Show code</summary>
