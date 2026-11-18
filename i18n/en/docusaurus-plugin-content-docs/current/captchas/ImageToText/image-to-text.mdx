@@ -591,6 +591,63 @@ async fn main() -> capmonstercloud_client::Result<()> {
     </details>
   </TabItem>
 
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Show code</summary>
+
+For Go, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Specify your CapMonster Cloud API key
+	client := capmonster.New("YOUR_API_KEY")
+
+	// Proxies are not required for ImageToTextRequest
+	// Set the path to the captcha image file
+	imageToTextRequest, err := capmonster.ImageToTextFromFile("image.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Specify additional parameters if necessary
+	imageToTextRequest.CapMonsterModule = capmonster.ModuleGoogle
+	imageToTextRequest.RecognizingThreshold = capmonster.Int(80)
+	imageToTextRequest.Case = capmonster.Bool(true)
+	imageToTextRequest.Numeric = capmonster.Bool(false)
+	imageToTextRequest.Math = capmonster.Bool(false)
+
+	// You can check your balance if necessary
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	solution, err := client.Solve(ctx, imageToTextRequest)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
+
   <TabItem value="php" label="PHP" className="method-panel">
     <details>
       <summary>Show code</summary>

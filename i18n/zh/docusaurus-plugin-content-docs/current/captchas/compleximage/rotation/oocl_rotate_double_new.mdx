@@ -390,6 +390,59 @@ async fn main() -> capmonstercloud_client::Result<()> {
     </details>
   </TabItem>
 
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+Go 请使用官方 SDK：[Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver)。
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// 指定您的 CapMonster Cloud API 密钥
+	client := capmonster.New("YOUR_API_KEY")
+
+	// 如有需要，可以检查余额
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Balance:", balance)
+
+	// RecognitionComplexImageTaskRequest 不需要代理
+	solution, err := client.Solve(ctx, capmonster.RecognitionComplexImageTaskRequest{
+		ImagesBase64: []string{
+			"background_base64",
+			"ring_base64",
+			"circle_base64",
+		},
+		Metadata: capmonster.RecognitionMetadata{
+			Task: "oocl_rotate_double_new",
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
+
   <TabItem value="php" label="PHP" className="method-panel">
     <details>
       <summary>显示代码</summary>
