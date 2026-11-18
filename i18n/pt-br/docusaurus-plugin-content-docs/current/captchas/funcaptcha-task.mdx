@@ -1103,5 +1103,46 @@ func main() {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Mostrar código</summary>
+
+Em PHP, use o SDK oficial: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). Ele exige PHP 8.1+ com as extensões `curl` e `json`. Instale com o Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\FuncaptchaRequest;
+
+// Informe sua chave de API do CapMonster Cloud
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// O FunCaptcha só pode ser resolvido usando seu próprio proxy
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = new FuncaptchaRequest(
+    'https://yourwebsite.com/page-with-funcaptcha',
+    'your-website-public-key',
+    $proxy,
+    funcaptchaApiJsSubdomain: 'your-funcaptcha-api-subdomain',
+    data: '{"blob":"your-blob-value"}',
+    userAgent: 'userAgentPlaceholder',
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>
 

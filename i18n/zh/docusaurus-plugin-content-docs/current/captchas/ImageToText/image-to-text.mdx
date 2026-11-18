@@ -574,4 +574,45 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>显示代码</summary>
+
+PHP 请使用官方 SDK：[Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver)。需要 PHP 8.1+，并启用 `curl` 和 `json` 扩展。使用 Composer 安装：`composer require capmonstercloud/capmonster-client`。
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\Requests\ImageToTextRequest;
+// 如果需要特定模块，请导入 TextModule
+use CapMonsterCloud\Requests\TextModule;
+
+// 请指定您的 CapMonster Cloud API 密钥
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// ImageToTextRequest 不需要代理
+$request = new ImageToTextRequest(
+    'your_image_base64',
+
+    // 如有需要，请指定其他参数
+    capMonsterModule: TextModule::YANDEX,
+    recognizingThreshold: 80,
+    case: true,
+    numeric: false,
+    math: false,
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>
