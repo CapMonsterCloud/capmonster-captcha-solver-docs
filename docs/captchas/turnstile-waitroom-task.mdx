@@ -527,4 +527,44 @@ func main() {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для PHP используйте официальный SDK: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). Нужен PHP 8.1+ с расширениями `curl` и `json`. Установите SDK через Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\TurnstileRequest;
+
+// Укажите ваш API-ключ CapMonster Cloud
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Cloudflare wait_room решается только с использованием вашего прокси
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = TurnstileRequest::waitRoom(
+    'https://yourwebsite.com/page-with-waiting-room',
+    'xxxxxxxx',
+    htmlPageBase64: 'your_html_page_base64',
+    userAgent: 'userAgentPlaceholder',
+    proxy: $proxy,
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>

@@ -1643,6 +1643,100 @@ func main() {
 
 </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+
+PHP 请使用官方 SDK：[Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver)。需要 PHP 8.1+，并启用 `curl` 和 `json` 扩展。使用 Composer 安装：`composer require capmonstercloud/capmonster-client`。
+
+<details>
+<summary>方案 1. Challenge（token）</summary>
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+// 如果您计划使用自己的代理，请导入 ProxyInfo 和 ProxyType
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\TurnstileRequest;
+
+// 请指定您的 CapMonster Cloud API 密钥
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// 不使用代理的基础示例
+// CapMonster Cloud 会自动使用自己的代理
+$request = TurnstileRequest::challengeToken(
+    'https://yourwebsite.com/page-with-cf-challenge',
+    'your-website-key',
+    pageAction: 'managed',
+    userAgent: 'userAgentPlaceholder',
+    data: 'your-data',
+    pageData: 'your-page-data',
+);
+
+// 使用您自己的代理的示例
+// 如果您想使用自己的代理，请取消注释此代码块
+/*
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = TurnstileRequest::challengeToken(
+    'https://yourwebsite.com/page-with-cf-challenge',
+    'your-website-key',
+    pageAction: 'managed',
+    userAgent: 'userAgentPlaceholder',
+    data: 'your-data',
+    pageData: 'your-page-data',
+    proxy: $proxy,
+);
+*/
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+</details>
+
+<details>
+<summary>方案 2. Challenge（cookie `cf_clearance`）</summary>
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\TurnstileRequest;
+
+// 请指定您的 CapMonster Cloud API 密钥
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Cloudflare cf_clearance 只能使用您自己的代理进行解决
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = TurnstileRequest::challengeCookie(
+    'https://yourwebsite.com/page-with-cf-challenge',
+    'your-website-key',
+    htmlPageBase64: 'your_html_page_base64',
+    userAgent: 'userAgentPlaceholder',
+    proxy: $proxy,
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+</details>
+  </TabItem>
 </Tabs>
 
 ---
