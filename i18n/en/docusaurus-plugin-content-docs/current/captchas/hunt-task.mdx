@@ -1461,6 +1461,109 @@ async fn main() -> capmonstercloud_client::Result<()> {
     </details>
   </TabItem>
 
+  <TabItem value="go" label="Go" className="method-panel">
+
+For Go, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+<details>
+<summary>Generating the X-HD parameter</summary>
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Specify your CapMonster Cloud API key
+	client := capmonster.New("YOUR_API_KEY")
+
+	// You can check your balance if necessary
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Balance: %.4f USD\n", balance)
+
+	// Your own proxy is required to solve HUNT
+	proxy := &capmonster.Proxy{Type: capmonster.ProxyHTTP, Address: "123.45.67.89", Port: 8080, Login: "username", Password: "password"}
+
+	// Fingerprint mode: only apiGetLib is sent
+	solution, err := client.Solve(ctx, capmonster.HuntCustomTaskRequest{
+		WebsiteURL: "https://yourwebsite.com/page-with-hunt",
+		Metadata:   capmonster.HuntMetadata{APIGetLib: "https://example.com/hd-api/external/apps/<app-hash>/api.js"},
+		Proxy:      proxy,
+		UserAgent:  "userAgentPlaceholder",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+</details>
+
+<details>
+<summary>Solving CAPTCHA</summary>
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Specify your CapMonster Cloud API key
+	client := capmonster.New("YOUR_API_KEY")
+
+	// You can check your balance if necessary
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Balance: %.4f USD\n", balance)
+
+	// Your own proxy is required to solve HUNT
+	proxy := &capmonster.Proxy{Type: capmonster.ProxyHTTP, Address: "123.45.67.89", Port: 8080, Login: "username", Password: "password"}
+
+	solution, err := client.Solve(ctx, capmonster.HuntCustomTaskRequest{
+		WebsiteURL: "https://yourwebsite.com/page-with-hunt",
+		Metadata: capmonster.HuntMetadata{
+			APIGetLib: "https://example.com/hd-api/external/apps/<app-hash>/api.js",
+			Data:      "your-site-meta-token",
+		},
+		Proxy:     proxy,
+		UserAgent: "userAgentPlaceholder",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+</details>
+  </TabItem>
+
   <TabItem value="php" label="PHP" className="method-panel">
 
 For PHP, use the official SDK: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). It requires PHP 8.1+ with the `curl` and `json` extensions. Install it with Composer: `composer require capmonstercloud/capmonster-client`.
