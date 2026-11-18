@@ -931,4 +931,123 @@ async fn main() -> capmonstercloud_client::Result<()> {
 
     </details>
   </TabItem>
+
+  <TabItem value="go" label="Go" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для Go используйте официальный SDK: [Github](https://github.com/CapMonsterCloud/capmonster-go-captcha-solver).
+
+```go
+// https://github.com/CapMonsterCloud/capmonster-go-captcha-solver
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	capmonster "github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Укажите ваш API-ключ CapMonster Cloud
+	client := capmonster.New("YOUR_API_KEY")
+
+	// При необходимости можно проверить баланс
+	balance, err := client.GetBalance(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Balance: %.4f USD\n", balance)
+
+	// Базовый пример без прокси
+	// CapMonster Cloud автоматически использует собственные прокси
+	request := capmonster.AltchaCustomTaskRequest{
+		WebsiteURL: "https://yourwebsite.com/page-with-altcha",
+		WebsiteKey: "",
+		Metadata: capmonster.AltchaMetadata{
+			Challenge:  "your-challenge",
+			Iterations: "your-iterations",
+			Salt:       "your-salt",
+			Signature:  "your-signature",
+		},
+		UserAgent: "userAgentPlaceholder",
+		// Пример с использованием вашего прокси
+		// Раскомментируйте эту строку, если хотите использовать свой прокси
+		// Proxy: &capmonster.Proxy{Type: capmonster.ProxyHTTP, Address: "123.45.67.89", Port: 8080, Login: "username", Password: "password"},
+	}
+
+	solution, err := client.Solve(ctx, request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Solution:", string(solution))
+}
+```
+
+    </details>
+  </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для PHP используйте официальный SDK: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). Нужен PHP 8.1+ с расширениями `curl` и `json`. Установите SDK через Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+// Импортируйте ProxyInfo и ProxyType, если планируете использовать собственный прокси
+use CapMonsterCloud\ProxyInfo;
+use CapMonsterCloud\ProxyType;
+use CapMonsterCloud\Requests\AltchaCustomTaskRequest;
+
+// Укажите ваш API-ключ CapMonster Cloud
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Базовый пример без прокси
+// CapMonster Cloud автоматически использует собственные прокси
+$request = new AltchaCustomTaskRequest(
+    'https://yourwebsite.com/page-with-altcha',
+    '',
+    'your-challenge',
+    'your-iterations',
+    'your-salt',
+    'your-signature',
+    userAgent: 'userAgentPlaceholder',
+);
+
+// Пример с использованием вашего прокси
+// Раскомментируйте этот блок, если хотите использовать свой прокси
+/*
+$proxy = new ProxyInfo(ProxyType::Http, '123.45.67.89', 8080, 'username', 'password');
+
+$request = new AltchaCustomTaskRequest(
+    'https://yourwebsite.com/page-with-altcha',
+    '',
+    'your-challenge',
+    'your-iterations',
+    'your-salt',
+    'your-signature',
+    proxy: $proxy,
+    userAgent: 'userAgentPlaceholder',
+);
+*/
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>

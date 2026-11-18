@@ -665,4 +665,39 @@ func main() {
 
     </details>
   </TabItem>
+
+  <TabItem value="php" label="PHP" className="method-panel">
+    <details>
+      <summary>Показать код</summary>
+
+Для PHP используйте официальный SDK: [Github](https://github.com/CapMonsterCloud/capmonster-php-captcha-solver). Нужен PHP 8.1+ с расширениями `curl` и `json`. Установите SDK через Composer: `composer require capmonstercloud/capmonster-client`.
+
+```php
+<?php
+
+// https://github.com/CapMonsterCloud/capmonster-php-captcha-solver
+
+require 'vendor/autoload.php';
+
+use CapMonsterCloud\CapMonsterClient;
+use CapMonsterCloud\ClientOptions;
+use CapMonsterCloud\Requests\RecaptchaV3EnterpriseRequest;
+
+// Укажите ваш API-ключ CapMonster Cloud
+$client = new CapMonsterClient(new ClientOptions('YOUR_API_KEY'));
+
+// Для RecaptchaV3EnterpriseRequest прокси не требуются
+$request = new RecaptchaV3EnterpriseRequest(
+    'https://yourwebsite.com/page-with-recaptcha',
+    'your-website-key',
+    minScore: 0.7,
+    pageAction: 'your-page-action',
+);
+
+$solution = $client->solve($request);
+print_r($solution);
+```
+
+    </details>
+  </TabItem>
 </Tabs>
