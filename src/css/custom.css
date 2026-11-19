@@ -532,6 +532,7 @@ a[class*='cardContainer'] {
 .full-width-tabs li {
   width: 100%;
   justify-content: center;
+  white-space: nowrap;
 }
 
 .filled-tabs li.tabs__item--active {
