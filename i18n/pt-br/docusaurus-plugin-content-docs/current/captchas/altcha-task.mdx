@@ -80,12 +80,13 @@ Se o proxy utiliza autenticação por IP, é necessário adicionar o endereço *
   <ParamItem title="challenge (dentro do metadata)" required="required" type="string" />
   Identificador único da tarefa obtido no site.<br />
   Exemplo: `3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
+  > **Importante:** os nomes dos parâmetros variam entre as versões do Altcha: no Altcha v2 (challenge format v2), este campo corresponde ao `nonce` do objeto `parameters` (`nonce` = `challenge`)!<br />
 
   ---
 
   <ParamItem title="iterations (dentro do metadata)" required="required" type="string" />
   Número de iterações ou valor máximo para os cálculos.
-  > **Importante:** o parâmetro `iterations` corresponde ao valor de `maxnumber`!<br />
+  > **Importante:** os nomes dos parâmetros variam entre as versões do Altcha: `cost` = `iterations` (Altcha v2), `maxnumber` = `iterations` (Altcha v1)!<br />
   Exemplo: `5000`
 
   ---
@@ -288,12 +289,42 @@ Após obter os parâmetros necessários, você precisa passá‑los para o objet
 
 ```javascript
 metadata: {
-  challenge: "<valor do challenge>", 
-  iterations: "<valor do maxnumber>", // deve estar entre aspas, assim como os demais parâmetros
+  challenge: "<valor do challenge ou do nonce>", 
+  iterations: "<valor do maxnumber ou do cost>", // deve estar entre aspas, assim como os demais parâmetros
   salt: "<valor do salt>",             
   signature: "<valor do signature>",  
 }
 ```
+
+### Altcha v2: formato do challenge com o objeto `parameters`
+
+Nas implementações mais recentes do Altcha (challenge format v2), a requisição de parâmetros do captcha retorna um objeto `parameters` e um campo `signature` separado - os campos habituais `challenge` e `maxnumber` não estão presentes na resposta. Exemplo de resposta:
+
+```json
+{
+  "parameters": {
+    "algorithm": "PBKDF2/SHA-256",
+    "cost": 5000,
+    "expiresAt": 1795535860,
+    "keyLength": 32,
+    "keyPrefix": "00",
+    "nonce": "b6ae67260248a78d005047ece3fca744",
+    "salt": "05762169d8feb9251b66660faffcd041"
+  },
+  "signature": "5e47c17fed56fff87e03b264cece06c00bbc88c8f0af56cc839c5483e848d334"
+}
+```
+
+Esses campos da resposta são passados para `metadata` conforme a correspondência abaixo:
+
+| Campo na resposta do site | Campo no `metadata` |
+|---|---|
+| `parameters.nonce` | `challenge` |
+| `parameters.cost` | `iterations` |
+| `parameters.salt` | `salt` |
+| `signature` (nível superior) | `signature` |
+
+Os demais campos (`algorithm`, `keyLength`, `keyPrefix`, `expiresAt` e outros) não são passados para `metadata`: para criar a tarefa, basta os quatro campos da tabela.
 
 Você também pode usar os seguintes exemplos de código para extrair todos os parâmetros:
 
@@ -320,7 +351,7 @@ Script para navegador que sobrescreve `fetch` e `XMLHttpRequest` para monitorar 
 
 ```javascript
 (function() {
-  const keywords = ['algorithm','challenge','maxnumber','salt','signature'];
+  const keywords = ['algorithm','challenge','maxnumber','salt','signature','nonce','cost','keyPrefix'];
   const foundParams = {};
 
   const intercept = (url, body, text) => {
