@@ -78,12 +78,13 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
   <ParamItem title="challenge（位于 metadata 中）" required="required" type="string" />
   从网页获取的唯一任务标识符。<br />
   示例：`3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
+  > **重要：** 不同版本的 Altcha 参数名称不同：在 Altcha v2（challenge format v2）中，此字段对应于 `parameters` 对象中的 `nonce`（`nonce` = `challenge`）！<br />
 
   ---
 
   <ParamItem title="iterations（位于 metadata 中）" required="required" type="string" />
   迭代次数或用于计算的最大数值。
-> **重要：** 参数 `iterations` 对应于 `maxnumber` 的值！<br />
+> **重要：** 不同版本的 Altcha 参数名称不同：`cost` = `iterations`（Altcha v2），`maxnumber` = `iterations`（Altcha v1）！<br />
 
 示例：`5000`
 
@@ -287,12 +288,42 @@ CapMonster Cloud 默认通过内置代理工作——这些代理已包含在费
 
 ```javascript
 metadata: {
-  challenge: "<challenge 的值>", 
-  iterations: "<maxnumber 的值>", // 与其他参数一样，必须使用引号
+  challenge: "<challenge 或 nonce 的值>", 
+  iterations: "<maxnumber 或 cost 的值>", // 与其他参数一样，必须使用引号
   salt: "<salt 的值>",             
   signature: "<signature 的值>",  
 }
 ```
+
+### Altcha v2：使用 `parameters` 对象的 challenge 格式
+
+在较新的 Altcha 实现中（challenge format v2），获取验证码参数的请求会返回 `parameters` 对象和单独的 `signature` 字段，响应中没有常见的 `challenge` 和 `maxnumber` 字段。响应示例：
+
+```json
+{
+  "parameters": {
+    "algorithm": "PBKDF2/SHA-256",
+    "cost": 5000,
+    "expiresAt": 1795535860,
+    "keyLength": 32,
+    "keyPrefix": "00",
+    "nonce": "b6ae67260248a78d005047ece3fca744",
+    "salt": "05762169d8feb9251b66660faffcd041"
+  },
+  "signature": "5e47c17fed56fff87e03b264cece06c00bbc88c8f0af56cc839c5483e848d334"
+}
+```
+
+这些响应字段按以下对应关系传入 `metadata`：
+
+| 站点响应中的字段 | `metadata` 中的字段 |
+|---|---|
+| `parameters.nonce` | `challenge` |
+| `parameters.cost` | `iterations` |
+| `parameters.salt` | `salt` |
+| `signature`（顶层） | `signature` |
+
+其余字段（`algorithm`、`keyLength`、`keyPrefix`、`expiresAt` 等）不传入 `metadata`：创建任务只需表格中的四个字段。
 
 也可以使用以下代码示例来获取所有参数：
 
@@ -319,7 +350,7 @@ fetch(url, { method: 'GET' })
 
 ```javascript
 (function() {
-  const keywords = ['algorithm','challenge','maxnumber','salt','signature'];
+  const keywords = ['algorithm','challenge','maxnumber','salt','signature','nonce','cost','keyPrefix'];
   const foundParams = {};
 
   const intercept = (url, body, text) => {

@@ -78,12 +78,13 @@ If you are using a proxy with IP authorization, make sure to whitelist the addre
   <ParamItem title="challenge (inside metadata)" required="required" type="string" />
   Unique task identifier obtained from the website.<br />
   Example: `3dd28253be6cc0c54d95f7f98c517e68744597cc6e66109619d1ac975c39181c`
+  > **Important:** parameter names differ between Altcha versions: in Altcha v2 (challenge format v2) this field corresponds to `nonce` from the `parameters` object (`nonce` = `challenge`)!<br />
 
   ---
 
   <ParamItem title="iterations (inside metadata)" required="required" type="string" />
   Number of iterations or the maximum number for calculations.
-  > **Important:** the `iterations` parameter corresponds to the `maxnumber` value!<br />
+  > **Important:** parameter names differ between Altcha versions: `cost` = `iterations` (Altcha v2), `maxnumber` = `iterations` (Altcha v1)!<br />
   
   Example: `5000`
 
@@ -286,12 +287,42 @@ After obtaining the required parameters, you need to pass them into the `metadat
 
 ```javascript
 metadata: {
-  challenge: "<challenge value>", 
-  iterations: "<maxnumber value>", // must be enclosed in quotes, like all other parameters
+  challenge: "<challenge or nonce value>", 
+  iterations: "<maxnumber or cost value>", // must be enclosed in quotes, like all other parameters
   salt: "<salt value>",             
   signature: "<signature value>",  
 }
 ```
+
+### Altcha v2: challenge format with the `parameters` object
+
+In newer Altcha implementations (challenge format v2) the captcha parameters request returns a `parameters` object and a separate `signature` field - the usual `challenge` and `maxnumber` fields are not present in the response. Response example:
+
+```json
+{
+  "parameters": {
+    "algorithm": "PBKDF2/SHA-256",
+    "cost": 5000,
+    "expiresAt": 1795535860,
+    "keyLength": 32,
+    "keyPrefix": "00",
+    "nonce": "b6ae67260248a78d005047ece3fca744",
+    "salt": "05762169d8feb9251b66660faffcd041"
+  },
+  "signature": "5e47c17fed56fff87e03b264cece06c00bbc88c8f0af56cc839c5483e848d334"
+}
+```
+
+These response fields are passed to `metadata` as follows:
+
+| Field in the site response | Field in `metadata` |
+|---|---|
+| `parameters.nonce` | `challenge` |
+| `parameters.cost` | `iterations` |
+| `parameters.salt` | `salt` |
+| `signature` (top level) | `signature` |
+
+The remaining fields (`algorithm`, `keyLength`, `keyPrefix`, `expiresAt` and others) are not passed to `metadata`: the four fields from the table are enough to create a task.
 
 You can also use the following code examples to extract all parameters:
 
@@ -318,7 +349,7 @@ Browser script that overrides `fetch` and `XMLHttpRequest` to automatically moni
 
 ```javascript
 (function() {
-  const keywords = ['algorithm','challenge','maxnumber','salt','signature'];
+  const keywords = ['algorithm','challenge','maxnumber','salt','signature','nonce','cost','keyPrefix'];
   const foundParams = {};
 
   const intercept = (url, body, text) => {
