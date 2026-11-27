@@ -16,7 +16,7 @@ const LibrariesList = [
     title: 'Python',
     Svg: require('@site/static/img/Python.svg').default,
     githubLink: 'https://zenno.link/cmcloud-github-py',
-    customLinkName: 'PyPl',
+    customLinkName: 'PyPI',
     customLinkUrl: 'https://zenno.link/cmcloud-pypi-py'
   },
   {
@@ -29,16 +29,16 @@ const LibrariesList = [
   {
     title: 'Go',
     Svg: require('@site/static/img/Go.svg').default,
-    githubLink: 'https://zenno.link/cmcloud-github-go',
+    githubLink: 'https://github.com/CapMonsterCloud/capmonster-go-captcha-solver',
     customLinkName: 'Pkg.go.dev',
-    customLinkUrl: 'https://zenno.link/cmcloud-pkggodev-go'
+    customLinkUrl: 'https://pkg.go.dev/github.com/CapMonsterCloud/capmonster-go-captcha-solver/v2'
   },
   {
     title: 'PHP',
     Svg: require('@site/static/img/Php.svg').default,
-    githubLink: 'https://github.com/ZennoLab/capmonstercloud-client-php',
+    githubLink: 'https://github.com/CapMonsterCloud/capmonster-php-captcha-solver',
     customLinkName: 'Packagist',
-    customLinkUrl: 'https://packagist.org/packages/zennolab/capmonstercloud.client'
+    customLinkUrl: 'https://packagist.org/packages/capmonstercloud/capmonster-client'
   },
   {
     title: 'Rust',
